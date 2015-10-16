@@ -3,7 +3,7 @@ package lists;
 /**
  * Created by sull0678 on 10/12/2015.
  */
-public class KitchenList extends List
+public class KitchenList extends PoPList
 {
     boolean bIsLinked;
     boolean bIsShared;
@@ -11,6 +11,7 @@ public class KitchenList extends List
     public KitchenList (String name)
     {
         mListName = name;
+        mSize = 0;
     }
     /*Functions
         Eat ()

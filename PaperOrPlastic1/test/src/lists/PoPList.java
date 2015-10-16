@@ -9,38 +9,73 @@ import java.util.ArrayList;
 public abstract class PoPList
 {
     String mListName;
-    int AisleCategoryNames[];
-    String FoodTypeCategoryNames[];
-    String CustomCategoryNames[];
+    int mAisleCategoryNames[];
+    String mFoodTypeCategoryNames[];
+    String mCustomCategoryNames[];
     ArrayList<ListItem> mItems;
     int mCurrentSortingValue;
+    int mSize;
+
+    /*******************************************
+     * Gets
+     ******************************************/
+    public String getListName ()
+    {
+        return mListName;
+    }
 
     public ListItem getItem (int itemIndex)
     {
         return mItems.get(itemIndex);
     }
 
-    public void addItemToList (ListItem item)
+    /********************************************
+     * Sets
+     *******************************************/
+
+    public void setListName (String name)
     {
-        mItems.add (item);
+        mListName = name;
     }
 
-    //(only works for certain kinds of categories)
+
+    /********************************************
+    * Adds
+     *******************************************/
+/*
+    public void addItem (ListItem item)
+    {
+        mItems.add (item);
+    }*/
+
+    //(only works for certain kinds of category sorting)
    /* public boolean moveItemToCat (int itemIndex, int sortingType, int categoryNameIndex)
     {
         boolean bIsValid = true;
         return bIsValid;
     }
 
-    deleteItem ();
-        removeCustomCategory ()
+    addCategory
+*/
+
+    /******************************************
+    * Deletes
+     ******************************************/
+    public void deleteItem (String itemName)
+    {
+    }
+     /*   removeCustomCategory ()
         addCustomCategory ()*/
 
     public void printListName()
     {
         System.out.println (mListName);
     }
-       /* setCurrentSortingCategory() (this is the way the list will be shown to the user)
-          printList ()
+
+
+
+       /* Functions
+       setCurrentSortingCategory() (this is the way the list will be shown to the user)
+          printListItems ()
      */
 }
