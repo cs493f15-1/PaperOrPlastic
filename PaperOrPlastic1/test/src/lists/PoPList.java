@@ -64,6 +64,12 @@ public abstract class PoPList
     public void deleteItem (String itemName)
     {
     }
+
+    public void clearList ()
+    {
+        //doesn't give memory leaks?
+        mItems.clear ();
+    }
      /*   removeCustomCategory ()
         addCustomCategory ()*/
 
