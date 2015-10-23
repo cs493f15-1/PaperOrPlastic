@@ -42,11 +42,37 @@ public abstract class PoPList
     /********************************************
     * Adds
      *******************************************/
-/*
+
     public void addItem (ListItem item)
     {
+      int i;
+      ListItem tempItem;
+
+      // Makes sure if there is a duplicate item added, updates quantity instead of adding again.
+      if (mItems.size () != 0)
+      {
+        for (i = 0; i < mItems.size(); i++)
+        {
+          tempItem = mItems.get (i);
+
+          if (item.getItemName().equals (tempItem.getItemName()))
+          {
+            tempItem.setAddQuantity (1);
+            mItems.set (1, tempItem);
+          }
+
+          else
+          {
+            mItems.add (item);
+          }
+        }
+      }
+
+      else
+      {
         mItems.add (item);
-    }*/
+      }
+    }
 
     //(only works for certain kinds of category sorting)
    /* public boolean moveItemToCat (int itemIndex, int sortingType, int categoryNameIndex)
@@ -63,11 +89,22 @@ public abstract class PoPList
      ******************************************/
     public void deleteItem (String itemName)
     {
+      int i;
+      ListItem tempItem;
+
+      for (i = 0; i < mItems.size(); i++)
+      {
+        tempItem = mItems.get (i);
+
+        if (itemName.equals (tempItem.getItemName()))
+        {
+          mItems.remove (i);
+        }
+      }
     }
 
     public void clearList ()
     {
-        //doesn't give memory leaks?
         mItems.clear ();
     }
      /*   removeCustomCategory ()
