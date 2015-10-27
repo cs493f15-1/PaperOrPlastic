@@ -1,34 +1,48 @@
 package lists;
 
+import com.sun.org.apache.bcel.internal.generic.POP;
+
 /**
  * Created by sull0678 on 10/5/2015.
  */
 
-public class ListItem
+public class ListItem extends PoPList
 {
-
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
-
     int mFoodType ;
     int mCustomCategory;
     double mPrice;
     int mAisle;
-    int mCalories;
     int mQuantity;
     String mName;
-    /*Need nutritional info?*/
+    NutritionFacts mNutritionFacts;
+
 
     public ListItem ( String name)
     {
-
         mName = name;
-        mQuantity = 1;
+        mQuantity = 0;
     }
 
     /***********************************
      * GETS*
      **********************************/
+
+    public void printAll ()
+    {
+        System.out.println (mName);
+        System.out.println (mFoodType);
+        System.out.println (mAisle);
+        System.out.println (mQuantity);
+        System.out.println (mPrice);
+        System.out.println (mCustomCategory);
+    }
+
+    public String getItemName ()
+    {
+        return mName;
+    }
 
     public int getFoodType ()
     {
@@ -38,11 +52,6 @@ public class ListItem
     public int getAisle ()
     {
         return mAisle;
-    }
-
-    public int getCalories ()
-    {
-        return mCalories;
     }
 
     public int getQuantity ()
@@ -60,6 +69,11 @@ public class ListItem
         return mCustomCategory;
     }
 
+    public NutritionFacts getNutritionFacts ()
+    {
+        return mNutritionFacts;
+    }
+
     /*******************************
      * SETS
      ******************************/
@@ -74,14 +88,9 @@ public class ListItem
         mAisle = aisle;
     }
 
-    public void setCalories (int calories)
+    public void setAddQuantity (int quantityToAdd)
     {
-        mCalories = calories;
-    }
-
-    public void setQuantity (int quantity)
-    {
-        mQuantity = quantity;
+        mQuantity += quantityToAdd;
     }
 
     public void setPrice (double price)
@@ -94,6 +103,23 @@ public class ListItem
         mCustomCategory = customCategory;
     }
 
+    public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
+    {
+        mNutritionFacts.mCalories = calories;
+        mNutritionFacts.mCarbohydrates = carbohydrate;
+        mNutritionFacts.mProtein = protein;
+        mNutritionFacts.mSugars = sugar;
+        mNutritionFacts.mFiber = fiber;
+        mNutritionFacts.mTotalFat = fat;
+    }
 
-
+    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, NutritionFacts NFacts)
+    {
+        setFoodType (foodType);
+        setAisle(aisle);
+        setAddQuantity(quantityToAdd);
+        setPrice(price);
+        setCustomCategory(customCategory);
+        mNutritionFacts = NFacts;
+    }
 }
