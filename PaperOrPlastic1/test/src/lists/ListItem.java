@@ -10,15 +10,17 @@ public class ListItem extends PoPList
 {
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
-    int mFoodType ;
-    int mCustomCategory;
-    double mPrice;
-    int mAisle;
-    int mQuantity;
-    boolean mCheckedOff;
-    String mNotes;
-    String mName;
-    NutritionFacts mNutritionFacts;
+    private int mFoodType ;
+    private int mCustomCategory;
+    private double mPrice;
+    private int mAisle;
+    private int mQuantity;
+    private boolean mCheckedOff;
+    private String mNotes;
+    private String mName;
+    private NutritionFacts mNutritionFacts;
+
+    public final int MAX_LENGTH = 200; //arbitrary number
 
 
     public ListItem ( String name)
@@ -125,8 +127,6 @@ public class ListItem extends PoPList
 
     public void setNotes (String notes)
     {
-        final int MAX_LENGTH = 200; //arbitrary number
-
         if (notes.length() <= MAX_LENGTH)
         {
             mNotes = notes;
