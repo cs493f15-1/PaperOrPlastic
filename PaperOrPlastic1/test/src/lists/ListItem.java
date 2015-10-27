@@ -15,6 +15,8 @@ public class ListItem extends PoPList
     double mPrice;
     int mAisle;
     int mQuantity;
+    boolean mCheckedOff;
+    String mNotes;
     String mName;
     NutritionFacts mNutritionFacts;
 
@@ -23,6 +25,7 @@ public class ListItem extends PoPList
     {
         mName = name;
         mQuantity = 0;
+        mCheckedOff = false;
     }
 
     /***********************************
@@ -37,6 +40,8 @@ public class ListItem extends PoPList
         System.out.println (mQuantity);
         System.out.println (mPrice);
         System.out.println (mCustomCategory);
+        System.out.println (mCheckedOff);
+        System.out.println (mNotes);
     }
 
     public String getItemName ()
@@ -67,6 +72,16 @@ public class ListItem extends PoPList
     public int getCustomCategory ()
     {
         return mCustomCategory;
+    }
+
+    public boolean getCheckedOff ()
+    {
+        return mCheckedOff;
+    }
+
+    public String getNotes ()
+    {
+        return mNotes;
     }
 
     public NutritionFacts getNutritionFacts ()
@@ -103,6 +118,25 @@ public class ListItem extends PoPList
         mCustomCategory = customCategory;
     }
 
+    public void setCheckedOff (boolean checkedOff)
+    {
+        mCheckedOff = checkedOff;
+    }
+
+    public void setNotes (String notes)
+    {
+        final int MAX_LENGTH = 200; //arbitrary number
+
+        if (notes.length() <= MAX_LENGTH)
+        {
+            mNotes = notes;
+        }
+        else
+        {
+            mNotes = notes.substring(0, MAX_LENGTH);
+        }
+    }
+
     public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
     {
         mNutritionFacts.mCalories = calories;
@@ -113,13 +147,15 @@ public class ListItem extends PoPList
         mNutritionFacts.mTotalFat = fat;
     }
 
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, NutritionFacts NFacts)
+    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFacts NFacts)
     {
         setFoodType (foodType);
         setAisle(aisle);
         setAddQuantity(quantityToAdd);
         setPrice(price);
         setCustomCategory(customCategory);
+        setCheckedOff(checkedOff);
+        setNotes(notes);
         mNutritionFacts = NFacts;
     }
 }

@@ -23,8 +23,8 @@ public class listActivity
 
         GroceryList GList = new GroceryList ("my groceries");
 
-        LItem.setAll(1, 2, 3, 4, 5, NFacts);
-        LItem2.setAll(5, 4, 3, 2, 1, NFacts);
+        LItem.setAll(1, 2, 3, 4, 5, false, "abcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehiabcdefgehijjj", NFacts);
+        LItem2.setAll(5, 4, 3, 2, 1, true, "Turtle", NFacts);
 
         KLists.addList("MyKitchen2");
         GLists.addList("MyGroceries2");
