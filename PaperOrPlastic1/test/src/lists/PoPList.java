@@ -46,7 +46,10 @@ public abstract class PoPList
     public void addItem (ListItem item)
     {
       int i;
+      boolean bExists;
       ListItem tempItem;
+
+      bExists = false;
 
       // Makes sure if there is a duplicate item added, updates quantity instead of adding again.
       if (mItems.size () != 0)
@@ -55,22 +58,19 @@ public abstract class PoPList
         {
           tempItem = mItems.get (i);
 
-          if (item.getItemName().equals (tempItem.getItemName()))
+          if (item.getItemName().contains (tempItem.getItemName()))
           {
             tempItem.setAddQuantity (1);
-            mItems.set (1, tempItem);
-          }
-
-          else
-          {
-            mItems.add (item);
+            mItems.set (i, tempItem);
+            bExists = true;
           }
         }
       }
 
-      else
+      if (bExists == false)
       {
         mItems.add (item);
+        mSize++;
       }
     }
 
@@ -87,6 +87,8 @@ public abstract class PoPList
     /******************************************
     * Deletes
      ******************************************/
+
+    // Deletion method could change.
     public void deleteItem (String itemName)
     {
       int i;
@@ -99,6 +101,7 @@ public abstract class PoPList
         if (itemName.equals (tempItem.getItemName()))
         {
           mItems.remove (i);
+          mSize--;
         }
       }
     }
