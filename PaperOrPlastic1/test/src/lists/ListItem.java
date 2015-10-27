@@ -6,7 +6,7 @@ import com.sun.org.apache.bcel.internal.generic.POP;
  * Created by sull0678 on 10/5/2015.
  */
 
-public class ListItem extends PoPList
+public class ListItem
 {
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
