@@ -44,7 +44,7 @@ public abstract class PoPList
      *******************************************/
 
     public void addItem (ListItem item)
-    {
+        {
       int i;
       boolean bExists;
       ListItem tempItem;

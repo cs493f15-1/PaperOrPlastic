@@ -6,23 +6,28 @@ import com.sun.org.apache.bcel.internal.generic.POP;
  * Created by sull0678 on 10/5/2015.
  */
 
-public class ListItem extends PoPList
+public class ListItem
 {
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
-    int mFoodType ;
-    int mCustomCategory;
-    double mPrice;
-    int mAisle;
-    int mQuantity;
-    String mName;
-    NutritionFacts mNutritionFacts;
+    private int mFoodType ;
+    private int mCustomCategory;
+    private double mPrice;
+    private int mAisle;
+    private int mQuantity;
+    private boolean mCheckedOff;
+    private String mNotes;
+    private String mName;
+    private NutritionFacts mNutritionFacts;
+
+    public final int MAX_LENGTH = 200; //arbitrary number
 
 
     public ListItem ( String name)
     {
         mName = name;
         mQuantity = 0;
+        mCheckedOff = false;
     }
 
     /***********************************
@@ -37,6 +42,8 @@ public class ListItem extends PoPList
         System.out.println (mQuantity);
         System.out.println (mPrice);
         System.out.println (mCustomCategory);
+        System.out.println (mCheckedOff);
+        System.out.println (mNotes);
     }
 
     public String getItemName ()
@@ -67,6 +74,16 @@ public class ListItem extends PoPList
     public int getCustomCategory ()
     {
         return mCustomCategory;
+    }
+
+    public boolean getCheckedOff ()
+    {
+        return mCheckedOff;
+    }
+
+    public String getNotes ()
+    {
+        return mNotes;
     }
 
     public NutritionFacts getNutritionFacts ()
@@ -103,6 +120,23 @@ public class ListItem extends PoPList
         mCustomCategory = customCategory;
     }
 
+    public void setCheckedOff (boolean checkedOff)
+    {
+        mCheckedOff = checkedOff;
+    }
+
+    public void setNotes (String notes)
+    {
+        if (notes.length() <= MAX_LENGTH)
+        {
+            mNotes = notes;
+        }
+        else
+        {
+            mNotes = notes.substring(0, MAX_LENGTH);
+        }
+    }
+
     public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
     {
         mNutritionFacts.mCalories = calories;
@@ -113,13 +147,15 @@ public class ListItem extends PoPList
         mNutritionFacts.mTotalFat = fat;
     }
 
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, NutritionFacts NFacts)
+    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFacts NFacts)
     {
         setFoodType (foodType);
         setAisle(aisle);
         setAddQuantity(quantityToAdd);
         setPrice(price);
         setCustomCategory(customCategory);
+        setCheckedOff(checkedOff);
+        setNotes(notes);
         mNutritionFacts = NFacts;
     }
 }
