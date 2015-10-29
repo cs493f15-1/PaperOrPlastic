@@ -25,11 +25,20 @@ import testLists.lists.GroceryLists;
 public class ListsActivity extends Activity implements View.OnClickListener
 {
     private Button mButtonAddList;
-    private ArrayList<Button> bLists;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     GroceryLists mGLists;
     TabHost mListTabHost;
 
+
+    /********************************************************************************************
+     * Function name: onCreate
+     *
+     * Description:   Initializes all needed setup for objects in page
+     *
+     * Parameters:    savedInstanceState  - a bundle object
+     *
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -38,6 +47,7 @@ public class ListsActivity extends Activity implements View.OnClickListener
 
         setContentView(R.layout.activity_lists);
 
+        //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
 
@@ -45,6 +55,7 @@ public class ListsActivity extends Activity implements View.OnClickListener
         mButtonAddList = (Button) findViewById (R.id.bAddList);
         mButtonAddList.setOnClickListener(this);
 
+        //For testing purposes
         mGLists = new GroceryLists();
         mGLists.addList("My GList 1");
 
@@ -58,6 +69,18 @@ public class ListsActivity extends Activity implements View.OnClickListener
 
     }
 
+    /********************************************************************************************
+     * Function name: addListTab
+     *
+     * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
+     *
+     * Parameters:    newList - a List object whose tab will be added to the top of the page
+     *                index   - the index of the newList in the GroceryLists object, also the
+     *                          new tab spec id
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
     private void addListTab (GroceryList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
@@ -67,16 +90,25 @@ public class ListsActivity extends Activity implements View.OnClickListener
 
     }
 
+    /********************************************************************************************
+     * Function name: onCLick
+     *
+     * Description:   To check which buttons were clicked on the list page and call functions
+     *                needed for what every was clicked
+     *
+     * Parameters:    view - what ever view had been clicked
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
     public void onClick (View view)
     {
         //Intent intent;
         if (mButtonAddList == view)
         {
-            //newGameDialog ();
+            //addList to Lists and create a tab
             mGLists.addList ("My NewGList");
             addListTab (mGLists.getList (mGLists.getSize () - 1), mGLists.getSize () - 1);
-           //add list with popup box
-
         }
     }
 }
