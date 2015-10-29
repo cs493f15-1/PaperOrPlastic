@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="ccMaroon">#800000</color>
+    <color name="ccRed">#ff0000</color>
+    <color name="ccOrange">#ffA500</color>
+    <color name="ccYellow">#ffff00</color>
+    <color name="ccOlive">#808000</color>
+    <color name="ccPurple">#800080</color>
+    <color name="ccFuchsia">#ff00ff</color>
+    <color name="ccWhite">#ffffff</color>
+    <color name="ccLime">#00ff00</color>
+    <color name="ccGreen">#008000</color>
+    <color name="ccNavy">#000080</color>
+    <color name="ccBlue">#0000ff</color>
+    <color name="ccAqua">#00ffff</color>
+    <color name="ccTeal">#008080</color>
+    <color name="ccBlack">#000000</color>
+    <color name="ccSilver">#c0c0c0</color>
+    <color name="ccGray">#808080</color>
+    <color name="ccSteelblue">#4682b4</color>
+    <color name="ccTransparentred">#99ff0000</color>
+    <color name="ccTransparentgreen">#9900ff00</color>
+
+
+</resources>
