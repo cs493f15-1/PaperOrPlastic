@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+                android:background="@drawable/grocery_background"
+                android:foregroundTint="@color/colorPrimaryDark"
+                android:nestedScrollingEnabled="false"
+                android:foregroundTintMode="src_over"
+                android:focusable="false"
+                android:outlineProvider="bounds">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:id="@+id/tableLayout">
+
+    </TableLayout>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="My Lists"
+        android:id="@+id/bContLists"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/ccBlack"
+        android:textStyle="bold"
+        android:outlineProvider="bounds"
+        android:background="@color/ccLightgreen"
+        android:layout_marginBottom="67dp"
+        android:layout_above="@+id/bContAbout"
+        android:layout_alignLeft="@+id/bContAbout"
+        android:layout_alignStart="@+id/bContAbout"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:id="@+id/bContSettings"
+        android:layout_gravity="center_horizontal"
+        android:outlineProvider="bounds"
+        android:textStyle="bold"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="72dp"
+        android:background="@color/ccLightgreen"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="About"
+        android:id="@+id/bContAbout"
+        android:layout_gravity="center_horizontal"
+        android:outlineProvider="bounds"
+        android:textStyle="bold"
+        android:layout_above="@+id/bContSettings"
+        android:layout_alignLeft="@+id/bContSettings"
+        android:layout_alignStart="@+id/bContSettings"
+        android:layout_marginBottom="55dp"
+        android:background="@color/ccLightgreen"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Paper or Plastic"
+        android:id="@+id/textView7"
+        android:layout_below="@+id/tableLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        style="@style/Base.DialogWindowTitle.AppCompat"/>
+</RelativeLayout>
