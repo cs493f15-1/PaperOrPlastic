@@ -1,4 +1,4 @@
-package lists;
+package testLists.lists;
 
 import com.sun.org.apache.bcel.internal.generic.POP;
 
