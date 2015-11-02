@@ -1,6 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,8 +23,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         setContentView (R.layout.activity_continue);
 
         //on click listener for buttons (connect to the view)
-//        mButtonLists = (Button) findViewById (R.id.bContLists);
-//        mButtonLists.setOnClickListener (this);
+        mButtonLists = (Button) findViewById (R.id.bContLists);
+        mButtonLists.setOnClickListener (this);
         mButtonSettings = (Button) findViewById (R.id.bContSettings);
         mButtonSettings.setOnClickListener (this);
         mButtonAbout = (Button) findViewById (R.id.bContAbout);
@@ -37,9 +38,9 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
         if (mButtonLists == view)
         {
-//            //will start a new activity using the intents
-//            intent = new Intent (this, ListActivity.class);
-//            startActivity (intent);
+            //will start a new activity using the intents
+            intent = new Intent (this, ListsActivity.class);
+            startActivity (intent);
         }
 
         if (mButtonSettings == view)
