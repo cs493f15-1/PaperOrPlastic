@@ -22,8 +22,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         setContentView (R.layout.activity_continue);
 
         //on click listener for buttons (connect to the view)
-//        mButtonLists = (Button) findViewById (R.id.bContLists);
-//        mButtonLists.setOnClickListener (this);
+        mButtonLists = (Button) findViewById (R.id.bContLists);
+        mButtonLists.setOnClickListener (this);
         mButtonSettings = (Button) findViewById (R.id.bContSettings);
         mButtonSettings.setOnClickListener (this);
         mButtonAbout = (Button) findViewById (R.id.bContAbout);
@@ -37,9 +37,9 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
         if (mButtonLists == view)
         {
-//            //will start a new activity using the intents
-//            intent = new Intent (this, ListActivity.class);
-//            startActivity (intent);
+           //will start a new activity using the intents
+            intent = new Intent (this, ListsActivity.class);
+           startActivity (intent);
         }
 
         if (mButtonSettings == view)
