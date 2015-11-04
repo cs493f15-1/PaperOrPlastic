@@ -5,6 +5,7 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class PoPList
 {
@@ -42,7 +43,6 @@ public abstract class PoPList
     /********************************************
     * Adds
      *******************************************/
-
     public void addItem (ListItem item)
         {
       int i;
@@ -108,7 +108,7 @@ public abstract class PoPList
 
     public void clearList ()
     {
-        mItems.clear ();
+        mItems.clear();
     }
      /*   removeCustomCategory ()
         addCustomCategory ()*/
@@ -124,4 +124,16 @@ public abstract class PoPList
        setCurrentSortingCategory() (this is the way the list will be shown to the user)
           printListItems ()
      */
+
+    /*********************************
+     * Sorts
+     ********************************/
+
+    /**
+     * Sorts the ListItems alphabetically by name using the Comparator NAME in ListItem
+     */
+    public void sortListByName ()
+    {
+        Collections.sort(this.mItems, ListItem.Comparators.NAME);
+    }
 }
