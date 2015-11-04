@@ -1,6 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
-//Not sure what this does?
+
 //import com.sun.org.apache.bcel.internal.generic.POP;
 
 /**
