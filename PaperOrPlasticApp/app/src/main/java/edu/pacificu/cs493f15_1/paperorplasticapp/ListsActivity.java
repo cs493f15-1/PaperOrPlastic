@@ -1,25 +1,33 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 import edu.pacificu.cs493f15_1.paperorplasticjava.*;
 
+import android.app.ActionBar;
 import android.app.Activity;
+
+import android.support.v4.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TabHost;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
 /**
  * Created by sull0678 on 10/26/2015.
  */
-public class ListsActivity extends Activity implements View.OnClickListener
+public class ListsActivity extends FragmentActivity implements View.OnClickListener
 {
     private Button mButtonAddList;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     GroceryLists mGLists;
     TabHost mListTabHost;
-
+    FragmentManager fm = getSupportFragmentManager();
 
     /********************************************************************************************
      * Function name: onCreate
@@ -39,6 +47,9 @@ public class ListsActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_lists);
 
         //setup tabs
+
+
+
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
 
@@ -75,9 +86,10 @@ public class ListsActivity extends Activity implements View.OnClickListener
     private void addListTab (GroceryList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
-        spec.setContent(R.id.linearLayout);
+        spec.setContent(R.id.fragment);
         spec.setIndicator(newList.getListName());
-        mListTabHost.addTab (spec);
+        mListTabHost.addTab(spec);
+
 
     }
 
@@ -97,6 +109,9 @@ public class ListsActivity extends Activity implements View.OnClickListener
         //Intent intent;
         if (mButtonAddList == view)
         {
+            //popup window
+            ListDFragment listDFragment = new ListDFragment();
+            listDFragment.show (fm, "Hi");
             //addList to Lists and create a tab
             mGLists.addList ("My NewGList");
             addListTab (mGLists.getList (mGLists.getSize () - 1), mGLists.getSize () - 1);

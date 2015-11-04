@@ -1,70 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical" android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:weightSum="1">
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listTabHost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_weight="0.03"
-        android:padding="0dp"
-        android:paddingLeft="0dp"
-        android:paddingTop="0dp"
-        android:paddingRight="0dp"
-        android:paddingBottom="0dp"
-        android:id="@+id/bListTabs"
-        android:background="#8dd3a1">
+    <LinearLayout android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/linearLayout">
 
-        <TabHost
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listTabHost"
-            android:layout_weight="1"
-            android:longClickable="true">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="1">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/bAddList" />
+
+            <HorizontalScrollView android:layout_width="321dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:fillViewport="true"
+                android:scrollbars="horizontal"
+                android:layout_gravity="right"
+                android:backgroundTint="#48928d"
+                android:backgroundTintMode="multiply"
+                android:foregroundGravity="left"
+                android:scrollIndicators="right">
 
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></TabWidget>
+                <TabWidget android:id="@android:id/tabs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Base.Widget.AppCompat.ActionBar.TabBar"
+                    android:foregroundGravity="top|left|bottom|right"
+                    android:showDividers="beginning|end" />
+            </HorizontalScrollView>
 
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        </TableRow>
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
+        <FrameLayout android:id="@android:id/tabcontent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"></LinearLayout>
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/bAddList"/>
-
-    </TableRow>
-</LinearLayout>
+            <fragment
+                android:layout_width="wrap_content"
+                android:layout_height="78dp"
+                android:name="android.app.ListFragment"
+                android:id="@+id/fragment"
+                android:layout_gravity="left|top"
+                tools:layout="@layout/design_navigation_menu" />
+        </FrameLayout>
+    </LinearLayout>
+</TabHost>
