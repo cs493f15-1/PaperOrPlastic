@@ -15,7 +15,7 @@ For Java & Android Application, open the folder PaperOrPlasticApp.
 	4. Be sure to open PaperOrPlasticApp (../PaperOrPlastic/PaperOrPlasticApp).
 	5. Build -> Make Project.
 #### How to run the code
-	1. If you haven't already, from the AVD Manager, download the Nexus 5 device with OS Marshmallow x86.
+	1. From the AVD Manager, download the Nexus 5 device with OS Marshmallow x86.
 	2. Press run (next to app button).
 #### Project dependent libraries and external software:
 - Firebase (instructions to install found here: https://www.firebase.com/docs/android/quickstart.html)
