@@ -21,13 +21,13 @@ import java.util.ArrayList;
 /**
  * Created by sull0678 on 10/26/2015.
  */
-public class ListsActivity extends FragmentActivity implements View.OnClickListener
+public class ListsActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener
 {
     private Button mButtonAddList;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     GroceryLists mGLists;
     TabHost mListTabHost;
-    FragmentManager fm = getSupportFragmentManager();
+    FragmentManager fm;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -46,19 +46,28 @@ public class ListsActivity extends FragmentActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_lists);
 
+        //init lists
+        mGLists = new GroceryLists();
+
         //setup tabs
-
-
-
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
 
         //on click listener for buttons (connect to the view)
         mButtonAddList = (Button) findViewById (R.id.bAddList);
-        mButtonAddList.setOnClickListener(this);
+        mButtonAddList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fm = getSupportFragmentManager();
+                ListDFragment listDFragment = new ListDFragment();
+                listDFragment.show(fm, "Hi");
+            }
+        });
+
+
+
 
         //For testing purposes
-        mGLists = new GroceryLists();
         mGLists.addList("My GList 1");
 
 
@@ -110,11 +119,28 @@ public class ListsActivity extends FragmentActivity implements View.OnClickListe
         if (mButtonAddList == view)
         {
             //popup window
-            ListDFragment listDFragment = new ListDFragment();
-            listDFragment.show (fm, "Hi");
-            //addList to Lists and create a tab
-            mGLists.addList ("My NewGList");
-            addListTab (mGLists.getList (mGLists.getSize () - 1), mGLists.getSize () - 1);
+
+
+
+
+
         }
+    }
+
+    /********************************************************************************************
+     * Function name: onFinishEditDialog
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
+    @Override
+    public void onFinishListDialog(String inputText) {
+        //add List to Lists and create a tab
+        mGLists.addList(inputText);
+        addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
     }
 }
