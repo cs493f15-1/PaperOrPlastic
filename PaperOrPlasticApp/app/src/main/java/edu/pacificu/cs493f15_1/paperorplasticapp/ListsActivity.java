@@ -103,31 +103,6 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     }
 
     /********************************************************************************************
-     * Function name: onCLick
-     *
-     * Description:   To check which buttons were clicked on the list page and call functions
-     *                needed for what every was clicked
-     *
-     * Parameters:    view - what ever view had been clicked
-     *
-     * Returns:       none
-     ******************************************************************************************/
-
-    public void onClick (View view)
-    {
-        //Intent intent;
-        if (mButtonAddList == view)
-        {
-            //popup window
-
-
-
-
-
-        }
-    }
-
-    /********************************************************************************************
      * Function name: onFinishEditDialog
      *
      * Description:

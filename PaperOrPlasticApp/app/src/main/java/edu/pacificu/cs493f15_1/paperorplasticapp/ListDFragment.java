@@ -22,12 +22,12 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 /**
  * Created by sull0678 on 11/3/2015.
  */
-public class ListDFragment extends DialogFragment implements TextView.OnEditorActionListener
+public class ListDFragment extends DialogFragment
 {
     private Button mbCancel;
     private Button mbOK;
     private EditText mEditText;
-
+    private Dialog mDialog;
 
 
     public interface EditNameDialogListener {
@@ -43,60 +43,39 @@ public class ListDFragment extends DialogFragment implements TextView.OnEditorAc
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.listdialogfragment, container,
                 false);
-        getDialog().setTitle("DialogFragment Tutorial");
-
-        // Do something else
-        return rootView;
-    }
-
-
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        super.onViewCreated(view, savedInstanceState);
-
-        mbCancel = (Button) view.findViewById (R.id.cancel_button);
-        mbCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDialog().dismiss();
-            }
-        });
-
-        mbOK = (Button) view.findViewById (R.id.ok_button);
-        mbOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDialog().dismiss();
-            }
-        });
 
         // Get field from view
-        mEditText = (EditText) view.findViewById(R.id.edit_text);
+        mEditText = (EditText) rootView.findViewById(R.id.edit_text);
 
         // Show soft keyboard automatically and request focus to field
         mEditText.requestFocus();
-        mEditText.setOnEditorActionListener(this);
+
+
+        mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
+        mbCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+        mbOK = (Button) rootView.findViewById (R.id.ok_button);
+        mbOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditNameDialogListener activity = (EditNameDialogListener) getActivity();
+                activity.onFinishListDialog(mEditText.getText().toString());
+                mDialog.dismiss();
+            }
+        });
+
+        mDialog = getDialog();
+
+        mDialog.setTitle("DialogFragment Tutorial");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
+        // Do something else
+        return rootView;
     }
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (EditorInfo.IME_ACTION_DONE == actionId) {
-
-            // Return input list to activity
-            EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-
-
-            activity.onFinishListDialog(mEditText.getText().toString());
-            this.dismiss();
-            return true;
-        }
-        return false;
-    }
-
 }
