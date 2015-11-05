@@ -248,6 +248,7 @@ private void testCreateFirebaseUsers ()
         {
           // there was an error
           System.out.println("Error authenticating user. ");
+          messageDialog ("Unable to Sign-In", "Invalid password or email.");
         }
       });
 
@@ -265,6 +266,7 @@ private void testCreateFirebaseUsers ()
         public void onSuccess(Map<String, Object> result)
         {
           System.out.println("Successfully created user account with uid: " + result.get("uid"));
+          messageDialog("Create Account","Account has been created.");
         }
 
         @Override
@@ -272,6 +274,7 @@ private void testCreateFirebaseUsers ()
         {
           // there was an error
           System.out.println("Error creating user. ");
+          messageDialog("Unable to Create Account","Email in use or invalid Email.");
         }
       });
 
@@ -279,16 +282,22 @@ private void testCreateFirebaseUsers ()
     }
     if (mButtonRecoverPassword == view)
     {
-      //intent = new Intent(this, AboutActivity.class);
-      //startActivity(intent);
-
-
-      //figure out how this works with firebase
+      myFirebaseRef.resetPassword(mEditEmail.getText().toString(), new Firebase.ResultHandler() {
+        @Override
+        public void onSuccess()
+        {
+          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" + mEditEmail.getText().toString());
+        }
+        @Override
+        public void onError(FirebaseError firebaseError)
+        {
+          // error encountered
+          messageDialog ("Recover Password", "Error sending recovery Email to: \n" + mEditEmail.getText().toString());
+        }
+      });
     }
     if (mButtonContinue == view)
     {
-      //will start a new activity using the intents
-
       intent = new Intent (this, ContinueActivity.class);
       startActivity (intent);
     }
@@ -297,19 +306,19 @@ private void testCreateFirebaseUsers ()
 
 
 /***************************************************************************************************
- *   Method:      messageDialog TODO
+ *   Method:      messageDialog
  *   Description: for now, using this as a template to see how to get a dialog box to appear
  *   Parameters:  N/A
  *   Returned:    N/A
  ***************************************************************************************************/
-  private void messageDialog ()
+  private void messageDialog (String title, String message)
   {
-    new AlertDialog.Builder (this).setTitle (R.string.sGameDifficulty)
-            .setItems (R.array.gameDifficulty, new DialogInterface.OnClickListener()
+    new AlertDialog.Builder (this).setTitle (title).setMessage(message)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener()
             {
-              public void onClick (DialogInterface dialog, int difficultyLevel)
+              public void onClick(DialogInterface dialog, int ok)
               {
-                //startGame (difficultyLevel);
+                //user clicked ok
               }
             }).show ();
   }
