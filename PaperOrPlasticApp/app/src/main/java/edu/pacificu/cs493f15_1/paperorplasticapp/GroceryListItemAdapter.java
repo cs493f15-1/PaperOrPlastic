@@ -43,7 +43,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     public void add (ListItem item) {
         // TODO Auto-generated method stub
         super.add (item);
-        mItemArray.add(item);
+        //mItemArray.add(item);
     }
 
     @Override

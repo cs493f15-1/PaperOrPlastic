@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     FragmentManager fm;
     ListView mListView;
     private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
+    private long mLastClickTime;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -51,6 +53,8 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_lists);
+
+        mLastClickTime = 0;
 
         //init lists
         mGLists = new GroceryLists();
@@ -76,6 +80,8 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 addItemToListView();
             }
         });
@@ -151,7 +157,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         ListItem item = new ListItem("newItem");
         GroceryList currentList =  getCurrentGList();
 
-        currentList.addItem(item);
+        //currentList.addItem(item);
 
         listAdapters.get(mListTabHost.getCurrentTab()).add(item);
     }

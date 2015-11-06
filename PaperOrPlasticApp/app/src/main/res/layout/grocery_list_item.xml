@@ -5,7 +5,8 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="43dp"
         android:text="New Button"
-        android:id="@+id/bListItem" />
+        android:id="@+id/bListItem"
+        style="@style/Base.Widget.AppCompat.ActionBar.TabText" />
 </LinearLayout>
