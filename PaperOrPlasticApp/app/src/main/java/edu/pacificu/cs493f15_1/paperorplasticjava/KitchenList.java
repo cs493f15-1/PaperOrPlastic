@@ -1,5 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
+import java.util.ArrayList;
+
 /**
  * Created by sull0678 on 10/12/2015.
  */
@@ -12,6 +14,7 @@ public class KitchenList extends PoPList
     {
         mListName = name;
         mSize = 0;
+        mItems = new ArrayList<ListItem>();
     }
     /*Functions
         Eat ()

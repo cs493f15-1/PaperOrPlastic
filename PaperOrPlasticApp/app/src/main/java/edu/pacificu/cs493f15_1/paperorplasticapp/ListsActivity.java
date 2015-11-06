@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
@@ -32,6 +33,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     TabHost mListTabHost;
     FragmentManager fm;
     ListView mListView;
+    private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
 
     /********************************************************************************************
      * Function name: onCreate
@@ -71,10 +73,10 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         });
 
         mbAddItem = (Button) findViewById (R.id.bAddItem);
-        mbAddList.setOnClickListener(new View.OnClickListener() {
+        mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addItem (getBaseContext());
+                addItemToListView();
             }
         });
 
@@ -87,7 +89,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         for (int i = 0; i < mGLists.getSize(); i++)
         {
             addListTab(mGLists.getList(i), i);
+
         }
+
 
     }
 
@@ -109,6 +113,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         spec.setContent(R.id.fragment);
         spec.setIndicator(newList.getListName());
         mListTabHost.addTab(spec);
+
+        //for keeping track of items in list
+        addListAdapter(mGLists.getList(index));
     }
 
     /********************************************************************************************
@@ -125,7 +132,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     public void onFinishListDialog(String inputText) {
         //add List to Lists and create a tab
         mGLists.addList(inputText);
+
         addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
+
     }
 
     /********************************************************************************************
@@ -137,14 +146,25 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      *
      * Returns:       none
      ******************************************************************************************/
-    public void addItem (Context context)
+    public void addItemToListView ()
     {
-        ListItemAdapter adapter = new ListItemAdapter();
+        ListItem item = new ListItem("newItem");
+        GroceryList currentList =  getCurrentGList();
 
-        mListView.setAdapter(adapter);
+        currentList.addItem(item);
 
+        listAdapters.get(mListTabHost.getCurrentTab()).add(item);
     }
 
+    private void addListAdapter (GroceryList gList)
+    {
+        listAdapters.add (new GroceryListItemAdapter(mListView.getContext(), R.layout.grocery_list_item, gList.getItemArray()));
+        GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
+        mListView.setAdapter ( newAdapter);
+    }
 
-
+    public GroceryList getCurrentGList ()
+    {
+        return mGLists.getList(mListTabHost.getCurrentTab());
+    }
 }

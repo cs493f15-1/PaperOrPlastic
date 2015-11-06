@@ -124,6 +124,11 @@ public abstract class PoPList
         return mSize;
     }
 
+    public ArrayList<ListItem> getItemArray ()
+    {
+        return mItems;
+    }
+
        /* Functions
        setCurrentSortingCategory() (this is the way the list will be shown to the user)
           printListItems ()
