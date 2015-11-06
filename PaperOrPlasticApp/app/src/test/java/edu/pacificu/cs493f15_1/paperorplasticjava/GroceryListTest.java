@@ -1,9 +1,5 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
-/**
- * Created by heyd5159 on 11/5/2015.
- */
-
 import static org.mockito.Mockito.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,19 +7,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-
-
 /**
- *  Tests all the methods of ListItem that are not just regular set/get functions or I/O
+ * Created by heyd5159 on 11/6/2015.
  */
-public class ListItemTest
+public class GroceryListTest
 {
     ListItem.Comparators comparators;
 
 
-    /**
-     * Tests SetNotes where the Note is less than the Max char limit set
-     */
     @Test
     public void TestSetNotesLessthanMAX ()
     {
@@ -34,9 +25,6 @@ public class ListItemTest
         Assert.assertEquals(expectedString, actualString);
     }
 
-    /**
-     * Tests SetNotes where the Note is greater than the Max char limit set
-     */
     @Test
     public void TestSetNotesMorethanMAX ()
     {
@@ -48,9 +36,6 @@ public class ListItemTest
         Assert.assertEquals(expectedString, actualString);
     }
 
-    /**
-     * Tests that the Comparator NAME compares the name of the listItems
-     */
     @Test
     public void TestComparatorNAME ()
     {
