@@ -16,11 +16,14 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -40,16 +43,21 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
   private Button  mButtonSignIn,
                   mButtonCreateAccount,
                   mButtonRecoverPassword,
+                  mButtonResetPassword,
                   mButtonContinue;
 
+  //testing new email input box
+  private AutoCompleteTextView mEmailView;
+
+
   //  edit text fields
-  private EditText  mEditEmail,
-                    mEditPassword;
+  private EditText  mEditPassword;
+
 
   //  firebase reference
   private Firebase  myFirebaseRef;
 
-
+  private View mLoginFormView;
 
 /***************************************************************************************************
  *   Method:        onCreate
@@ -90,12 +98,14 @@ private void initializeButtons ()
   mButtonCreateAccount = (Button) findViewById (R.id.bCreateAccount);
   mButtonRecoverPassword = (Button) findViewById (R.id.bRecoverPassword);
   mButtonContinue = (Button) findViewById (R.id.bContinue);
+  mButtonResetPassword = (Button) findViewById (R.id.bResetPassword);
 
   //  on click listener for buttons (connect to the view)
   mButtonSignIn.setOnClickListener(this);
-  mButtonCreateAccount.setOnClickListener (this);
-  mButtonRecoverPassword.setOnClickListener (this);
+  mButtonCreateAccount.setOnClickListener(this);
+  mButtonRecoverPassword.setOnClickListener(this);
   mButtonContinue.setOnClickListener(this);
+  mButtonResetPassword.setOnClickListener(this);
 }
 
 
@@ -107,8 +117,9 @@ private void initializeButtons ()
  ***************************************************************************************************/
 private void initializeEditFields()
 {
-  mEditEmail = (EditText) findViewById (R.id.editTextEmail);
+  mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
   mEditPassword = (EditText) findViewById (R.id.editTextPassword);
+  mLoginFormView = findViewById(R.id.loginForm);
 }
 
 
@@ -179,21 +190,21 @@ private void testCreateFirebaseUsers ()
   //hard coding the addition of a registered user
 
   myFirebaseRef.createUser("alco8653@pacificu.edu", "password1234",
-          new Firebase.ValueResultHandler <Map<String, Object>>()
-  {
-    @Override
-    public void onSuccess(Map<String, Object> result)
-    {
-      System.out.println("Successfully created user account with uid: " + result.get("uid"));
-    }
+          new Firebase.ValueResultHandler<Map<String, Object>>()
+          {
+            @Override
+            public void onSuccess(Map<String, Object> result)
+            {
+              System.out.println("Successfully created user account with uid: " + result.get("uid"));
+            }
 
-    @Override
-    public void onError(FirebaseError firebaseError)
-    {
-      // there was an error
-      System.out.println("Error creating user. ");
-    }
-  });
+            @Override
+            public void onError(FirebaseError firebaseError)
+            {
+              // there was an error
+              System.out.println("Error creating user. ");
+            }
+          });
 
   myFirebaseRef.authWithPassword("alco8653@pacificu.edu", "password1234", new Firebase.AuthResultHandler()
   {
@@ -211,17 +222,21 @@ private void testCreateFirebaseUsers ()
       System.out.println("Error authenticating user. ");
     }
   });
+
 }
 
 /***************************************************************************************************
  *   Method:      onClick
  *   Description: called when a click has been captured.
- *                If Sign-In button selected: capture information in edit text fields and pass to
- *                                            firebase to attempt to authenticate the user
- *                If Create Account button selected: capture information in edit text fields and
- *                                                   pass to firebase to attempt to create the user
- *                If Recover Password button selected: TODO
- *                If Continue button selected:  TODO
+ *                If selected:
+ *                Sign-In:        - capture information in edit text fields and pass to
+ *                                  firebase to attempt to authenticate the user
+ *                Create Account: - capture information in edit text fields and
+ *                                  pass to firebase to attempt to create the user
+ *                Recover Password: - an email to recover password is sent to the email
+ *                                    typed in the email field
+ *                Reset Password: - resets the password associated with the user with token passed in
+ *                Continue:       - starts the next activity (home screen)
  *   Parameters:  view - the view that has been clicked
  *   Returned:    N/A
  ***************************************************************************************************/
@@ -232,7 +247,7 @@ private void testCreateFirebaseUsers ()
     if (mButtonSignIn == view)
     {
       //capture text from password editText and email editText ->pass this to firebase authentication
-      myFirebaseRef.authWithPassword (mEditEmail.getText().toString(),
+      myFirebaseRef.authWithPassword (mEmailView.getText().toString(),
                                       mEditPassword.getText().toString(),
                                       new Firebase.AuthResultHandler()
       {
@@ -241,6 +256,7 @@ private void testCreateFirebaseUsers ()
         {
           System.out.println("Authenticated the user.");
           System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+          messageDialog ("Sign-In", "Successful login.");
         }
 
         @Override
@@ -251,14 +267,13 @@ private void testCreateFirebaseUsers ()
           messageDialog ("Unable to Sign-In", "Invalid password or email.");
         }
       });
-
     }
 
     if (mButtonCreateAccount == view)
     {
       //capture text from password editText and email editText -> pass this to firebase user create
 
-      myFirebaseRef.createUser (mEditEmail.getText().toString(),
+      myFirebaseRef.createUser (mEmailView.getText().toString(),
                                 mEditPassword.getText().toString(),
                                 new Firebase.ValueResultHandler<Map<String, Object>>()
       {
@@ -277,25 +292,94 @@ private void testCreateFirebaseUsers ()
           messageDialog("Unable to Create Account","Email in use or invalid Email.");
         }
       });
-
-
     }
+
     if (mButtonRecoverPassword == view)
     {
-      myFirebaseRef.resetPassword(mEditEmail.getText().toString(), new Firebase.ResultHandler() {
+      myFirebaseRef.resetPassword(mEmailView.getText().toString(), new Firebase.ResultHandler() {
         @Override
         public void onSuccess()
         {
-          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" + mEditEmail.getText().toString());
+          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" + mEmailView.getText().toString());
         }
         @Override
         public void onError(FirebaseError firebaseError)
         {
           // error encountered
-          messageDialog ("Recover Password", "Error sending recovery Email to: \n" + mEditEmail.getText().toString());
+          messageDialog ("Recover Password", "Error sending recovery Email to: \n" + mEmailView.getText().toString());
         }
       });
     }
+
+    if (mButtonResetPassword == view)
+    {
+      final Dialog login = new Dialog (this);
+
+      login.setContentView(R.layout.dialog_pass_recovery);
+      login.setTitle("Reset Password");
+
+      Button btnReset = (Button) login.findViewById(R.id.btnReset);
+      Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
+
+      final EditText  txtUser = (EditText) login.findViewById(R.id.userEmail),
+                      txtToken = (EditText) login.findViewById(R.id.passwordToken),
+                      txtNewPass = (EditText) login.findViewById(R.id.newPassword);
+
+      //recoverPasswordDialog();
+
+      btnReset.setOnClickListener(new View.OnClickListener()
+      {
+        @Override
+        public void onClick(View v)
+        {
+          myFirebaseRef.authWithPassword(txtUser.getText().toString(),
+            txtToken.getText().toString(),
+            new Firebase.AuthResultHandler()
+            {
+              @Override
+              public void onAuthenticated(AuthData authData)
+              {
+                myFirebaseRef.changePassword(txtUser.getText().toString(),
+                txtToken.getText().toString(), txtNewPass.getText().toString(),
+                new Firebase.ResultHandler()
+                {
+                  @Override
+                  public void onSuccess()
+                  {
+                    System.out.println("Password changed. ");
+                  }
+
+                  @Override
+                  public void onError(FirebaseError firebaseError)
+                  {
+                    System.out.println("Error changing password. ");
+                  }
+                });
+              }
+
+              @Override
+              public void onAuthenticationError(FirebaseError firebaseError)
+              {
+                // there was an error
+              }
+            });
+
+          login.dismiss();
+        }
+      });
+
+      btnCancel.setOnClickListener(new View.OnClickListener()
+      {
+        @Override
+        public void onClick(View v)
+        {
+          login.dismiss();
+        }
+      });
+
+      login.show();
+    }
+
     if (mButtonContinue == view)
     {
       intent = new Intent (this, ContinueActivity.class);
@@ -322,5 +406,71 @@ private void testCreateFirebaseUsers ()
               }
             }).show ();
   }
+
+
+/*  private void recoverPasswordDialog()
+  {
+    LayoutInflater inflater = this.getLayoutInflater();
+
+    AlertDialog.Builder test;
+    DialogInterface.OnClickListener resetDialog;
+    test = new AlertDialog.Builder (this).setView(inflater.inflate(R.layout.dialog_pass_recovery, null));
+
+
+
+    test.setPositiveButton("OK", new DialogInterface.OnClickListener()
+    {
+      @Override
+      public void onClick(DialogInterface dialog, int ok)
+      {
+        //user clicked ok
+
+        myFirebaseRef.authWithPassword(dUserEmail.getText().toString(),
+                dPassToken.getText().toString(),
+                new Firebase.AuthResultHandler()
+                {
+                  @Override
+                  public void onAuthenticated(AuthData authData)
+                  {
+                    myFirebaseRef.changePassword(dUserEmail.getText().toString(),
+                            dPassToken.getText().toString(), dPassNew.getText().toString(),
+                            new Firebase.ResultHandler()
+                            {
+                              @Override
+                              public void onSuccess()
+                              {
+                                System.out.println("Password changed. ");
+                              }
+
+                              @Override
+                              public void onError(FirebaseError firebaseError)
+                              {
+                                System.out.println("Error changing password. ");
+                              }
+                            });
+                  }
+
+                  @Override
+                  public void onAuthenticationError(FirebaseError firebaseError)
+                  {
+                    // there was an error
+                  }
+                });
+      }
+    })
+    .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+    {
+      public void onClick(DialogInterface dialog, int cancel)
+      {
+        //user clicked cancel
+        //LoginDialogFragment.this.getDialog().cancel();
+      }
+    });
+
+    test.show();
+
+  }*/
+
+
 
 }
