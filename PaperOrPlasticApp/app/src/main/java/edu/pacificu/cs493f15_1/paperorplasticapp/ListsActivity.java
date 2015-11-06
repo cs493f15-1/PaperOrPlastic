@@ -4,6 +4,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.*;
 import android.app.ActionBar;
 import android.app.Activity;
 
+import android.content.Context;
 import android.support.v4.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 
 import java.io.FileDescriptor;
@@ -23,11 +26,12 @@ import java.util.ArrayList;
  */
 public class ListsActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener
 {
-    private Button mButtonAddList;
+    private Button mbAddList, mbAddItem;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     GroceryLists mGLists;
     TabHost mListTabHost;
     FragmentManager fm;
+    ListView mListView;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -49,13 +53,15 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         //init lists
         mGLists = new GroceryLists();
 
+        mListView = (ListView) findViewById(R.id.listView);
+
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
 
         //on click listener for buttons (connect to the view)
-        mButtonAddList = (Button) findViewById (R.id.bAddList);
-        mButtonAddList.setOnClickListener(new View.OnClickListener() {
+        mbAddList = (Button) findViewById (R.id.bAddList);
+        mbAddList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fm = getSupportFragmentManager();
@@ -64,19 +70,24 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             }
         });
 
-
+        mbAddItem = (Button) findViewById (R.id.bAddItem);
+        mbAddList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem (getBaseContext());
+            }
+        });
 
 
         //For testing purposes
-        mGLists.addList("My GList 1");
+        mGLists.addList("My First List");
 
 
-        //add all lists in GroceryLists to list tabs
+        //add all lists in GroceryLists to tabs
         for (int i = 0; i < mGLists.getSize(); i++)
         {
             addListTab(mGLists.getList(i), i);
         }
-
 
     }
 
@@ -98,8 +109,6 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         spec.setContent(R.id.fragment);
         spec.setIndicator(newList.getListName());
         mListTabHost.addTab(spec);
-
-
     }
 
     /********************************************************************************************
@@ -118,4 +127,24 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mGLists.addList(inputText);
         addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
     }
+
+    /********************************************************************************************
+     * Function name: addItem
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:       none
+     ******************************************************************************************/
+    public void addItem (Context context)
+    {
+        ListItemAdapter adapter = new ListItemAdapter();
+
+        mListView.setAdapter(adapter);
+
+    }
+
+
+
 }
