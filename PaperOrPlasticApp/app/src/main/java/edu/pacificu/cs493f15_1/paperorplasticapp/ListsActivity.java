@@ -30,10 +30,10 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 {
     private Button mbAddList, mbAddItem;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
-    GroceryLists mGLists;
-    TabHost mListTabHost;
-    FragmentManager fm;
-    ListView mListView;
+    private GroceryLists mGLists;
+    private TabHost mListTabHost;
+    private FragmentManager fm;
+    private ListView mListView;
     private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
     private long mLastClickTime;
 
@@ -56,9 +56,10 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         mLastClickTime = 0;
 
-        //init lists
+        //init my grocery lists
         mGLists = new GroceryLists();
 
+        //to view items
         mListView = (ListView) findViewById(R.id.listView);
 
         //setup tabs
@@ -66,6 +67,8 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mListTabHost.setup();
 
         //on click listener for buttons (connect to the view)
+
+        //add list button
         mbAddList = (Button) findViewById (R.id.bAddList);
         mbAddList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,28 +79,24 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             }
         });
 
+        //add item button
         mbAddItem = (Button) findViewById (R.id.bAddItem);
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 addItemToListView();
             }
         });
-
 
         //For testing purposes
         mGLists.addList("My First List");
 
 
-        //add all lists in GroceryLists to tabs
+        //add all existing lists in GroceryLists to tabs
         for (int i = 0; i < mGLists.getSize(); i++)
         {
             addListTab(mGLists.getList(i), i);
-
         }
-
 
     }
 
@@ -125,49 +124,68 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     }
 
     /********************************************************************************************
-     * Function name: onFinishEditDialog
+     * Function name: onFinishListDialog
      *
-     * Description:
+     * Description:   When dialog for adding list is done, add list and list tab with text from
+     *                dialog as the new list name
      *
-     * Parameters:
+     * Parameters:    newListName - the new list's name
      *
      * Returns:       none
      ******************************************************************************************/
 
     @Override
-    public void onFinishListDialog(String inputText) {
+    public void onFinishListDialog(String newListName) {
         //add List to Lists and create a tab
-        mGLists.addList(inputText);
+        mGLists.addList(newListName);
 
         addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
 
     }
 
     /********************************************************************************************
-     * Function name: addItem
+     * Function name: addItemToListView
      *
-     * Description:
+     * Description:   Adds item layout to listView as a new row (and the new item to our currently selected list?)
      *
-     * Parameters:
+     * Parameters:    none
      *
      * Returns:       none
      ******************************************************************************************/
     public void addItemToListView ()
     {
         ListItem item = new ListItem("newItem");
-        GroceryList currentList =  getCurrentGList();
-
-        //currentList.addItem(item);
 
         listAdapters.get(mListTabHost.getCurrentTab()).add(item);
     }
 
+    /********************************************************************************************
+     * Function name: addListAdapter
+     *
+     * Description:   Adds a list adapter for mListView to keep track of the info in gList
+     *
+     * Parameters:    gList - the new list whose info needs to be kept track of
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
     private void addListAdapter (GroceryList gList)
     {
-        listAdapters.add (new GroceryListItemAdapter(mListView.getContext(), R.layout.grocery_list_item, gList.getItemArray()));
+        listAdapters.add (new GroceryListItemAdapter(mListView.getContext(),
+                R.layout.grocery_list_item, gList.getItemArray()));
         GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
         mListView.setAdapter ( newAdapter);
     }
+
+    /********************************************************************************************
+     * Function name: getCurrentGList
+     *
+     * Description:   Gets the GroceryList whose tab we have selected
+     *
+     * Parameters:    none
+     *
+     * Returns:       the current list selected
+     ******************************************************************************************/
 
     public GroceryList getCurrentGList ()
     {
