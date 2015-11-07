@@ -17,6 +17,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -65,6 +66,14 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
+        mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                mListTabHost.setCurrentTab(Integer.parseInt(tabId));
+                //listAdapters.get (Integer.parseInt(tabId)).getView(Integer.parseInt(tabId), mListView,  mListTabHost);
+            }
+        });
+
 
         //on click listener for buttons (connect to the view)
 
@@ -87,6 +96,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
                 addItemToListView();
             }
         });
+
 
         //For testing purposes
         mGLists.addList("My First List");
@@ -171,10 +181,10 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     private void addListAdapter (GroceryList gList)
     {
-        listAdapters.add (new GroceryListItemAdapter(mListView.getContext(),
+        listAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
         GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
-        mListView.setAdapter ( newAdapter);
+        mListView.setAdapter(newAdapter);
     }
 
     /********************************************************************************************
