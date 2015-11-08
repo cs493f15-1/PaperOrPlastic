@@ -5,7 +5,11 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  */
 
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collections;
+=======
+import java.util.List;
+>>>>>>> upstream/master
 
 public abstract class PoPList
 {
@@ -118,7 +122,15 @@ public abstract class PoPList
         System.out.println (mListName);
     }
 
+    public int getSize ()
+    {
+        return mSize;
+    }
 
+    public ArrayList<ListItem> getItemArray ()
+    {
+        return mItems;
+    }
 
        /* Functions
        setCurrentSortingCategory() (this is the way the list will be shown to the user)
