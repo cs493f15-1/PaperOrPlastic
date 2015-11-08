@@ -5,11 +5,8 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  */
 
 import java.util.ArrayList;
-<<<<<<< HEAD
 import java.util.Collections;
-=======
 import java.util.List;
->>>>>>> upstream/master
 
 public abstract class PoPList
 {
@@ -20,6 +17,8 @@ public abstract class PoPList
     ArrayList<ListItem> mItems;
     int mCurrentSortingValue;
     int mSize;
+
+    public static final String[]GroupByStrings = {"" , "alphabetical", "calories", "date entered", "aisle", "price"};
 
     /*******************************************
      * Gets

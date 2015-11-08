@@ -24,7 +24,6 @@ public class ListItem
 
     public final int MAX_LENGTH = 200; //arbitrary number
 
-
     public ListItem ( String name)
     {
         mName = name;
