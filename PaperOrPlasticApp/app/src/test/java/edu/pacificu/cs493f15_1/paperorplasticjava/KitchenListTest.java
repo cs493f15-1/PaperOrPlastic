@@ -11,6 +11,9 @@ public class KitchenListTest
     private KitchenList KList;
     private ListItem item1, item2, item3;
 
+    /**
+     * Creates the List and List items that may be added each test.
+     */
     @Before
     public void setUp () {
         KList = new KitchenList("Temp List");
@@ -19,9 +22,21 @@ public class KitchenListTest
         item3 = new ListItem("3");
     }
 
+    /**
+     * Deletes all of the items in case they were changed in the test.
+     */
     @After
-    public void tearDown () { KList = null; }
+    public void tearDown ()
+    {
+        KList = null;
+        item1 = null;
+        item2 = null;
+        item3 = null;
+    }
 
+    /**
+     * Tests that returnItem returns an item if the index is within bounds.
+     */
     @Test
     public void TestGetItemReturnItem ()
     {
@@ -33,6 +48,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item returned was not as expected.", item1, KList.getItem(0));
     }
 
+    /**
+     * Tests that returnItem returns null if the index is out of bounds.
+     */
     @Test
     public void TestGetItemReturnNull ()
     {
@@ -40,6 +58,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item returned was not as expected.", null, KList.getItem(0));
     }
 
+    /**
+     * Tests that an item can be added to a List with 0 items.
+     */
     @Test
     public void TestAddItemWith0Items ()
     {
@@ -51,6 +72,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item1 returned was not as expected.", item1, KList.getItem(0));
     }
 
+    /**
+     * Tests that an item can be added to a List with 1 item.
+     */
     @Test
     public void TestAddItemWith1Item ()
     {
@@ -68,6 +92,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item2 returned was not as expected.", item2, KList.getItem(1));
     }
 
+    /**
+     * Tests that adding a duplicate item increases the quantity of that item.
+     */
     @Test
     public void TestAddDuplicateItem () {
         Assert.assertEquals("The size of the List was not as expected.", 0, KList.getSize());
@@ -86,6 +113,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item1 returned was not as expected.", item1, KList.getItem(0));
     }
 
+    /**
+     * Tests that a list can be deleted from if there is no items in the list.
+     */
     @Test
     public void TestDeleteListWith0Items () {
         Assert.assertEquals("The size of the List was not as expected.", 0, KList.getSize());
@@ -95,6 +125,9 @@ public class KitchenListTest
         Assert.assertEquals("The size of the List was not as expected.", 0, KList.getSize());
     }
 
+    /**
+     * Tests that deleting an item from a list reduces the size of the list.
+     */
     @Test
     public void TestDeleteListWith1Items () {
         Assert.assertEquals("The size of the List was not as expected.", 0, KList.getSize());
@@ -110,6 +143,10 @@ public class KitchenListTest
         Assert.assertEquals("The List Item1 returned was not as expected.", null, KList.getItem(0));
     }
 
+
+    /**
+     * Tests that deleting an item from a list reduces the size of the list and deletes the correct one.
+     */
     @Test
     public void TestDeleteListWith3Items () {
         Assert.assertEquals("The size of the List was not as expected.", 0, KList.getSize());
@@ -130,6 +167,9 @@ public class KitchenListTest
         Assert.assertEquals("The List Item1 returned was not as expected.", null, KList.getItem(2));
     }
 
+    /**
+     * Tests that sortByName sorts correctly on a list.
+     */
     @Test
     public void TestSortbyName ()
     {
@@ -152,5 +192,4 @@ public class KitchenListTest
         Assert.assertEquals("The List Item2 returned was not as expected.", KList.getItem(1).getItemName(), item1.getItemName());
         Assert.assertEquals("The List Item3 returned was not as expected.", KList.getItem(2).getItemName(), item2.getItemName());
     }
-
 }
