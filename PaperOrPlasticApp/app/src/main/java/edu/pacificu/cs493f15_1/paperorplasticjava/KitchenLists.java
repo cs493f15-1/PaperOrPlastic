@@ -38,7 +38,12 @@ public class KitchenLists
 
     public KitchenList getList (int listIndex)
     {
-        return mLists.get (listIndex);
+        return mLists.get(listIndex);
+    }
+
+    public int getSize()
+    {
+        return mLists.size();
     }
 
     /**********************************

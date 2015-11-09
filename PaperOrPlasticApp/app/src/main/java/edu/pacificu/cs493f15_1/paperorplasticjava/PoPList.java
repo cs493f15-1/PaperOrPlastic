@@ -30,7 +30,14 @@ public abstract class PoPList
 
     public ListItem getItem (int itemIndex)
     {
-        return mItems.get(itemIndex);
+        if (itemIndex >= getSize())
+        {
+            return null;
+        }
+        else
+        {
+            return mItems.get(itemIndex);
+        }
     }
 
     /********************************************
@@ -91,6 +98,7 @@ public abstract class PoPList
     * Deletes
      ******************************************/
 
+    //TODO change this to return a value if not found
     // Deletion method could change.
     public void deleteItem (String itemName)
     {
