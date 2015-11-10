@@ -12,16 +12,20 @@ import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 /**
@@ -30,6 +34,7 @@ import java.util.ArrayList;
 public class ListsActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener
 {
     private Button mbAddList, mbAddItem;
+    private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     private GroceryLists mGLists;
     private TabHost mListTabHost;
@@ -101,6 +106,42 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         //For testing purposes
         mGLists.addList("My First List");
 
+        //For the Group By Spinner (sorting dropdown)
+
+        mGroupBySpinner = (Spinner)findViewById(R.id.GroupBySpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ListsActivity.this,
+                android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGroupBySpinner.setAdapter(adapter);
+        mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+
+                    case 0: // first item in dropdown currently blank
+                        break;
+                    case 1: //second item in dropdown currently alphabetical
+                        getCurrentGList().sortListByName();
+
+                        //TODO need to refresh the page so the new list displays
+                        break;
+                    case 2: //calories
+                        break;
+                    case 3: //date entered
+                        break;
+                    case 4: //aisle
+                        break;
+                    case 5: //price
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                    //Nothing to do if the dropdown is not selected.
+            }
+        });
 
         //add all existing lists in GroceryLists to tabs
         for (int i = 0; i < mGLists.getSize(); i++)
@@ -162,9 +203,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      *
      * Returns:       none
      ******************************************************************************************/
-    public void addItemToListView ()
-    {
-        ListItem item = new ListItem("newItem");
+    public void addItemToListView () {
+
+        ListItem item = new ListItem(UUID.randomUUID().toString().substring(0, 10)); // to get a random string name
 
         listAdapters.get(mListTabHost.getCurrentTab()).add(item);
     }
