@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
@@ -30,6 +31,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
         this.mLayoutResourceId = layoutResourceId;
         this.mContext = context;
         this.mItemArray = items;
+        this.setNotifyOnChange(true);
     }
 
 
@@ -39,12 +41,27 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
         return mItemArray.get (position);
     }
 
+
+    public ArrayList<ListItem> getItems ()
+    {
+        return mItemArray;
+    }
+
     @Override
     public void add (ListItem item) {
         // TODO Auto-generated method stub
         super.add (item);
         //mItemArray.add(item);
     }
+
+
+    /*public void replaceItems (ArrayList<ListItem> sortedItems)
+    {
+        super.clear ();
+        super.addAll();
+        super.notifyDataSetChanged();
+
+    }*/
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent)

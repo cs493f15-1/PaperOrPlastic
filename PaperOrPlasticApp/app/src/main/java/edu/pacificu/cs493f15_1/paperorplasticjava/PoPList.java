@@ -17,6 +17,12 @@ public abstract class PoPList
     ArrayList<ListItem> mItems;
     int mCurrentSortingValue;
     int mSize;
+    public static final int SORT_NONE = 0;
+    public static final int SORT_ALPHA = 1;
+    public static final int SORT_CAL = 2;
+    public static final int SORT_DATE = 3;
+    public static final int SORT_AISLE = 4;
+    public static final int SORT_PRICE = 5;
 
     public static final String[]GroupByStrings = {"" , "alphabetical", "calories", "date entered", "aisle", "price"};
 
@@ -50,6 +56,10 @@ public abstract class PoPList
     }
 
 
+    public void setItems (ArrayList<ListItem> items)
+    {
+        mItems = items;
+    }
     /********************************************
     * Adds
      *******************************************/
@@ -147,6 +157,16 @@ public abstract class PoPList
     /*********************************
      * Sorts
      ********************************/
+
+    public int getCurrentSortingValue ()
+    {
+        return mCurrentSortingValue;
+    }
+
+    public void setCurrentSortingValue (int sortingValue)
+    {
+        mCurrentSortingValue = sortingValue;
+    }
 
     /**
      * Sorts the ListItems alphabetically by name using the Comparator NAME in ListItem
