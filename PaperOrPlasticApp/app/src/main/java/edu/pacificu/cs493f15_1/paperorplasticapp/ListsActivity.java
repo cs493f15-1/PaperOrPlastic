@@ -142,6 +142,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
                 switch (position) {
 
                     case PoPList.SORT_NONE: // first item in dropdown currently blank
+                        currentList.setCurrentSortingValue(PoPList.SORT_NONE);
                         break;
                     case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
@@ -153,12 +154,16 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
                         //TODO need to refresh the page so the new list displays
                         break;
                     case PoPList.SORT_CAL: //calories
+                        currentList.setCurrentSortingValue(PoPList.SORT_CAL);
                         break;
                     case PoPList.SORT_DATE: //date entered
+                        currentList.setCurrentSortingValue(PoPList.SORT_DATE);
                         break;
                     case PoPList.SORT_AISLE: //aisle
+                        currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
                         break;
                     case PoPList.SORT_PRICE: //price
+                        currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
                         break;
                 }
             }
