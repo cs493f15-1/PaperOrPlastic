@@ -21,6 +21,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticapp.NewItemInfoDialogListener;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -41,7 +42,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     private FragmentManager fm;
     private ListView mListView;
     private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
+
     private long mLastClickTime;
+    private NewItemInfoDialogListener mItemInfoListener;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -84,9 +87,11 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         //add list button
         mbAddList = (Button) findViewById (R.id.bAddList);
-        mbAddList.setOnClickListener(new View.OnClickListener() {
+        mbAddList.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 fm = getSupportFragmentManager();
                 ListDFragment listDFragment = new ListDFragment();
                 listDFragment.show(fm, "Hi");
@@ -97,8 +102,23 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mbAddItem = (Button) findViewById (R.id.bAddItem);
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                addItemToListView();
+            public void onClick(View v)
+            {
+                mItemInfoListener = new NewItemInfoDialogListener()
+                {
+                    @Override
+                    public void onFinishNewItemDialog(String inputText)
+                    {
+                        ListItem newItem = new ListItem(inputText);
+                        addItemToListView(newItem);
+                    }
+
+                };
+                fm = getSupportFragmentManager();
+                NewItemDFragment newItemFragment = new NewItemDFragment();
+                newItemFragment.show(fm, "Hi");
+
+
             }
         });
 
@@ -117,22 +137,28 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                GroceryList currentList  = getCurrentGList();
+
                 switch (position) {
 
-                    case 0: // first item in dropdown currently blank
+                    case PoPList.SORT_NONE: // first item in dropdown currently blank
                         break;
-                    case 1: //second item in dropdown currently alphabetical
-                        getCurrentGList().sortListByName();
+                    case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
+
+                        currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                        currentList.sortListByName();
+                        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+
 
                         //TODO need to refresh the page so the new list displays
                         break;
-                    case 2: //calories
+                    case PoPList.SORT_CAL: //calories
                         break;
-                    case 3: //date entered
+                    case PoPList.SORT_DATE: //date entered
                         break;
-                    case 4: //aisle
+                    case PoPList.SORT_AISLE: //aisle
                         break;
-                    case 5: //price
+                    case PoPList.SORT_PRICE: //price
                         break;
                 }
             }
@@ -203,11 +229,28 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      *
      * Returns:       none
      ******************************************************************************************/
-    public void addItemToListView () {
+    public void addItemToListView (ListItem newItem)
+    {
+        listAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
+        GroceryList currentList = getCurrentGList();
 
-        ListItem item = new ListItem(UUID.randomUUID().toString().substring(0, 10)); // to get a random string name
+        /*currentList.setItems(listAdapters.get(mListTabHost.getCurrentTab()).getItems());
+        currentList.sortListByName();
+        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();*/
 
-        listAdapters.get(mListTabHost.getCurrentTab()).add(item);
+
+        switch (currentList.getCurrentSortingValue())
+        {
+            case PoPList.SORT_ALPHA:    currentList.sortListByName();
+                                        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                                        break;
+            case PoPList.SORT_AISLE:
+            case PoPList.SORT_CAL:
+            case PoPList.SORT_DATE:
+            case PoPList.SORT_PRICE:
+            case PoPList.SORT_NONE:     break;
+        }
+
     }
 
     /********************************************************************************************
@@ -220,8 +263,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListAdapter (GroceryList gList)
-    {
+    private void addListAdapter (GroceryList gList) {
         listAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
         GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
@@ -242,4 +284,29 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     {
         return mGLists.getList(mListTabHost.getCurrentTab());
     }
+
+
+    public NewItemInfoDialogListener getItemInfoListener ()
+    {
+        return mItemInfoListener;
+    }
+
+    /********************************************************************************************
+     * Function name: onFinishNewItemDialog
+     *
+     * Description:   When dialog for adding list is done, add list and list tab with text from
+     *                dialog as the new list name
+     *
+     * Parameters:    newListName - the new list's name
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
+       /* public void onFinishNewItemDialog(String newListName) {
+        //add List to Lists and create a tab
+        mGLists.addList(newListName);
+
+        addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
+
+    }*/
 }
