@@ -25,6 +25,7 @@
 
     <string name="cancel">Cancel</string>
     <string name="OK">OK</string>
+    <string name="qty">Qty</string>
 
     <string-array name="gameDifficulty">
         <item>Easy</item>
