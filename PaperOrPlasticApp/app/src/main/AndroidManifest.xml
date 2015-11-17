@@ -40,7 +40,55 @@
             android:label="@string/title_activity_lists">
         </activity>
 
+        <activity
+            android:name=".GroceryListActivity"
+            android:label="@string/title_activity_grocery_lists">
+        </activity>
 
+        <activity
+            android:name=".GroceryListSettingsActivity"
+            android:label="@string/title_activity_grocery_lists_settings">
+        </activity>
+
+        <activity
+            android:name=".KitchenListActivity"
+            android:label="@string/title_activity_kitchen_lists">
+        </activity>
+
+        <activity
+            android:name=".KitchenListSettingsActivity"
+            android:label="@string/title_activity_kitchen_lists_settings">
+        </activity>
+
+        <activity
+            android:name=".NutritionActivity"
+            android:label="@string/title_activity_nutrition">
+        </activity>
+
+        <activity
+            android:name=".NutritionSettingsActivity"
+            android:label="@string/title_activity_nutrition_settings">
+        </activity>
+
+        <activity
+            android:name=".CouponsActivity"
+            android:label="@string/title_activity_coupons">
+        </activity>
+
+        <activity
+            android:name=".CouponsSettingsActivity"
+            android:label="@string/title_activity_coupons_settings">
+        </activity>
+
+        <activity
+            android:name=".RecipesActivity"
+            android:label="@string/title_activity_recipes">
+        </activity>
+
+        <activity
+            android:name=".RecipesSettingsActivity"
+            android:label="@string/title_activity_recipes_settings">
+        </activity>
 
     </application>
 
