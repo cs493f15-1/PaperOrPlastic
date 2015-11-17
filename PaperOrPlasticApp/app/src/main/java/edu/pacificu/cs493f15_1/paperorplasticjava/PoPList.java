@@ -127,6 +127,11 @@ public abstract class PoPList
       }
     }
 
+    public void delete (int index)
+    {
+        mItems.remove(index);
+    }
+
     public void clearList ()
     {
         mItems.clear();

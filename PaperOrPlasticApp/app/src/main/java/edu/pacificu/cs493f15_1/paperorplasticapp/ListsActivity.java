@@ -11,15 +11,21 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.Toast;
+
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticapp.NewItemInfoDialogListener;
 
@@ -32,8 +38,7 @@ import java.util.UUID;
 /**
  * Created by sull0678 on 10/26/2015.
  */
-public class ListsActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener
-{
+public class ListsActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
     private Button mbAddList, mbAddItem;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
@@ -41,23 +46,24 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
+    private ArrayList<GroceryListItemAdapter> mListAdapters = new ArrayList<GroceryListItemAdapter>();
+    int position = 0;
+    Button delete;
 
     private long mLastClickTime;
     private NewItemInfoDialogListener mItemInfoListener;
 
     /********************************************************************************************
      * Function name: onCreate
-     *
+     * <p/>
      * Description:   Initializes all needed setup for objects in page
-     *
+     * <p/>
      * Parameters:    savedInstanceState  - a bundle object
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -70,6 +76,23 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView)
+        {
+            @Override
+            public void onSwipeRight (int pos)
+            {
+                //Toast.makeText (ListsActivity.this, "right", Toast.LENGTH_LONG).show();
+                showDeleteButton(pos);
+            }
+
+            @Override
+            public void onSwipeLeft(int pos) {
+                //Toast.makeText (ListsActivity.this, "left", Toast.LENGTH_LONG).show();
+                showDeleteButton(pos);
+            }
+        });
+
+
 
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
@@ -78,37 +101,34 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             @Override
             public void onTabChanged(String tabId) {
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
-                //listAdapters.get (Integer.parseInt(tabId)).getView(Integer.parseInt(tabId), mListView,  mListTabHost);
+                if (mListAdapters.size() > 0) {
+                    mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
+                }
             }
         });
 
 
         //on click listener for buttons (connect to the view)
 
-        //add list button
-        mbAddList = (Button) findViewById (R.id.bAddList);
-        mbAddList.setOnClickListener(new View.OnClickListener()
-        {
+        //set up addList button
+        mbAddList = (Button) findViewById(R.id.bAddList);
+        mbAddList.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 fm = getSupportFragmentManager();
                 ListDFragment listDFragment = new ListDFragment();
                 listDFragment.show(fm, "Hi");
             }
         });
 
-        //add item button
-        mbAddItem = (Button) findViewById (R.id.bAddItem);
+        //set up add item button
+        mbAddItem = (Button) findViewById(R.id.bAddItem);
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                mItemInfoListener = new NewItemInfoDialogListener()
-                {
+            public void onClick(View v) {
+                mItemInfoListener = new NewItemInfoDialogListener() {
                     @Override
-                    public void onFinishNewItemDialog(String inputText)
-                    {
+                    public void onFinishNewItemDialog(String inputText) {
                         ListItem newItem = new ListItem(inputText);
                         addItemToListView(newItem);
                     }
@@ -128,7 +148,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         //For the Group By Spinner (sorting dropdown)
 
-        mGroupBySpinner = (Spinner)findViewById(R.id.GroupBySpinner);
+        mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ListsActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
@@ -137,7 +157,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                GroceryList currentList  = getCurrentGList();
+                GroceryList currentList = getCurrentGList();
 
                 switch (position) {
 
@@ -148,7 +168,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
                         currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
                         currentList.sortListByName();
-                        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
 
                         //TODO need to refresh the page so the new list displays
@@ -170,13 +190,13 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                    //Nothing to do if the dropdown is not selected.
+                //Nothing to do if the dropdown is not selected.
             }
         });
 
+
         //add all existing lists in GroceryLists to tabs
-        for (int i = 0; i < mGLists.getSize(); i++)
-        {
+        for (int i = 0; i < mGLists.getSize(); i++) {
             addListTab(mGLists.getList(i), i);
         }
 
@@ -188,36 +208,39 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
      *
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     *                index   - the index of the newList in the GroceryLists object, also the
-     *                          new tab spec id
+     * index   - the index of the newList in the GroceryLists object, also the
+     * new tab spec id
      *
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListTab (GroceryList newList, int index)
+    private void addListTab(GroceryList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
         spec.setContent(R.id.fragment);
         spec.setIndicator(newList.getListName());
         mListTabHost.addTab(spec);
 
+
         //for keeping track of items in list
         addListAdapter(mGLists.getList(index));
+        mListTabHost.setCurrentTab(index);
     }
 
     /********************************************************************************************
      * Function name: onFinishListDialog
-     *
+     * <p/>
      * Description:   When dialog for adding list is done, add list and list tab with text from
-     *                dialog as the new list name
-     *
+     * dialog as the new list name
+     * <p/>
      * Parameters:    newListName - the new list's name
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
 
     @Override
-    public void onFinishListDialog(String newListName) {
+    public void onFinishListDialog(String newListName)
+    {
         //add List to Lists and create a tab
         mGLists.addList(newListName);
 
@@ -227,51 +250,52 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     /********************************************************************************************
      * Function name: addItemToListView
-     *
-     * Description:   Adds item layout to listView as a new row (and the new item to our currently selected list?)
-     *
-     * Parameters:    none
-     *
+     * <p/>
+     * Description:   Adds item layout to listView as a new row, and resort the list
+     * <p/>
+     * Parameters:    newItem - the new ListItem being added
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
-    public void addItemToListView (ListItem newItem)
+    public void addItemToListView(ListItem newItem)
     {
-        listAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
+        mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
+
+
+        //resort the list depending on the current sorting category
         GroceryList currentList = getCurrentGList();
-
-        /*currentList.setItems(listAdapters.get(mListTabHost.getCurrentTab()).getItems());
-        currentList.sortListByName();
-        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();*/
-
 
         switch (currentList.getCurrentSortingValue())
         {
-            case PoPList.SORT_ALPHA:    currentList.sortListByName();
-                                        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
-                                        break;
+            case PoPList.SORT_ALPHA:
+                currentList.sortListByName();
+                mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                break;
             case PoPList.SORT_AISLE:
             case PoPList.SORT_CAL:
             case PoPList.SORT_DATE:
             case PoPList.SORT_PRICE:
-            case PoPList.SORT_NONE:     break;
+            case PoPList.SORT_NONE:
+                break;
         }
 
     }
 
     /********************************************************************************************
      * Function name: addListAdapter
-     *
+     * <p/>
      * Description:   Adds a list adapter for mListView to keep track of the info in gList
-     *
+     * <p/>
      * Parameters:    gList - the new list whose info needs to be kept track of
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListAdapter (GroceryList gList) {
-        listAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
+    private void addListAdapter(GroceryList gList)
+    {
+        mListAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
-        GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
+        GroceryListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 
@@ -285,33 +309,90 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public GroceryList getCurrentGList ()
-    {
+    public GroceryList getCurrentGList() {
         return mGLists.getList(mListTabHost.getCurrentTab());
     }
 
-
-    public NewItemInfoDialogListener getItemInfoListener ()
-    {
+    /********************************************************************************************
+     * Function name: getItemInfoListener
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
+    public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 
     /********************************************************************************************
-     * Function name: onFinishNewItemDialog
+     * Function name: showDeleteButton
      *
-     * Description:   When dialog for adding list is done, add list and list tab with text from
-     *                dialog as the new list name
+     * Description:
      *
-     * Parameters:    newListName - the new list's name
+     * Parameters:
      *
-     * Returns:       none
+     * Returns:
+     ******************************************************************************************/
+    private boolean showDeleteButton(final int pos) {
+        position = pos;
+        View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
+        if (child != null) {
+
+            delete = (Button) child.findViewById(R.id.bDelete);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    GroceryList gList = getCurrentGList();
+                    gList.delete(pos);
+                    mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+
+                }
+            });
+            if (delete != null)
+            {
+                if (delete.getVisibility() == View.INVISIBLE) {
+                    Animation animation =
+                            AnimationUtils.loadAnimation(this,
+                                    R.anim.slide_out_left);
+                    delete.startAnimation(animation);
+                    delete.setVisibility(View.VISIBLE);
+                } else {
+                    Animation animation =
+                            AnimationUtils.loadAnimation(this,
+                                    R.anim.slide_in_right);
+                    delete.startAnimation(animation);
+                    delete.setVisibility(View.INVISIBLE);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /********************************************************************************************
+     * Function name: deleteItem
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
      ******************************************************************************************/
 
-       /* public void onFinishNewItemDialog(String newListName) {
-        //add List to Lists and create a tab
-        mGLists.addList(newListName);
+    public void deleteItem (View view, ListItem item) {
 
-        addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
+        mListAdapters.get(mListTabHost.getCurrentTab()).remove(item);
+        delete.setVisibility(View.INVISIBLE);
+        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+    }
 
-    }*/
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        return super.dispatchTouchEvent(ev);
+    }
+    //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 }
