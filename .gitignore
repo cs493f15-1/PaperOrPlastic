@@ -46,3 +46,4 @@ captures/
 
 #Ignore .idea files
 .idea/
+*.iml
