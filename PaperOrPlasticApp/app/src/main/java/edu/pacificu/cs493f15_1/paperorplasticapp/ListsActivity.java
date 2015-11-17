@@ -41,9 +41,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList <GroceryListItemAdapter> listAdapters = new ArrayList<GroceryListItemAdapter>();
+    private ArrayList <GroceryListItemAdapter> listAdapters =
+                                        new ArrayList<GroceryListItemAdapter>();
 
-    private long mLastClickTime;
     private NewItemInfoDialogListener mItemInfoListener;
 
     /********************************************************************************************
@@ -63,7 +63,6 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         setContentView(R.layout.activity_lists);
 
-        mLastClickTime = 0;
 
         //init my grocery lists
         mGLists = new GroceryLists();
@@ -78,7 +77,6 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             @Override
             public void onTabChanged(String tabId) {
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
-                //listAdapters.get (Integer.parseInt(tabId)).getView(Integer.parseInt(tabId), mListView,  mListTabHost);
             }
         });
 
@@ -150,8 +148,6 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
                         currentList.sortListByName();
                         listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
-
-                        //TODO need to refresh the page so the new list displays
                         break;
                     case PoPList.SORT_CAL: //calories
                         currentList.setCurrentSortingValue(PoPList.SORT_CAL);
@@ -228,26 +224,23 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     /********************************************************************************************
      * Function name: addItemToListView
      *
-     * Description:   Adds item layout to listView as a new row (and the new item to our currently selected list?)
+     * Description:   Adds item layout to listView as a new row and adds it to listadapter
      *
      * Parameters:    none
      *
      * Returns:       none
      ******************************************************************************************/
+
     public void addItemToListView (ListItem newItem)
     {
         listAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
         GroceryList currentList = getCurrentGList();
 
-        /*currentList.setItems(listAdapters.get(mListTabHost.getCurrentTab()).getItems());
-        currentList.sortListByName();
-        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();*/
-
-
         switch (currentList.getCurrentSortingValue())
         {
             case PoPList.SORT_ALPHA:    currentList.sortListByName();
-                                        listAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                                        listAdapters.get(mListTabHost.getCurrentTab())
+                                                .notifyDataSetChanged();
                                         break;
             case PoPList.SORT_AISLE:
             case PoPList.SORT_CAL:
@@ -268,7 +261,8 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListAdapter (GroceryList gList) {
+    private void addListAdapter (GroceryList gList)
+    {
         listAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
         GroceryListItemAdapter newAdapter = listAdapters.get(listAdapters.size() - 1);
@@ -291,27 +285,20 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     }
 
 
+    /********************************************************************************************
+     * Function name: NewItemInfoDialogListener
+     *
+     * Description:   Returns the newItemInfoDialogListener
+     *
+     * Parameters:    none
+     *
+     * Returns:       mItemInfoListener
+     ******************************************************************************************/
+    //not sure if this is needed
     public NewItemInfoDialogListener getItemInfoListener ()
     {
         return mItemInfoListener;
     }
 
-    /********************************************************************************************
-     * Function name: onFinishNewItemDialog
-     *
-     * Description:   When dialog for adding list is done, add list and list tab with text from
-     *                dialog as the new list name
-     *
-     * Parameters:    newListName - the new list's name
-     *
-     * Returns:       none
-     ******************************************************************************************/
 
-       /* public void onFinishNewItemDialog(String newListName) {
-        //add List to Lists and create a tab
-        mGLists.addList(newListName);
-
-        addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
-
-    }*/
 }
