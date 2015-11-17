@@ -11,6 +11,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -80,13 +81,14 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             @Override
             public void onSwipeRight (int pos)
             {
-                Toast.makeText (ListsActivity.this, "right", Toast.LENGTH_LONG).show();
+                //Toast.makeText (ListsActivity.this, "right", Toast.LENGTH_LONG).show();
                 showDeleteButton(pos);
             }
 
             @Override
-            public void onSwipeLeft() {
-                Toast.makeText (ListsActivity.this, "left", Toast.LENGTH_LONG).show();
+            public void onSwipeLeft(int pos) {
+                //Toast.makeText (ListsActivity.this, "left", Toast.LENGTH_LONG).show();
+                showDeleteButton(pos);
             }
         });
 
@@ -99,11 +101,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             @Override
             public void onTabChanged(String tabId) {
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
-                if (mListAdapters.size() > 0)
-                {
+                if (mListAdapters.size() > 0) {
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
                 }
-                //listAdapters.get (Integer.parseInt(tabId)).getView(Integer.parseInt(tabId), mListView,  mListTabHost);
             }
         });
 
@@ -301,11 +301,11 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     /********************************************************************************************
      * Function name: getCurrentGList
-     * <p/>
+     *
      * Description:   Gets the GroceryList whose tab we have selected
-     * <p/>
+     *
      * Parameters:    none
-     * <p/>
+     *
      * Returns:       the current list selected
      ******************************************************************************************/
 
@@ -313,27 +313,46 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         return mGLists.getList(mListTabHost.getCurrentTab());
     }
 
-
-    public NewItemInfoDialogListener getItemInfoListener() {
+    /********************************************************************************************
+     * Function name: getItemInfoListener
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
+    public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 
     /********************************************************************************************
-     * Function name: getCurrentGList
-     * <p/>
-     * Description:   Gets the GroceryList whose tab we have selected
-     * <p/>
-     * Parameters:    none
-     * <p/>
-     * Returns:       the current list selected
+     * Function name: showDeleteButton
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
      ******************************************************************************************/
-    private boolean showDeleteButton(int pos) {
+    private boolean showDeleteButton(final int pos) {
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
         if (child != null) {
 
             delete = (Button) child.findViewById(R.id.bDelete);
-            if (delete != null) {
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    GroceryList gList = getCurrentGList();
+                    gList.delete(pos);
+                    mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+
+                }
+            });
+            if (delete != null)
+            {
                 if (delete.getVisibility() == View.INVISIBLE) {
                     Animation animation =
                             AnimationUtils.loadAnimation(this,
@@ -351,6 +370,29 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
             return true;
         }
         return false;
+    }
+
+    /********************************************************************************************
+     * Function name: deleteItem
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
+
+    public void deleteItem (View view, ListItem item) {
+
+        mListAdapters.get(mListTabHost.getCurrentTab()).remove(item);
+        delete.setVisibility(View.INVISIBLE);
+        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+
+        return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 }

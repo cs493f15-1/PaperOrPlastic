@@ -34,7 +34,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener
 
     }
 
-    public void onSwipeLeft() {
+    public void onSwipeLeft(int pos) {
 
     }
 
@@ -48,7 +48,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener
             return true;
         }
 
-        private int getPostion(MotionEvent e1) {
+        private int getPosition(MotionEvent e1) {
             return list.pointToPosition((int) e1.getX(), (int) e1.getY());
         }
 
@@ -58,9 +58,9 @@ public class OnSwipeTouchListener implements View.OnTouchListener
             float distanceY = e2.getY() - e1.getY();
             if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                 if (distanceX > 0)
-                    onSwipeRight(getPostion(e1));
+                    onSwipeRight(getPosition(e1));
                 else
-                    onSwipeLeft();
+                    onSwipeLeft(getPosition(e1));
                 return true;
             }
             return false;

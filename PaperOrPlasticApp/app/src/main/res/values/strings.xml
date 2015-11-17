@@ -21,11 +21,12 @@
     <string name="sCreateAccount">Create Account</string>
     <string name="sRememberPass">Remember Password?</string>
     <string name="sRecoverPass">Recover Password</string>
-
+    <string name="sDelete">X</string>
 
     <string name="cancel">Cancel</string>
     <string name="OK">OK</string>
     <string name="qty">Qty</string>
+    <string name="delete">Delete</string>
 
     <string-array name="gameDifficulty">
         <item>Easy</item>
