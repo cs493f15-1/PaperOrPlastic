@@ -54,7 +54,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_lists);
+        setContentView(R.layout.activity_grocery_list);
 
         mLastClickTime = 0;
 
@@ -68,13 +68,13 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onSwipeRight (int pos)
             {
-                //Toast.makeText (ListsActivity.this, "right", Toast.LENGTH_LONG).show();
+                //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
                 showDeleteButton(pos);
             }
 
             @Override
             public void onSwipeLeft(int pos) {
-                //Toast.makeText (ListsActivity.this, "left", Toast.LENGTH_LONG).show();
+                //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
                 showDeleteButton(pos);
             }
         });
@@ -122,7 +122,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                 };
                 fm = getSupportFragmentManager();
-                NewItemDFragment newItemFragment = new NewItemDFragment();
+                NewGroceryItemDFragment newItemFragment = new NewGroceryItemDFragment();
                 newItemFragment.show(fm, "Hi");
 
 

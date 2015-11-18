@@ -16,8 +16,8 @@ import android.widget.TabHost;
 
 import java.util.ArrayList;
 
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
+import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
@@ -29,11 +29,11 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     private Button mbAddList, mbAddItem;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
-    private GroceryLists mGLists;
+    private KitchenLists mKLists;
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList<GroceryListItemAdapter> mListAdapters = new ArrayList<GroceryListItemAdapter>();
+    private ArrayList<KitchenListItemAdapter> mListAdapters = new ArrayList<KitchenListItemAdapter>();
     int position = 0;
     Button delete;
 
@@ -54,12 +54,12 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_lists);
+        setContentView(R.layout.activity_kitchen_list);
 
         mLastClickTime = 0;
 
         //init my grocery lists
-        mGLists = new GroceryLists();
+        mKLists = new KitchenLists();
 
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
@@ -68,13 +68,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onSwipeRight (int pos)
             {
-                //Toast.makeText (ListsActivity.this, "right", Toast.LENGTH_LONG).show();
+                //Toast.makeText (KitchenListActivity.this, "right", Toast.LENGTH_LONG).show();
                 showDeleteButton(pos);
             }
 
             @Override
             public void onSwipeLeft(int pos) {
-                //Toast.makeText (ListsActivity.this, "left", Toast.LENGTH_LONG).show();
+                //Toast.makeText (KitchenListActivity.this, "left", Toast.LENGTH_LONG).show();
                 showDeleteButton(pos);
             }
         });
@@ -122,7 +122,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
                 };
                 fm = getSupportFragmentManager();
-                NewItemDFragment newItemFragment = new NewItemDFragment();
+                NewKitchenItemDFragment newItemFragment = new NewKitchenItemDFragment();
                 newItemFragment.show(fm, "Hi");
 
 
@@ -131,12 +131,12 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //For testing purposes
-        mGLists.addList("My First List");
+        mKLists.addList("My First List");
 
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(GroceryListActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(KitchenListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -144,7 +144,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                GroceryList currentList = getCurrentGList();
+                KitchenList currentList = getCurrentKList();
 
                 switch (position) {
 
@@ -182,9 +182,9 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         });
 
 
-        //add all existing lists in GroceryLists to tabs
-        for (int i = 0; i < mGLists.getSize(); i++) {
-            addListTab(mGLists.getList(i), i);
+        //add all existing lists in KitchenLists to tabs
+        for (int i = 0; i < mKLists.getSize(); i++) {
+            addListTab(mKLists.getList(i), i);
         }
 
     }
@@ -195,13 +195,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
      *
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     * index   - the index of the newList in the GroceryLists object, also the
+     * index   - the index of the newList in the KitchenLists object, also the
      * new tab spec id
      *
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListTab(GroceryList newList, int index)
+    private void addListTab(KitchenList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
         spec.setContent(R.id.fragment);
@@ -210,7 +210,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //for keeping track of items in list
-        addListAdapter(mGLists.getList(index));
+        addListAdapter(mKLists.getList(index));
         mListTabHost.setCurrentTab(index);
     }
 
@@ -229,9 +229,9 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     public void onFinishListDialog(String newListName)
     {
         //add List to Lists and create a tab
-        mGLists.addList(newListName);
+        mKLists.addList(newListName);
 
-        addListTab(mGLists.getList(mGLists.getSize() - 1), mGLists.getSize() - 1);
+        addListTab(mKLists.getList(mKLists.getSize() - 1), mKLists.getSize() - 1);
 
     }
 
@@ -250,7 +250,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //resort the list depending on the current sorting category
-        GroceryList currentList = getCurrentGList();
+        KitchenList currentList = getCurrentKList();
 
         switch (currentList.getCurrentSortingValue())
         {
@@ -268,36 +268,41 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     }
 
+    @Override
+    protected void onPause ()
+    {
+        super.onPause();
+
+    }
     /********************************************************************************************
      * Function name: addListAdapter
      * <p/>
-     * Description:   Adds a list adapter for mListView to keep track of the info in gList
+     * Description:   Adds a list adapter for mListView to keep track of the info in kList
      * <p/>
-     * Parameters:    gList - the new list whose info needs to be kept track of
+     * Parameters:    kList - the new list whose info needs to be kept track of
      * <p/>
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListAdapter(GroceryList gList)
+    private void addListAdapter(KitchenList kList)
     {
-        mListAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
-                R.layout.grocery_list_item, gList.getItemArray()));
-        GroceryListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
+        mListAdapters.add(new KitchenListItemAdapter(mListView.getContext(),
+                R.layout.kitchen_list_item, kList.getItemArray()));
+        KitchenListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 
     /********************************************************************************************
-     * Function name: getCurrentGList
+     * Function name: getCurrentKList
      *
-     * Description:   Gets the GroceryList whose tab we have selected
+     * Description:   Gets the KitchenList whose tab we have selected
      *
      * Parameters:    none
      *
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public GroceryList getCurrentGList() {
-        return mGLists.getList(mListTabHost.getCurrentTab());
+    public KitchenList getCurrentKList() { return mKLists.getList(mListTabHost.getCurrentTab());
     }
 
     /********************************************************************************************
@@ -332,8 +337,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                 @Override
                 public void onClick(View v)
                 {
-                    GroceryList gList = getCurrentGList();
-                    gList.delete(pos);
+                    KitchenList kList = getCurrentKList();
+                    kList.delete(pos);
                     mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                 }
