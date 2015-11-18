@@ -2,16 +2,21 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.TextView;
 
+import android.widget.Button;
+import android.widget.CheckBox;
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.OnCheckListener;
 import java.util.ArrayList;
-import java.util.Comparator;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
@@ -24,6 +29,11 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     private ArrayList<ListItem> mItemArray;
     int mLayoutResourceId;
     Context mContext;
+    public int mPosition;
+    final Handler mHandlerUI = new Handler(); //for waiting if needed
+
+
+    private int nCounter;
 
     public GroceryListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
     {
@@ -67,7 +77,10 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
+
         ItemHolder itemHolder = null;
+
+        mPosition = position; //to see which item was clicked
 
         if(row == null)
         {
@@ -78,6 +91,49 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
             itemHolder = new ItemHolder();
             //get items in row and set them to layout items
             itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
+            itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
+
+            itemHolder.checkBox.setOnClickListener(new OnCheckListener()
+            {
+                //TODO need to be ale to check multiple at a time
+                @Override
+                public void onClick (View v)
+                {
+                    //to wait for a certain amount of time
+                    if (!mbWaiting)
+                    {
+                        mbWaiting = Boolean.TRUE;
+
+                        mTimerTask = new TimerTask()
+                        {
+                            public void run()
+                            {
+                                mHandlerUI.post(new Runnable() {
+                                    public void run() {
+                                        if (mbWaiting)
+                                        {
+                                            mItemArray.remove(mPosition);
+                                            GroceryListItemAdapter.this.notifyDataSetChanged();
+                                            mbWaiting = false;
+                                        }
+                                    }
+                                });
+                            }
+
+                        };
+                        timer.schedule(mTimerTask, 3000);  //
+
+                    }
+                    else
+                    {
+                       mbWaiting = Boolean.FALSE;
+                       mTimerTask.cancel();
+                    }
+                }
+
+            });
+
+
 
             row.setTag(itemHolder);
 
@@ -98,6 +154,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     static class ItemHolder
     {
         Button itemButton;
+        CheckBox checkBox;
     }
 
 
