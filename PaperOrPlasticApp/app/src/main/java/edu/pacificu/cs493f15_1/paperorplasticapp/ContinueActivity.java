@@ -1,7 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -111,14 +110,6 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     public void onClick (View view)
     {
         Intent intent;
-
-        if (mButtonLists == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, ListsActivity.class);
-            startActivity (intent);
-
-        }
 
         if (mButtonSettings == view)
         {

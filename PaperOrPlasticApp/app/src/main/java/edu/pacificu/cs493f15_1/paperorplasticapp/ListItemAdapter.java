@@ -8,23 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
 import android.widget.Button;
 import android.widget.CheckBox;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.OnCheckListener;
 import java.util.ArrayList;
-
-import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
  * Created by sull0678 on 11/5/2015.
  */
-public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
+public class ListItemAdapter extends ArrayAdapter<ListItem>
 {
     private ArrayList<ListItem> mItemArray;
     int mLayoutResourceId;
@@ -35,7 +29,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
 
     private int nCounter;
 
-    public GroceryListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
+    public ListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
     {
         super (context, layoutResourceId, items);
         this.mLayoutResourceId = layoutResourceId;
@@ -113,7 +107,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
                                         if (mbWaiting)
                                         {
                                             mItemArray.remove(mPosition);
-                                            GroceryListItemAdapter.this.notifyDataSetChanged();
+                                            ListItemAdapter.this.notifyDataSetChanged();
                                             mbWaiting = false;
                                         }
                                     }

@@ -36,11 +36,6 @@
         </activity>
 
         <activity
-            android:name=".ListsActivity"
-            android:label="@string/title_activity_lists">
-        </activity>
-
-        <activity
             android:name=".GroceryListActivity"
             android:label="@string/title_activity_grocery_lists">
         </activity>
