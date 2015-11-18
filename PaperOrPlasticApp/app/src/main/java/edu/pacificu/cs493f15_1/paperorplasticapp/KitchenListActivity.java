@@ -33,7 +33,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList<KitchenListItemAdapter> mListAdapters = new ArrayList<KitchenListItemAdapter>();
+    private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
 
@@ -286,9 +286,9 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     private void addListAdapter(KitchenList kList)
     {
-        mListAdapters.add(new KitchenListItemAdapter(mListView.getContext(),
+        mListAdapters.add(new ListItemAdapter(mListView.getContext(),
                 R.layout.kitchen_list_item, kList.getItemArray()));
-        KitchenListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
+        ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 

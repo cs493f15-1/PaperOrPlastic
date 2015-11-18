@@ -6,26 +6,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
  * Created by sull0678 on 11/5/2015.
  */
-public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
+public class ListItemAdapter extends ArrayAdapter<ListItem>
 {
     private ArrayList<ListItem> mItemArray;
     int mLayoutResourceId;
     Context mContext;
 
-    public GroceryListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
+    public ListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
     {
         super (context, layoutResourceId, items);
         this.mLayoutResourceId = layoutResourceId;

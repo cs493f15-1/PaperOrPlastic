@@ -1,16 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
-import edu.pacificu.cs493f15_1.paperorplasticjava.*;
-
-import android.app.ActionBar;
-import android.app.Activity;
-
-import android.content.Context;
-import android.os.SystemClock;
-import android.support.v4.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -18,21 +9,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TabHost;
-import android.widget.Toast;
 
-import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticapp.NewItemInfoDialogListener;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.UUID;
+
+import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 
 /**
@@ -46,7 +32,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList<GroceryListItemAdapter> mListAdapters = new ArrayList<GroceryListItemAdapter>();
+    private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
 
@@ -293,9 +279,9 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     private void addListAdapter(GroceryList gList)
     {
-        mListAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
+        mListAdapters.add(new ListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
-        GroceryListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
+        ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 

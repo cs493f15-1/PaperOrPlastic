@@ -33,7 +33,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private ArrayList<GroceryListItemAdapter> mListAdapters = new ArrayList<GroceryListItemAdapter>();
+    private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
 
@@ -280,9 +280,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     private void addListAdapter(GroceryList gList)
     {
-        mListAdapters.add(new GroceryListItemAdapter(mListView.getContext(),
+        mListAdapters.add(new ListItemAdapter(mListView.getContext(),
                 R.layout.grocery_list_item, gList.getItemArray()));
-        GroceryListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
+        ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 
