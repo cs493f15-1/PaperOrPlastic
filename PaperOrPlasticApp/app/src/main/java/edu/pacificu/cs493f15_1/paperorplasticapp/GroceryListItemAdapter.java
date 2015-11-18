@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     private ArrayList<ListItem> mItemArray;
     int mLayoutResourceId;
     Context mContext;
+    public int mPosition;
 
     public GroceryListItemAdapter (Context context, int layoutResourceId, ArrayList<ListItem> items)
     {
@@ -67,7 +69,10 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     public View getView(int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
+
         ItemHolder itemHolder = null;
+
+        mPosition = position; //to see which item was clicked
 
         if(row == null)
         {
@@ -78,6 +83,21 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
             itemHolder = new ItemHolder();
             //get items in row and set them to layout items
             itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
+            itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
+
+            itemHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick (View v)
+                {
+                    //TODO wait for certain amount of time for user to uncheck if needed
+                    mItemArray.remove(mPosition);
+                    GroceryListItemAdapter.this.notifyDataSetChanged();
+                }
+
+            });
+
+
 
             row.setTag(itemHolder);
 
@@ -98,6 +118,7 @@ public class GroceryListItemAdapter extends ArrayAdapter<ListItem>
     static class ItemHolder
     {
         Button itemButton;
+        CheckBox checkBox;
     }
 
 

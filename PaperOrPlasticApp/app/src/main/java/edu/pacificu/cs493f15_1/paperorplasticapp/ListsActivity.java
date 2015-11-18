@@ -145,6 +145,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
         //For testing purposes
         mGLists.addList("My First List");
+        //TODO ability to rename lists
 
         //For the Group By Spinner (sorting dropdown)
 
@@ -208,8 +209,8 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
      *
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     * index   - the index of the newList in the GroceryLists object, also the
-     * new tab spec id
+     *                index   - the index of the newList in the GroceryLists object, also the
+     *                          new tab spec id
      *
      * Returns:       none
      ******************************************************************************************/
@@ -229,12 +230,12 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     /********************************************************************************************
      * Function name: onFinishListDialog
-     * <p/>
+     *
      * Description:   When dialog for adding list is done, add list and list tab with text from
-     * dialog as the new list name
-     * <p/>
+     *                dialog as the new list name
+     *
      * Parameters:    newListName - the new list's name
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
 
@@ -250,11 +251,11 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     /********************************************************************************************
      * Function name: addItemToListView
-     * <p/>
+     *
      * Description:   Adds item layout to listView as a new row, and resort the list
-     * <p/>
+     *
      * Parameters:    newItem - the new ListItem being added
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     public void addItemToListView(ListItem newItem)
@@ -283,11 +284,11 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
 
     /********************************************************************************************
      * Function name: addListAdapter
-     * <p/>
+     *
      * Description:   Adds a list adapter for mListView to keep track of the info in gList
-     * <p/>
+     *
      * Parameters:    gList - the new list whose info needs to be kept track of
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
 
@@ -316,12 +317,13 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
     /********************************************************************************************
      * Function name: getItemInfoListener
      *
-     * Description:
+     * Description:  Used with newItemDFragment
      *
      * Parameters:
      *
      * Returns:
      ******************************************************************************************/
+
     public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
@@ -333,7 +335,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      *
      * Parameters:
      *
-     * Returns:
+     * Returns:       true if item exists, else false
      ******************************************************************************************/
     private boolean showDeleteButton(final int pos) {
         position = pos;
@@ -379,7 +381,7 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
      *
      * Parameters:
      *
-     * Returns:
+     * Returns:       none
      ******************************************************************************************/
 
     public void deleteItem (View view, ListItem item) {
@@ -389,10 +391,23 @@ public class ListsActivity extends FragmentActivity implements ListDFragment.Edi
         mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
     }
 
+    /********************************************************************************************
+     * Function name: dispatchTouchEvent
+     *
+     * Description:
+     *
+     * Parameters:    ev
+     *
+     * Returns:       super.dispatchTouchEvent(ev)
+     ******************************************************************************************/
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+
+
+
 }
