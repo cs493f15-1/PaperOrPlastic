@@ -2,6 +2,7 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
 
 
 //import com.sun.org.apache.bcel.internal.generic.POP;
+import java.util.Comparator;
 
 /**
  * Created by sull0678 on 10/5/2015.
@@ -22,7 +23,6 @@ public class ListItem
     private NutritionFacts mNutritionFacts;
 
     public final int MAX_LENGTH = 200; //arbitrary number
-
 
     public ListItem ( String name)
     {
@@ -159,4 +159,24 @@ public class ListItem
         setNotes(notes);
         mNutritionFacts = NFacts;
     }
+
+    /*******************************
+     * SORTING
+     ******************************/
+
+    public static class Comparators
+    {
+        /**
+         * A Comparator<ListItem> that compares two ListItems by their names using the Java string comparison
+         */
+        public static Comparator<ListItem> NAME = new Comparator<ListItem>()
+        {
+            @Override
+            public int compare(ListItem listitem1, ListItem listitem2)
+            {
+                return listitem1.getItemName().compareTo(listitem2.getItemName());
+            }
+        };
+    }
+
 }

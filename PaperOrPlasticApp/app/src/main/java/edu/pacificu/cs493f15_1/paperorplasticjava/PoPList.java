@@ -5,6 +5,7 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  */
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class PoPList
@@ -16,6 +17,14 @@ public abstract class PoPList
     ArrayList<ListItem> mItems;
     int mCurrentSortingValue;
     int mSize;
+    public static final int SORT_NONE = 0;
+    public static final int SORT_ALPHA = 1;
+    public static final int SORT_CAL = 2;
+    public static final int SORT_DATE = 3;
+    public static final int SORT_AISLE = 4;
+    public static final int SORT_PRICE = 5;
+
+    public static final String[]GroupByStrings = {"" , "alphabetical", "calories", "date entered", "aisle", "price"};
 
     /*******************************************
      * Gets
@@ -27,7 +36,14 @@ public abstract class PoPList
 
     public ListItem getItem (int itemIndex)
     {
-        return mItems.get(itemIndex);
+        if (itemIndex >= getSize())
+        {
+            return null;
+        }
+        else
+        {
+            return mItems.get(itemIndex);
+        }
     }
 
     /********************************************
@@ -40,10 +56,13 @@ public abstract class PoPList
     }
 
 
+    public void setItems (ArrayList<ListItem> items)
+    {
+        mItems = items;
+    }
     /********************************************
     * Adds
      *******************************************/
-
     public void addItem (ListItem item)
         {
       int i;
@@ -89,6 +108,7 @@ public abstract class PoPList
     * Deletes
      ******************************************/
 
+    //TODO change this to return a value if not found
     // Deletion method could change.
     public void deleteItem (String itemName)
     {
@@ -107,9 +127,14 @@ public abstract class PoPList
       }
     }
 
+    public void delete (int index)
+    {
+        mItems.remove(index);
+    }
+
     public void clearList ()
     {
-        mItems.clear ();
+        mItems.clear();
     }
      /*   removeCustomCategory ()
         addCustomCategory ()*/
@@ -133,4 +158,26 @@ public abstract class PoPList
        setCurrentSortingCategory() (this is the way the list will be shown to the user)
           printListItems ()
      */
+
+    /*********************************
+     * Sorts
+     ********************************/
+
+    public int getCurrentSortingValue ()
+    {
+        return mCurrentSortingValue;
+    }
+
+    public void setCurrentSortingValue (int sortingValue)
+    {
+        mCurrentSortingValue = sortingValue;
+    }
+
+    /**
+     * Sorts the ListItems alphabetically by name using the Comparator NAME in ListItem
+     */
+    public void sortListByName ()
+    {
+        Collections.sort(this.mItems, ListItem.Comparators.NAME);
+    }
 }

@@ -15,8 +15,8 @@ public class GroceryList extends PoPList
     mListName = name;
     mSize = 0;
       mItems = new ArrayList<ListItem>();
+      mCurrentSortingValue = SORT_NONE;
   }
-
 
     /*Functions
         LinkListToGrocery (groceryList);

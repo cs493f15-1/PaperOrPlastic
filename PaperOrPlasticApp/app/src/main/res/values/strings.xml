@@ -1,10 +1,25 @@
 <resources>
     <string name="app_name">PaperOrPlasticApp</string>
     <string name="title_activity_main_sign_in">Sign-in</string>
-    <string name="title_activity_about">About</string>
     <string name="title_activity_continue">Continue</string>
+    <string name="title_activity_about">About</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_lists">Lists</string>
+
+    <string name="title_activity_grocery_lists">Grocery Lists</string>
+    <string name="title_activity_grocery_lists_settings">Grocery Lists Settings</string>
+
+    <string name="title_activity_kitchen_lists">Kitchen Lists</string>
+    <string name="title_activity_kitchen_lists_settings">Kitchen Lists Settings</string>
+
+    <string name="title_activity_nutrition">Nutrition</string>
+    <string name="title_activity_nutrition_settings">Nutrition Settings</string>
+
+    <string name="title_activity_coupons">Coupons</string>
+    <string name="title_activity_coupons_settings">Coupons Settings</string>
+
+    <string name="title_activity_recipes">Recipes</string>
+    <string name="title_activity_recipes_settings">Recipes Settings</string>
 
 
     <string name="action_settings">Settings</string>
@@ -15,16 +30,34 @@
     <string name="sContinue">Continue</string>
     <string name="sRules">Rules</string>
     <string name="sAbout">About</string>
+    <string name="sSettings">Settings</string>
+
+    <string name="sMyList">My List</string>
+    <string name="sGList">Grocery List</string>
+    <string name="sGListSettings">Grocery List Settings</string>
+    <string name="sKList">Kitchen List</string>
+    <string name="sKListSettings">Kitchen List Settings</string>
+    <string name="sNutrition">Nutrition</string>
+    <string name="sNutritionSettings">Nutrition Settings</string>
+    <string name="sCoupons">Coupons</string>
+    <string name="sCouponsSettings">Coupons Settings</string>
+    <string name="sRecipes">Recipes</string>
+    <string name="sRecipesSettings">Recipes Settings</string>
+
+
     <string name="sExit">Exit</string>
     <string name="sGameDifficulty">Game Difficulty</string>
     <string name="sSignIn">Sign-In</string>
     <string name="sCreateAccount">Create Account</string>
     <string name="sRememberPass">Remember Password?</string>
     <string name="sRecoverPass">Recover Password</string>
-
+    <string name="sDelete">X</string>
 
     <string name="cancel">Cancel</string>
     <string name="OK">OK</string>
+    <string name="qty">Qty</string>
+    <string name="delete">Delete</string>
+
 
     <string-array name="gameDifficulty">
         <item>Easy</item>
