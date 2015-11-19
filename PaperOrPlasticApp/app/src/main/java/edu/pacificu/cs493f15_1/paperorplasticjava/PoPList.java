@@ -16,7 +16,6 @@ public abstract class PoPList
     String mCustomCategoryNames[];
     ArrayList<ListItem> mItems;
     int mCurrentSortingValue;
-    int mSize;
     public static final int SORT_NONE = 0;
     public static final int SORT_ALPHA = 1;
     public static final int SORT_CAL = 2;
@@ -44,6 +43,18 @@ public abstract class PoPList
         {
             return mItems.get(itemIndex);
         }
+    }
+
+    public int getItemIndex (String itemName)
+    {
+        for (int i = 0; i < mItems.size(); i++)
+        {
+            if (mItems.get(i).getItemName().equals(itemName))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /********************************************
@@ -90,7 +101,6 @@ public abstract class PoPList
       if (bExists == false)
       {
         mItems.add (item);
-        mSize++;
       }
     }
 
@@ -122,9 +132,13 @@ public abstract class PoPList
         if (itemName.equals (tempItem.getItemName()))
         {
           mItems.remove (i);
-          mSize--;
         }
       }
+    }
+
+    public void delete (int index)
+    {
+        mItems.remove(index);
     }
 
     public void clearList ()
@@ -141,7 +155,7 @@ public abstract class PoPList
 
     public int getSize ()
     {
-        return mSize;
+        return mItems.size();
     }
 
     public ArrayList<ListItem> getItemArray ()

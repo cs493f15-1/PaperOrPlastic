@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,5 +9,62 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Settings"
         android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sGList"
+        android:id="@+id/bSettGList"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sNutrition"
+        android:id="@+id/bSettNutrition"
+        android:layout_below="@+id/bSettKList"
+        android:layout_alignRight="@+id/bSettKList"
+        android:layout_alignEnd="@+id/bSettKList"
+        android:layout_alignLeft="@+id/bSettGList"
+        android:layout_alignStart="@+id/bSettGList" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sCoupons"
+        android:id="@+id/bSettCoupons"
+        android:layout_below="@+id/bSettNutrition"
+        android:layout_alignRight="@+id/bSettNutrition"
+        android:layout_alignEnd="@+id/bSettNutrition"
+        android:layout_alignLeft="@+id/bSettNutrition"
+        android:layout_alignStart="@+id/bSettNutrition" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sRecipes"
+        android:id="@+id/bSettRecipes"
+        android:layout_below="@+id/bSettCoupons"
+        android:layout_alignRight="@+id/bSettNutrition"
+        android:layout_alignEnd="@+id/bSettNutrition"
+        android:layout_alignLeft="@+id/bSettGList"
+        android:layout_alignStart="@+id/bSettGList" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sKList"
+        android:id="@+id/bSettKList"
+        android:layout_below="@+id/bSettGList"
+        android:layout_alignRight="@+id/bSettGList"
+        android:layout_alignEnd="@+id/bSettGList"
+        android:layout_alignLeft="@+id/bSettGList"
+        android:layout_alignStart="@+id/bSettGList" />
+
+</RelativeLayout>
