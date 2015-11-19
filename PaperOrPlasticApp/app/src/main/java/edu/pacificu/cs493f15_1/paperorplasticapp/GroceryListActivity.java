@@ -111,7 +111,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             {
                 //note, GroceryList object doesn't keep track of size, only the array of items within
                 // it does
-                int size = getCurrentGList().getItemArray().size();
+                int size = getCurrentGList().getSize();
                 if (size > 0) {
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
@@ -152,6 +152,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                     @Override
                     public void onFinishNewItemDialog(String inputText) {
                         ListItem newItem = new ListItem(inputText);
+
                         addItemToListView(newItem);
                         mLastAddedItemName = inputText;
                     }

@@ -13,7 +13,6 @@ public class KitchenList extends PoPList
     public KitchenList (String name)
     {
         mListName = name;
-        mSize = 0;
         mItems = new ArrayList<ListItem>();
         mCurrentSortingValue = SORT_NONE;
     }
