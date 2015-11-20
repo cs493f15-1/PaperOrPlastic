@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticapp.OnCheckListener;
 
 /**
  * Created by sull0678 on 11/5/2015.
@@ -85,11 +86,11 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
             itemHolder = new ItemHolder();
             //get items in row and set them to layout items
             itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
-            itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
 
+            //set up check box functionality
+            itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
             itemHolder.checkBox.setOnClickListener(new OnCheckListener()
             {
-                //TODO need to be ale to check multiple at a time
                 @Override
                 public void onClick (View v)
                 {
@@ -106,6 +107,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                                     public void run() {
                                         if (mbWaiting)
                                         {
+                                            //remove item after certain amount of time?
                                             mItemArray.remove(mPosition);
                                             ListItemAdapter.this.notifyDataSetChanged();
                                             mbWaiting = false;

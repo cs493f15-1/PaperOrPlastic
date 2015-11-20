@@ -15,7 +15,7 @@ public class GroceryList extends PoPList
   public GroceryList (String name)
   {
     mListName = name;
-    mSize = 0;
+
       mItems = new ArrayList<ListItem>();
       mCurrentSortingValue = SORT_NONE;
   }
