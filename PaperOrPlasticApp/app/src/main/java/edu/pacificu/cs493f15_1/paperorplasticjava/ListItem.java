@@ -2,7 +2,10 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
 
 
 //import com.sun.org.apache.bcel.internal.generic.POP;
+
+import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.Scanner;
 
 /**
  * Created by sull0678 on 10/5/2015.
@@ -29,6 +32,7 @@ public class ListItem
         mName = name;
         mQuantity = 0;
         mCheckedOff = false;
+        mNutritionFacts = new NutritionFacts();
     }
 
     /***********************************
@@ -177,6 +181,33 @@ public class ListItem
                 return listitem1.getItemName().compareTo(listitem2.getItemName());
             }
         };
+    }
+
+
+    /*********************************
+     * I/O
+     ********************************/
+
+    /**
+     * Outputs the current item in to the passed in file.
+     * @param itemOutput - the file being written to
+     */
+    public void writeItemToFile (PrintWriter itemOutput)
+    {
+        String content = mName + " " + mFoodType + " " + mAisle + " " + mQuantity + " " + mPrice + " " + mCustomCategory + " " + mCheckedOff + " " + mNotes;
+        itemOutput.print(content);
+        mNutritionFacts.writeNutritionToFile(itemOutput);
+        itemOutput.print("\n");
+    }
+
+
+    /**
+     * reads from the file in to the current item.
+     * @param itemInput - the file being read from
+     */
+    public void readItemFromFile (Scanner itemInput)
+    {
+
     }
 
 }

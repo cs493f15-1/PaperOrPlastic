@@ -1,5 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
@@ -265,13 +269,26 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             case PoPList.SORT_NONE:
                 break;
         }
-
     }
 
     @Override
     protected void onPause ()
     {
+        FileOutputStream KitchenOutput = null;
+        PrintWriter listsOutput = null;
         super.onPause();
+
+        try
+        {
+            KitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        listsOutput = new PrintWriter(KitchenOutput);
+
+        mKLists.writeListsToFile(listsOutput);
 
     }
     /********************************************************************************************

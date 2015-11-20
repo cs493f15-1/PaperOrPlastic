@@ -1,5 +1,8 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 /**
  * Created by jo9026 on 10/22/2015.
  */
@@ -32,5 +35,28 @@ public class NutritionFacts
 		mSugars = sugar;
 		mFiber = fiber;
 		mTotalFat = fat;
+	}
+
+	/*********************************
+	 * I/O
+	 ********************************/
+
+	/**
+	 * Outputs the current nutrition to the passed in file.
+	 * @param NutritionOutput - the file being written to
+	 */
+	public void writeNutritionToFile (PrintWriter NutritionOutput)
+	{
+		NutritionOutput.print(mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber);
+	}
+
+
+	/**
+	 * reads from the file in to the current nutrition.
+	 * @param Nutritioninput - the file being read from
+	 */
+	public void readNutritionFromFile (Scanner Nutritioninput)
+	{
+
 	}
 }

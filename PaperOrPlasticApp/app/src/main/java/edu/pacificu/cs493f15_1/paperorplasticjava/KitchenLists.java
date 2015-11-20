@@ -3,10 +3,14 @@ package edu.pacificu.cs493f15_1.paperorplasticjava; /**
  */
 
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class KitchenLists
 {
+    public static final String KITCHEN_FILE_NAME = "kitchenLists";
+
     ArrayList<KitchenList> mLists;
 
     public KitchenLists ()
@@ -84,4 +88,31 @@ public class KitchenLists
         shareList (listName, username);
         unShareList (listName, username);
      */
+
+
+
+    /*********************************
+     * I/O
+     ********************************/
+
+    /**
+     * Outputs the current lists in to the passed in file.
+     * @param listsOutput - the file being written to
+     */
+    public void writeListsToFile (PrintWriter listsOutput)
+    {
+        for (KitchenList list : mLists)
+        {
+            list.writeListToFile(listsOutput);
+        }
+    }
+
+    /**
+     * reads from the file in to the current lists.
+     * @param listsInput - the file being read from
+     */
+    public void readListsFromFile (Scanner listsInput)
+    {
+
+    }
 }
