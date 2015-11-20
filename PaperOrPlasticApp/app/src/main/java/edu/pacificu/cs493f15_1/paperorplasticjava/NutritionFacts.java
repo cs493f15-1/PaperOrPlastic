@@ -57,6 +57,11 @@ public class NutritionFacts
 	 */
 	public void readNutritionFromFile (Scanner Nutritioninput)
 	{
-
+		mCalories = Nutritioninput.nextInt();
+		mCarbohydrates = Nutritioninput.nextInt();
+		mProtein = Nutritioninput.nextInt();
+		mSugars = Nutritioninput.nextInt();
+		mFiber = Nutritioninput.nextInt();
+		mTotalFat = Nutritioninput.nextInt();
 	}
 }

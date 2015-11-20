@@ -95,7 +95,10 @@ public class GroceryLists
      */
     public void writeListsToFile (PrintWriter listsOutput)
     {
-
+        for (GroceryList list : mLists)
+        {
+            list.writeListToFile(listsOutput);
+        }
     }
 
     /**

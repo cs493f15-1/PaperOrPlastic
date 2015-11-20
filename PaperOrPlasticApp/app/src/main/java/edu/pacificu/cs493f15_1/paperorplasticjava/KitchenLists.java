@@ -1,4 +1,5 @@
-package edu.pacificu.cs493f15_1.paperorplasticjava; /**
+package edu.pacificu.cs493f15_1.paperorplasticjava;
+/**
  * Created by sull0678 on 10/12/2015.
  */
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 
 public class KitchenLists
 {
-    public static final String KITCHEN_FILE_NAME = "kitchenLists";
+    public static final String KITCHEN_FILE_NAME = "kitchenLists.txt";
 
     ArrayList<KitchenList> mLists;
 
@@ -101,6 +102,7 @@ public class KitchenLists
      */
     public void writeListsToFile (PrintWriter listsOutput)
     {
+        listsOutput.println(mLists.size());
         for (KitchenList list : mLists)
         {
             list.writeListToFile(listsOutput);
@@ -113,6 +115,16 @@ public class KitchenLists
      */
     public void readListsFromFile (Scanner listsInput)
     {
+        int size;
+        KitchenList tempList;
 
+        size = listsInput.nextInt();
+
+        for (int i = 0; i < size; ++i)
+        {
+            addList("temp");
+            tempList = getList(i);
+            tempList.readListFromFile(listsInput);
+        }
     }
 }

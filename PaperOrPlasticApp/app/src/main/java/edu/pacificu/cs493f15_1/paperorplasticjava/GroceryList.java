@@ -37,7 +37,12 @@ public class GroceryList extends PoPList
      */
     public void writeListToFile (PrintWriter listOutput)
     {
-
+      listOutput.println (mListName + " " + mItems.size() + " " + mCurrentSortingValue);
+      for (ListItem item : mItems)
+      {
+        item.writeItemToFile(listOutput);
+      }
+      listOutput.print ("\n");
     }
 
 

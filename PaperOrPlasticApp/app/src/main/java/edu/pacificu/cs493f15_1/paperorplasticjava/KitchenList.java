@@ -40,7 +40,7 @@ public class KitchenList extends PoPList
      */
     public void writeListToFile (PrintWriter listOutput)
     {
-        listOutput.println (mListName + " " + mSize + " " + mCurrentSortingValue);
+        listOutput.println (getListName() + " " + getSize() + " " + getCurrentSortingValue());
         for (ListItem item : mItems)
         {
             item.writeItemToFile(listOutput);
@@ -55,6 +55,19 @@ public class KitchenList extends PoPList
      */
     public void readListFromFile (Scanner listInput)
     {
+        int size;
+        ListItem tempItem;
 
+        setListName(listInput.next());
+        size = listInput.nextInt();
+
+        setCurrentSortingValue(listInput.nextInt());
+
+        for (int i = 0; i < size; ++i)
+        {
+            tempItem = new ListItem("temp");
+            tempItem.readItemFromFile(listInput);
+            addItem(tempItem);
+        }
     }
 }

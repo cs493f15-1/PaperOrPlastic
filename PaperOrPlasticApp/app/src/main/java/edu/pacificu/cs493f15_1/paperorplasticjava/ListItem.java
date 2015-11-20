@@ -100,6 +100,8 @@ public class ListItem
      * SETS
      ******************************/
 
+    private void setName (String name) {mName = name;}
+
     public void setFoodType (int foodType)
     {
          mFoodType = foodType;
@@ -194,7 +196,8 @@ public class ListItem
      */
     public void writeItemToFile (PrintWriter itemOutput)
     {
-        String content = mName + " " + mFoodType + " " + mAisle + " " + mQuantity + " " + mPrice + " " + mCustomCategory + " " + mCheckedOff + " " + mNotes;
+        String content = getItemName() + " " + getFoodType() + " " + getAisle() + " " + getQuantity() + " "
+                + getPrice() + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
         itemOutput.print(content);
         mNutritionFacts.writeNutritionToFile(itemOutput);
         itemOutput.print("\n");
@@ -207,7 +210,15 @@ public class ListItem
      */
     public void readItemFromFile (Scanner itemInput)
     {
-
+        setName(itemInput.next());
+        setFoodType(itemInput.nextInt());
+        setAisle(itemInput.nextInt());
+        setAddQuantity(itemInput.nextInt());
+        setPrice(itemInput.nextDouble());
+        setCustomCategory(itemInput.nextInt());
+        setCheckedOff(itemInput.nextBoolean());
+        setNotes(itemInput.next());
+        mNutritionFacts.readNutritionFromFile(itemInput);
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,10 +16,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
@@ -252,7 +258,6 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
 
-
         //resort the list depending on the current sorting category
         KitchenList currentList = getCurrentKList();
 
@@ -271,24 +276,71 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
+    /**
+     *
+     */
     @Override
     protected void onPause ()
     {
+        super.onPause();
+
         FileOutputStream KitchenOutput = null;
         PrintWriter listsOutput = null;
-        super.onPause();
 
         try
         {
             KitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+
+            listsOutput = new PrintWriter(KitchenOutput);
+
+             mKLists.writeListsToFile(listsOutput);
+            listsOutput.flush();
+            listsOutput.close();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        listsOutput = new PrintWriter(KitchenOutput);
+        try {
+            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append("\n" + line);
+            }
+            r.close();
+            inputStream.close();
+            Log.d("File", "File contents: " + total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-        mKLists.writeListsToFile(listsOutput);
+    @Override
+    protected void onResume ()
+    {
+        super.onResume();
+
+        File KitchenFile = new File(KitchenLists.KITCHEN_FILE_NAME);
+        FileInputStream KitchenInput = null;
+        Scanner listsInput;
+
+    // try finding the file and seeing if it exists
+
+        try
+        {
+            KitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+
+            listsInput = new Scanner(KitchenInput);
+
+            mKLists.readListsFromFile(listsInput);
+            listsInput.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
 
     }
     /********************************************************************************************
