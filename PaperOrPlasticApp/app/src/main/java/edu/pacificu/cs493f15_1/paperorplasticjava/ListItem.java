@@ -191,25 +191,19 @@ public class ListItem
      * I/O
      ********************************/
 
-    @Override
-    public String toString ()
-    {
-        String content = getItemName() + "\n" + getFoodType() + " " + getAisle() + " " + getQuantity() + " "
-                + getPrice() + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
-
-        return content + mNutritionFacts.toString();
-    }
-
-
-
-    /**
-     * Outputs the current item in to the passed in file.
-     * @param itemOutput - the file being written to
-     */
+    /********************************************************************************************
+     * Function name: writeItemToFile
+     *
+     * Description: Outputs the current item to the passed in PrintWriter
+     *
+     * Parameters: itemOutput - the printWriter which the listItem will be outputted to
+     *
+     * Returns: None
+     ******************************************************************************************/
     public void writeItemToFile (PrintWriter itemOutput)
     {
-        String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " "
-                + getPrice() + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
+        String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " " + getPrice()
+                + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
 
         itemOutput.println(getItemName());
         itemOutput.print(content);
@@ -218,14 +212,18 @@ public class ListItem
         itemOutput.flush();
     }
 
-
-    /**
-     * reads from the file in to the current item.
-     * @param itemInput - the file being read from
-     */
+    /********************************************************************************************
+     * Function name: readItemFromFile
+     *
+     * Description: reads from a file using a scanner and inputs the information into the listItem
+     *
+     * Parameters: itemInput - the Scanner which the listItem will be read from
+     *
+     * Returns: None
+     ******************************************************************************************/
     public void readItemFromFile (Scanner itemInput)
     {
-        setName(itemInput.nextLine()); //get new line character leftover from before
+        itemInput.nextLine(); //get new line character leftover from before
         setName(itemInput.nextLine());
         setFoodType(itemInput.nextInt());
         setAisle(itemInput.nextInt());

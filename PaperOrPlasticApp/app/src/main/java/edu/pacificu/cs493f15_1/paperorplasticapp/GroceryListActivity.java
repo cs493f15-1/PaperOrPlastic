@@ -1,6 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -15,7 +15,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -168,7 +173,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
 
         //For testing purposes
-        mGLists.addList("My First List");
+       // mGLists.addList("My First List");
 
         //For the Group By Spinner (sorting dropdown)
 
@@ -224,12 +229,89 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     }
 
-   /* @Override
-    public void OnResume ()
+
+    /********************************************************************************************
+     * Function name: onPause
+     * <p/>
+     * Description:   When the activity is paused writes the GroceryLists to groceryLists.txt
+     * <p/>
+     * Parameters:    none
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
+    @Override
+    protected void onPause ()
     {
+        super.onPause();
+
+        FileOutputStream groceryOutput = null;
+        PrintWriter listsOutput = null;
+
+        try
+        {
+            groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
+
+            listsOutput = new PrintWriter(groceryOutput);
+
+            mGLists.writeListsToFile(listsOutput);
+            listsOutput.flush();
+            listsOutput.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        /*
+        try {
+            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append("\n" + line);
+            }
+            r.close();
+            inputStream.close();
+            Log.d("File", "File contents: " + total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
+    }
+    /********************************************************************************************
+     * Function name: onResume
+     * <p/>
+     * Description:   When the activity is resumed reads in GroceryLists from groceryLists.txt and
+     *                updates mGLists with the information
+     * <p/>
+     * Parameters:    none
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
+    @Override
+    protected void onResume ()
+    {
+        super.onResume();
+
+        FileInputStream groceryInput;
+        Scanner listsInput;
+
+        try {
+            groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
+
+            listsInput = new Scanner(groceryInput);
+            mGLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < mGLists.getSize(); ++i)
+        {
+            addListTab(mGLists.getList(i), i);
+        }
 
     }
-*/
 
     /********************************************************************************************
      * Function name: addListTab

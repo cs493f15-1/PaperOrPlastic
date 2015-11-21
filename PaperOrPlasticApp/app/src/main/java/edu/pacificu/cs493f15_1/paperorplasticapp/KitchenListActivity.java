@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -16,11 +15,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -137,9 +134,6 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
             }
         });
-
-        //For testing purposes
-  //      mKLists.addList("My First List");
 
         //For the Group By Spinner (sorting dropdown)
 
@@ -274,30 +268,30 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
-    /**
-     *
-     */
+    /********************************************************************************************
+     * Function name: onPause
+     * <p/>
+     * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
+     * <p/>
+     * Parameters:    none
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onPause ()
     {
         super.onPause();
 
-        FileOutputStream KitchenOutput = null;
+        FileOutputStream kitchenOutput = null;
         PrintWriter listsOutput = null;
 
         try
         {
-            KitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+            kitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
 
-            listsOutput = new PrintWriter(KitchenOutput);
+            listsOutput = new PrintWriter(kitchenOutput);
 
-             mKLists.writeListsToFile(listsOutput);
- //           String temp = mKLists.toString();
- //           Log.d("Attempt", "File contents: " + temp);
-
-   //         listsOutput.print(temp);
-
-
+            mKLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
         }
@@ -305,53 +299,28 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             e.printStackTrace();
         }
 
-        /*
-        try {
-            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
-            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append("\n" + line);
-            }
-            r.close();
-            inputStream.close();
-            Log.d("File", "File contents: " + total);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
     }
-
+    /********************************************************************************************
+     * Function name: onResume
+     * <p/>
+     * Description:   When the activity is resumed reads in KitchenLists from kitchenLists.txt and
+     *                updates mKLists with the information
+     * <p/>
+     * Parameters:    none
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onResume ()
     {
         super.onResume();
-
-        try {
-            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
-            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append("\n" + line);
-            }
-            r.close();
-            inputStream.close();
-            Log.d("File", "File contents: " + total);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-        FileInputStream KitchenInput = null;
+        FileInputStream kitchenInput;
         Scanner listsInput;
 
             try {
-                KitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+                kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
 
-                listsInput = new Scanner(KitchenInput);
+                listsInput = new Scanner(kitchenInput);
                 mKLists.readListsFromFile(listsInput);
                 listsInput.close();
             } catch (FileNotFoundException e) {
@@ -362,8 +331,6 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         {
             addListTab(mKLists.getList(i), i);
         }
-
-
     }
     /********************************************************************************************
      * Function name: addListAdapter

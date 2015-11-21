@@ -20,23 +20,10 @@ public class KitchenLists
     }
 
     /*********************************
-     * Printing
-     *********************************/
-
-    public void printListNames ()
-    {
-        for (KitchenList tempList : mLists)
-        {
-            tempList.printListName();
-        }
-    }
-
-
-    /*********************************
      * Gets
      ********************************/
 
-    public String getListName (int listIndex)
+    public String getKListName(int listIndex)
     {
         return mLists.get (listIndex).getListName();
     }
@@ -96,25 +83,23 @@ public class KitchenLists
      * I/O
      ********************************/
 
-    @Override
-    public String toString ()
+    public void printListNames ()
     {
-        String returnString;
-
-        returnString = Integer.toString(mLists.size());
-        for (KitchenList list : mLists)
+        for (KitchenList tempList : mLists)
         {
-            returnString.concat(list.toString());
+            tempList.printListName();
         }
-
-        return returnString;
     }
 
-
-    /**
-     * Outputs the current lists in to the passed in file.
-     * @param listsOutput - the file being written to
-     */
+    /********************************************************************************************
+     * Function name: writeListsToFile
+     *
+     * Description: Outputs the current mLists to the passed in PrintWriter
+     *
+     * Parameters: listsOutput - the printWriter which the kitchenLists will be outputted to
+     *
+     * Returns: None
+    ******************************************************************************************/
     public void writeListsToFile (PrintWriter listsOutput)
     {
         listsOutput.println(mLists.size());
@@ -128,10 +113,15 @@ public class KitchenLists
 
     }
 
-    /**
-     * reads from the file in to the current lists.
-     * @param listsInput - the file being read from
-     */
+    /********************************************************************************************
+     * Function name: readListsFromFile
+     *
+     * Description: reads from a file using a scanner and inputs the information into mLists
+     *
+     * Parameters: listsInput - the Scanner which the kitchenLists will be read from
+     *
+     * Returns: None
+     ******************************************************************************************/
     public void readListsFromFile (Scanner listsInput)
     {
         int size;

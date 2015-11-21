@@ -30,33 +30,24 @@ public class KitchenList extends PoPList
 
 
 
+
     /*********************************
      * I/O
      ********************************/
 
-    @Override
-    public String toString ()
-    {
-        String returnString;
-
-        returnString = getListName() + "\n" + getSize() + " " + getCurrentSortingValue();
-        for (ListItem item : mItems)
-        {
-            returnString.concat(item.toString() + "\n");
-        }
-        returnString.concat("\n");
-
-        return returnString;
-    }
-
-    /**
-     * Outputs the current list in to the passed in file.
-     * @param listOutput - the file being written to
-     */
+    /********************************************************************************************
+     * Function name: writeListToFile
+     *
+     * Description: Outputs the current list to the passed in PrintWriter
+     *
+     * Parameters: listOutput - the printWriter which the kitchenList will be outputted to
+     *
+     * Returns: None
+     ******************************************************************************************/
     public void writeListToFile (PrintWriter listOutput)
     {
         listOutput.println(getListName());
-        listOutput.println (getSize() + " " + getCurrentSortingValue());
+        listOutput.println(getSize() + " " + getCurrentSortingValue());
         for (ListItem item : mItems)
         {
             item.writeItemToFile(listOutput);
@@ -65,17 +56,22 @@ public class KitchenList extends PoPList
     }
 
 
-    /**
-     * reads from the file in to the current list.
-     * @param listInput - the file being read from
-     */
+    /********************************************************************************************
+     * Function name: readListFromFile
+     *
+     * Description: reads from a file using a scanner and inputs the information into the list
+     *
+     * Parameters: listInput - the Scanner which the kitchenList will be read from
+     *
+     * Returns: None
+     ******************************************************************************************/
     public void readListFromFile (Scanner listInput)
     {
         String temp;
         int size;
         ListItem tempItem;
 
-        setListName(listInput.nextLine()); //get the new line character left from before
+        listInput.nextLine(); //get the new line character left from before
         setListName(listInput.nextLine());
 
         size = listInput.nextInt();

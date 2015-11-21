@@ -41,26 +41,30 @@ public class NutritionFacts
 	 * I/O
 	 ********************************/
 
-	@Override
-	public String toString ()
-	{
-		return mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber;
-	}
-
-	/**
-	 * Outputs the current nutrition to the passed in file.
-	 * @param NutritionOutput - the file being written to
-	 */
+	/********************************************************************************************
+	 * Function name: writeNutritionToFile
+	 *
+	 * Description: Outputs the current nutritionFacts to the passed in PrintWriter
+	 *
+	 * Parameters: NutritionOutput - the printWriter which the nutritionFacts will be outputted to
+	 *
+	 * Returns: None
+	 ******************************************************************************************/
 	public void writeNutritionToFile (PrintWriter NutritionOutput)
 	{
 		NutritionOutput.print(mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber);
 		NutritionOutput.flush();
 	}
 
-	/**
-	 * reads from the file in to the current nutrition.
-	 * @param Nutritioninput - the file being read from
-	 */
+	/********************************************************************************************
+	 * Function name: readNutrtionFromFile
+	 *
+	 * Description: reads from a file using a scanner and inputs the information into the nutritionFacts
+	 *
+	 * Parameters: NutritionInput - the Scanner which the nutritionFacts will be read from
+	 *
+	 * Returns: None
+	 ******************************************************************************************/
 	public void readNutritionFromFile (Scanner Nutritioninput)
 	{
 		mCalories = Nutritioninput.nextInt();
