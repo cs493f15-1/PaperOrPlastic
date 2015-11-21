@@ -33,6 +33,7 @@ public class ListItem
         mQuantity = 0;
         mCheckedOff = false;
         mNutritionFacts = new NutritionFacts();
+        mNotes = "init";
     }
 
     /***********************************
@@ -190,17 +191,31 @@ public class ListItem
      * I/O
      ********************************/
 
+    @Override
+    public String toString ()
+    {
+        String content = getItemName() + "\n" + getFoodType() + " " + getAisle() + " " + getQuantity() + " "
+                + getPrice() + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
+
+        return content + mNutritionFacts.toString();
+    }
+
+
+
     /**
      * Outputs the current item in to the passed in file.
      * @param itemOutput - the file being written to
      */
     public void writeItemToFile (PrintWriter itemOutput)
     {
-        String content = getItemName() + " " + getFoodType() + " " + getAisle() + " " + getQuantity() + " "
+        String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " "
                 + getPrice() + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
+
+        itemOutput.println(getItemName());
         itemOutput.print(content);
         mNutritionFacts.writeNutritionToFile(itemOutput);
         itemOutput.print("\n");
+        itemOutput.flush();
     }
 
 
@@ -210,7 +225,8 @@ public class ListItem
      */
     public void readItemFromFile (Scanner itemInput)
     {
-        setName(itemInput.next());
+        setName(itemInput.nextLine()); //get new line character leftover from before
+        setName(itemInput.nextLine());
         setFoodType(itemInput.nextInt());
         setAisle(itemInput.nextInt());
         setAddQuantity(itemInput.nextInt());

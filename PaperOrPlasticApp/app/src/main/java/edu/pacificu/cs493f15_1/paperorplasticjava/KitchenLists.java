@@ -96,6 +96,21 @@ public class KitchenLists
      * I/O
      ********************************/
 
+    @Override
+    public String toString ()
+    {
+        String returnString;
+
+        returnString = Integer.toString(mLists.size());
+        for (KitchenList list : mLists)
+        {
+            returnString.concat(list.toString());
+        }
+
+        return returnString;
+    }
+
+
     /**
      * Outputs the current lists in to the passed in file.
      * @param listsOutput - the file being written to
@@ -103,10 +118,14 @@ public class KitchenLists
     public void writeListsToFile (PrintWriter listsOutput)
     {
         listsOutput.println(mLists.size());
+
         for (KitchenList list : mLists)
         {
+            list.getListName();
             list.writeListToFile(listsOutput);
+            listsOutput.flush();
         }
+
     }
 
     /**

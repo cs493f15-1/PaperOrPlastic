@@ -34,18 +34,34 @@ public class KitchenList extends PoPList
      * I/O
      ********************************/
 
+    @Override
+    public String toString ()
+    {
+        String returnString;
+
+        returnString = getListName() + "\n" + getSize() + " " + getCurrentSortingValue();
+        for (ListItem item : mItems)
+        {
+            returnString.concat(item.toString() + "\n");
+        }
+        returnString.concat("\n");
+
+        return returnString;
+    }
+
     /**
      * Outputs the current list in to the passed in file.
      * @param listOutput - the file being written to
      */
     public void writeListToFile (PrintWriter listOutput)
     {
-        listOutput.println (getListName() + " " + getSize() + " " + getCurrentSortingValue());
+        listOutput.println(getListName());
+        listOutput.println (getSize() + " " + getCurrentSortingValue());
         for (ListItem item : mItems)
         {
             item.writeItemToFile(listOutput);
         }
-        listOutput.print ("\n");
+        listOutput.flush();
     }
 
 
@@ -55,10 +71,13 @@ public class KitchenList extends PoPList
      */
     public void readListFromFile (Scanner listInput)
     {
+        String temp;
         int size;
         ListItem tempItem;
 
-        setListName(listInput.next());
+        setListName(listInput.nextLine()); //get the new line character left from before
+        setListName(listInput.nextLine());
+
         size = listInput.nextInt();
 
         setCurrentSortingValue(listInput.nextInt());

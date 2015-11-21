@@ -17,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -139,9 +138,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             }
         });
 
-
         //For testing purposes
-        mKLists.addList("My First List");
+  //      mKLists.addList("My First List");
 
         //For the Group By Spinner (sorting dropdown)
 
@@ -294,12 +292,41 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             listsOutput = new PrintWriter(KitchenOutput);
 
              mKLists.writeListsToFile(listsOutput);
+ //           String temp = mKLists.toString();
+ //           Log.d("Attempt", "File contents: " + temp);
+
+   //         listsOutput.print(temp);
+
+
             listsOutput.flush();
             listsOutput.close();
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        /*
+        try {
+            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append("\n" + line);
+            }
+            r.close();
+            inputStream.close();
+            Log.d("File", "File contents: " + total);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+*/
+    }
+
+    @Override
+    protected void onResume ()
+    {
+        super.onResume();
 
         try {
             FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
@@ -315,30 +342,25 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
 
-    @Override
-    protected void onResume ()
-    {
-        super.onResume();
 
-        File KitchenFile = new File(KitchenLists.KITCHEN_FILE_NAME);
+
         FileInputStream KitchenInput = null;
         Scanner listsInput;
 
-    // try finding the file and seeing if it exists
+            try {
+                KitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
 
-        try
+                listsInput = new Scanner(KitchenInput);
+                mKLists.readListsFromFile(listsInput);
+                listsInput.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+        for (int i = 0; i < mKLists.getSize(); ++i)
         {
-            KitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
-
-            listsInput = new Scanner(KitchenInput);
-
-            mKLists.readListsFromFile(listsInput);
-            listsInput.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
+            addListTab(mKLists.getList(i), i);
         }
 
 

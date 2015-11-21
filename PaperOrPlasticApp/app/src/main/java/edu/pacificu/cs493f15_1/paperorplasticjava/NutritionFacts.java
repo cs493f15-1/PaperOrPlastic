@@ -41,6 +41,12 @@ public class NutritionFacts
 	 * I/O
 	 ********************************/
 
+	@Override
+	public String toString ()
+	{
+		return mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber;
+	}
+
 	/**
 	 * Outputs the current nutrition to the passed in file.
 	 * @param NutritionOutput - the file being written to
@@ -48,8 +54,8 @@ public class NutritionFacts
 	public void writeNutritionToFile (PrintWriter NutritionOutput)
 	{
 		NutritionOutput.print(mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber);
+		NutritionOutput.flush();
 	}
-
 
 	/**
 	 * reads from the file in to the current nutrition.
