@@ -1,3 +1,13 @@
+/**************************************************************************************************
+*   File:     GroceryListActivity.java
+*   Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
+*   Date:     10/28/15
+*   Class:    Capstone/Software Engineering
+*   Project:  PaperOrPlastic Application
+*   Purpose:  This activity will be the activity that is opened when the user selects the
+*             grocery list button from the continue activity
+***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.DialogInterface;
@@ -23,9 +33,14 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 
-/**
- * Created by sull0678 on 10/26/2015.
- */
+/***************************************************************************************************
+*   Class:         GroceryListActivity
+*   Description:   Creates GroceryListActivity class that controls what occurs when the user
+*                  selects the grocery list option from the continue activity. Specifically
+*                  contains the list functionality.
+*   Parameters:    N/A
+*   Returned:      N/A
+**************************************************************************************************/
 public class GroceryListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
     private Button mbAddList, mbAddItem;
     private Spinner mGroupBySpinner;
