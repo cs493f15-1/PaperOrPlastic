@@ -1,5 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -33,11 +34,15 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
+    private Button mbEdit;
+    private boolean mbIsOnEdit;
+    private String mLastAddedItemName;
+
     private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
 
-    private long mLastClickTime;
+
     private NewItemInfoDialogListener mItemInfoListener;
 
     /********************************************************************************************
@@ -55,8 +60,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_grocery_list);
-
-        mLastClickTime = 0;
+        mbIsOnEdit = false;
 
         //init my grocery lists
         mGLists = new GroceryLists();
@@ -88,6 +92,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onTabChanged(String tabId) {
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
+
                 if (mListAdapters.size() > 0) {
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
                 }
@@ -96,6 +101,36 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
 
         //on click listener for buttons (connect to the view)
+
+        //setup edit button
+        mbEdit = (Button) findViewById(R.id.bEdit);
+        mbEdit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //note, GroceryList object doesn't keep track of size, only the array of items within
+                // it does
+                int size = getCurrentGList().getSize();
+                if (size > 0) {
+                    if (!mbIsOnEdit) {
+                        mbIsOnEdit = true;
+                        for (int i = 0; i < size; i++) {
+                            showDeleteButton(i);
+                        }
+                    } else {
+
+                        //showDeleteButton also gets rid of the delete button so we might not need this check
+                        //TODO might need to show again if tab is changed
+                        mbIsOnEdit = false;
+                        for (int i = 0; i < size; i++) {
+                            showDeleteButton(i);
+                        }
+                    }
+                }
+
+            }
+        });
 
         //set up addList button
         mbAddList = (Button) findViewById(R.id.bAddList);
@@ -117,14 +152,16 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                     @Override
                     public void onFinishNewItemDialog(String inputText) {
                         ListItem newItem = new ListItem(inputText);
-                        addItemToListView(newItem);
-                    }
 
+                        addItemToListView(newItem);
+                        mLastAddedItemName = inputText;
+                    }
                 };
+
+
                 fm = getSupportFragmentManager();
                 NewGroceryItemDFragment newItemFragment = new NewGroceryItemDFragment();
                 newItemFragment.show(fm, "Hi");
-
 
             }
         });
@@ -157,8 +194,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                         currentList.sortListByName();
                         mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
-
-                        //TODO need to refresh the page so the new list displays
                         break;
                     case PoPList.SORT_CAL: //calories
                         currentList.setCurrentSortingValue(PoPList.SORT_CAL);
@@ -188,6 +223,13 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         }
 
     }
+
+   /* @Override
+    public void OnResume ()
+    {
+
+    }
+*/
 
     /********************************************************************************************
      * Function name: addListTab
@@ -237,17 +279,17 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     /********************************************************************************************
      * Function name: addItemToListView
-     * <p/>
-     * Description:   Adds item layout to listView as a new row, and resort the list
-     * <p/>
-     * Parameters:    newItem - the new ListItem being added
-     * <p/>
+     *
+     * Description:   Adds item layout to listView as a new row and adds it to listadapter
+     *
+     * Parameters:    none
+     *
      * Returns:       none
      ******************************************************************************************/
-    public void addItemToListView(ListItem newItem)
+
+    public void addItemToListView (ListItem newItem)
     {
         mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
-
 
         //resort the list depending on the current sorting category
         GroceryList currentList = getCurrentGList();
@@ -265,7 +307,25 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             case PoPList.SORT_NONE:
                 break;
         }
+    }
 
+    /********************************************************************************************
+     * Function name: showDeleteOnEdit
+     *
+     * Description:   Shows delete button for item if editing is on
+     *
+     * Parameters:    gList - the new list whose info needs to be kept track of
+     *
+     * Returns:       none
+     ******************************************************************************************/
+
+    public void showDeleteOnEdit (String itemName)
+    {
+        int itemIndex = getCurrentGList().getItemIndex(itemName);
+        if (mbIsOnEdit && itemIndex != -1)
+        {
+            showDeleteButton(itemIndex);
+        }
     }
 
     /********************************************************************************************
@@ -277,7 +337,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      * <p/>
      * Returns:       none
      ******************************************************************************************/
-
     private void addListAdapter(GroceryList gList)
     {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
@@ -359,22 +418,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         return false;
     }
 
-    /********************************************************************************************
-     * Function name: deleteItem
-     *
-     * Description:
-     *
-     * Parameters:
-     *
-     * Returns:
-     ******************************************************************************************/
-
-    public void deleteItem (View view, ListItem item) {
-
-        mListAdapters.get(mListTabHost.getCurrentTab()).remove(item);
-        delete.setVisibility(View.INVISIBLE);
-        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
-    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -382,4 +425,5 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+
 }

@@ -57,7 +57,8 @@
     <string name="OK">OK</string>
     <string name="qty">Qty</string>
     <string name="delete">Delete</string>
-
+   <string name="sAddItem">Add Item</string>
+    <string name="sEdit">Edit</string>
 
     <string-array name="gameDifficulty">
         <item>Easy</item>
