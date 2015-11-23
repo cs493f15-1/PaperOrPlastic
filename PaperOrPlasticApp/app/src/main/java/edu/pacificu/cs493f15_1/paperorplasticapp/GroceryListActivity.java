@@ -266,8 +266,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         Context context = getApplicationContext();
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
-        groceryFile.delete();
-
         if (groceryFile.exists()) {
             readGListsFromGroceryFile();
         }
