@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -148,32 +149,35 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 KitchenList currentList = getCurrentKList();
 
-                switch (position) {
+                if (null != currentList)
+                {
+                    switch (position)
+                    {
+                        case PoPList.SORT_NONE: // first item in dropdown currently blank
+                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+                            break;
+                        case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
-                    case PoPList.SORT_NONE: // first item in dropdown currently blank
-                        currentList.setCurrentSortingValue(PoPList.SORT_NONE);
-                        break;
-                    case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
-
-                        currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
-                        currentList.sortListByName();
-                        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                            currentList.sortListByName();
+                            mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
 
-                        //TODO need to refresh the page so the new list displays
-                        break;
-                    case PoPList.SORT_CAL: //calories
-                        currentList.setCurrentSortingValue(PoPList.SORT_CAL);
-                        break;
-                    case PoPList.SORT_DATE: //date entered
-                        currentList.setCurrentSortingValue(PoPList.SORT_DATE);
-                        break;
-                    case PoPList.SORT_AISLE: //aisle
-                        currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
-                        break;
-                    case PoPList.SORT_PRICE: //price
-                        currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
-                        break;
+                            //TODO need to refresh the page so the new list displays
+                            break;
+                        case PoPList.SORT_CAL: //calories
+                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+                            break;
+                        case PoPList.SORT_DATE: //date entered
+                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+                            break;
+                        case PoPList.SORT_AISLE: //aisle
+                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+                            break;
+                        case PoPList.SORT_PRICE: //price
+                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+                            break;
+                    }
                 }
             }
 
@@ -270,11 +274,11 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     /********************************************************************************************
      * Function name: onPause
-     * <p/>
+     *
      * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
-     * <p/>
+     *
      * Parameters:    none
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     @Override
@@ -282,54 +286,29 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         super.onPause();
 
-        FileOutputStream kitchenOutput = null;
-        PrintWriter listsOutput = null;
-
-        try
-        {
-            kitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
-
-            listsOutput = new PrintWriter(kitchenOutput);
-
-            mKLists.writeListsToFile(listsOutput);
-            listsOutput.flush();
-            listsOutput.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        writeKListsToKitchenFile();
 
     }
     /********************************************************************************************
      * Function name: onResume
-     * <p/>
-     * Description:   When the activity is resumed reads in KitchenLists from kitchenLists.txt and
-     *                updates mKLists with the information
-     * <p/>
+     *
+     * Description:   When the activity is resumed reads in KitchenLists from KITCHEN_FILE_NAME and
+     *                updates mKLists with the information.
+     *
      * Parameters:    none
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     @Override
     protected void onResume ()
     {
         super.onResume();
-        FileInputStream kitchenInput;
-        Scanner listsInput;
 
-            try {
-                kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+        Context context = getApplicationContext();
+        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
 
-                listsInput = new Scanner(kitchenInput);
-                mKLists.readListsFromFile(listsInput);
-                listsInput.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-        for (int i = 0; i < mKLists.getSize(); ++i)
-        {
-            addListTab(mKLists.getList(i), i);
+        if (kitchenFile.exists()) {
+            readKListsFromKitchenFile();
         }
     }
     /********************************************************************************************
@@ -360,7 +339,16 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public KitchenList getCurrentKList() { return mKLists.getList(mListTabHost.getCurrentTab());
+    public KitchenList getCurrentKList()
+    {
+        KitchenList list = null;
+        int currentTabIndex = mListTabHost.getCurrentTab();
+
+        if (TabHost.NO_ID != currentTabIndex) {
+            list = mKLists.getList(currentTabIndex);
+        }
+
+        return list;
     }
 
     /********************************************************************************************
@@ -445,4 +433,63 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+
+    /********************************************************************************************
+     * Function name: writeKListsToKitchenFile
+     *
+     * Description: Writes the current mKLists to KITCHEN_FILE_NAME to store the information stored in mKLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void writeKListsToKitchenFile ()
+    {
+        FileOutputStream kitchenOutput = null;
+        PrintWriter listsOutput = null;
+
+        try
+        {
+            kitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+
+            listsOutput = new PrintWriter(kitchenOutput);
+
+            mKLists.writeListsToFile(listsOutput);
+            listsOutput.flush();
+            listsOutput.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: readKListsFromKitchenFile
+     *
+     * Description: Reads from the KITCHEN_FILE_NAME the current KitchenLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void readKListsFromKitchenFile ()
+    {
+        FileInputStream kitchenInput;
+        Scanner listsInput;
+
+        try {
+            kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+
+            listsInput = new Scanner(kitchenInput);
+            mKLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < mKLists.getSize(); ++i) {
+            addListTab(mKLists.getList(i), i);
+        }
+    }
+
 }

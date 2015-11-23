@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -171,10 +172,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             }
         });
 
-
-        //For testing purposes
-       // mGLists.addList("My First List");
-
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
@@ -188,30 +185,34 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 GroceryList currentList = getCurrentGList();
 
-                switch (position) {
+                if (null != currentList)
+                {
+                    switch (position)
+                    {
 
-                    case PoPList.SORT_NONE: // first item in dropdown currently blank
-                        currentList.setCurrentSortingValue(PoPList.SORT_NONE);
-                        break;
-                    case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
+                        case PoPList.SORT_NONE: // first item in dropdown currently blank
+                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+                            break;
+                        case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
-                        currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
-                        currentList.sortListByName();
-                        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                            currentList.sortListByName();
+                            mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
-                        break;
-                    case PoPList.SORT_CAL: //calories
-                        currentList.setCurrentSortingValue(PoPList.SORT_CAL);
-                        break;
-                    case PoPList.SORT_DATE: //date entered
-                        currentList.setCurrentSortingValue(PoPList.SORT_DATE);
-                        break;
-                    case PoPList.SORT_AISLE: //aisle
-                        currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
-                        break;
-                    case PoPList.SORT_PRICE: //price
-                        currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
-                        break;
+                            break;
+                        case PoPList.SORT_CAL: //calories
+                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+                            break;
+                        case PoPList.SORT_DATE: //date entered
+                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+                            break;
+                        case PoPList.SORT_AISLE: //aisle
+                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+                            break;
+                        case PoPList.SORT_PRICE: //price
+                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+                            break;
+                    }
                 }
             }
 
@@ -232,11 +233,11 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     /********************************************************************************************
      * Function name: onPause
-     * <p/>
-     * Description:   When the activity is paused writes the GroceryLists to groceryLists.txt
-     * <p/>
+     *
+     * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
+     *
      * Parameters:    none
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     @Override
@@ -244,48 +245,17 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     {
         super.onPause();
 
-        FileOutputStream groceryOutput = null;
-        PrintWriter listsOutput = null;
+        writeGListsToGroceryFile();
 
-        try
-        {
-            groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
-
-            listsOutput = new PrintWriter(groceryOutput);
-
-            mGLists.writeListsToFile(listsOutput);
-            listsOutput.flush();
-            listsOutput.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        /*
-        try {
-            FileInputStream inputStream = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
-            BufferedReader r = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder total = new StringBuilder();
-            String line;
-            while ((line = r.readLine()) != null) {
-                total.append("\n" + line);
-            }
-            r.close();
-            inputStream.close();
-            Log.d("File", "File contents: " + total);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-*/
     }
     /********************************************************************************************
      * Function name: onResume
-     * <p/>
-     * Description:   When the activity is resumed reads in GroceryLists from groceryLists.txt and
-     *                updates mGLists with the information
-     * <p/>
+     *
+     * Description:   When the activity is resumed reads in GroceryLists from GROCERY_FILE_NAME and
+     *                updates mGLists with the information.
+     *
      * Parameters:    none
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     @Override
@@ -293,26 +263,13 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     {
         super.onResume();
 
-        FileInputStream groceryInput;
-        Scanner listsInput;
+        Context context = getApplicationContext();
+        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
-        try {
-            groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
-
-            listsInput = new Scanner(groceryInput);
-            mGLists.readListsFromFile(listsInput);
-            listsInput.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (groceryFile.exists()) {
+            readGListsFromGroceryFile();
         }
-
-        for (int i = 0; i < mGLists.getSize(); ++i)
-        {
-            addListTab(mGLists.getList(i), i);
-        }
-
     }
-
     /********************************************************************************************
      * Function name: addListTab
      *
@@ -437,8 +394,16 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public GroceryList getCurrentGList() {
-        return mGLists.getList(mListTabHost.getCurrentTab());
+    public GroceryList getCurrentGList()
+    {
+        GroceryList list = null;
+        int currentTabIndex = mListTabHost.getCurrentTab();
+
+        if (TabHost.NO_ID != currentTabIndex) {
+            list = mGLists.getList(currentTabIndex);
+        }
+
+        return list;
     }
 
     /********************************************************************************************
@@ -508,4 +473,61 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 
+    /********************************************************************************************
+     * Function name: writeGListsToGroceryFile
+     *
+     * Description: Writes the current mGLists to GROCERY_FILE_NAME to store the information stored in mGLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void writeGListsToGroceryFile ()
+    {
+        FileOutputStream groceryOutput = null;
+        PrintWriter listsOutput = null;
+
+        try
+        {
+            groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
+
+            listsOutput = new PrintWriter(groceryOutput);
+
+            mGLists.writeListsToFile(listsOutput);
+            listsOutput.flush();
+            listsOutput.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: readGListsFromGroceryFile
+     *
+     * Description: Reads from the GROCERY_FILE_NAME the current GroceryLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void readGListsFromGroceryFile ()
+    {
+        FileInputStream groceryInput;
+        Scanner listsInput;
+
+        try {
+            groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
+
+            listsInput = new Scanner(groceryInput);
+            mGLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < mGLists.getSize(); ++i) {
+            addListTab(mGLists.getList(i), i);
+        }
+    }
 }

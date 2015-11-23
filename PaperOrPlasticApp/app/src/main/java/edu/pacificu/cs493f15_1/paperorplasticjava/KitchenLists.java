@@ -30,7 +30,14 @@ public class KitchenLists
 
     public KitchenList getList (int listIndex)
     {
-        return mLists.get(listIndex);
+
+        KitchenList list = null;
+        if (mLists.size() > listIndex)
+        {
+            list =  mLists.get(listIndex);
+        }
+        return list;
+
     }
 
     public int getSize()

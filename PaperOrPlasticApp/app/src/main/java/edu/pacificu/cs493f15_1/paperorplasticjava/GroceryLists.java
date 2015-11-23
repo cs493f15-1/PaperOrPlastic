@@ -41,7 +41,14 @@ public class GroceryLists
 
     public GroceryList getList (int listIndex)
     {
-        return mLists.get(listIndex);
+
+        GroceryList list = null;
+        if (mLists.size() > listIndex)
+        {
+            list =  mLists.get(listIndex);
+        }
+        return list;
+
     }
 
     public int getSize ()
