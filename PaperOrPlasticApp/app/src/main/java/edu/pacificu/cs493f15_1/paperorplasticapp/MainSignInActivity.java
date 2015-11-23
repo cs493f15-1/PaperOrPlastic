@@ -34,6 +34,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
@@ -233,18 +234,15 @@ private void testWritingDataToFirebase()
   alanRef.setValue(alan);
 
   //now test retrieving this information -- Attach a listener to read the data at our posts reference (test saving data)
-  alanRef.addValueEventListener(new ValueEventListener()
-  {
+  alanRef.addValueEventListener(new ValueEventListener() {
     @Override
-    public void onDataChange(DataSnapshot snapshot)
-    {
+    public void onDataChange(DataSnapshot snapshot) {
       System.out.println(snapshot.getValue());
       System.out.println("There are " + snapshot.getChildrenCount() + " fields to this user.");
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError)
-    {
+    public void onCancelled(FirebaseError firebaseError) {
       System.out.println("The read failed: " + firebaseError.getMessage());
     }
   });
@@ -313,12 +311,27 @@ private void testCreateFirebaseUsers ()
     sTest.addItem(s2);
     sTest.addItem(s3);
 
+
+    KitchenList sTest2 = new KitchenList("Groceries");
+    ListItem  s12 = new ListItem("pancakes"),
+            s22 = new ListItem("cups"),
+            s32 = new ListItem("paper towels");
+
+    sTest2.addItem(s12);
+    sTest2.addItem(s22);
+    sTest2.addItem(s32);
+
     //user should be signed in at this point
     if (null != mfCurrentUser.getMyRef())
     {
       mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest.getListName()).setValue(sTest);
-
+      mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest2.getListName()).setValue(sTest2);
       //test adding a shared user
+
+      Map<String, String> test = new HashMap<String, String>();
+      test.put("0","TestShareUser");
+      mfCurrentUser.getMyRef().child("SharedUsers").child("uid-test123").setValue(test); //TODO: add the uid based on email input
+
       //Firebase sCurrentList = new Firebase(myFirebaseUserRef.child("Kitchen Lists").child(sTest.getListName()).toString());
 
       //sCurrentList.child("shared").setValue();
@@ -377,7 +390,7 @@ public void rememberPass(String email, String password)
  ***************************************************************************************************/
   public void onClick (View view)
   {
-    Intent intent; //will be using this to launch to new activity (e.g. clicking continue)
+    Intent intent = new Intent (this, ContinueActivity.class); //will be using this to launch to new activity (e.g. clicking continue)
 
     if (mButtonSignIn == view)
     {
@@ -392,8 +405,6 @@ public void rememberPass(String email, String password)
         @Override
         public void onAuthenticated(AuthData authData)
         {
-          messageDialog("Sign-In", "Successful login.");
-
           mAuthSuccess = true;
 
           mfCurrentUser = new FirebaseUser(authData.getUid());
@@ -405,6 +416,7 @@ public void rememberPass(String email, String password)
 
           rememberPass(email, password);
 
+          messageDialog("Sign-In", "Successful login.", true);
         }
 
         @Override
@@ -412,7 +424,7 @@ public void rememberPass(String email, String password)
         {
           // there was an error
           System.out.println("Error authenticating user. ");
-          messageDialog ("Unable to Sign-In", "Invalid password or email.");
+          messageDialog ("Unable to Sign-In", "Invalid password or email.", false);
         }
       });
     }
@@ -429,8 +441,6 @@ public void rememberPass(String email, String password)
         @Override
         public void onSuccess(Map<String, Object> result)
         {
-          messageDialog("Create Account", "Account has been created.");
-
           //after create sign-in
           myFirebaseRef.authWithPassword (email, password, new Firebase.AuthResultHandler()
             {
@@ -444,11 +454,13 @@ public void rememberPass(String email, String password)
                 mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
                 mfCurrentUser.setmEmail(email);
                 rememberPass(email, password);
+
+                messageDialog("Create Account", "Account has been created.", true);
               }
               @Override
               public void onAuthenticationError(FirebaseError firebaseError)
               {
-                messageDialog ("Unable to Sign-In", "Invalid password or email.");
+                messageDialog ("Unable to Sign-In", "Invalid password or email.", false);
               }
             });
         }
@@ -458,9 +470,10 @@ public void rememberPass(String email, String password)
         {
           // there was an error
           System.out.println("Error creating user. ");
-          messageDialog("Unable to Create Account","Email in use or invalid Email.");
+          messageDialog("Unable to Create Account","Email in use or invalid Email.", false);
         }
       });
+
     }
 
     if (mButtonRecoverPassword == view)
@@ -470,13 +483,13 @@ public void rememberPass(String email, String password)
         public void onSuccess()
         {
           messageDialog ("Recover Password", "Recovery Email has been sent to: \n" +
-                  mEmailView.getText().toString());
+                  mEmailView.getText().toString(), false);
         }
         @Override
         public void onError(FirebaseError firebaseError)// error encountered
         {
           messageDialog ("Recover Password", "Error sending recovery Email to: \n" +
-                  mEmailView.getText().toString());
+                  mEmailView.getText().toString(), false);
         }
       });
     }
@@ -516,13 +529,13 @@ public void rememberPass(String email, String password)
                   @Override
                   public void onSuccess()
                   {
-                    System.out.println("Password changed. ");
+                    System.out.println("Password changed. "); //TODO: indicate success to user
                   }
 
                   @Override
                   public void onError(FirebaseError firebaseError)
                   {
-                    System.out.println("Error changing password. ");
+                    System.out.println("Error changing password. "); //TODO: indicate failure to user
                   }
                 });
               }
@@ -565,16 +578,20 @@ public void rememberPass(String email, String password)
  *   Parameters:  N/A
  *   Returned:    N/A
  ***************************************************************************************************/
-  private void messageDialog (String title, String message)
+  private void messageDialog (String title, String message, final boolean bContinueScreen)
   {
+    final Intent intent = new Intent (this, ContinueActivity.class);
+
     new AlertDialog.Builder (this).setTitle (title).setMessage(message)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-              public void onClick(DialogInterface dialog, int ok)
-              {
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int ok) {
                 //user clicked ok
+                if (bContinueScreen)
+                {
+                  startActivity(intent);
+                }
               }
-            }).show ();
+            }).show();
   }
 
 
