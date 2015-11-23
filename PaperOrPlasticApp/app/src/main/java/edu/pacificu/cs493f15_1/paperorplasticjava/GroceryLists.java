@@ -3,10 +3,13 @@ package edu.pacificu.cs493f15_1.paperorplasticjava; /**
  */
 
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GroceryLists
 {
+    public static final String GROCERY_FILE_NAME = "groceryLists.txt";
 
     ArrayList<GroceryList> mLists;
 
@@ -31,14 +34,21 @@ public class GroceryLists
      * Gets
      ********************************/
 
-    public String getListName (int listIndex)
+    public String getGListName(int listIndex)
     {
         return mLists.get (listIndex).getListName();
     }
 
     public GroceryList getList (int listIndex)
     {
-        return mLists.get(listIndex);
+
+        GroceryList list = null;
+        if (mLists.size() > listIndex)
+        {
+            list =  mLists.get(listIndex);
+        }
+        return list;
+
     }
 
     public int getSize ()
@@ -85,6 +95,58 @@ public class GroceryLists
         shareList (listName, username);
         unShareList (listName, username);
      */
+
+
+
+    /*********************************
+     * I/O
+     ********************************/
+
+
+    /********************************************************************************************
+     * Function name: writeListsToFile
+     *
+     * Description: Outputs the current mLists to the passed in PrintWriter
+     *
+     * Parameters: listsOutput - the printWriter which the groceryLists will be outputted to
+     *
+     * Returns: None
+     ******************************************************************************************/
+    public void writeListsToFile (PrintWriter listsOutput)
+    {
+        listsOutput.println(mLists.size());
+
+        for (GroceryList glist : mLists)
+        {
+            glist.getListName();
+            glist.writeListToFile(listsOutput);
+            listsOutput.flush();
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: readListsFromFile
+     *
+     * Description: reads from a file using a scanner and inputs the information into mLists
+     *
+     * Parameters: listsInput - the Scanner which the groceryLists will be read from
+     *
+     * Returns: None
+     ******************************************************************************************/
+    public void readListsFromFile (Scanner listsInput)
+    {
+        int size;
+        GroceryList tempList;
+
+        size = listsInput.nextInt();
+
+        for (int i = 0; i < size; ++i)
+        {
+            addList("temp");
+            tempList = getList(i);
+            tempList.readListFromFile(listsInput);
+        }
+    }
 
 
 }

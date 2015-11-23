@@ -1,11 +1,17 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -34,12 +40,19 @@ public class GroceryListSettingsActivity extends Activity implements View.OnClic
 
 
         //get grocery lists
-       // mGLists = ((GroceryListActivity)getParent()).getLists();
+       // mGLists = .getLists();
         //instead for now
         mGLists = new GroceryLists ();
-        ListItem item = new ListItem("item");
+        /*ListItem item = new ListItem("item");
         mGLists.addList("blagh");
-        mGLists.getList(0).addItem(item);
+        mGLists.getList(0).addItem(item);*/
+
+        Context context = getApplicationContext();
+        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
+
+        if (groceryFile.exists()) {
+            readGListsFromGroceryFile(mGLists);
+        }
 
         //set up list view
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
@@ -64,5 +77,30 @@ public class GroceryListSettingsActivity extends Activity implements View.OnClic
                 ContinueActivity.bGListButtonStatusFromSettings.setVisibility(View.VISIBLE);
             }
         }*/
+    }
+
+    /********************************************************************************************
+     * Function name: readGListsFromGroceryFile
+     *
+     * Description: Reads from the GROCERY_FILE_NAME the current GroceryLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void readGListsFromGroceryFile (GroceryLists gLists)
+    {
+        FileInputStream groceryInput;
+        Scanner listsInput;
+
+        try {
+            groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
+
+            listsInput = new Scanner(groceryInput);
+            gLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

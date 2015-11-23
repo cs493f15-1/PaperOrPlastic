@@ -2,7 +2,10 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
 
 
 //import com.sun.org.apache.bcel.internal.generic.POP;
+
+import java.io.PrintWriter;
 import java.util.Comparator;
+import java.util.Scanner;
 
 /**
  * Created by sull0678 on 10/5/2015.
@@ -30,6 +33,8 @@ public class ListItem
         mName = name;
         mQuantity = 0;
         mCheckedOff = false;
+        mNutritionFacts = new NutritionFacts();
+        mNotes = "init";
     }
 
     /***********************************
@@ -102,10 +107,14 @@ public class ListItem
      * SETS
      ******************************/
 
+
     public void setShowingDelete (boolean bIsShowingDelete)
     {
         mbShowsDelete = bIsShowingDelete;
     }
+
+    private void setName (String name) {mName = name;}
+
 
     public void setFoodType (int foodType)
     {
@@ -188,6 +197,55 @@ public class ListItem
                 return listitem1.getItemName().compareTo(listitem2.getItemName());
             }
         };
+    }
+
+
+    /*********************************
+     * I/O
+     ********************************/
+
+    /********************************************************************************************
+     * Function name: writeItemToFile
+     *
+     * Description: Outputs the current item to the passed in PrintWriter
+     *
+     * Parameters: itemOutput - the printWriter which the listItem will be outputted to
+     *
+     * Returns: None
+     ******************************************************************************************/
+    public void writeItemToFile (PrintWriter itemOutput)
+    {
+        String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " " + getPrice()
+                + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
+
+        itemOutput.println(getItemName());
+        itemOutput.print(content);
+        mNutritionFacts.writeNutritionToFile(itemOutput);
+        itemOutput.print("\n");
+        itemOutput.flush();
+    }
+
+    /********************************************************************************************
+     * Function name: readItemFromFile
+     *
+     * Description: reads from a file using a scanner and inputs the information into the listItem
+     *
+     * Parameters: itemInput - the Scanner which the listItem will be read from
+     *
+     * Returns: None
+     ******************************************************************************************/
+    public void readItemFromFile (Scanner itemInput)
+    {
+        itemInput.nextLine(); //get new line character leftover from before
+        setName(itemInput.nextLine());
+        setFoodType(itemInput.nextInt());
+        setAisle(itemInput.nextInt());
+        setAddQuantity(itemInput.nextInt());
+        setPrice(itemInput.nextDouble());
+        setCustomCategory(itemInput.nextInt());
+        setCheckedOff(itemInput.nextBoolean());
+        setNotes(itemInput.next());
+        mNutritionFacts.readNutritionFromFile(itemInput);
     }
 
 }
