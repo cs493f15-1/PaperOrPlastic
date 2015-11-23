@@ -266,6 +266,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         Context context = getApplicationContext();
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
+        groceryFile.delete();
+
         if (groceryFile.exists()) {
             readGListsFromGroceryFile();
         }
@@ -328,23 +330,25 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     public void addItemToListView (ListItem newItem)
     {
-        mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
-
-        //resort the list depending on the current sorting category
-        GroceryList currentList = getCurrentGList();
-
-        switch (currentList.getCurrentSortingValue())
+        if (mGLists.getSize() > 0) //make sure that there is at least one tab
         {
-            case PoPList.SORT_ALPHA:
-                currentList.sortListByName();
-                mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
-                break;
-            case PoPList.SORT_AISLE:
-            case PoPList.SORT_CAL:
-            case PoPList.SORT_DATE:
-            case PoPList.SORT_PRICE:
-            case PoPList.SORT_NONE:
-                break;
+            mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
+
+            //resort the list depending on the current sorting category
+            GroceryList currentList = getCurrentGList();
+
+            switch (currentList.getCurrentSortingValue()) {
+                case PoPList.SORT_ALPHA:
+                    currentList.sortListByName();
+                    mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                    break;
+                case PoPList.SORT_AISLE:
+                case PoPList.SORT_CAL:
+                case PoPList.SORT_DATE:
+                case PoPList.SORT_PRICE:
+                case PoPList.SORT_NONE:
+                    break;
+            }
         }
     }
 
