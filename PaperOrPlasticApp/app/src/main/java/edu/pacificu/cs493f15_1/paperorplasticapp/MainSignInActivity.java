@@ -475,7 +475,6 @@ public void rememberPass(String email, String password)
         @Override
         public void onError(FirebaseError firebaseError)// error encountered
         {
-          if (mEmailView.)
           messageDialog ("Recover Password", "Error sending recovery Email to: \n" +
                   mEmailView.getText().toString());
         }
