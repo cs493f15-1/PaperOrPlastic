@@ -19,12 +19,13 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.firebase.client.AuthData;
@@ -35,9 +36,17 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.Map;
 
+import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
+
+
 public class MainSignInActivity extends AppCompatActivity implements View.OnClickListener
 {
   private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
+  private String SIGNIN_PREFS = "signinPrefs";
+  private String SIGNIN_PREFS_BOOLEAN = "saveSignIn";
+
 
   //  buttons
   private Button  mButtonSignIn,
@@ -46,18 +55,29 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
                   mButtonResetPassword,
                   mButtonContinue;
 
+  //  checkboxes
+  private CheckBox mcbRememberPass;
+
   //testing new email input box
   private AutoCompleteTextView mEmailView;
-
 
   //  edit text fields
   private EditText  mEditPassword;
 
+  private SharedPreferences mSignInPreferences;
+  private SharedPreferences.Editor mSignInPrefsEditor;
+
+  private boolean saveSignIn;
 
   //  firebase reference
-  private Firebase  myFirebaseRef;
+  private Firebase  myFirebaseRef, myFirebaseUserRef;
+
+  private FirebaseUser mfCurrentUser;
+  private boolean mAuthSuccess;
 
   private View mLoginFormView;
+
+
 
 /***************************************************************************************************
  *   Method:        onCreate
@@ -75,15 +95,31 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
 
     setContentView(R.layout.activity_main_sign_in);
 
-    initializeButtons();
-    initializeEditFields();
-    initializeFirebase();
-
+    initializeActivity();
 
     testWritingDataToFirebase();
     testCreateFirebaseUsers();
 
   }
+
+/***************************************************************************************************
+ *   Method:       initializeActivity
+ *   Description:  calls all initialization functions
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ ***************************************************************************************************/
+  private void initializeActivity()
+  {
+    initializeButtons();
+    initializeEditFields();
+    initializeCheckboxes();
+    initializeFirebase();
+    initializeSignInPrefs();
+
+    mAuthSuccess = false;
+    mLoginFormView = findViewById(R.id.loginForm);
+  }
+
 
 /***************************************************************************************************
  *   Method:       initializeButtons
@@ -108,6 +144,19 @@ private void initializeButtons ()
   mButtonResetPassword.setOnClickListener(this);
 }
 
+/***************************************************************************************************
+ *   Method:       initializeCheckboxes
+ *   Description:  pairs member variable checkboxes with the views on this activity by ID
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ ***************************************************************************************************/
+private void initializeCheckboxes()
+{
+  mcbRememberPass = (CheckBox) findViewById(R.id.cbRememberPassword);
+  mcbRememberPass.setChecked(false);
+  saveSignIn = false;
+}
+
 
 /***************************************************************************************************
  *   Method:       initializeEditFields
@@ -123,7 +172,29 @@ private void initializeEditFields()
 }
 
 
+
 /***************************************************************************************************
+ *   Method:       initializeSignInPrefs
+ *   Description:  sets shared preferences for signing in with this app
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ ***************************************************************************************************/
+private void initializeSignInPrefs()
+{
+  mSignInPreferences = getSharedPreferences(SIGNIN_PREFS, MODE_PRIVATE);
+  mSignInPrefsEditor = mSignInPreferences.edit();
+  saveSignIn = mSignInPreferences.getBoolean(SIGNIN_PREFS_BOOLEAN, false);
+  if (saveSignIn)
+  {
+    mEmailView.setText(mSignInPreferences.getString("email", ""));
+    mEditPassword.setText(mSignInPreferences.getString("password",""));
+    mcbRememberPass.setChecked(true);
+  }
+}
+
+
+
+  /***************************************************************************************************
  *   Method:         initializeFirebase
  *   Description:    links firebase with our application by setting our member variable myFirebaseRef
  *                   to the link of our cloud database
@@ -222,8 +293,72 @@ private void testCreateFirebaseUsers ()
       System.out.println("Error authenticating user. ");
     }
   });
-
 }
+
+
+/***************************************************************************************************
+ *   Method:      testWriteListToFirebase
+ *   Description: just more testing....
+ *   Parameters:  N/A
+ *   Returned:    N/A
+ ***************************************************************************************************/
+  private void testWriteListToFirebase ()
+  {
+    KitchenList sTest = new KitchenList("Test List");
+    ListItem  s1 = new ListItem("milk"),
+              s2 = new ListItem("cookies"),
+              s3 = new ListItem("orange juice");
+
+    sTest.addItem(s1);
+    sTest.addItem(s2);
+    sTest.addItem(s3);
+
+    //user should be signed in at this point
+    if (null != mfCurrentUser.getMyRef())
+    {
+      mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest.getListName()).setValue(sTest);
+
+      //test adding a shared user
+      //Firebase sCurrentList = new Firebase(myFirebaseUserRef.child("Kitchen Lists").child(sTest.getListName()).toString());
+
+      //sCurrentList.child("shared").setValue();
+
+    }
+
+  }
+
+/***************************************************************************************************
+ *   Method:      rememberPass
+ *   Description: remember the email and password if the checkbox is checked. otherwise, clear
+ *                the sign in preferences data
+ *   Parameters:  email - user email
+ *                password - user password
+ *   Returned:    N/A
+ ***************************************************************************************************/
+public void rememberPass(String email, String password)
+{
+  if (mcbRememberPass.isChecked())
+  {
+    mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
+    mSignInPrefsEditor.putString("email", email);
+    mSignInPrefsEditor.putString("password", password);
+    mSignInPrefsEditor.commit();
+    if (mfCurrentUser != null)
+    {
+      mfCurrentUser.setmbRememberPass(true);
+    }
+  }
+  else
+  {
+    mSignInPrefsEditor.clear();
+    mSignInPrefsEditor.commit();
+    if (mfCurrentUser != null)
+    {
+      mfCurrentUser.setmbRememberPass(false);
+    }
+  }
+}
+
 
 /***************************************************************************************************
  *   Method:      onClick
@@ -246,17 +381,30 @@ private void testCreateFirebaseUsers ()
 
     if (mButtonSignIn == view)
     {
+      final String email = mEmailView.getText().toString();
+      final String password = mEditPassword.getText().toString();
+
       //capture text from password editText and email editText ->pass this to firebase authentication
       myFirebaseRef.authWithPassword (mEmailView.getText().toString(),
-                                      mEditPassword.getText().toString(),
-                                      new Firebase.AuthResultHandler()
+              mEditPassword.getText().toString(),
+              new Firebase.AuthResultHandler()
       {
         @Override
         public void onAuthenticated(AuthData authData)
         {
-          System.out.println("Authenticated the user.");
-          System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-          messageDialog ("Sign-In", "Successful login.");
+          messageDialog("Sign-In", "Successful login.");
+
+          mAuthSuccess = true;
+
+          mfCurrentUser = new FirebaseUser(authData.getUid());
+          mfCurrentUser.setmProvider(authData.getProvider());
+          mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
+          mfCurrentUser.setmEmail(email);
+
+          testWriteListToFirebase();
+
+          rememberPass(email, password);
+
         }
 
         @Override
@@ -272,16 +420,37 @@ private void testCreateFirebaseUsers ()
     if (mButtonCreateAccount == view)
     {
       //capture text from password editText and email editText -> pass this to firebase user create
+      final String email = mEmailView.getText().toString();
+      final String password = mEditPassword.getText().toString();
 
-      myFirebaseRef.createUser (mEmailView.getText().toString(),
-                                mEditPassword.getText().toString(),
+      myFirebaseRef.createUser (email, password,
                                 new Firebase.ValueResultHandler<Map<String, Object>>()
       {
         @Override
         public void onSuccess(Map<String, Object> result)
         {
-          System.out.println("Successfully created user account with uid: " + result.get("uid"));
-          messageDialog("Create Account","Account has been created.");
+          messageDialog("Create Account", "Account has been created.");
+
+          //after create sign-in
+          myFirebaseRef.authWithPassword (email, password, new Firebase.AuthResultHandler()
+            {
+              @Override
+              public void onAuthenticated(AuthData authData)
+              {
+                mAuthSuccess = true;
+
+                mfCurrentUser = new FirebaseUser(authData.getUid());
+                mfCurrentUser.setmProvider(authData.getProvider());
+                mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
+                mfCurrentUser.setmEmail(email);
+                rememberPass(email, password);
+              }
+              @Override
+              public void onAuthenticationError(FirebaseError firebaseError)
+              {
+                messageDialog ("Unable to Sign-In", "Invalid password or email.");
+              }
+            });
         }
 
         @Override
@@ -300,13 +469,15 @@ private void testCreateFirebaseUsers ()
         @Override
         public void onSuccess()
         {
-          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" + mEmailView.getText().toString());
+          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" +
+                  mEmailView.getText().toString());
         }
         @Override
-        public void onError(FirebaseError firebaseError)
+        public void onError(FirebaseError firebaseError)// error encountered
         {
-          // error encountered
-          messageDialog ("Recover Password", "Error sending recovery Email to: \n" + mEmailView.getText().toString());
+          if (mEmailView.)
+          messageDialog ("Recover Password", "Error sending recovery Email to: \n" +
+                  mEmailView.getText().toString());
         }
       });
     }
