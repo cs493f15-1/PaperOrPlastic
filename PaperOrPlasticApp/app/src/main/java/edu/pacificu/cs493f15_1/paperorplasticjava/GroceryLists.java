@@ -46,6 +46,11 @@ public class GroceryLists
         return mLists.size();
     }
 
+    public ArrayList<GroceryList> getArrayOfLists ()
+    {
+        return mLists;
+    }
+
     /**********************************
      * Sets
      *********************************/

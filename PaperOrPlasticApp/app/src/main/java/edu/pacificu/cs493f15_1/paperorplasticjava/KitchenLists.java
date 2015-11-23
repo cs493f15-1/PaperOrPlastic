@@ -31,6 +31,11 @@ public class KitchenLists
      * Gets
      ********************************/
 
+    public ArrayList<KitchenList> getArrayOfLists ()
+    {
+        return mLists;
+    }
+
     public String getListName (int listIndex)
     {
         return mLists.get (listIndex).getListName();
