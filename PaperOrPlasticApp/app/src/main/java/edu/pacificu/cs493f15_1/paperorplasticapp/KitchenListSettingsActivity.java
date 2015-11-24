@@ -1,3 +1,15 @@
+/**************************************************************************************************
+ *   File:     KitchenListSettingsActivity.java
+ *   Author:   Abigail Jones
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that is opened when the user chooses to
+ *             look at the ktichen list settings. This can happen through the settings button on the
+ *             continue activity or through the settings tab when the ktichen list button is pressed
+ *             from the continue activity.
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
@@ -5,9 +17,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * Created by jone8832 on 10/26/2015.
- */
+/***************************************************************************************************
+ *   Class:         KitchenListSettingsActivity
+ *   Description:   Creates KitchenListSettingsActivity class that controls what occurs when the
+ *                  user reaches the kitchen list settings page. Specifically, handles what happens
+ *                  when the user specifies whether the kitchen list button should be displayed on
+ *                  the continue activity.
+ *                  creates intents that take users to those specific pages.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class KitchenListSettingsActivity extends Activity implements View.OnClickListener
 {
     private Button mButtonShowKitchenList;

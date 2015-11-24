@@ -1,3 +1,13 @@
+/**************************************************************************************************
+ *   File:     KitchenListActivity.java
+ *   Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that is opened when the user selects the
+ *             kitchen list button from the continue activity
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.Context;
@@ -29,9 +39,14 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 
-/**
- * Created by sull0678 on 10/26/2015.
- */
+/***************************************************************************************************
+ *   Class:         KitchenListActivity
+ *   Description:   Creates KitchenListActivity class that controls what occurs when the user
+ *                  selects the kitchen list option from the continue activity. Specifically
+ *                  contains the list functionality.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class KitchenListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
     private Button mbAddList, mbAddItem;
     private Spinner mGroupBySpinner;
