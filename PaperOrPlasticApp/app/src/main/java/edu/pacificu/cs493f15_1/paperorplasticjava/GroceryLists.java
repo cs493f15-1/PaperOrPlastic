@@ -56,6 +56,11 @@ public class GroceryLists
         return mLists.size();
     }
 
+    public ArrayList<GroceryList> getArrayOfLists ()
+    {
+        return mLists;
+    }
+
     /**********************************
      * Sets
      *********************************/
@@ -140,6 +145,14 @@ public class GroceryLists
             addList("temp");
             tempList = getList(i);
             tempList.readListFromFile(listsInput);
+        }
+    }
+
+    public void clearLists ()
+    {
+        for (int i = 0; i < mLists.size(); i++)
+        {
+            mLists.remove(i);
         }
     }
 

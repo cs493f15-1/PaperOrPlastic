@@ -29,6 +29,16 @@ public abstract class PoPList
     /*******************************************
      * Gets
      ******************************************/
+    public int getSize ()
+    {
+        return mItems.size();
+    }
+
+    public int getCurrentSortingValue ()
+    {
+        return mCurrentSortingValue;
+    }
+
     public String getListName ()
     {
         return mListName;
@@ -154,10 +164,6 @@ public abstract class PoPList
         System.out.println (mListName);
     }
 
-    public int getSize ()
-    {
-        return mItems.size();
-    }
 
     public ArrayList<ListItem> getItemArray ()
     {
@@ -173,10 +179,7 @@ public abstract class PoPList
      * Sorts
      ********************************/
 
-    public int getCurrentSortingValue ()
-    {
-        return mCurrentSortingValue;
-    }
+
 
     public void setCurrentSortingValue (int sortingValue)
     {

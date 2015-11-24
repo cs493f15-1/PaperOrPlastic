@@ -26,4 +26,8 @@
     <color name="ccTransparentgreen">#9900ff00</color>
     <color name="ccLightgreen">#83cf68</color>
 
+
+    <color name="cListTitleColor">#c4c3c3</color>
+    <color name="cListTitleTextColor">#5e5e5e</color>
+
 </resources>

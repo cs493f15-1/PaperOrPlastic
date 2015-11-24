@@ -308,7 +308,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
 
         if (kitchenFile.exists()) {
-            readKListsFromKitchenFile();
+            readKListsFromKitchenFile(mKLists);
         }
     }
     /********************************************************************************************
@@ -472,7 +472,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns: None
      ******************************************************************************************/
-    private void readKListsFromKitchenFile ()
+    private void readKListsFromKitchenFile (KitchenLists kLists)
     {
         FileInputStream kitchenInput;
         Scanner listsInput;
@@ -481,14 +481,14 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
 
             listsInput = new Scanner(kitchenInput);
-            mKLists.readListsFromFile(listsInput);
+            kLists.readListsFromFile(listsInput);
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < mKLists.getSize(); ++i) {
-            addListTab(mKLists.getList(i), i);
+        for (int i = 0; i < kLists.getSize(); ++i) {
+            addListTab(kLists.getList(i), i);
         }
     }
 
