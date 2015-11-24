@@ -49,6 +49,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener
         {
             //will start a new activity using the intents
             intent = new Intent (this, GroceryListSettingsActivity.class);
+            intent.putExtra("Caller", "SettingsActivity");
             startActivity (intent);
         }
 

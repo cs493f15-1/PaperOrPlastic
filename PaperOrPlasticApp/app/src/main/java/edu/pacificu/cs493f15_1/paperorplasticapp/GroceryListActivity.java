@@ -44,7 +44,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
-    private Button mbAddList, mbAddItem, mbSettings;
+    private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     private GroceryLists mGLists;
@@ -151,12 +151,22 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             }
         });
 
+        mbBack = (Button) findViewById (R.id.bBackToHome);
+        mbBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class);
+                startActivity (intent);
+            }
+        });
+
         //set up settings activity button
         mbSettings = (Button) findViewById(R.id.bGListSettings);
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class);
+                intent.putExtra("Caller", "GroceryListActivity");
                 startActivity(intent);
             }
         });
