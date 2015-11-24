@@ -29,6 +29,8 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -261,6 +263,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             addListTab(mGLists.getList(i), i);
         }
 
+
+
     }
 
 
@@ -279,6 +283,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         super.onPause();
 
         writeGListsToGroceryFile();
+        mGLists.clearLists();
 
     }
     /********************************************************************************************
@@ -300,7 +305,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
         if (groceryFile.exists()) {
+            mGLists.clearLists();
             readGListsFromGroceryFile(mGLists);
+
         }
     }
     /********************************************************************************************
@@ -587,7 +594,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         {
             groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
 
+
             listsOutput = new PrintWriter(groceryOutput);
+
 
             mGLists.writeListsToFile(listsOutput);
             listsOutput.flush();
