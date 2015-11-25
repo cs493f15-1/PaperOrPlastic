@@ -59,6 +59,7 @@
     <string name="delete">Delete</string>
    <string name="sAddItem">Add Item</string>
     <string name="sEdit">Edit</string>
+    <string name="passRecover">Recover Password</string>
 
     <string-array name="gameDifficulty">
         <item>Easy</item>
