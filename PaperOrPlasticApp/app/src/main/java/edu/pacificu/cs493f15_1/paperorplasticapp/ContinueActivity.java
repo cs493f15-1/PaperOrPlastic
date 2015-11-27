@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
+
 /**
  * Created by jone8832 on 10/26/2015.
  */
@@ -35,6 +39,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
                     mButtonNutrition,
                     mButtonCoupons,
                     mButtonRecipes;
+
+    private FirebaseUser fUserTest;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -92,6 +98,14 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
         bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);
 
+
+        fUserTest = getIntent().getParcelableExtra("currentUser");
+        //now since we have user TODO: create a sign out button
+        if (fUserTest.getMyRef() != null)
+        {
+            System.out.println(fUserTest.getmEmail());
+            System.out.println(this.getApplicationContext().toString());
+        }
     }
 
 
@@ -137,7 +151,10 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         {
             //will start a new activity using the intents
             intent = new Intent (this, KitchenListActivity.class);
-            startActivity (intent);
+
+            intent.putExtra("currentUser",fUserTest);
+
+            startActivity(intent);
         }
 
         if (mButtonNutrition == view)

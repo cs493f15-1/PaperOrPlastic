@@ -41,13 +41,11 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 
-
 public class MainSignInActivity extends AppCompatActivity implements View.OnClickListener
 {
   private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
   private String SIGNIN_PREFS = "signinPrefs";
   private String SIGNIN_PREFS_BOOLEAN = "saveSignIn";
-
 
   //  buttons
   private Button  mButtonSignIn,
@@ -71,7 +69,7 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
   private boolean saveSignIn;
 
   //  firebase reference
-  private Firebase  myFirebaseRef, myFirebaseUserRef;
+  private Firebase  myFirebaseRef;
 
   private FirebaseUser mfCurrentUser;
   private boolean mAuthSuccess;
@@ -322,20 +320,33 @@ private void testCreateFirebaseUsers ()
     if (null != mfCurrentUser.getMyRef())
     {
       mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest.getListName()).setValue(sTest);
-      //mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest2.getListName()).setValue(sTest2);
+      mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest2.getListName()).setValue(sTest2);
+    }
+
+  }
+
+/***************************************************************************************************
+ *   Method:      testAddSharedUser
+ *   Description: test a user "adding another user to see their lists"
+ *   Parameters:  N/A
+ *   Returned:    N/A
+ ***************************************************************************************************/
+  private void testAddSharedUser()
+  {
+    if (null != mfCurrentUser.getMyRef())
+    {
       //test adding a shared user
 
-      //Map<String, String> test = new HashMap<String, String>();
-      //test.put("0","TestShareUser");
-      //mfCurrentUser.getMyRef().child("SharedUsers").child("uid-test123").setValue(test); //TODO: add the uid based on email input
+      Map<String, String> test = new HashMap<String, String>();
+      test.put("0","TestShareUser");
+      mfCurrentUser.getMyRef().child("SharedUsers").child("uid-test123").setValue(test); //TODO: add the uid based on email input
 
       //Firebase sCurrentList = new Firebase(myFirebaseUserRef.child("Kitchen Lists").child(sTest.getListName()).toString());
 
       //sCurrentList.child("shared").setValue();
-
     }
-
   }
+
 
 /***************************************************************************************************
  *   Method:      rememberPass
@@ -424,19 +435,21 @@ public void rememberPass(String email, String password)
  *   Parameters:  N/A
  *   Returned:    N/A
  ***************************************************************************************************/
-  private void messageDialog (String title, String message, final boolean bContinueScreen)
+  private void messageDialog (String title, String message, final boolean bContinue)
   {
     final Intent intent = new Intent (this, ContinueActivity.class);
 
     new AlertDialog.Builder (this)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton ("OK", new DialogInterface.OnClickListener()
-            {
-              public void onClick(DialogInterface dialog, int ok)
-              { //user clicked ok
-                if (bContinueScreen)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int ok) { //user clicked ok
+                if (bContinue)
                 {
+                  if (mAuthSuccess)
+                  {
+                    intent.putExtra("currentUser", mfCurrentUser);
+                  }
                   startActivity(intent);
                 }
               }
@@ -469,7 +482,7 @@ public void rememberPass(String email, String password)
         mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
         mfCurrentUser.setmEmail(email);
 
-        testWriteListToFirebase();
+        //testWriteListToFirebase();
 
         rememberPass(email, password);
 

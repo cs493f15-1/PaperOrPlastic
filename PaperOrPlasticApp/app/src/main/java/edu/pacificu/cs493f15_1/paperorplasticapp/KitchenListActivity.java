@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import com.firebase.client.Firebase;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
@@ -47,6 +50,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     private long mLastClickTime;
     private NewItemInfoDialogListener mItemInfoListener;
 
+    private FirebaseUser fUser;
+
     /********************************************************************************************
      * Function name: onCreate
      * <p/>
@@ -62,6 +67,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_kitchen_list);
+
+        fUser = getIntent().getParcelableExtra("currentUser");
 
         mLastClickTime = 0;
 
@@ -287,6 +294,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         super.onPause();
 
         writeKListsToKitchenFile();
+
+        //test right here for firebase writing TODO
+
+        for (int i = 0; i < mKLists.getSize(); ++i)
+        {
+            fUser.getMyRef().child("Kitchen Lists").child(mKLists.getKListName(i)).setValue(mKLists.getList(i));
+        }
 
     }
     /********************************************************************************************
