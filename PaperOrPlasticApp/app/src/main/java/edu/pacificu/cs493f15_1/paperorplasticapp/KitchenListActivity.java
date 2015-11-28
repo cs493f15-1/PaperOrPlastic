@@ -295,13 +295,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         writeKListsToKitchenFile();
 
-        //test right here for firebase writing TODO
-
-        for (int i = 0; i < mKLists.getSize(); ++i)
-        {
-            fUser.getMyRef().child("Kitchen Lists").child(mKLists.getKListName(i)).setValue(mKLists.getList(i));
-        }
-
+        writeKListsToFirebase();
     }
     /********************************************************************************************
      * Function name: onResume
@@ -503,6 +497,27 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         for (int i = 0; i < mKLists.getSize(); ++i) {
             addListTab(mKLists.getList(i), i);
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: writeKListsToFirebase
+     *
+     * Description: Writes the current mKLists to Firebase (will write lists to the user's
+     *              cloud if they are signed in)
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     *******************************************************************************************/
+    private void writeKListsToFirebase()
+    {
+        if (null != fUser.getMyRef())
+        {
+            for (int i = 0; i < mKLists.getSize(); ++i)
+            {
+                fUser.getMyRef().child("Kitchen Lists").child(mKLists.getKListName(i)).setValue(mKLists.getList(i));
+            }
         }
     }
 

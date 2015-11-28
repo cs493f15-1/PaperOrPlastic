@@ -398,7 +398,7 @@ public void rememberPass(String email, String password)
  ***************************************************************************************************/
   public void onClick (View view)
   {
-    Intent intent = new Intent (this, ContinueActivity.class); //will be using this to launch to new activity (e.g. clicking continue)
+    Intent intent;
 
     if (mButtonSignIn == view)
     {
