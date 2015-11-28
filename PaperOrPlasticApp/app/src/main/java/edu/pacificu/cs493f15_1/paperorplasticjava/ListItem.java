@@ -24,6 +24,7 @@ public class ListItem
     private String mNotes;
     private String mName;
     private NutritionFacts mNutritionFacts;
+    private boolean mbShowsDelete;
 
     public final int MAX_LENGTH = 200; //arbitrary number
 
@@ -39,6 +40,11 @@ public class ListItem
     /***********************************
      * GETS*
      **********************************/
+
+    public boolean isShowingDelete ()
+    {
+        return mbShowsDelete;
+    }
 
     public void printAll ()
     {
@@ -101,7 +107,14 @@ public class ListItem
      * SETS
      ******************************/
 
+
+    public void setShowingDelete (boolean bIsShowingDelete)
+    {
+        mbShowsDelete = bIsShowingDelete;
+    }
+
     private void setName (String name) {mName = name;}
+
 
     public void setFoodType (int foodType)
     {
