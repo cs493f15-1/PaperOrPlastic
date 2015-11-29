@@ -21,6 +21,7 @@
     <string name="title_activity_recipes">Recipes</string>
     <string name="title_activity_recipes_settings">Recipes Settings</string>
 
+    <string name="title_activity_list_settings">Grocery Lists Settings</string>
 
     <string name="action_settings">Settings</string>
 
@@ -57,7 +58,11 @@
     <string name="OK">OK</string>
     <string name="qty">Qty</string>
     <string name="delete">Delete</string>
+   <string name="sAddItem">Add Item</string>
+    <string name="sEdit">Edit</string>
 
+
+    <string name="sDeleteList">Are you sure you want to delete this list?</string>
 
     <string-array name="gameDifficulty">
         <item>Easy</item>

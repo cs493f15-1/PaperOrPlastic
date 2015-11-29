@@ -1,5 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +15,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
@@ -129,10 +136,6 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             }
         });
 
-
-        //For testing purposes
-        mKLists.addList("My First List");
-
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
@@ -146,32 +149,35 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 KitchenList currentList = getCurrentKList();
 
-                switch (position) {
+                if (null != currentList)
+                {
+                    switch (position)
+                    {
+                        case PoPList.SORT_NONE: // first item in dropdown currently blank
+                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+                            break;
+                        case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
-                    case PoPList.SORT_NONE: // first item in dropdown currently blank
-                        currentList.setCurrentSortingValue(PoPList.SORT_NONE);
-                        break;
-                    case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
-
-                        currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
-                        currentList.sortListByName();
-                        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                            currentList.sortListByName();
+                            mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
 
-                        //TODO need to refresh the page so the new list displays
-                        break;
-                    case PoPList.SORT_CAL: //calories
-                        currentList.setCurrentSortingValue(PoPList.SORT_CAL);
-                        break;
-                    case PoPList.SORT_DATE: //date entered
-                        currentList.setCurrentSortingValue(PoPList.SORT_DATE);
-                        break;
-                    case PoPList.SORT_AISLE: //aisle
-                        currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
-                        break;
-                    case PoPList.SORT_PRICE: //price
-                        currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
-                        break;
+                            //TODO need to refresh the page so the new list displays
+                            break;
+                        case PoPList.SORT_CAL: //calories
+                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+                            break;
+                        case PoPList.SORT_DATE: //date entered
+                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+                            break;
+                        case PoPList.SORT_AISLE: //aisle
+                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+                            break;
+                        case PoPList.SORT_PRICE: //price
+                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+                            break;
+                    }
                 }
             }
 
@@ -248,7 +254,6 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
 
-
         //resort the list depending on the current sorting category
         KitchenList currentList = getCurrentKList();
 
@@ -265,14 +270,46 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             case PoPList.SORT_NONE:
                 break;
         }
-
     }
 
+    /********************************************************************************************
+     * Function name: onPause
+     *
+     * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
+     *
+     * Parameters:    none
+     *
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onPause ()
     {
         super.onPause();
 
+        writeKListsToKitchenFile();
+
+    }
+    /********************************************************************************************
+     * Function name: onResume
+     *
+     * Description:   When the activity is resumed reads in KitchenLists from KITCHEN_FILE_NAME and
+     *                updates mKLists with the information.
+     *
+     * Parameters:    none
+     *
+     * Returns:       none
+     ******************************************************************************************/
+    @Override
+    protected void onResume ()
+    {
+        super.onResume();
+
+        Context context = getApplicationContext();
+        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
+
+        if (kitchenFile.exists()) {
+            readKListsFromKitchenFile(mKLists);
+        }
     }
     /********************************************************************************************
      * Function name: addListAdapter
@@ -302,7 +339,16 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public KitchenList getCurrentKList() { return mKLists.getList(mListTabHost.getCurrentTab());
+    public KitchenList getCurrentKList()
+    {
+        KitchenList list = null;
+        int currentTabIndex = mListTabHost.getCurrentTab();
+
+        if (TabHost.NO_ID != currentTabIndex) {
+            list = mKLists.getList(currentTabIndex);
+        }
+
+        return list;
     }
 
     /********************************************************************************************
@@ -387,4 +433,63 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+
+    /********************************************************************************************
+     * Function name: writeKListsToKitchenFile
+     *
+     * Description: Writes the current mKLists to KITCHEN_FILE_NAME to store the information stored in mKLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void writeKListsToKitchenFile ()
+    {
+        FileOutputStream kitchenOutput = null;
+        PrintWriter listsOutput = null;
+
+        try
+        {
+            kitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+
+            listsOutput = new PrintWriter(kitchenOutput);
+
+            mKLists.writeListsToFile(listsOutput);
+            listsOutput.flush();
+            listsOutput.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: readKListsFromKitchenFile
+     *
+     * Description: Reads from the KITCHEN_FILE_NAME the current KitchenLists
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     ******************************************************************************************/
+    private void readKListsFromKitchenFile (KitchenLists kLists)
+    {
+        FileInputStream kitchenInput;
+        Scanner listsInput;
+
+        try {
+            kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+
+            listsInput = new Scanner(kitchenInput);
+            kLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < kLists.getSize(); ++i) {
+            addListTab(kLists.getList(i), i);
+        }
+    }
+
 }
