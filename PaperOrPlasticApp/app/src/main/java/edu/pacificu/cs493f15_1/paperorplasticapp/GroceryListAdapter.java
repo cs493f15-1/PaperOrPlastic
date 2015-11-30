@@ -19,7 +19,6 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
  */
 public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 {
-
     private ArrayList<GroceryList> mListArray;
     int mLayoutResourceId;
     Context mContext;
@@ -72,7 +71,16 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
             listHolder = new ListHolder();
             //get items in row and set them to layout items
             listHolder.listName = (TextView)row.findViewById(R.id.listName);
+            listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
+            listHolder.bAddQty = (Button) row.findViewById(R.id.btnAddQty);
+            listHolder.bAddQty.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTextQuantity.getText().toString()
+                }
+            });
 
+            listHolder.bMinusQty = (Button) row.findViewById(R.id.btnMinusQty);
             row.setTag(listHolder);
 
         }
@@ -93,6 +101,10 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
     {
         TextView listName;
         CheckBox checkBox;
+        TextView txtQuantity;
+        Button bMinusQty;
+        Button bAddQty;
+        int quantity = 1;
     }
 
 }
