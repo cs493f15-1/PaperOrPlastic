@@ -2,6 +2,8 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
  * Created by sull0678 on 11/23/2015.
@@ -20,9 +23,11 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 {
     private ArrayList<GroceryList> mListArray;
+    private ArrayList<QtyChangeDialogListener> mQtyChangeListeners;
     int mLayoutResourceId;
     Context mContext;
     public int mPosition;
+    public int mQuantity;
 
     public GroceryListAdapter (Context context, int layoutResourceId, ArrayList<GroceryList> items)
     {
@@ -49,7 +54,8 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
     @Override
     public void add (GroceryList list) {
         // TODO Auto-generated method stub
-        super.add (list);
+        super.add(list);
+
         //mListArray.add(list);
     }
 
@@ -70,17 +76,33 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 
             listHolder = new ListHolder();
             //get items in row and set them to layout items
-            listHolder.listName = (TextView)row.findViewById(R.id.listName);
             listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
-            listHolder.bAddQty = (Button) row.findViewById(R.id.btnAddQty);
-            listHolder.bAddQty.setOnClickListener(new View.OnClickListener() {
+            listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mTextQuantity.getText().toString()
+                    mQtyChangeListeners.add (new QtyChangeDialogListener() {
+                        @Override
+                        public void onFinishQtyChangeDialog (String inputText) {
+                            mQuantity = (Integer.parseInt(inputText));
+
+                        }});
+
+                            FragmentActivity activity = (FragmentActivity)(mContext);
+                    FragmentManager fm = activity.getSupportFragmentManager();
+                    QuantityChangeDFragment dialog = new QuantityChangeDFragment();
+                    dialog.show(fm, "fragment");
                 }
             });
 
-            listHolder.bMinusQty = (Button) row.findViewById(R.id.btnMinusQty);
+           /* mItemInfoListener = new NewItemInfoDialogListener() {
+                @Override
+                public void onFinishNewItemDialog(String inputText) {
+                    ListItem newItem = new ListItem(inputText);
+
+                    addItemToListView(newItem);
+                    mLastAddedItemName = inputText;
+                }*/
+
             row.setTag(listHolder);
 
         }
@@ -91,20 +113,23 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 
         //set list row info
         GroceryList list = mListArray.get(position);
-        listHolder.listName.setText(list.getListName());
 
 
         return row;
     }
 
+
     static class ListHolder
     {
-        TextView listName;
+        QtyChangeDialogListener mQtyChangeListener;
         CheckBox checkBox;
         TextView txtQuantity;
-        Button bMinusQty;
-        Button bAddQty;
-        int quantity = 1;
+       // Button bMinusQty;
+       //Button bAddQty;
+        int mQuantity = 1;
+
+
+
     }
 
 }

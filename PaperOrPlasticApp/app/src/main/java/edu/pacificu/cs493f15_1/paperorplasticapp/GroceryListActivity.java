@@ -46,6 +46,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
+    private QtyChangeDialogListener mQtyChangeListener;
     private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
@@ -136,9 +137,13 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 if (size > 0) {
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
-                        for (int i = 0; i < size; i++) {
+                        for (int i = 0; i < size; i++)
+                        {
                             showDeleteButton(i);
                         }
+                        mbAddItem.setBackgroundColor(0xCCC);
+                        mbAddItem.setTextColor(0x309);
+
                     } else {
 
                         //showDeleteButton also gets rid of the delete button so we might not need this check
@@ -458,6 +463,19 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
     public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
+    }
+
+    /********************************************************************************************
+     * Function name: getQtyChangeListener
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
+    public QtyChangeDialogListener getQtyChangeListener () {
+        return mQtyChangeListener;
     }
 
     /********************************************************************************************
