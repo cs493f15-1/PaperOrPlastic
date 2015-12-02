@@ -1,16 +1,14 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -29,8 +27,6 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -75,6 +71,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Used for add item
+        Intent intent;
 
         super.onCreate(savedInstanceState);
 
@@ -158,7 +156,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class);
-                startActivity (intent);
+                startActivity(intent);
             }
         });
 
@@ -186,26 +184,45 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //set up add item button
         mbAddItem = (Button) findViewById(R.id.bAddItem);
+
+        /*
+        mbAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroceryListActivity.this, ItemSearchActivity.class);
+                startActivity(intent);
+            }
+        });
+        */
+
+
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mItemInfoListener = new NewItemInfoDialogListener() {
                     @Override
-                    public void onFinishNewItemDialog(String inputText) {
-                        ListItem newItem = new ListItem(inputText);
+                    public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
+													  String upc, String item_type, String item_description,
+													  int serv_per_cont, double serv_size_qty, String serv_size_unit,
+													  double serv_size_weight) {
+                        ListItem newItem = new ListItem(item_name);
 
                         addItemToListView(newItem);
-                        mLastAddedItemName = inputText;
+                        mLastAddedItemName = item_name;
                     }
                 };
 
 
                 fm = getSupportFragmentManager();
-                NewGroceryItemDFragment newItemFragment = new NewGroceryItemDFragment();
+                ItemSearchActivity newItemFragment = new ItemSearchActivity();
                 newItemFragment.show(fm, "Hi");
-
             }
         });
+
+
+
+
+
 
         //For the Group By Spinner (sorting dropdown)
 

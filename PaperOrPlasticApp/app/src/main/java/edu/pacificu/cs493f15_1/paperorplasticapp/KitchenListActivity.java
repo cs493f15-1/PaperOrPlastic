@@ -122,8 +122,11 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             public void onClick(View v) {
                 mItemInfoListener = new NewItemInfoDialogListener() {
                     @Override
-                    public void onFinishNewItemDialog(String inputText) {
-                        ListItem newItem = new ListItem(inputText);
+                    public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
+                                                      String upc, String item_type, String item_description,
+                                                      int serv_per_cont, double serv_size_qty, String serv_size_unit,
+                                                      double serv_size_weight) {
+                        ListItem newItem = new ListItem(item_name);
                         addItemToListView(newItem);
                     }
 

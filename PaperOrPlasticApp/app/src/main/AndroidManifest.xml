@@ -38,6 +38,26 @@
         <activity
             android:name=".GroceryListActivity"
             android:label="@string/title_activity_grocery_lists">
+
+            <!--
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            -->
+        </activity>
+
+        <activity
+            android:name=".ItemSearchActivity"
+            android:label="@string/title_activity_item_search">
+
+            <!--
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".GroceryListActivity" />
+                -->
         </activity>
 
         <activity

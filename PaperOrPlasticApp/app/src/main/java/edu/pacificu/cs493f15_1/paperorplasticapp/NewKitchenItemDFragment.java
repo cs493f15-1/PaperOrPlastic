@@ -28,11 +28,11 @@ public class NewKitchenItemDFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.new_item_dialog_fragment, container,
+        View rootView = inflater.inflate(R.layout.activity_new_item, container,
                 false);
 
         // Get field from view
-        mItemNameText = (EditText) rootView.findViewById(R.id.item_name_input);
+        //mItemNameText = (EditText) rootView.findViewById(R.id.item_name_input);
 
         // Show soft keyboard automatically and request focus to field
         mItemNameText.requestFocus();
@@ -52,7 +52,7 @@ public class NewKitchenItemDFragment extends DialogFragment
             public void onClick(View v) {
                 KitchenListActivity activity = (KitchenListActivity) getActivity();
                 NewItemInfoDialogListener listener = activity.getItemInfoListener();
-                listener.onFinishNewItemDialog(mItemNameText.getText().toString());
+               // listener.onFinishNewItemDialog(mItemNameText.getText().toString());
                 mDialog.dismiss();
             }
         });
