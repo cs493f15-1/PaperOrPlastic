@@ -1,9 +1,8 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 /**
  * Created by sull0678 on 11/23/2015.
  */
-public class DeleteListDFragment extends DialogFragment
+public class DeleteKitchenListDFragment extends DialogFragment
 {
 
     private Button mbCancel;
@@ -25,7 +24,7 @@ public class DeleteListDFragment extends DialogFragment
 
 
 
-    public DeleteListDFragment() {
+    public DeleteKitchenListDFragment() {
         // Empty constructor required for DialogFragment
     }
 
@@ -48,7 +47,7 @@ public class DeleteListDFragment extends DialogFragment
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroceryListSettingsActivity activity = (GroceryListSettingsActivity) getActivity();
+                KitchenListSettingsActivity activity = (KitchenListSettingsActivity) getActivity();
                 DeleteListDialogListener listener = activity.getDeleteDialogListener();
                 listener.onDeleted();
                 mDialog.dismiss();

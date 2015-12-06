@@ -50,6 +50,16 @@
                 android:background="@drawable/back"
                 android:layout_marginTop="5dp" />
 
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sEdit"
+                android:id="@+id/bEdit"
+                android:layout_alignTop="@+id/bBackToHome"
+                android:layout_toRightOf="@+id/bBackToHome"
+                android:layout_toEndOf="@+id/bBackToHome" />
+
         </RelativeLayout>
 
         <TableRow
@@ -63,7 +73,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+"
-                android:id="@+id/bAddList" />
+                android:id="@+id/bAddList"
+                android:textSize="20dp" />
 
             <HorizontalScrollView android:layout_width="321dp"
                 android:layout_height="match_parent"
@@ -110,19 +121,23 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/groupByText"
-                android:layout_toEndOf="@+id/groupByText" />
+                android:layout_toEndOf="@+id/groupByText"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:text="Add Item"
                 android:id="@+id/bAddItem"
                 android:layout_gravity="left|top"
                 android:longClickable="true"
                 android:layout_alignBottom="@+id/GroupBySpinner"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/sAddItem" />
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"
