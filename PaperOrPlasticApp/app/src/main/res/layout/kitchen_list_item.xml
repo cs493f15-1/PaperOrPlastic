@@ -15,6 +15,7 @@
             android:id="@+id/bListItem"
             style="@style/Base.Widget.AppCompat.ActionBar.TabText"
             android:elegantTextHeight="false"
+            android:background="@android:color/transparent"
             android:maxWidth="200dp"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/itemCheckBox"

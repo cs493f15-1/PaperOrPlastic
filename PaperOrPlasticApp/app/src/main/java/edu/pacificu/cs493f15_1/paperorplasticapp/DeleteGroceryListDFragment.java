@@ -1,9 +1,8 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Dialog;
-import android.support.v4.app.DialogFragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 /**
  * Created by sull0678 on 11/23/2015.
  */
-public class DeleteListDFragment extends DialogFragment
+public class DeleteGroceryListDFragment extends DialogFragment
 {
 
     private Button mbCancel;
@@ -25,7 +24,7 @@ public class DeleteListDFragment extends DialogFragment
 
 
 
-    public DeleteListDFragment() {
+    public DeleteGroceryListDFragment() {
         // Empty constructor required for DialogFragment
     }
 
@@ -57,7 +56,7 @@ public class DeleteListDFragment extends DialogFragment
 
         mDialog = getDialog();
 
-        mDialog.setTitle("DialogFragment Tutorial");
+        mDialog.setTitle("Delete List");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
