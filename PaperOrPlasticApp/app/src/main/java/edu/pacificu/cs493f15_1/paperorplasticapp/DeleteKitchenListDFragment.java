@@ -56,7 +56,7 @@ public class DeleteKitchenListDFragment extends DialogFragment
 
         mDialog = getDialog();
 
-        mDialog.setTitle("DialogFragment Tutorial");
+        mDialog.setTitle("Delete List");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

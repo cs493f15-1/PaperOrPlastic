@@ -59,7 +59,7 @@ public class NewGroceryItemDFragment extends DialogFragment
 
         mDialog = getDialog();
 
-        mDialog.setTitle("DialogFragment Tutorial");
+        mDialog.setTitle("Add Item");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
