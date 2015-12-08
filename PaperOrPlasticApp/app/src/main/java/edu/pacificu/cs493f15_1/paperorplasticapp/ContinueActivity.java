@@ -15,8 +15,12 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /***************************************************************************************************
  *   Class:         ContinueActivity
@@ -30,14 +34,25 @@ import android.widget.TextView;
 public class ContinueActivity extends Activity implements View.OnClickListener
 {
     //Buttons found on continue page
-    private Button  mButtonLists,
-                    mButtonSettings,
-                    mButtonAbout,
-                    mButtonGroceryList,
-                    mButtonKitchenList,
-                    mButtonNutrition,
-                    mButtonCoupons,
-                    mButtonRecipes;
+   // static final int NUM_CONT_BUTTONS = 7;
+    //Button buttons[] = new Button[NUM_CONT_BUTTONS];
+
+    private enum Buttons { G_LIST,  }
+
+    static final int G_LIST = 0;
+    static final int K_LIST = 1;
+    static final int COUPONS = 2;
+    static final int NUTRITION = 3;
+    static final int RECIPIES = 4;
+    static final int SETTINGS = 5;
+    static final int ABOUT = 6;
+
+    private List<Button> buttons;
+
+    private static final int[] BUTTON_IDS = {R.id.bContGList,   R.id.bContKList,
+                                             R.id.bContCoupons, R.id.bContNutrition,
+                                             R.id.bContRecipes, R.id.bContSettings, R.id.bContAbout};
+
 
     //Button status used to control which buttons appears as specified by settings
     public static Button bGListButtonStatusFromSettings;
@@ -46,7 +61,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     public static Button bCouponsButtonStatusFromSettings;
     public static Button bRecipesButtonStatusFromSettings;
 
-    //Used to specify weather a button should be seen or not as specified by the settings
+    //Used to specify whether a button should be seen or not as specified by the settings
     private boolean visibilityFlag = true;
 
     //Used to change fonts
@@ -75,79 +90,26 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         Typeface laneNarrowFont = Typeface.createFromAsset (getAssets (), "fonts/LANENAR.ttf");
         titleText.setTypeface (laneUpperFont);
 
-        //Initialize buttons
-        mButtonLists = (Button) findViewById (R.id.bContLists);
-        mButtonLists.setOnClickListener(this);
+        //Create and initialize buttons
+        buttons = new ArrayList<Button>(BUTTON_IDS.length);
 
-//        initializeButtons (mButtonSettings, R.id.bContSettings, laneNarrowFont);
+        for (int id: BUTTON_IDS)
+        {
+            Button button = (Button) findViewById(id);
+            button.setOnClickListener(this);
+            button.getBackground().setAlpha(ALPHA_SETTING);
+            button.setTypeface(laneNarrowFont, Typeface.BOLD);
+            buttons.add(button);
+        }
 
-        mButtonSettings = (Button) findViewById (R.id.bContSettings);
-        mButtonSettings.setOnClickListener(this);
-        mButtonSettings.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonSettings.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonAbout, R.id.bContAbout, laneNarrowFont);
-
-        mButtonAbout = (Button) findViewById (R.id.bContAbout);
-        mButtonAbout.setOnClickListener(this);
-        mButtonAbout.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonAbout.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonGroceryList, R.id.bContGList, laneNarrowFont);
-
-        mButtonGroceryList = (Button) findViewById (R.id.bContGList);
-        mButtonGroceryList.setOnClickListener(this);
-        mButtonGroceryList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonGroceryList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonKitchenList, R.id.bContKList, laneNarrowFont);
-
-        mButtonKitchenList = (Button) findViewById (R.id.bContKList);
-        mButtonKitchenList.setOnClickListener(this);
-        mButtonKitchenList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonKitchenList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonNutrition, R.id.bContNutrition, laneNarrowFont);
-
-        mButtonNutrition = (Button) findViewById (R.id.bContNutrition);
-        mButtonNutrition.setOnClickListener(this);
-        mButtonNutrition.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonNutrition.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonCoupons, R.id.bContCoupons, laneNarrowFont);
-
-        mButtonCoupons = (Button) findViewById (R.id.bContCoupons);
-        mButtonCoupons.setOnClickListener(this);
-        mButtonCoupons.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonCoupons.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonRecipes, R.id.bContRecipes, laneNarrowFont);
-
-
-        mButtonRecipes = (Button) findViewById (R.id.bContRecipes);
-        mButtonRecipes.setOnClickListener(this);
-        mButtonRecipes.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonRecipes.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-        bGListButtonStatusFromSettings = (Button) findViewById (R.id.bContGList);
-        bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKList);
-        bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
-        bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
-        bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);
-
+        //Determine whether or not buttons should be shown based on settings preferences
+        bGListButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[G_LIST]);
+        bKListButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[K_LIST]);
+        bCouponsButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[COUPONS]);
+        bNutritionButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[NUTRITION]);
+        bRecipesButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[RECIPIES]);
     }
 
-
-//    private void initializeButtons (Button button, int bButtonID, Typeface font)
-//    {
-//        button = (Button) findViewById (bButtonID);
-//        button.setOnClickListener(this);
-//        button.getBackground().setAlpha(ALPHA_SETTING);
-//        button.setTypeface(font, Typeface.BOLD);
-//    }
 
     /***********************************************************************************************
     *   Method:        onSaveInstanceState
@@ -167,7 +129,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         visibilityFlag = true;
     }
 
-    /***************************************************************************************************
+    /***********************************************************************************************
     *   Method:      onClick
     *   Description: Called when a click has been captured.
     *                If the about, settings, kitchen lists, grocery list, nutrition, or coupon
@@ -175,61 +137,59 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     *                is started
     *   Parameters:  view - the view that has been clicked
     *   Returned:    N/A
-    ***************************************************************************************************/
+    ***********************************************************************************************/
     public void onClick (View view)
     {
         Intent intent;
 
-        if (mButtonSettings == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, SettingsActivity.class);
-            startActivity (intent);
-        }
-
-
-        if (mButtonAbout == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, AboutActivity.class);
-            startActivity (intent);
-        }
-
-        if (mButtonGroceryList == view)
+        if (buttons.get (G_LIST) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, GroceryListActivity.class);
             startActivity (intent);
         }
 
-        if (mButtonKitchenList == view)
+        if (buttons.get (K_LIST) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, KitchenListActivity.class);
             startActivity (intent);
         }
 
-        if (mButtonNutrition == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, NutritionActivity.class);
-            startActivity (intent);
-        }
-
-        if (mButtonCoupons == view)
+        if (buttons.get (COUPONS) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, CouponsActivity.class);
             startActivity (intent);
         }
 
-        if (mButtonRecipes == view)
+        if (buttons.get (NUTRITION) == view)
+        {
+            //will start a new activity using the intents
+            intent = new Intent (this, NutritionActivity.class);
+            startActivity (intent);
+        }
+
+        if (buttons.get (RECIPIES) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, RecipesActivity.class);
             startActivity (intent);
         }
-    }
 
+        if (buttons.get (SETTINGS) == view)
+        {
+            //will start a new activity using the intents
+            intent = new Intent (this, SettingsActivity.class);
+            startActivity (intent);
+        }
+
+        if (buttons.get (ABOUT) == view)
+        {
+            //will start a new activity using the intents
+            intent = new Intent (this, AboutActivity.class);
+            startActivity (intent);
+        }
+    }
 }
 

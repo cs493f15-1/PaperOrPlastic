@@ -41,6 +41,13 @@ public class CouponsSettingsActivity extends Activity implements View.OnClickLis
         mButtonShowCouponsList.setOnClickListener(this);
     }
 
+    /***********************************************************************************************
+    *   Method:      onClick
+    *   Description: Called when a click has been captured.
+    *                If the the show coupons list button has been clicked
+    *   Parameters:  view - the view that has been clicked
+    *   Returned:    N/A
+    ***********************************************************************************************/
     public void onClick (View view)
     {
         if (mButtonShowCouponsList == view)

@@ -50,7 +50,8 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 *   Parameters:    N/A
 *   Returned:      N/A
 **************************************************************************************************/
-public class GroceryListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public class GroceryListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener
+{
 
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
@@ -74,15 +75,16 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     /********************************************************************************************
      * Function name: onCreate
-     * <p/>
+     *
      * Description:   Initializes all needed setup for objects in page
-     * <p/>
+     *
      * Parameters:    savedInstanceState  - a bundle object
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
 
         super.onCreate(savedInstanceState);
 
@@ -94,44 +96,264 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
+
+        handleSwipingToDelete();
+
+        //setup tabs
+        setupTabs();
+
+        //setup edit button
+        setupEditDeleteButtonsForGLists();
+
+        //setup back buttons
+        setupBackButton();
+
+        //setup settings activity button
+        setupSettingsActivityButton();
+
+        //setup addList and addItem buttons
+        setupAddListAndAddItemButtons();
+
+        //setup the sorting group by spinner (drop down list sorting)
+        setUpGroupSpinnerHandleSorting();
+
+        addAllExistingListsInGroceryListsToTabs();
+
+//        mListView = (ListView) findViewById(R.id.listView);
+//
+//        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView)
+//        {
+//
+//            @Override
+//            public void onSwipeRight(int pos)
+//            {
+//                //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
+//
+//                if (!mbIsOnEdit)
+//                {
+//                    hideDeleteButton(pos);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onSwipeLeft(int pos)
+//            {
+//                //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
+//                if (!mbIsOnEdit)
+//                {
+//                    showDeleteButton(pos);
+//                }
+//            }
+//        });
+
+//        //setup tabs
+//        setupTabs ();
+//        mListTabHost = (TabHost) findViewById(R.id.listTabHost);
+//        mListTabHost.setup();
+//        mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+//            @Override
+//            public void onTabChanged(String tabId) {
+//                mListTabHost.setCurrentTab(Integer.parseInt(tabId));
+//
+//                if (mListAdapters.size() > 0) {
+//                    mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
+//                }
+//            }
+//        });
+
+
+        //on click listener for buttons (connect to the view)
+
+//        //setup edit button
+//        setupEditDeleteButtonsForGLists();
+//        mbEdit = (Button) findViewById(R.id.bEdit);
+//        mbEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //note, GroceryList object doesn't keep track of size, only the array of items within
+//                // it does
+//                int size = getCurrentGList().getSize();
+//                if (size > 0) {
+//                    if (!mbIsOnEdit) {
+//                        mbIsOnEdit = true;
+//                        for (int i = 0; i < size; i++) {
+//                            showDeleteButton(i);
+//                        }
+//                    } else {
+//
+//                        //showDeleteButton also gets rid of the delete button so we might not need this check
+//                        //TODO might need to show again if tab is changed
+//                        mbIsOnEdit = false;
+//                        for (int i = 0; i < size; i++) {
+//                            hideDeleteButton(i);
+//                        }
+//                    }
+//                }
+//            }
+//        });
+
+        //set up back button
+//        mbBack = (Button) findViewById (R.id.bBackToHome);
+//        mbBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class);
+//                startActivity (intent);
+//            }
+//        });
+
+        //set up settings activity button
+//        mbSettings = (Button) findViewById(R.id.bGListSettings);
+//        mbSettings.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class);
+//                intent.putExtra("Caller", "GroceryListActivity");
+//                startActivity(intent);
+//            }
+//        });
+
+
+//        //set up addList button
+//        mbAddList = (Button) findViewById(R.id.bAddList);
+//        mbAddList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fm = getSupportFragmentManager();
+//                ListDFragment listDFragment = new ListDFragment();
+//                listDFragment.show(fm, "Hi");
+//            }
+//        });
+//
+//        //set up add item button
+//        mbAddItem = (Button) findViewById(R.id.bAddItem);
+//        mbAddItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mItemInfoListener = new NewItemInfoDialogListener() {
+//                    @Override
+//                    public void onFinishNewItemDialog(String inputText) {
+//                        ListItem newItem = new ListItem(inputText);
+//
+//                        addItemToListView(newItem);
+//                        mLastAddedItemName = inputText;
+//                    }
+//                };
+//
+//
+//                fm = getSupportFragmentManager();
+//                NewGroceryItemDFragment newItemFragment = new NewGroceryItemDFragment();
+//                newItemFragment.show(fm, "Hi");
+//
+//            }
+//        });
+
+        //For the Group By Spinner (sorting dropdown)
+
+//        mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(GroceryListActivity.this,
+//                android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
+//
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mGroupBySpinner.setAdapter(adapter);
+//        mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                GroceryList currentList = getCurrentGList();
+//
+//                if (null != currentList)
+//                {
+//                    switch (position)
+//                    {
+//                        case PoPList.SORT_NONE: // first item in dropdown currently blank
+//                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+//                            break;
+//                        case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
+//
+//                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+//                            currentList.sortListByName();
+//                            mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+//
+//                            break;
+//                        case PoPList.SORT_CAL: //calories
+//                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+//                            break;
+//                        case PoPList.SORT_DATE: //date entered
+//                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+//                            break;
+//                        case PoPList.SORT_AISLE: //aisle
+//                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+//                            break;
+//                        case PoPList.SORT_PRICE: //price
+//                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+//                            break;
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                //Nothing to do if the dropdown is not selected.
+//            }
+//        });
+
+
+//        add all existing lists in GroceryLists to tabs
+//        for (int i = 0; i < mGLists.getSize(); i++) {
+//            addListTab(mGLists.getList(i), i);
+//        }
+    }
+
+
+
+
+    /***********************************************************************************************
+    *   Method:      handleSwipingToDelete
+    *   Description: Handles when user swipes left or right on list items. Will show or
+    *                hide delete buttons depending on the status of the edit button.
+    *   Parameters:  NONE
+    *   Returned:    NONE
+    ***********************************************************************************************/
+    private void handleSwipingToDelete ()
+    {
+
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView)
+        {
+
             @Override
-            public void onSwipeRight(int pos) {
+            public void onSwipeRight(int pos)
+            {
                 //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
 
-                if (!mbIsOnEdit) {
+                if (!mbIsOnEdit)
+                {
                     hideDeleteButton(pos);
                 }
 
             }
 
             @Override
-            public void onSwipeLeft(int pos) {
+            public void onSwipeLeft(int pos)
+            {
                 //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
-                if (!mbIsOnEdit) {
+                if (!mbIsOnEdit)
+                {
                     showDeleteButton(pos);
                 }
             }
         });
+    }
 
-        //setup tabs
-        mListTabHost = (TabHost) findViewById(R.id.listTabHost);
-        mListTabHost.setup();
-        mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String tabId) {
-                mListTabHost.setCurrentTab(Integer.parseInt(tabId));
-
-                if (mListAdapters.size() > 0) {
-                    mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
-                }
-            }
-        });
-
-
-        //on click listener for buttons (connect to the view)
-
-        //setup edit button
+    /***********************************************************************************************
+     *   Method:      setupEditDeleteButtonsForGLists
+     *   Description: Sets up the grocery list settings edit button. Handles what happens when user
+     *                selects edit when viewing grocery lits.
+     *   Parameters:  NONE
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void setupEditDeleteButtonsForGLists ()
+    {
         mbEdit = (Button) findViewById(R.id.bEdit);
         mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,27 +379,56 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 }
             }
         });
+    }
 
+    /***********************************************************************************************
+    *   Method:      setupTabs
+    *   Description: Sets up tabs
+    *   Parameters:  NONE
+    *   Returned:    NONE
+    ***********************************************************************************************/
+    private void setupTabs ()
+    {
+        mListTabHost = (TabHost) findViewById(R.id.listTabHost);
+        mListTabHost.setup();
+        mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                mListTabHost.setCurrentTab(Integer.parseInt(tabId));
+
+                if (mListAdapters.size() > 0) {
+                    mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
+                }
+            }
+        });
+    }
+
+    /***********************************************************************************************
+     *   Method:      setupBackButton
+     *   Description: Setup back button that takes user from grocery list page to continue page
+     *   Parameters:  NONE
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void setupBackButton ()
+    {
         mbBack = (Button) findViewById (R.id.bBackToHome);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class);
-                startActivity (intent);
-            }
-        });
-
-        //set up settings activity button
-        mbSettings = (Button) findViewById(R.id.bGListSettings);
-        mbSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class);
-                intent.putExtra("Caller", "GroceryListActivity");
                 startActivity(intent);
             }
         });
+    }
 
+    /***********************************************************************************************
+     *   Method:      setupAddListAndAddItemButtons
+     *   Description: Sets up addList and addItem buttons
+     *   Parameters:  NONE
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void setupAddListAndAddItemButtons ()
+    {
         //set up addList button
         mbAddList = (Button) findViewById(R.id.bAddList);
         mbAddList.setOnClickListener(new View.OnClickListener() {
@@ -211,9 +462,38 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
             }
         });
+    }
 
-        //For the Group By Spinner (sorting dropdown)
+    /***********************************************************************************************
+     *   Method:      setupSettingsActivityButton
+     *   Description: Sets up settings activity button so that when the user selects the settings
+     *                button from the grocery list activity they can be taken to the grocer list
+     *                settings activity
+     *   Parameters:  NONE
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void setupSettingsActivityButton ()
+    {
+        mbSettings = (Button) findViewById(R.id.bGListSettings);
+        mbSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class);
+                intent.putExtra("Caller", "GroceryListActivity");
+                startActivity(intent);
+            }
+        });
+    }
 
+    /***********************************************************************************************
+     *   Method:      setUpGroupSpinnerHandleSorting
+     *   Description: Sets up the group by drop down menu and takes care of sorting the list items
+     *                within grocery lists.
+     *   Parameters:  NONE
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void setUpGroupSpinnerHandleSorting ()
+    {
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(GroceryListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
@@ -225,10 +505,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 GroceryList currentList = getCurrentGList();
 
-                if (null != currentList)
-                {
-                    switch (position)
-                    {
+                if (null != currentList) {
+                    switch (position) {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
                             currentList.setCurrentSortingValue(PoPList.SORT_NONE);
                             break;
@@ -260,13 +538,18 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 //Nothing to do if the dropdown is not selected.
             }
         });
+    }
 
 
-        //add all existing lists in GroceryLists to tabs
-        for (int i = 0; i < mGLists.getSize(); i++) {
+    private void addAllExistingListsInGroceryListsToTabs()
+    {
+        for (int i = 0; i < mGLists.getSize(); i++)
+        {
             addListTab(mGLists.getList(i), i);
         }
     }
+
+
     /********************************************************************************************
      * Function name: onPause
      *

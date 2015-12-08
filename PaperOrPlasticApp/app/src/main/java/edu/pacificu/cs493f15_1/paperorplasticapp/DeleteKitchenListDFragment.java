@@ -1,3 +1,14 @@
+/**************************************************************************************************
+ *   File:     DeleteKitchenListDFragment.java
+ *   Author:   Lauren Sullivan
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  Takes care of the process of deleting a kitchen list. When user goes to kitchen
+ *             settings and selects edit or swipes and deletes a list, a dialog box will appear
+ *             asking if they are sure they want to delete the list.
+ **************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Dialog;
@@ -10,9 +21,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-/**
- * Created by sull0678 on 11/23/2015.
- */
+/***************************************************************************************************
+ *   Class:         DeleteKitchenListDFragment
+ *   Description:   Takes care of the process of deleting a kitchen list. When user goes to kitchen
+ *                  settings and selects edit or swipes and deletes a list, a dialog box will appear
+ *                  asking if they are sure they want to delete the list.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class DeleteKitchenListDFragment extends DialogFragment
 {
 
@@ -24,13 +40,15 @@ public class DeleteKitchenListDFragment extends DialogFragment
 
 
 
-    public DeleteKitchenListDFragment() {
+    public DeleteKitchenListDFragment()
+    {
         // Empty constructor required for DialogFragment
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         View rootView = inflater.inflate(R.layout.dfragment_delete_list, container,
                 false);
 

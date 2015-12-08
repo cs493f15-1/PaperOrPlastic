@@ -40,6 +40,13 @@ public class NutritionSettingsActivity extends Activity implements View.OnClickL
         mButtonShowNutritionList.setOnClickListener(this);
     }
 
+    /***********************************************************************************************
+     *   Method:      onClick
+     *   Description: Called when a click has been captured.
+     *                If the the show nutrition list button has been clicked
+     *   Parameters:  view - the view that has been clicked
+     *   Returned:    N/A
+     ***********************************************************************************************/
     public void onClick (View view)
     {
         if (mButtonShowNutritionList == view)
