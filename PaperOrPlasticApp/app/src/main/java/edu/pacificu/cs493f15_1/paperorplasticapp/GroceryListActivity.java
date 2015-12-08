@@ -82,30 +82,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         //init my grocery lists
         mGLists = new GroceryLists();
 
-        //to view items
-        mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
-            @Override
-            public void onSwipeRight(int pos) {
-
-
-                if (!mbIsOnEdit) {
-                    hideDeleteButton(pos);
-                }
-
-            }
-
-            @Override
-            public void onSwipeLeft(int pos) {
-
-                if (!mbIsOnEdit) {
-                    showDeleteButton(pos);
-                }
-            }
-        });
-
-
-
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
@@ -254,10 +230,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 GroceryList currentList = getCurrentGList();
 
                 //functionality when we're using drop down sorting menu
-                if (null != currentList)
-                {
-                    switch (position)
-                    {
+                if (null != currentList) {
+                    switch (position) {
 
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
                             currentList.setCurrentSortingValue(PoPList.SORT_NONE);
@@ -290,6 +264,30 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 //Nothing to do if the dropdown is not selected.
             }
         });
+
+
+        //to view items in list
+        mListView = (ListView) findViewById(R.id.listView);
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
+            @Override
+            public void onSwipeRight(int pos) {
+
+
+                if (!mbIsOnEdit) {
+                    hideDeleteButton(pos);
+                }
+
+            }
+
+            @Override
+            public void onSwipeLeft(int pos) {
+
+                if (!mbIsOnEdit) {
+                    showDeleteButton(pos);
+                }
+            }
+        });
+
 
     }
 
@@ -642,13 +640,13 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns:       None
      ******************************************************************************************/
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-
-        return super.dispatchTouchEvent(ev);
-    }
-    //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+//
+//    @Override
+//    public boolean dispatchTouchEvent(MotionEvent ev) {
+//
+//        return super.dispatchTouchEvent(ev);
+//    }
+//    //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 
 
 

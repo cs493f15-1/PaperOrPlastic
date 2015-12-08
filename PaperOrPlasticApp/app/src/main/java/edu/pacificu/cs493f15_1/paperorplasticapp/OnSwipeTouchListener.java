@@ -9,6 +9,7 @@ import android.widget.ListView;
 /**
  * Created by sull0678 on 11/16/2015.
  */
+//https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 public class OnSwipeTouchListener implements View.OnTouchListener
 {
     ListView list;

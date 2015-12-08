@@ -53,11 +53,16 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         setContentView(R.layout.activity_grocery_list_settings);
         mbIsOnEdit = false;
 
+        //create grocery lists
+        mGLists = new GroceryLists ();
+
+
+        //set up button
         mbEdit = (Button) findViewById (R.id.bEdit);
         mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //if its clicked, show or hide delete buttons
                 int size = mGLists.getSize();
                 if (size > 0) {
                     if (!mbIsOnEdit) {
@@ -98,28 +103,19 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
             }
         });
 
-
-
-
-        //create grocery lists
-        mGLists = new GroceryLists ();
-
 //        Context context = getApplicationContext();
 //        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
-//        if (groceryFile.exists()) {
-//            readGListsFromGroceryFile(mGLists);
-//        }
 
-        //set up list view
+        //set up list view to view lists
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
-
+        //list adapter holds info of lists for listView
         mListAdapter = new GroceryListAdapter(mListOfListView.getContext(),
                 R.layout.listview_list_row_settings, mGLists.getArrayOfLists());
 
         mListOfListView.setAdapter(mListAdapter);
 
-
+        //set up swipe listening
         mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView) {
             @Override
             public void onSwipeRight(int pos) {
@@ -330,6 +326,8 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
     {
         super.onResume();
 
+
+        //read list info from file
         Context context = getApplicationContext();
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
