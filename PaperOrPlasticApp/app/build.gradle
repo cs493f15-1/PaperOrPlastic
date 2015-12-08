@@ -2,9 +2,12 @@ apply plugin: 'com.android.application'
 
 android
         {
+            signingConfigs {
+                config {
+                }
+            }
             compileSdkVersion 23
             buildToolsVersion "23.0.1"
-
             defaultConfig
                     {
                         applicationId "edu.pacificu.cs493f15_1.paperorplasticapp"
@@ -21,7 +24,6 @@ android
                                     proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
                                 }
                     }
-
             packagingOptions
                     {
                         exclude 'META-INF/LICENSE'

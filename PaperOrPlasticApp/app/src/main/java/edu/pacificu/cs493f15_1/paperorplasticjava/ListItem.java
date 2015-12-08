@@ -18,7 +18,6 @@ public class ListItem
     private String itemID;
     private String item_name;
     private String brand_name;
-    private String upc;
     private String item_type;
     private String item_description;
     private int serv_per_cont;
@@ -47,6 +46,22 @@ public class ListItem
         mNutritionFactModel = new NutritionFactModel();
         mNotes = "init";
     }
+
+    public ListItem (String itemId, String itemName, String brandName, String itemType,
+                     String itemDescription, int servPerCont, double servSizeQty,
+                     String servSizeUnit, double servSizeWeight)
+    {
+        itemID = itemId;
+        item_name = itemName;
+        brand_name = brandName;
+        item_type = itemType;
+        item_description = itemDescription;
+        serv_per_cont = servPerCont;
+        serv_size_qty = servSizeQty;
+        serv_size_unit = servSizeUnit;
+        serv_size_weight = servSizeWeight;
+    }
+
 
     /***********************************
      * GETS*

@@ -16,12 +16,11 @@ public class NutritionFactModel
 	int mCaloriesFat;
 	int mTotal_Fat;
 	int mSat_Fat;
-	int mMonoUnsat_Fat;
-	int mPolyUnsat_Fat;
 	int mTotal_Carbs;
 	int mProtein;
 	int mSugars;
 	int mFiber;
+	int mSodium;
 
 	public NutritionFactModel()
 	{

@@ -21,14 +21,24 @@
         android:imeOptions="actionSearch"
         android:paddingRight="10dp"/>
 
-    <ListView
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_gravity="right|top"
-        android:layout_below="@+id/action_search"
+        android:layout_height="400dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"/>
+        android:layout_alignParentStart="false"
+        android:id="@+id/FrameLayoutItems"
+        android:layout_alignParentEnd="false"
+        android:layout_below="@+id/action_search">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemSearchList"
+            android:layout_below="@+id/action_search"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 
     <Button
         android:id="@+id/ok_button"
@@ -37,9 +47,9 @@
         android:text="@string/OK"
         android:foregroundGravity="bottom|center_horizontal|right"
         android:layout_gravity="bottom"
-        android:layout_below="@+id/listView"
         android:layout_toRightOf="@+id/cancel_button"
-        android:layout_toEndOf="@+id/cancel_button"/>
+        android:layout_toEndOf="@+id/cancel_button"
+        android:layout_below="@+id/FrameLayoutItems"/>
 
     <Button
         android:id="@+id/cancel_button"
@@ -51,9 +61,9 @@
         android:layout_gravity="bottom|right"
         android:layout_marginLeft="107dp"
         android:layout_marginStart="107dp"
-        android:layout_below="@+id/listView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/FrameLayoutItems"/>
 
 
 </RelativeLayout>

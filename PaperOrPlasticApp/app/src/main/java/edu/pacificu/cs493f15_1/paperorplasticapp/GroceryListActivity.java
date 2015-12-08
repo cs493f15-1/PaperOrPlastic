@@ -185,27 +185,18 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         //set up add item button
         mbAddItem = (Button) findViewById(R.id.bAddItem);
 
-        /*
-        mbAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(GroceryListActivity.this, ItemSearchActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
-
-
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mItemInfoListener = new NewItemInfoDialogListener() {
                     @Override
                     public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
-													  String upc, String item_type, String item_description,
+													  String item_type, String item_description,
 													  int serv_per_cont, double serv_size_qty, String serv_size_unit,
 													  double serv_size_weight) {
-                        ListItem newItem = new ListItem(item_name);
+                        ListItem newItem = new ListItem(itemId, item_name, brand_name,
+                                item_type, item_description, serv_per_cont, serv_size_qty,
+                                serv_size_unit, serv_size_weight);
 
                         addItemToListView(newItem);
                         mLastAddedItemName = item_name;
@@ -218,10 +209,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 newItemFragment.show(fm, "Hi");
             }
         });
-
-
-
-
 
 
         //For the Group By Spinner (sorting dropdown)
@@ -279,9 +266,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         for (int i = 0; i < mGLists.getSize(); i++) {
             addListTab(mGLists.getList(i), i);
         }
-
-
-
     }
 
 
