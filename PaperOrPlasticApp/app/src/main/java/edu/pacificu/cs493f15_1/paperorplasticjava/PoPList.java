@@ -4,9 +4,10 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  * Created by sull0678 on 10/5/2015.
  */
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
+import java.util.Scanner;
 
 public abstract class PoPList
 {
@@ -28,6 +29,16 @@ public abstract class PoPList
     /*******************************************
      * Gets
      ******************************************/
+    public int getSize ()
+    {
+        return mItems.size();
+    }
+
+    public int getCurrentSortingValue ()
+    {
+        return mCurrentSortingValue;
+    }
+
     public String getListName ()
     {
         return mListName;
@@ -153,10 +164,6 @@ public abstract class PoPList
         System.out.println (mListName);
     }
 
-    public int getSize ()
-    {
-        return mItems.size();
-    }
 
     public ArrayList<ListItem> getItemArray ()
     {
@@ -172,10 +179,7 @@ public abstract class PoPList
      * Sorts
      ********************************/
 
-    public int getCurrentSortingValue ()
-    {
-        return mCurrentSortingValue;
-    }
+
 
     public void setCurrentSortingValue (int sortingValue)
     {
@@ -189,4 +193,26 @@ public abstract class PoPList
     {
         Collections.sort(this.mItems, ListItem.Comparators.NAME);
     }
+
+
+
+
+    /*********************************
+     * I/O
+     ********************************/
+
+    /**
+     * Outputs the current list in to the passed in file.
+     * @param listOutput - the file being written to
+     */
+    public abstract void writeListToFile (PrintWriter listOutput);
+
+
+    /**
+     * reads from the file in to the current list.
+     * @param listInput - the file being read from
+     */
+    public abstract void readListFromFile (Scanner listInput);
+
+
 }

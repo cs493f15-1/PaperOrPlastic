@@ -3,18 +3,17 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+
 import java.util.ArrayList;
 import java.util.TimerTask;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticapp.OnCheckListener;
 
 /**
  * Created by sull0678 on 11/5/2015.
@@ -129,10 +128,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
             });
 
-
-
             row.setTag(itemHolder);
-
         }
         else
         {

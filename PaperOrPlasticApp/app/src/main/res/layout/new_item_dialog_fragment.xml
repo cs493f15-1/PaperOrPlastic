@@ -2,56 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
-android:layout_height="match_parent" >
+android:layout_height="100dp" >
 
-    <RelativeLayout
-    android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="260dp"
+    <Button
+    android:id="@+id/ok_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/OK"
+    android:foregroundGravity="bottom|right|center_horizontal"
     android:layout_gravity="bottom"
-    android:gravity="bottom|center_horizontal"
-        android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-        android:id="@+id/relativeLayout"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/cancel_button"
+        android:layout_toEndOf="@+id/cancel_button" />
 
-        <Button
-        android:id="@+id/ok_button"
+    <EditText
+        android:id="@+id/item_name_input"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:padding="8dp"
+        android:hint="Item Name"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/OK"
-        android:foregroundGravity="bottom|right|center_horizontal"
-        android:layout_gravity="bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/cancel_button"
-            android:layout_toEndOf="@+id/cancel_button" />
-
-        <EditText
-            android:id="@+id/item_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:padding="8dp"
-            android:hint="Item Name"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <Button
-            android:id="@+id/cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:foregroundGravity="left|bottom|center_horizontal"
-            android:elegantTextHeight="false"
-            android:layout_gravity="bottom|right"
-            android:layout_marginLeft="105dp"
-            android:layout_marginStart="105dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-    </RelativeLayout>
+        android:text="@string/cancel"
+        android:foregroundGravity="left|bottom|center_horizontal"
+        android:elegantTextHeight="false"
+        android:layout_gravity="bottom|right"
+        android:layout_marginLeft="105dp"
+        android:layout_marginStart="105dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
