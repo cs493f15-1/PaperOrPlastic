@@ -1,11 +1,25 @@
+/**************************************************************************************************
+ *   File:     NutritionActivity.java
+ *   Author:   Abigail Jones
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that is opened when the user selects the
+ *             nutrition button from the continue activity
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-/**
- * Created by jone8832 on 10/26/2015.
- */
+/***************************************************************************************************
+ *   Class:         NutritionActivity
+ *   Description:   Creates NutritionActivity class that controls what occurs when the user
+ *                  selects the nutrition option from the continue activity.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class NutritionActivity extends Activity
 {
     @Override

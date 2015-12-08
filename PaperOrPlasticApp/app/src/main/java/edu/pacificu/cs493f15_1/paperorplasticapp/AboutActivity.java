@@ -1,11 +1,25 @@
+/**************************************************************************************************
+ *   File:     AboutActivity.java
+ *   Author:   Abigail Jones
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that opens when the about button is pressed
+ *             from the continue activity.
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-/**
- * Created by jone8832 on 10/26/2015.
- */
+/***************************************************************************************************
+ *   Class:         AboutActivity
+ *   Description:   Creates AboutActivity that takes user to about activity once about button
+ *                  is pressed
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ ***************************************************************************************************/
 public class AboutActivity extends Activity
 {
     @Override

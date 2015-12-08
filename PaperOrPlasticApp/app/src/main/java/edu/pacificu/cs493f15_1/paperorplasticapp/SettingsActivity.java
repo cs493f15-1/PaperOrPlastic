@@ -1,3 +1,13 @@
+/**************************************************************************************************
+ *   File:     SettingsActivity.java
+ *   Author:   Abigail Jones
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that is opened when the user selects settings
+ *             from the continue activity
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
@@ -6,9 +16,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-/**
- * Created by jone8832 on 10/26/2015.
- */
+/***************************************************************************************************
+ *   Class:         SettingsActivity
+ *   Description:   Creates SettingsActivity class that controls what occurs when the user
+ *                  reaches the settings page. Specifically, from the settings page user can
+ *                  select a specific settings page (such as recipes, nutrition, lits).
+ *                  creates intents that take users to those specific settings pages.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class SettingsActivity extends Activity implements View.OnClickListener
 {
     //buttons
