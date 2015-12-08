@@ -1,7 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -57,6 +56,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener
         {
             //will start a new activity using the intents
             intent = new Intent (this, KitchenListSettingsActivity.class);
+            intent.putExtra("Caller", "SettingsActivity");
             startActivity (intent);
         }
 

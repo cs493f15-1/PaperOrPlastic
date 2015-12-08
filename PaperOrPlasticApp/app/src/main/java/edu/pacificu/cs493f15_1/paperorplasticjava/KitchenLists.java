@@ -148,4 +148,12 @@ public class KitchenLists
             tempList.readListFromFile(listsInput);
         }
     }
+
+    public void clearLists ()
+    {
+        for (int i = 0; i < mLists.size(); i++)
+        {
+            mLists.remove(i);
+        }
+    }
 }

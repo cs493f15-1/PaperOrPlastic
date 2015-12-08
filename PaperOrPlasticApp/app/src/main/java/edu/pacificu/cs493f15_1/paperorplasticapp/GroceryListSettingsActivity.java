@@ -1,6 +1,5 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.io.File;
@@ -21,12 +18,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
-import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 
 /**
@@ -251,7 +244,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
                         }
                     };
                     fm = getSupportFragmentManager();
-                    DeleteListDFragment deleteListFragment = new DeleteListDFragment();
+                    DeleteGroceryListDFragment deleteListFragment = new DeleteGroceryListDFragment();
                     deleteListFragment.show(fm, "Yeah");
 
                 }
