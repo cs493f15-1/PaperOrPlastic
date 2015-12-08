@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,6 +87,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
             @Override
             public void onSwipeRight(int pos) {
+
+
                 if (!mbIsOnEdit) {
                     hideDeleteButton(pos);
                 }
@@ -94,6 +97,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
             @Override
             public void onSwipeLeft(int pos) {
+
                 if (!mbIsOnEdit) {
                     showDeleteButton(pos);
                 }
@@ -117,11 +121,14 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 if (mbIsOnEdit) {
                     //show delete buttons
                     // showDeleteOnEdit(getCurrentGList().getSize());
-                    int size = getCurrentGList().getSize();
-                    if (size > 0) {
+                    if (mListAdapters.size() != 0)
+                    {
+                        int size = getCurrentGList().getSize();
+                        if (size > 0) {
 
-                    for (int i = 0; i < size; i++) {
-                        showDeleteButton(i);
+                            for (int i = 0; i < size; i++) {
+                                showDeleteButton(i);
+                            }
                     }
                 }
             }
@@ -132,30 +139,32 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int size = getCurrentGList().getSize();
-                if (size > 0) {
+                if (mListAdapters.size() != 0) {
+                    int size = getCurrentGList().getSize();
+                    if (size > 0) {
 
-                    if (!mbIsOnEdit) {
-                        mbIsOnEdit = true;
+                        if (!mbIsOnEdit) {
+                            mbIsOnEdit = true;
 
 
-                        //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
-                        for (int i = 0; i < size; i++) {
-                            showDeleteButton(i);
-                        }
-                        mbAddItem.setTextColor(Color.rgb(170, 170, 170));
-                        mbAddItem.setEnabled(false);
+                            //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
+                            for (int i = 0; i < size; i++) {
+                                showDeleteButton(i);
+                            }
+                            mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+                            mbAddItem.setEnabled(false);
 
-                    } else {
+                        } else {
 
-                        //showDeleteButton also gets rid of the delete button so we might not need this check
+                            //showDeleteButton also gets rid of the delete button so we might not need this check
 
-                        mbIsOnEdit = false;
+                            mbIsOnEdit = false;
 
-                        mbAddItem.setTextColor(Color.rgb(0, 0, 0));
-                        mbAddItem.setEnabled(true);
-                        for (int i = 0; i < size; i++) {
-                            hideDeleteButton(i);
+                            mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+                            mbAddItem.setEnabled(true);
+                            for (int i = 0; i < size; i++) {
+                                hideDeleteButton(i);
+                            }
                         }
                     }
                 }
@@ -317,6 +326,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     {
         super.onResume();
 
+        //turn off edit and enable add item button
+        mbIsOnEdit = false;
+        mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+        mbAddItem.setEnabled(true);
+
+        //read lists in
         Context context = getApplicationContext();
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
@@ -427,11 +442,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      * Returns:       none
      ******************************************************************************************/
 
-    public void showDeleteOnEdit (int listIndex)
+    public void showDeleteOnEdit (String itemName)
     {
-        for (int i=0; i < mGLists.getList(listIndex).getSize(); i++)
+        int itemIndex = getCurrentGList().getItemIndex(itemName);
+        if (mbIsOnEdit && itemIndex != -1)
         {
-            showDeleteButton(i);
+            showDeleteButton(itemIndex);
         }
     }
 

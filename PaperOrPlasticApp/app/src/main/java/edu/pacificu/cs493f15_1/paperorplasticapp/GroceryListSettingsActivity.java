@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -122,7 +123,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView) {
             @Override
             public void onSwipeRight(int pos) {
-                //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
+
 
                 if (!mbIsOnEdit) {
                     hideDeleteButton(pos);
@@ -132,7 +133,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
 
             @Override
             public void onSwipeLeft(int pos) {
-                //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
+
                 if (!mbIsOnEdit) {
                     showDeleteButton(pos);
                 }
