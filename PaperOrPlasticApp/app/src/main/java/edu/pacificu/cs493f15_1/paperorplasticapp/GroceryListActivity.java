@@ -1,19 +1,26 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +29,8 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -33,7 +42,11 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
  * Created by sull0678 on 10/26/2015.
  */
 public class GroceryListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
-    private Button mbAddList, mbAddItem;
+
+    final float SLIDE_RIGHT_ITEM = 5;
+    final float SLIDE_LEFT_ITEM = -145;
+
+    private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
     private GroceryLists mGLists;
@@ -73,19 +86,23 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView)
-        {
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
             @Override
-            public void onSwipeRight (int pos)
-            {
+            public void onSwipeRight(int pos) {
                 //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
-                showDeleteButton(pos);
+
+                if (!mbIsOnEdit) {
+                    hideDeleteButton(pos);
+                }
+
             }
 
             @Override
             public void onSwipeLeft(int pos) {
                 //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
-                showDeleteButton(pos);
+                if (!mbIsOnEdit) {
+                    showDeleteButton(pos);
+                }
             }
         });
 
@@ -110,11 +127,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //setup edit button
         mbEdit = (Button) findViewById(R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener()
-        {
+        mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 //note, GroceryList object doesn't keep track of size, only the array of items within
                 // it does
                 int size = getCurrentGList().getSize();
@@ -130,11 +145,31 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                         //TODO might need to show again if tab is changed
                         mbIsOnEdit = false;
                         for (int i = 0; i < size; i++) {
-                            showDeleteButton(i);
+                            hideDeleteButton(i);
                         }
                     }
                 }
 
+            }
+        });
+
+        mbBack = (Button) findViewById (R.id.bBackToHome);
+        mbBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class);
+                startActivity (intent);
+            }
+        });
+
+        //set up settings activity button
+        mbSettings = (Button) findViewById(R.id.bGListSettings);
+        mbSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class);
+                intent.putExtra("Caller", "GroceryListActivity");
+                startActivity(intent);
             }
         });
 
@@ -228,6 +263,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             addListTab(mGLists.getList(i), i);
         }
 
+
+
     }
 
 
@@ -246,6 +283,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         super.onPause();
 
         writeGListsToGroceryFile();
+        mGLists.clearLists();
 
     }
     /********************************************************************************************
@@ -267,7 +305,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
         if (groceryFile.exists()) {
-            readGListsFromGroceryFile();
+            mGLists.clearLists();
+            readGListsFromGroceryFile(mGLists);
+
         }
     }
     /********************************************************************************************
@@ -328,26 +368,25 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     public void addItemToListView (ListItem newItem)
     {
-        if (mGLists.getSize() > 0) //make sure that there is at least one tab
+        //resort the list depending on the current sorting category
+
+        getCurrentGList().addItem(newItem);
+
+        switch (getCurrentGList().getCurrentSortingValue())
         {
-            mListAdapters.get(mListTabHost.getCurrentTab()).add(newItem);
+            case PoPList.SORT_ALPHA:
+                getCurrentGList().sortListByName();
 
-            //resort the list depending on the current sorting category
-            GroceryList currentList = getCurrentGList();
+                break;
+            case PoPList.SORT_AISLE:
+            case PoPList.SORT_CAL:
+            case PoPList.SORT_DATE:
+            case PoPList.SORT_PRICE:
+            case PoPList.SORT_NONE:
+                break;
 
-            switch (currentList.getCurrentSortingValue()) {
-                case PoPList.SORT_ALPHA:
-                    currentList.sortListByName();
-                    mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
-                    break;
-                case PoPList.SORT_AISLE:
-                case PoPList.SORT_CAL:
-                case PoPList.SORT_DATE:
-                case PoPList.SORT_PRICE:
-                case PoPList.SORT_NONE:
-                    break;
-            }
         }
+        mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
     }
 
     /********************************************************************************************
@@ -396,7 +435,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public GroceryList getCurrentGList()
+    private GroceryList getCurrentGList()
     {
         GroceryList list = null;
         int currentTabIndex = mListTabHost.getCurrentTab();
@@ -449,22 +488,78 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             if (delete != null)
             {
                 if (delete.getVisibility() == View.INVISIBLE) {
-                    Animation animation =
+                    Animation deleteAnimation =
                             AnimationUtils.loadAnimation(this,
                                     R.anim.slide_out_left);
-                    delete.startAnimation(animation);
+
+                    delete.startAnimation(deleteAnimation);
                     delete.setVisibility(View.VISIBLE);
-                } else {
-                    Animation animation =
-                            AnimationUtils.loadAnimation(this,
-                                    R.anim.slide_in_right);
-                    delete.startAnimation(animation);
-                    delete.setVisibility(View.INVISIBLE);
+
+                    slideItemView(child, SLIDE_LEFT_ITEM);
                 }
             }
             return true;
         }
         return false;
+    }
+
+    /********************************************************************************************
+     * Function name: hideDeleteButton
+     *
+     * Description:
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
+    private boolean hideDeleteButton(final int pos) {
+        position = pos;
+        View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
+        if (child != null) {
+
+            delete = (Button) child.findViewById(R.id.bDelete);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                    GroceryList gList = getCurrentGList();
+                    gList.delete(pos);
+                    mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
+
+                }
+            });
+            if (delete != null)
+            {
+                if (delete.getVisibility() == View.VISIBLE) {
+                    Animation deleteAnimation =
+                            AnimationUtils.loadAnimation(this,
+                                    R.anim.slide_in_right);
+
+                    delete.startAnimation(deleteAnimation);
+
+                    delete.setVisibility(View.INVISIBLE);
+
+                    slideItemView(child, SLIDE_RIGHT_ITEM);
+
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    private void slideItemView (View child, float translationAmount)
+    {
+        CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
+        Button itemName = (Button) child.findViewById(R.id.bListItem);
+        TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
+        Spinner spinner = (Spinner) child.findViewById(R.id.itemQuantitySpinner);
+
+        checkBox.setTranslationX(translationAmount);
+        itemName.setTranslationX(translationAmount);
+        qtyText.setTranslationX(translationAmount);
+        spinner.setTranslationX(translationAmount);
     }
 
 
@@ -474,6 +569,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+
+
+
+    public GroceryLists getLists () {
+        return mGLists;
+    }
 
     /********************************************************************************************
      * Function name: writeGListsToGroceryFile
@@ -493,7 +594,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         {
             groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
 
+
             listsOutput = new PrintWriter(groceryOutput);
+
 
             mGLists.writeListsToFile(listsOutput);
             listsOutput.flush();
@@ -513,7 +616,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns: None
      ******************************************************************************************/
-    private void readGListsFromGroceryFile ()
+    private void readGListsFromGroceryFile (GroceryLists gLists)
     {
         FileInputStream groceryInput;
         Scanner listsInput;
@@ -522,14 +625,14 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
 
             listsInput = new Scanner(groceryInput);
-            mGLists.readListsFromFile(listsInput);
+            gLists.readListsFromFile(listsInput);
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < mGLists.getSize(); ++i) {
-            addListTab(mGLists.getList(i), i);
+        for (int i = 0; i < gLists.getSize(); ++i) {
+            addListTab(gLists.getList(i), i);
         }
     }
 }

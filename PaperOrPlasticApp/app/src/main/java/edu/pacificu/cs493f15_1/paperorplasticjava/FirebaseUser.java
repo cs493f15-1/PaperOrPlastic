@@ -9,11 +9,14 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.firebase.client.Firebase;
 /**
  * Created by alco8653 on 11/19/2015.
 */
-public class FirebaseUser
+public class FirebaseUser implements Parcelable
 {
   private String    mUID, mProvider, mEmail;
   private Firebase  mMyRef = null;
@@ -27,6 +30,19 @@ public class FirebaseUser
     mMyRef = new Firebase(FIREBASE_URL + "users/" + mUID + "/");
     mbRememberPass = false;
   }
+
+  public FirebaseUser (Parcel in)
+  {
+    String[] data = new String[5];
+
+    in.readStringArray(data);
+    this.mUID = data[0];
+    this.mProvider = data[1];
+    this.mEmail = data[2];
+    this.mMyRef = new Firebase(data[3]); //TODO: this line might not work right
+    this.mbRememberPass = Boolean.parseBoolean(data[4]);
+  }
+
 
   public void setmUID (String uid)
   {
@@ -75,6 +91,41 @@ public class FirebaseUser
     return mMyRef;
   }
 
+
+  @Override
+  public int describeContents()
+  {     // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public void writeToParcel(Parcel dest, int flags)
+  {// TODO Auto-generated method stub
+    dest.writeStringArray (new String[]
+            {
+                    this.mUID,
+                    this.mProvider,
+                    this.mEmail,
+                    this.mMyRef.toString(),
+                    String.valueOf(this.mbRememberPass)
+            });
+  }
+
+  public static final Parcelable.Creator<FirebaseUser> CREATOR= new Parcelable.Creator<FirebaseUser>()
+  {
+
+    @Override
+    public FirebaseUser createFromParcel(Parcel source)
+    {   // TODO Auto-generated method stub
+      return new FirebaseUser(source);  //using parcelable constructor
+    }
+
+    @Override
+    public FirebaseUser[] newArray(int size)
+    { // TODO Auto-generated method stub
+      return new FirebaseUser[size];
+    }
+  };
 
 
 }

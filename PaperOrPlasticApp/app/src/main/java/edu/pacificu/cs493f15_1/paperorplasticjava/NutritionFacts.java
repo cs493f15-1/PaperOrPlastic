@@ -37,6 +37,66 @@ public class NutritionFacts
 		mTotalFat = fat;
 	}
 
+	public void setmCalories(int calories)
+	{
+		mCalories = calories;
+	}
+
+	public void setmProtein (int protein)
+	{
+		mProtein = protein;
+	}
+
+	public void setmCarbohydrates (int carbohydrates)
+	{
+		mCarbohydrates = carbohydrates;
+	}
+
+	public void setmSugars (int sugars)
+	{
+		mSugars = sugars;
+	}
+
+	public void setmFiber (int fiber)
+	{
+		mFiber = fiber;
+	}
+
+	public void setmTotalFat (int totalFat)
+	{
+		mTotalFat = totalFat;
+	}
+
+	public int getmCalories ()
+	{
+		return mCalories;
+	}
+
+	public int getmProtein ()
+	{
+		return mProtein;
+	}
+
+	public int getmCarbohydrates ()
+	{
+		return mCarbohydrates;
+	}
+
+	public int getmSugars ()
+	{
+		return mSugars;
+	}
+
+	public int getmFiber ()
+	{
+		return mFiber;
+	}
+
+	public int getmTotalFat ()
+	{
+		return mTotalFat;
+	}
+
 	/*********************************
 	 * I/O
 	 ********************************/

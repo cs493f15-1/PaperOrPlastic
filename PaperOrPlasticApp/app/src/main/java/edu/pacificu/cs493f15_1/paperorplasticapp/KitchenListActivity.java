@@ -15,6 +15,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 
+import com.firebase.client.Firebase;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,6 +25,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
@@ -47,6 +50,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     private long mLastClickTime;
     private NewItemInfoDialogListener mItemInfoListener;
 
+    private FirebaseUser fUser;
+
     /********************************************************************************************
      * Function name: onCreate
      * <p/>
@@ -62,6 +67,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_kitchen_list);
+
+        fUser = getIntent().getParcelableExtra("currentUser");
 
         mLastClickTime = 0;
 
@@ -288,6 +295,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         writeKListsToKitchenFile();
 
+        writeKListsToFirebase();
     }
     /********************************************************************************************
      * Function name: onResume
@@ -308,7 +316,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
 
         if (kitchenFile.exists()) {
-            readKListsFromKitchenFile();
+            readKListsFromKitchenFile(mKLists);
         }
     }
     /********************************************************************************************
@@ -472,7 +480,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns: None
      ******************************************************************************************/
-    private void readKListsFromKitchenFile ()
+    private void readKListsFromKitchenFile (KitchenLists kLists)
     {
         FileInputStream kitchenInput;
         Scanner listsInput;
@@ -481,14 +489,35 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
 
             listsInput = new Scanner(kitchenInput);
-            mKLists.readListsFromFile(listsInput);
+            kLists.readListsFromFile(listsInput);
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < mKLists.getSize(); ++i) {
-            addListTab(mKLists.getList(i), i);
+        for (int i = 0; i < kLists.getSize(); ++i) {
+            addListTab(kLists.getList(i), i);
+        }
+    }
+
+    /********************************************************************************************
+     * Function name: writeKListsToFirebase
+     *
+     * Description: Writes the current mKLists to Firebase (will write lists to the user's
+     *              cloud if they are signed in)
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     *******************************************************************************************/
+    private void writeKListsToFirebase()
+    {
+        if (null != fUser.getMyRef())
+        {
+            for (int i = 0; i < mKLists.getSize(); ++i)
+            {
+                fUser.getMyRef().child("Kitchen Lists").child(mKLists.getKListName(i)).setValue(mKLists.getList(i));
+            }
         }
     }
 
