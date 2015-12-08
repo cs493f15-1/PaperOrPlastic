@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:text="New Button"
             android:id="@+id/bListItem"
-            style="@style/Base.Widget.AppCompat.ActionBar.TabText"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:elegantTextHeight="false"
             android:maxWidth="200dp"
             android:layout_alignParentBottom="true"

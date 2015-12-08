@@ -35,18 +35,44 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
     }
 
 
+    /********************************************************************************************
+     * Function name: getItem
+     *
+     * Description:   returns GroceryList with corresponding index of variable position
+     *
+     * Parameters:    position
+     *
+     * Returns:       GroceryList
+     ******************************************************************************************/
     @Override
     public GroceryList getItem (int position) {
         // TODO Auto-generated method stub
         return mListArray.get (position);
     }
 
-
+    /********************************************************************************************
+     * Function name: getItems
+     *
+     * Description:   returns array of GroceryList objects
+     *
+     * Parameters:    none
+     *
+     * Returns:       mListArray
+     ******************************************************************************************/
     public ArrayList<GroceryList> getItems ()
     {
         return mListArray;
     }
 
+    /********************************************************************************************
+     * Function name: add
+     *
+     * Description:
+     *
+     * Parameters:    position
+     *
+     * Returns:       None
+     ******************************************************************************************/
     @Override
     public void add (GroceryList list) {
         // TODO Auto-generated method stub
@@ -54,6 +80,15 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
         //mListArray.add(list);
     }
 
+    /********************************************************************************************
+     * Function name: getView
+     *
+     * Description:
+     *
+     * Parameters:    position
+     *
+     * Returns:       None
+     ******************************************************************************************/
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
