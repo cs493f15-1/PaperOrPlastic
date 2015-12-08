@@ -1,16 +1,12 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -29,8 +25,6 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
@@ -60,7 +54,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
-
 
     private NewItemInfoDialogListener mItemInfoListener;
 
@@ -106,8 +99,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             }
         });
 
-
-
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
         mListTabHost.setup();
@@ -149,7 +140,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                         }
                     }
                 }
-
             }
         });
 
@@ -224,7 +214,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 {
                     switch (position)
                     {
-
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
                             currentList.setCurrentSortingValue(PoPList.SORT_NONE);
                             break;
@@ -262,12 +251,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         for (int i = 0; i < mGLists.getSize(); i++) {
             addListTab(mGLists.getList(i), i);
         }
-
-
-
     }
-
-
     /********************************************************************************************
      * Function name: onPause
      *
@@ -284,7 +268,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         writeGListsToGroceryFile();
         mGLists.clearLists();
-
     }
     /********************************************************************************************
      * Function name: onResume
@@ -307,9 +290,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         if (groceryFile.exists()) {
             mGLists.clearLists();
             readGListsFromGroceryFile(mGLists);
-
         }
     }
+
     /********************************************************************************************
      * Function name: addListTab
      *
@@ -361,11 +344,10 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Description:   Adds item layout to listView as a new row and adds it to listadapter
      *
-     * Parameters:    none
+     * Parameters:    newItem - the new ListItem being added
      *
      * Returns:       none
      ******************************************************************************************/
-
     public void addItemToListView (ListItem newItem)
     {
         //resort the list depending on the current sorting category
@@ -548,7 +530,15 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         return false;
     }
 
-
+    /********************************************************************************************
+     * Function name: slideItemView
+     *
+     * Description: Displays the slideItemView
+     *
+     * Parameters:
+     *
+     * Returns:
+     ******************************************************************************************/
     private void slideItemView (View child, float translationAmount)
     {
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
@@ -562,14 +552,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         spinner.setTranslationX(translationAmount);
     }
 
-
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         return super.dispatchTouchEvent(ev);
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
-
 
 
     public GroceryLists getLists () {
@@ -594,10 +582,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         {
             groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
 
-
             listsOutput = new PrintWriter(groceryOutput);
-
-
             mGLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
