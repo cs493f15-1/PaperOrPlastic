@@ -10,15 +10,18 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context=".MainActivity">
+                tools:context=".MainActivity"
+              android:background="@drawable/grocery_background_blurry">
 
     <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/loginForm">
+                android:layout_height="match_parent" android:id="@+id/loginForm"
+                android:fillViewport="false">
 
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:orientation="vertical" android:id="@+id/emailLoginForm">
+                      android:orientation="vertical" android:id="@+id/emailLoginForm"
+                      android:background="#99FFFFFF">
 
 
             <android.support.design.widget.TextInputLayout
@@ -43,11 +46,12 @@
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password (optional)"
+                    android:hint="Password"
                     android:inputType="textPassword"
                     android:id="@+id/editTextPassword"
                     android:maxLines="1"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -92,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sContinue"
                 android:id="@+id/bContinue"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="75dp"
                 />
 
         </LinearLayout>

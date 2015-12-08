@@ -95,10 +95,6 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
     setContentView(R.layout.activity_main_sign_in);
 
     initializeActivity();
-
-    //testWritingDataToFirebase();
-    //testCreateFirebaseUsers();
-
   }
 
 /***************************************************************************************************
@@ -205,148 +201,6 @@ private void initializeFirebase()
   Firebase.setAndroidContext(this);
   myFirebaseRef = new Firebase (FIREBASE_URL);
 }
-
-/***************************************************************************************************
- *   Method:      testWritingDataToFirebase
- *   Description: just some testing...
- *   Parameters:  N/A
- *   Returned:    N/A
- ***************************************************************************************************/
-private void testWritingDataToFirebase()
-{
-  myFirebaseRef.child ("message").setValue ("YO WADDUP");
-  myFirebaseRef.child ("testing").setValue ("Testing123");
-
-
-  // test creating a new reference "ref" to save data
-  Firebase ref = new Firebase (FIREBASE_URL + "/test-saving-data");
-
-  // creating another reference "alanRef" (which is the child of the above reference)
-  // creating reference to a child object -  a user with id alanisawesome
-  Firebase alanRef = ref.child ("users").child ("alanisawesome");
-
-  // creating new object testUser
-  TestUser alan = new TestUser ("Alan Turing", 1912);
-
-  // setting the value of the reference we created to the java object we created
-  alanRef.setValue(alan);
-
-  //now test retrieving this information -- Attach a listener to read the data at our posts reference (test saving data)
-  alanRef.addValueEventListener(new ValueEventListener() {
-    @Override
-    public void onDataChange(DataSnapshot snapshot) {
-      System.out.println(snapshot.getValue());
-      System.out.println("There are " + snapshot.getChildrenCount() + " fields to this user.");
-    }
-
-    @Override
-    public void onCancelled(FirebaseError firebaseError) {
-      System.out.println("The read failed: " + firebaseError.getMessage());
-    }
-  });
-}
-
-/***************************************************************************************************
- *   Method:      testCreateFirebaseUsers
- *   Description: just more testing....
- *   Parameters:  N/A
- *   Returned:    N/A
- ***************************************************************************************************/
-private void testCreateFirebaseUsers ()
-{
-  //hard coding the addition of a registered user
-
-  myFirebaseRef.createUser("alco8653@pacificu.edu", "password1234",
-          new Firebase.ValueResultHandler<Map<String, Object>>()
-          {
-            @Override
-            public void onSuccess(Map<String, Object> result)
-            {
-              System.out.println("Successfully created user account with uid: " + result.get("uid"));
-            }
-
-            @Override
-            public void onError(FirebaseError firebaseError)
-            {
-              // there was an error
-              System.out.println("Error creating user. ");
-            }
-          });
-
-  myFirebaseRef.authWithPassword("alco8653@pacificu.edu", "password1234", new Firebase.AuthResultHandler() {
-    @Override
-    public void onAuthenticated(AuthData authData) {
-      System.out.println("Authenticated the user.");
-      System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-    }
-
-    @Override
-    public void onAuthenticationError(FirebaseError firebaseError) {
-      // there was an error
-      System.out.println("Error authenticating user. ");
-    }
-  });
-}
-
-
-/***************************************************************************************************
- *   Method:      testWriteListToFirebase
- *   Description: just more testing....
- *   Parameters:  N/A
- *   Returned:    N/A
- ***************************************************************************************************/
-  private void testWriteListToFirebase ()
-  {
-    KitchenList sTest = new KitchenList("Test List");
-    ListItem  s1 = new ListItem("milk"),
-              s2 = new ListItem("cookies"),
-              s3 = new ListItem("orange juice");
-
-    sTest.addItem(s1);
-    sTest.addItem(s2);
-    sTest.addItem(s3);
-
-
-    KitchenList sTest2 = new KitchenList("Groceries");
-    ListItem  s12 = new ListItem("pancakes"),
-              s22 = new ListItem("cups"),
-              s32 = new ListItem("paper towels");
-
-    sTest2.addItem(s12);
-    sTest2.addItem(s22);
-    sTest2.addItem(s32);
-
-    //user should be signed in at this point
-    if (null != mfCurrentUser.getMyRef())
-    {
-      mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest.getListName()).setValue(sTest);
-      mfCurrentUser.getMyRef().child("Kitchen Lists").child(sTest2.getListName()).setValue(sTest2);
-    }
-
-  }
-
-/***************************************************************************************************
- *   Method:      testAddSharedUser
- *   Description: test a user "adding another user to see their lists"
- *   Parameters:  N/A
- *   Returned:    N/A
- ***************************************************************************************************/
-  private void testAddSharedUser()
-  {
-    if (null != mfCurrentUser.getMyRef())
-    {
-      //test adding a shared user
-
-      Map<String, String> test = new HashMap<String, String>();
-      test.put("0","TestShareUser");
-      mfCurrentUser.getMyRef().child("SharedUsers").child("uid-test123").setValue(test); //TODO: add the uid based on email input
-
-      //Firebase sCurrentList = new Firebase(myFirebaseUserRef.child("Kitchen Lists").child(sTest.getListName()).toString());
-
-      //sCurrentList.child("shared").setValue();
-    }
-  }
-
 
 /***************************************************************************************************
  *   Method:      rememberPass
@@ -457,6 +311,26 @@ public void rememberPass(String email, String password)
   }
 
 /***************************************************************************************************
+ *   Method:      setMfCurrentUser
+ *   Description: after a successful sign-in attempts, sets the mf current user
+ *   Parameters:  authData - firebase authorization data
+ *                email - the email for the user
+ *                password - the password for the user
+ *   Returned:    N/A
+ ***************************************************************************************************/
+  public void setMfCurrentUser (AuthData authData, String email, String password)
+  {
+    mAuthSuccess = true;
+
+    mfCurrentUser = new FirebaseUser(authData.getUid());
+    mfCurrentUser.setmProvider(authData.getProvider());
+    mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
+    mfCurrentUser.setmEmail(email);
+
+    rememberPass(email, password);
+  }
+
+  /***************************************************************************************************
  *   Method:      signInAttempt
  *   Description: to be executed when the user clicks on sign-in button. captures text in the email
  *                 and password edit text fields -> attempts to signin using these credentials. A
@@ -471,20 +345,12 @@ public void rememberPass(String email, String password)
     final String password = mEditPassword.getText().toString();
 
     //capture text from password editText and email editText ->pass this to firebase authentication
-    myFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
+    myFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler()
+    {
       @Override
       public void onAuthenticated(AuthData authData)
       {
-        mAuthSuccess = true;
-
-        mfCurrentUser = new FirebaseUser(authData.getUid());
-        mfCurrentUser.setmProvider(authData.getProvider());
-        mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
-        mfCurrentUser.setmEmail(email);
-
-        //testWriteListToFirebase();
-
-        rememberPass(email, password);
+        setMfCurrentUser(authData, email, password);
 
         messageDialog("Sign-In", "Successful login.", true);
       }
@@ -522,14 +388,9 @@ public void rememberPass(String email, String password)
         //after create sign-in
         myFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler() {
           @Override
-          public void onAuthenticated(AuthData authData) {
-            mAuthSuccess = true;
-
-            mfCurrentUser = new FirebaseUser(authData.getUid());
-            mfCurrentUser.setmProvider(authData.getProvider());
-            mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
-            mfCurrentUser.setmEmail(email);
-            rememberPass(email, password);
+          public void onAuthenticated(AuthData authData)
+          {
+            setMfCurrentUser (authData, email, password);
 
             messageDialog("Create Account", "Account has been created.", true);
           }
@@ -691,72 +552,4 @@ public void rememberPass(String email, String password)
 
     }
   }
-
-
-
-/*  private void recoverPasswordDialog()
-  {
-    LayoutInflater inflater = this.getLayoutInflater();
-
-    AlertDialog.Builder test;
-    DialogInterface.OnClickListener resetDialog;
-    test = new AlertDialog.Builder (this).setView(inflater.inflate(R.layout.dialog_pass_recovery, null));
-
-
-
-    test.setPositiveButton("OK", new DialogInterface.OnClickListener()
-    {
-      @Override
-      public void onClick(DialogInterface dialog, int ok)
-      {
-        //user clicked ok
-
-        myFirebaseRef.authWithPassword(dUserEmail.getText().toString(),
-                dPassToken.getText().toString(),
-                new Firebase.AuthResultHandler()
-                {
-                  @Override
-                  public void onAuthenticated(AuthData authData)
-                  {
-                    myFirebaseRef.changePassword(dUserEmail.getText().toString(),
-                            dPassToken.getText().toString(), dPassNew.getText().toString(),
-                            new Firebase.ResultHandler()
-                            {
-                              @Override
-                              public void onSuccess()
-                              {
-                                System.out.println("Password changed. ");
-                              }
-
-                              @Override
-                              public void onError(FirebaseError firebaseError)
-                              {
-                                System.out.println("Error changing password. ");
-                              }
-                            });
-                  }
-
-                  @Override
-                  public void onAuthenticationError(FirebaseError firebaseError)
-                  {
-                    // there was an error
-                  }
-                });
-      }
-    })
-    .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-    {
-      public void onClick(DialogInterface dialog, int cancel)
-      {
-        //user clicked cancel
-        //LoginDialogFragment.this.getDialog().cancel();
-      }
-    });
-
-    test.show();
-
-  }*/
-
-
-
 }
