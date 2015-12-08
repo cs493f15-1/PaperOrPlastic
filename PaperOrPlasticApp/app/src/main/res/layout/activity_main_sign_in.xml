@@ -11,7 +11,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity"
-              android:background="@drawable/grocery_background_blurry">
+              android:background="#bbd7da">
 
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent" android:id="@+id/loginForm"

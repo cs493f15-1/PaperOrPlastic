@@ -198,7 +198,7 @@ private void initializeSignInPrefs()
  ***************************************************************************************************/
 private void initializeFirebase()
 {
-  Firebase.setAndroidContext(this);
+  //Firebase.setAndroidContext(this.getApplication());
   myFirebaseRef = new Firebase (FIREBASE_URL);
 }
 

@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 
 
@@ -43,12 +44,19 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
     Button delete;
     //private Button mButtonShowGroceryList;
 
+    private FirebaseUser mfCurrentUser; /** FIREBASE WOO **/
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kitchen_list_settings);
         mbIsOnEdit = false;
+
+
+        /** FIREBASE WOO **/
+        mfCurrentUser = getIntent().getParcelableExtra("currentUser");
+
 
         mbEdit = (Button) findViewById (R.id.bEdit);
         mbEdit.setOnClickListener(new View.OnClickListener() {
@@ -90,11 +98,11 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
                 } else {
                     intent = new Intent(KitchenListSettingsActivity.this, KitchenListActivity.class);
                 }
-
+                intent.putExtra("currentUser", mfCurrentUser);
                 startActivity(intent);
             }
         });
-
+        mKLists = new KitchenLists();
         //set up list view
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
 
@@ -168,7 +176,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      *
      * Returns: None
      ******************************************************************************************/
-    private void writeGListsToGroceryFile ()
+    private void writeKListsToKitchenFile ()
     {
         FileOutputStream kitchenOutput = null;
         PrintWriter listsOutput = null;
@@ -306,9 +314,9 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
         super.onResume();
 
         Context context = getApplicationContext();
-        File groceryFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
+        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
 
-        if (groceryFile.exists())
+        if (kitchenFile.exists())
         {
             mKLists.clearLists();
             readKListsFromKitchenFile(mKLists);
@@ -329,7 +337,8 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
     {
         super.onPause();
 
-        writeGListsToGroceryFile();
+        writeKListsToKitchenFile();
+        mKLists.writeKListsToFirebase(mfCurrentUser);
         mKLists.clearLists();
 
     }

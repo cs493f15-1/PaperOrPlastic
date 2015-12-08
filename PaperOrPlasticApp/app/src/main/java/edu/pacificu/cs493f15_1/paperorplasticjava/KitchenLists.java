@@ -156,4 +156,26 @@ public class KitchenLists
             mLists.remove(i);
         }
     }
+
+    /********************************************************************************************
+     * Function name: writeKListsToFirebase
+     *
+     * Description: Writes the current mKLists to Firebase (will write lists to the user's
+     *              cloud if they are signed in)
+     *
+     * Parameters: None
+     *
+     * Returns: None
+     *******************************************************************************************/
+    public void writeKListsToFirebase(FirebaseUser currentUser)
+    {
+        if (null != currentUser.getMyRef())
+        {
+            for (int i = 0; i < getSize(); ++i)
+            {
+                currentUser.getMyRef().child("Kitchen Lists").child(getKListName(i)).setValue(getList(i));
+            }
+        }
+    }
+
 }

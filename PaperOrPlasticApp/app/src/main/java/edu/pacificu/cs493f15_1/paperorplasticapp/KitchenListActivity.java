@@ -60,7 +60,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     private NewItemInfoDialogListener mItemInfoListener;
 
-    private FirebaseUser fUser;
+    private FirebaseUser mfCurrentUser;
+
 
     /********************************************************************************************
      * Function name: onCreate
@@ -79,7 +80,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         setContentView(R.layout.activity_kitchen_list);
         mbIsOnEdit = false;
 
-        fUser = getIntent().getParcelableExtra("currentUser");
+        mfCurrentUser = getIntent().getParcelableExtra("currentUser");
 
         //init my kitchen lists
 
@@ -156,17 +157,19 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(KitchenListActivity.this, ContinueActivity.class);
+                intent.putExtra("currentUser", mfCurrentUser);
                 startActivity (intent);
             }
         });
 
         //set up settings activity button
-        mbSettings = (Button) findViewById(R.id.bGListSettings);
+        mbSettings = (Button) findViewById(R.id.bKListSettings);
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(KitchenListActivity.this, KitchenListSettingsActivity.class);
                 intent.putExtra("Caller", "KitchenListActivity");
+                intent.putExtra("currentUser", mfCurrentUser);
                 startActivity(intent);
             }
         });
@@ -272,12 +275,15 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     @Override
     protected void onPause ()
     {
-        super.onPause();
+      super.onPause();
 
-        writeKListsToKitchenFile();
-        mKLists.clearLists();
+      writeKListsToKitchenFile();
 
-        writeKListsToFirebase();
+      mKLists.writeKListsToFirebase(mfCurrentUser);
+
+      mKLists.clearLists();
+
+
     }
     /********************************************************************************************
      * Function name: onResume
@@ -290,16 +296,17 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onResume ()
+    protected void onResume()
     {
-        super.onResume();
+      super.onResume();
 
         Context context = getApplicationContext();
         File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
 
         if (kitchenFile.exists()) {
             mKLists.clearLists();
-            readKListsFromKitchenFile(mKLists);
+            //mListAdapters.clear();
+          readKListsFromKitchenFile(mKLists);
         }
     }
 
@@ -324,8 +331,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //for keeping track of items in list
-        addListAdapter(mKLists.getList(index));
-        mListTabHost.setCurrentTab(index);
+      addListAdapter(mKLists.getList(index));
+      mListTabHost.setCurrentTab(index);
     }
 
     /********************************************************************************************
@@ -343,9 +350,9 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     public void onFinishListDialog(String newListName)
     {
         //add List to Lists and create a tab
-        mKLists.addList(newListName);
+      mKLists.addList(newListName);
 
-        addListTab(mKLists.getList(mKLists.getSize() - 1), mKLists.getSize() - 1);
+      addListTab(mKLists.getList(mKLists.getSize() - 1), mKLists.getSize() - 1);
 
     }
 
@@ -594,7 +601,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
             listsOutput = new PrintWriter(kitchenOutput);
             mKLists.writeListsToFile(listsOutput);
-            listsOutput.flush();
+          listsOutput.flush();
             listsOutput.close();
         }
         catch (FileNotFoundException e) {
@@ -631,26 +638,5 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
-
-    /********************************************************************************************
-     * Function name: writeKListsToFirebase
-     *
-     * Description: Writes the current mKLists to Firebase (will write lists to the user's
-     *              cloud if they are signed in)
-     *
-     * Parameters: None
-     *
-     * Returns: None
-     *******************************************************************************************/
-    private void writeKListsToFirebase()
-    {
-        if (null != fUser.getMyRef())
-        {
-            for (int i = 0; i < mKLists.getSize(); ++i)
-            {
-                fUser.getMyRef().child("Kitchen Lists").child(mKLists.getKListName(i)).setValue(mKLists.getList(i));
-            }
-        }
-    }
 
 }
