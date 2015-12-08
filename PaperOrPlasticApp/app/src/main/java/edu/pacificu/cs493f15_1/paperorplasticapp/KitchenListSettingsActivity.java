@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -94,24 +95,6 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
             }
         });
 
-
-
-
-        //get grocery lists
-        // mGLists = .getLists();
-        //instead for now
-        mKLists = new KitchenLists ();
-        /*ListItem item = new ListItem("item");
-        mGLists.addList("blagh");
-        mGLists.getList(0).addItem(item);*/
-
-        Context context = getApplicationContext();
-        File groceryFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
-
-        if (groceryFile.exists()) {
-            readKListsFromKitchenFile(mKLists);
-        }
-
         //set up list view
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
 
@@ -169,6 +152,10 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+
+        for (int i = 0; i < kLists.getSize(); ++i) {
+           Log.d("List" + i, kLists.getKListName(i));
         }
     }
 
