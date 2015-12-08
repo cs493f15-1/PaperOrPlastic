@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -113,12 +114,18 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
                 }
 
-                if (mbIsOnEdit)
-                {
-                    //show delete button
+                if (mbIsOnEdit) {
+                    //show delete buttons
+                    // showDeleteOnEdit(getCurrentGList().getSize());
+                    int size = getCurrentGList().getSize();
+                    if (size > 0) {
+
+                    for (int i = 0; i < size; i++) {
+                        showDeleteButton(i);
+                    }
                 }
             }
-        });
+        }});
 
         //setup edit button
         mbEdit = (Button) findViewById(R.id.bEdit);
@@ -130,6 +137,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
+
 
                         //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
                         for (int i = 0; i < size; i++) {
@@ -143,6 +151,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                         //showDeleteButton also gets rid of the delete button so we might not need this check
 
                         mbIsOnEdit = false;
+
                         mbAddItem.setTextColor(Color.rgb(0, 0, 0));
                         mbAddItem.setEnabled(true);
                         for (int i = 0; i < size; i++) {
@@ -418,12 +427,11 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      * Returns:       none
      ******************************************************************************************/
 
-    public void showDeleteOnEdit (String itemName)
+    public void showDeleteOnEdit (int listIndex)
     {
-        int itemIndex = getCurrentGList().getItemIndex(itemName);
-        if (mbIsOnEdit && itemIndex != -1)
+        for (int i=0; i < mGLists.getList(listIndex).getSize(); i++)
         {
-            showDeleteButton(itemIndex);
+            showDeleteButton(i);
         }
     }
 
@@ -603,12 +611,10 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
-        Spinner spinner = (Spinner) child.findViewById(R.id.itemQuantitySpinner);
 
         checkBox.setTranslationX(translationAmount);
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
-        spinner.setTranslationX(translationAmount);
     }
 
     /********************************************************************************************
@@ -620,12 +626,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns:       None
      ******************************************************************************************/
-    /*
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         return super.dispatchTouchEvent(ev);
-    }*/
+    }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 
 

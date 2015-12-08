@@ -109,10 +109,16 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
 
+
             listHolder = new ListHolder();
             //get items in row and set them to layout items
-            listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
-            listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {
+            listHolder.listName = (TextView)row.findViewById(R.id.listName);
+
+
+
+            //get items in row and set them to layout items
+            /*listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
+            // listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mQtyChangeListeners.add (new QtyChangeDialogListener() {
@@ -128,6 +134,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
                     dialog.show(fm, "fragment");
                 }
             });
+            */
 
            /* mItemInfoListener = new NewItemInfoDialogListener() {
                 @Override
@@ -148,6 +155,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 
         //set list row info
         GroceryList list = mListArray.get(position);
+        listHolder.listName.setText(list.getListName());
 
 
         return row;
@@ -157,6 +165,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
     static class ListHolder
     {
         QtyChangeDialogListener mQtyChangeListener;
+        TextView listName;
         CheckBox checkBox;
         TextView txtQuantity;
        // Button bMinusQty;

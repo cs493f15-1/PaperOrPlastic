@@ -103,12 +103,12 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         //create grocery lists
         mGLists = new GroceryLists ();
 
-        Context context = getApplicationContext();
-        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
+//        Context context = getApplicationContext();
+//        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
-        if (groceryFile.exists()) {
-            readGListsFromGroceryFile(mGLists);
-        }
+//        if (groceryFile.exists()) {
+//            readGListsFromGroceryFile(mGLists);
+//        }
 
         //set up list view
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
@@ -161,7 +161,6 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
 
         try {
             groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
-
             listsInput = new Scanner(groceryInput);
             gLists.readListsFromFile(listsInput);
             listsInput.close();
@@ -335,7 +334,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
 
         if (groceryFile.exists())
         {
-            mGLists.clearLists();
+           mGLists.clearLists();
            readGListsFromGroceryFile(mGLists);
         }
     }
