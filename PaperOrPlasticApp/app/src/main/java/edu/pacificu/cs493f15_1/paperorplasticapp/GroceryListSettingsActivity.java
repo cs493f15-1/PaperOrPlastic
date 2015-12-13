@@ -1,3 +1,15 @@
+/**************************************************************************************************
+ *   File:     GroceryListSettingsActivity.java
+ *   Author:   Abigail Jones
+ *   Date:     10/28/15
+ *   Class:    Capstone/Software Engineering
+ *   Project:  PaperOrPlastic Application
+ *   Purpose:  This activity will be the activity that is opened when the user chooses to
+ *             look at the grocery list settings. This can happen through the settings button on the
+ *             continue activity or through the settings tab when the grocery list button is pressed
+ *             from the continue activity.
+ ***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.Context;
@@ -20,15 +32,20 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-
-
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
 
 
+/***************************************************************************************************
+ *   Class:         GroceryListSettingsActivity
+ *   Description:   Creates GroceryListSettingsActivity class that controls what occurs when the
+ *                  user reaches the grocery list settings page. Specifically, handles what happens
+ *                  when the user specifies whether the grocery list button should be displayed on
+ *                  the continue activity.
+ *                  creates intents that take users to those specific pages.
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 
-/**
- * Created by jone8832 on 10/26/2015.
- */
 public class GroceryListSettingsActivity extends FragmentActivity implements View.OnClickListener
 {
     final float SLIDE_RIGHT_ITEM = 5;
@@ -228,7 +245,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
                         }
                     };
                     fm = getSupportFragmentManager();
-                    DeleteListDFragment deleteListFragment = new DeleteListDFragment();
+                    DeleteGroceryListDFragment deleteListFragment = new DeleteGroceryListDFragment();
                     deleteListFragment.show(fm, "Yeah");
 
                 }

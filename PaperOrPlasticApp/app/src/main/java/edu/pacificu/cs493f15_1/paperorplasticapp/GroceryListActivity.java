@@ -1,8 +1,17 @@
+/**************************************************************************************************
+*   File:     GroceryListActivity.java
+*   Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
+*   Date:     10/28/15
+*   Class:    Capstone/Software Engineering
+*   Project:  PaperOrPlastic Application
+*   Purpose:  This activity will be the activity that is opened when the user selects the
+*             grocery list button from the continue activity
+***************************************************************************************************/
+
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.content.Context;
 import android.content.Intent;
-
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -35,9 +44,14 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 
-/**
- * Created by sull0678 on 10/26/2015.
- */
+/***************************************************************************************************
+*   Class:         GroceryListActivity
+*   Description:   Creates GroceryListActivity class that controls what occurs when the user
+*                  selects the grocery list option from the continue activity. Specifically
+*                  contains the list functionality.
+*   Parameters:    N/A
+*   Returned:      N/A
+**************************************************************************************************/
 public class GroceryListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
 
     final float SLIDE_RIGHT_ITEM = 5;
@@ -58,7 +72,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
-
 
     private NewItemInfoDialogListener mItemInfoListener;
 
@@ -81,6 +94,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //init my grocery lists
         mGLists = new GroceryLists();
+
 
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
@@ -144,7 +158,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                         }
                     }
                 }
-
             }
         });
 
@@ -231,8 +244,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                 //functionality when we're using drop down sorting menu
                 if (null != currentList) {
-                    switch (position) {
-
+                    switch (position)
+                    {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
                             currentList.setCurrentSortingValue(PoPList.SORT_NONE);
                             break;
@@ -266,6 +279,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         });
 
 
+
         //to view items in list
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
@@ -291,6 +305,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     }
 
+
     /********************************************************************************************
      * Function name: onPause
      *
@@ -307,7 +322,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         writeGListsToGroceryFile();
         mGLists.clearLists();
-
     }
     /********************************************************************************************
      * Function name: onResume
@@ -336,7 +350,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         if (groceryFile.exists()) {
             mGLists.clearLists();
             readGListsFromGroceryFile(mGLists);
-
         }
 
         if (mListAdapters.size() == 0) {
@@ -344,6 +357,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             mbAddItem.setEnabled(false);
         }
     }
+
     /********************************************************************************************
      * Function name: addListTab
      *
@@ -402,11 +416,10 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Description:   Adds item layout to listView as a new row and adds it to listadapter
      *
-     * Parameters:    none
+     * Parameters:    newItem - the new ListItem being added
      *
      * Returns:       none
      ******************************************************************************************/
-
     public void addItemToListView (ListItem newItem)
     {
         getCurrentGList().addItem(newItem);
@@ -630,7 +643,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
     }
-
     /********************************************************************************************
      * Function name: dispatchTouchEvent
      *
@@ -673,10 +685,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         {
             groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
 
-
             listsOutput = new PrintWriter(groceryOutput);
-
-
             mGLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();

@@ -1,23 +1,14 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import edu.pacificu.cs493f15_1.paperorplasticapp.ListDFragment.EditNameDialogListener;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 
 /**
  * Created by sull0678 on 11/3/2015.
@@ -71,8 +62,7 @@ public class ListDFragment extends DialogFragment
 
         mDialog = getDialog();
 
-        mDialog.setTitle("DialogFragment Tutorial");
-
+        mDialog.setTitle("Add List");
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         // Do something else
