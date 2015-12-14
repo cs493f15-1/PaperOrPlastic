@@ -29,6 +29,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="sNewGame">New Game</string>
     <string name="sContinue">Continue</string>
+    <string name="sContinueOffline">Continue Offline</string>
     <string name="sRules">Rules</string>
     <string name="sAbout">About</string>
     <string name="sSettings">Settings</string>

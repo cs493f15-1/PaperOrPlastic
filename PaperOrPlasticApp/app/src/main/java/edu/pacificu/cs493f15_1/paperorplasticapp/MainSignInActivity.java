@@ -74,9 +74,10 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
 
   //  firebase reference
   private Firebase  myFirebaseRef;
-
   private FirebaseUser mfCurrentUser;
-  private boolean mAuthSuccess;
+  private FirebaseError mfLastError;
+
+  private boolean mAuthSuccess, mbResetSuccess, mbResetDismiss;
 
   private View mLoginFormView;
 
@@ -276,11 +277,29 @@ public void rememberPass(String email, String password)
     if (mButtonResetPassword == view)
     {
       resetPasswordAttempt();
+      if (!mbResetDismiss)
+      {
+        if (mbResetSuccess)
+        {
+          messageDialog("Reset Password", "Successful. Password reset.", false);
+        }
+        else
+        {
+          String errMsg = captureFirebaseError(mfLastError);
+          messageDialog("Reset Password", "Unsuccessful. Password was not reset. \n" + errMsg, false);
+        }
+      }
     }
 
     if (mButtonContinue == view)
     {
       intent = new Intent (this, ContinueActivity.class);
+
+      if (!mAuthSuccess)
+      {
+        mfCurrentUser = new FirebaseUser("offline");
+      }
+      intent.putExtra("currentUser", mfCurrentUser);
       startActivity(intent);
     }
 
@@ -462,6 +481,9 @@ public void rememberPass(String email, String password)
     Button btnReset = (Button) login.findViewById(R.id.btnReset);
     Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
 
+    mbResetSuccess = false;
+    mbResetDismiss = false;
+
     final EditText  txtUser = (EditText) login.findViewById(R.id.userEmail),
                     txtToken = (EditText) login.findViewById(R.id.passwordToken),
                     txtNewPass = (EditText) login.findViewById(R.id.newPassword);
@@ -488,13 +510,14 @@ public void rememberPass(String email, String password)
                   @Override
                   public void onSuccess()
                   {
-                    System.out.println("Password changed. "); //TODO: indicate success to user
+                    mbResetSuccess = true;
                   }
 
                   @Override
                   public void onError(FirebaseError firebaseError)
                   {
-                    System.out.println("Error changing password. "); //TODO: indicate failure to user
+                    mbResetSuccess = false;
+                    mfLastError = firebaseError;
                   }
                 });
             }
@@ -515,6 +538,7 @@ public void rememberPass(String email, String password)
       @Override
       public void onClick(View v)
       {
+        mbResetDismiss = true;
         login.dismiss();
       }
     });
@@ -531,29 +555,39 @@ public void rememberPass(String email, String password)
  *   Returned:    N/A
  ***************************************************************************************************/
 
-  public void captureFirebaseError (FirebaseError error)
+  public String captureFirebaseError (FirebaseError error)
   {
+    String errorMessage = "Firebase Error.";
     switch (error.getCode())
     {
       case FirebaseError.EMAIL_TAKEN:
+        errorMessage = "Error: Email taken.";
         break;
       case FirebaseError.EXPIRED_TOKEN:
+        errorMessage = "Error: Expired token.";
         break;
       case FirebaseError.INVALID_EMAIL:
+        errorMessage = "Error: Invalid email.";
         break;
       case FirebaseError.INVALID_PASSWORD:
+        errorMessage = "Error: Invalid password.";
         break;
       case FirebaseError.INVALID_TOKEN:
+        errorMessage = "Error: Invalid token.";
         break;
       case FirebaseError.INVALID_CREDENTIALS:
+        errorMessage = "Error: Invalid credentials.";
         break;
       case FirebaseError.PERMISSION_DENIED:
+        errorMessage = "Error: Permission denied.";
         break;
       case FirebaseError.OPERATION_FAILED:
+        errorMessage = "Error: Operation failed.";
         break;
       default:
         System.out.println("Firebase error");
-
     }
+    return errorMessage;
   }
+
 }

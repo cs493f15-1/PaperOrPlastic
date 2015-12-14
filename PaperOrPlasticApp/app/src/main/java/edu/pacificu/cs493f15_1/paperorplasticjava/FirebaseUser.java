@@ -86,6 +86,12 @@ public class FirebaseUser implements Parcelable
     return mbRememberPass;
   }
 
+  public void setMyRefNull()
+  {
+    mMyRef = null;
+  }
+
+
   public Firebase getMyRef()
   {
     return mMyRef;
