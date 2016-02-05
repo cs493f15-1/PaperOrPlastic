@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
-              android:clickable="true">
+    android:weightSum="1">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,64 +13,56 @@
             android:layout_height="wrap_content"
             android:text="New Button"
             android:id="@+id/bListItem"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            style="@style/Base.Widget.AppCompat.ActionBar.TabText"
             android:elegantTextHeight="false"
             android:background="@android:color/transparent"
             android:maxWidth="200dp"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/itemCheckBox" />
+            android:layout_toRightOf="@+id/itemCheckBox"
+            android:layout_toEndOf="@+id/itemCheckBox" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Qty:"
+            android:text="@string/qty"
             android:id="@+id/quantityText"
-            android:textSize="20dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/quantityValue"
-            android:layout_toStartOf="@+id/quantityValue"
-            android:layout_marginRight="5dp"/>
+            android:layout_toLeftOf="@+id/input_qty" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="@string/sDelete"
             android:id="@+id/bDelete"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:visibility="invisible"
-            android:background="#b32d2d"
             android:textColor="#d8d8d8"
-            android:textSize="20dp"
-            android:layout_alignParentRight="true" />
+            android:textSize="20sp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/delete" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/itemCheckBox"
             android:checked="false"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/quantityValue"
-            android:layout_alignBottom="@+id/quantityText"/>
+            android:layout_alignParentStart="true" />
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="30dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="1"
-            android:id="@+id/quantityValue"
-            android:textSize="20dp"
-            android:foregroundGravity="center_horizontal"
-            android:gravity="center_vertical|center_horizontal"
-            android:singleLine="false"
-            android:background="@drawable/square"
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/input_qty"
+            android:layout_alignTop="@+id/itemCheckBox"
+            android:layout_alignParentBottom="true"
             android:layout_alignLeft="@+id/bDelete"
             android:layout_alignStart="@+id/bDelete"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentTop="false"/>
+            android:layout_alignRight="@+id/bDelete"
+            android:layout_alignEnd="@+id/bDelete"
+            android:autoText="true" />
 
 
     </RelativeLayout>

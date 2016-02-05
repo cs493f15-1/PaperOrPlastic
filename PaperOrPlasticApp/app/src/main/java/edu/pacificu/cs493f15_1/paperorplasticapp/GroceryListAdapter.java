@@ -115,7 +115,6 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
             listHolder.listName = (TextView)row.findViewById(R.id.listName);
 
 
-
             //get items in row and set them to layout items
             /*listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
             // listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {

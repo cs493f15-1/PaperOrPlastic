@@ -82,7 +82,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
 
-            itemHolder = new ItemHolder();
+           itemHolder = new ItemHolder();
             //get items in row and set them to layout items
             itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
 
@@ -137,7 +137,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
         //set list row info
         ListItem item = mItemArray.get(position);
-        itemHolder.itemButton.setText(item.getItemName());
+       itemHolder.itemButton.setText(item.getItemName());
 
 
         return row;
