@@ -1,42 +1,42 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
+
 /**
- * Created by sull0678 on 10/12/2015.
+ * Created by heyd5159 on 2/6/2016.
  */
 
+        import java.io.PrintWriter;
+        import java.util.ArrayList;
+        import java.util.Scanner;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-public class KitchenLists extends PoPLists
+public abstract class PoPLists
 {
-    public static final String KITCHEN_FILE_NAME = "kitchenLists.txt";
+    ArrayList<PoPList> mLists;
 
-    ArrayList<KitchenList> mLists;
+    /*********************************
+     * Printing
+     *********************************/
 
-    public KitchenLists ()
+    public void printListNames ()
     {
-        mLists = new ArrayList<KitchenList>();
+        for (PoPList tempList : mLists)
+        {
+            tempList.printListName();
+        }
     }
 
     /*********************************
      * Gets
      ********************************/
 
-    public ArrayList<KitchenList> getArrayOfLists ()
-    {
-        return mLists;
-    }
-
-    public String getKListName(int listIndex)
+    public String getListName(int listIndex)
     {
         return mLists.get (listIndex).getListName();
     }
 
-    public KitchenList getList (int listIndex)
+    public PoPList getList (int listIndex)
     {
 
-        KitchenList list = null;
+        PoPList list = null;
         if (mLists.size() > listIndex)
         {
             list =  mLists.get(listIndex);
@@ -45,9 +45,14 @@ public class KitchenLists extends PoPLists
 
     }
 
-    public int getSize()
+    public int getSize ()
     {
         return mLists.size();
+    }
+
+    public ArrayList<PoPList> getArrayOfLists ()
+    {
+        return mLists;
     }
 
     /**********************************
@@ -63,66 +68,39 @@ public class KitchenLists extends PoPLists
      * Adding
      ********************************/
 
-    public void addList (String listName)
-    {
-        KitchenList newList = new KitchenList (listName);
-        mLists.add (newList);
-    }
-
-    //addListItem
-
+    public abstract void addList (String listName);
 
     /*********************************
      * Deletes
      ********************************/
-
     public void deleteList (int listIndex)
     {
-        mLists.remove(listIndex);
+        mLists.remove (listIndex);
     }
-
-    /*Functions
-        addListItem (listName);
-        deleteListItem ()
-        linkList (listName, groceryListName);
-        shareList (listName, username);
-        unShareList (listName, username);
-     */
-
-
 
     /*********************************
      * I/O
      ********************************/
-
-    public void printListNames ()
-    {
-        for (KitchenList tempList : mLists)
-        {
-            tempList.printListName();
-        }
-    }
 
     /********************************************************************************************
      * Function name: writeListsToFile
      *
      * Description: Outputs the current mLists to the passed in PrintWriter
      *
-     * Parameters: listsOutput - the printWriter which the kitchenLists will be outputted to
+     * Parameters: listsOutput - the printWriter which the PoPLists will be outputted to
      *
      * Returns: None
-    ******************************************************************************************/
+     ******************************************************************************************/
     public void writeListsToFile (PrintWriter listsOutput)
     {
         listsOutput.println(mLists.size());
 
-        for (KitchenList list : mLists)
+        for (PoPList glist : mLists)
         {
-            list.getListName();
-            list.writeListToFile(listsOutput);
+            glist.getListName();
+            glist.writeListToFile(listsOutput);
             listsOutput.flush();
         }
-
     }
 
     /********************************************************************************************
@@ -130,14 +108,14 @@ public class KitchenLists extends PoPLists
      *
      * Description: reads from a file using a scanner and inputs the information into mLists
      *
-     * Parameters: listsInput - the Scanner which the kitchenLists will be read from
+     * Parameters: listsInput - the Scanner which the PoPLists will be read from
      *
      * Returns: None
      ******************************************************************************************/
-    public void readListsFromFile (Scanner listsInput)
+    public  void readListsFromFile (Scanner listsInput)
     {
         int size;
-        KitchenList tempList;
+        PoPList tempList;
 
         size = listsInput.nextInt();
 
@@ -155,5 +133,6 @@ public class KitchenLists extends PoPLists
         {
             mLists.remove(i);
         }
+
     }
 }

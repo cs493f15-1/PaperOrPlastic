@@ -10,7 +10,7 @@
  *             from the continue activity.
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,7 +32,10 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory.DeleteKitchenListDFragment;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.DeleteListDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 
 

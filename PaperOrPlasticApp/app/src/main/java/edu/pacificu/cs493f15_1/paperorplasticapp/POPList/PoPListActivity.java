@@ -1,21 +1,21 @@
 /**************************************************************************************************
- *   File:     KitchenListActivity.java
+ *   File:     GroceryListActivity.java
  *   Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
  *   Date:     10/28/15
  *   Class:    Capstone/Software Engineering
  *   Project:  PaperOrPlastic Application
  *   Purpose:  This activity will be the activity that is opened when the user selects the
- *             kitchen list button from the continue activity
+ *             grocery list button from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.POPList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -36,36 +36,44 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.GroceryListActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.NewItemInfoDialogListener;
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
-import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
-import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 
 /***************************************************************************************************
- *   Class:         KitchenListActivity
- *   Description:   Creates KitchenListActivity class that controls what occurs when the user
- *                  selects the kitchen list option from the continue activity. Specifically
- *                  contains the list functionality.
+ *   Class:         POPListActivity
+ *   Description:   Creates POPListActivity class that is inherited by GroceryListActivity and
+ *                  KitchenInventoryActivity
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class KitchenListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public abstract class PoPListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
 
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
+    private QtyChangeDialogListener mQtyChangeListener;
     private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
     private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
-    private KitchenLists mKLists;
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
     private Button mbEdit;
     private boolean mbIsOnEdit;
     private String mLastAddedItemName;
+
+    private String mPoPFileName;
+    private PoPLists mPoPLists;
+
+    private int mItemLayout;
 
     private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
@@ -87,33 +95,18 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_kitchen_list);
+        PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list); //TODO test line remove;
+    }
+
+    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName)
+    {
+        setContentView(activitylayout);
+
+        mPoPLists = popLists;
+        mItemLayout = itemLayout;
+        mPoPFileName = fileName;
+
         mbIsOnEdit = false;
-
-        //init my kitchen lists
-        mKLists = new KitchenLists();
-
-        //to view items
-        mListView = (ListView) findViewById(R.id.listView);
-        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
-            @Override
-            public void onSwipeRight(int pos) {
-                //Toast.makeText (KitchenListsActivity.this, "right", Toast.LENGTH_LONG).show();
-
-                if (!mbIsOnEdit) {
-                    hideDeleteButton(pos);
-                }
-
-            }
-
-            @Override
-            public void onSwipeLeft(int pos) {
-                //Toast.makeText (KitchenListsActivity.this, "left", Toast.LENGTH_LONG).show();
-                if (!mbIsOnEdit) {
-                    showDeleteButton(pos);
-                }
-            }
-        });
 
         //setup tabs
         mListTabHost = (TabHost) findViewById(R.id.listTabHost);
@@ -126,44 +119,64 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                 if (mListAdapters.size() > 0) {
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
                 }
-            }
-        });
 
+                if (mbIsOnEdit) {
+                    if (mListAdapters.size() != 0)
+                    {
+                        int size = getCurrentPoPList().getSize();
+                        if (size > 0) {
 
-        //on click listener for buttons (connect to the view)
+                            for (int i = 0; i < size; i++) {
+                                showDeleteButton(i);
+                            }
+                        }
+                    }
+                }
+            }});
 
         //setup edit button
         mbEdit = (Button) findViewById(R.id.bEdit);
         mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //note, KitchenList object doesn't keep track of size, only the array of items within
-                // it does
-                int size = getCurrentKList().getSize();
-                if (size > 0) {
-                    if (!mbIsOnEdit) {
-                        mbIsOnEdit = true;
-                        for (int i = 0; i < size; i++) {
-                            showDeleteButton(i);
-                        }
-                    } else {
+                if (mListAdapters.size() != 0) {
+                    int size = getCurrentPoPList().getSize();
+                    if (size > 0) {
 
-                        //showDeleteButton also gets rid of the delete button so we might not need this check
-                        //TODO might need to show again if tab is changed
-                        mbIsOnEdit = false;
-                        for (int i = 0; i < size; i++) {
-                            hideDeleteButton(i);
+                        if (!mbIsOnEdit) {
+                            mbIsOnEdit = true;
+
+
+                            //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
+                            for (int i = 0; i < size; i++) {
+                                showDeleteButton(i);
+                            }
+                            mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+                            mbAddItem.setEnabled(false);
+
+                        } else {
+
+                            //showDeleteButton also gets rid of the delete button so we might not need this check
+
+                            mbIsOnEdit = false;
+
+                            mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+                            mbAddItem.setEnabled(true);
+                            for (int i = 0; i < size; i++) {
+                                hideDeleteButton(i);
+                            }
                         }
                     }
                 }
             }
         });
 
+        //set up back button
         mbBack = (Button) findViewById (R.id.bBackToHome);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(KitchenListActivity.this, ContinueActivity.class);
+                Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class); //TODO Come back to this maybe if statements?
                 startActivity (intent);
             }
         });
@@ -173,8 +186,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(KitchenListActivity.this, KitchenListSettingsActivity.class);
-                intent.putExtra("Caller", "KitchenListActivity");
+                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class); //TODO Come back to this maybe if statements?
+                intent.putExtra("Caller", "GroceryListActivity");
                 startActivity(intent);
             }
         });
@@ -195,9 +208,14 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mItemInfoListener = new NewItemInfoDialogListener() {
+
                     @Override
                     public void onFinishNewItemDialog(String inputText) {
+                        /*When newItemDialog finishes we want this to be called to make an item
+                        with the inputText as the name of the newItem and add it to the current
+                        selected list*/
                         ListItem newItem = new ListItem(inputText);
 
                         addItemToListView(newItem);
@@ -207,16 +225,24 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
                 fm = getSupportFragmentManager();
-                NewKitchenItemDFragment newItemFragment = new NewKitchenItemDFragment();
+                NewListItemDFragment newItemFragment = new NewListItemDFragment();
                 newItemFragment.show(fm, "Hi");
-
             }
         });
+
+
+        //set Add Item Button to not enabled if we have no list selected
+        if (mListAdapters.size() == 0) {
+            mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+            mbAddItem.setEnabled(false);
+        }
+
+
 
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(KitchenListActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(GroceryListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -224,10 +250,10 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                KitchenList currentList = getCurrentKList();
+                PoPList currentList = getCurrentPoPList();
 
-                if (null != currentList)
-                {
+                //functionality when we're using drop down sorting menu
+                if (null != currentList) {
                     switch (position)
                     {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
@@ -263,15 +289,36 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         });
 
 
-        //add all existing lists in KitchenLists to tabs
-        for (int i = 0; i < mKLists.getSize(); i++) {
-            addListTab(mKLists.getList(i), i);
-        }
+
+        //to view items in list
+        mListView = (ListView) findViewById(R.id.listView);
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
+            @Override
+            public void onSwipeRight(int pos) {
+
+
+                if (!mbIsOnEdit) {
+                    hideDeleteButton(pos);
+                }
+
+            }
+
+            @Override
+            public void onSwipeLeft(int pos) {
+
+                if (!mbIsOnEdit) {
+                    showDeleteButton(pos);
+                }
+            }
+        });
+
+
     }
+
     /********************************************************************************************
      * Function name: onPause
      *
-     * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
+     * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
      *
      * Parameters:    none
      *
@@ -282,14 +329,14 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         super.onPause();
 
-        writeKListsToKitchenFile();
-        mKLists.clearLists();
+        writeListsToFile();
+        mPoPLists.clearLists();
     }
     /********************************************************************************************
      * Function name: onResume
      *
-     * Description:   When the activity is resumed reads in KitchenLists from KITCHEN_FILE_NAME and
-     *                updates mKLists with the information.
+     * Description:   When the activity is resumed reads in GroceryLists from GROCERY_FILE_NAME and
+     *                updates mGLists with the information.
      *
      * Parameters:    none
      *
@@ -300,12 +347,23 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         super.onResume();
 
-        Context context = getApplicationContext();
-        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
+        //turn off edit and enable add item button
+        mbIsOnEdit = false;
+        mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+        mbAddItem.setEnabled(true);
 
-        if (kitchenFile.exists()) {
-            mKLists.clearLists();
-            readKListsFromKitchenFile(mKLists);
+        //read lists in
+        Context context = getApplicationContext();
+        File popFile = context.getFileStreamPath(mPoPFileName);
+
+        if (popFile.exists()) {
+            mPoPLists.clearLists();
+            readListsFromFile(mPoPLists);
+        }
+
+        if (mListAdapters.size() == 0) {
+            mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+            mbAddItem.setEnabled(false);
         }
     }
 
@@ -315,13 +373,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
      *
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     * index   - the index of the newList in the KitchenLists object, also the
-     * new tab spec id
+     *                index   - the index of the newList in the GroceryLists object, also the
+     *                          new tab spec id
      *
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListTab(KitchenList newList, int index)
+    private void addListTab(PoPList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
         spec.setContent(R.id.fragment);
@@ -330,18 +388,25 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //for keeping track of items in list
-        addListAdapter(mKLists.getList(index));
+        addListAdapter(mPoPLists.getList(index));
         mListTabHost.setCurrentTab(index);
+
+        //change AddItem button to enabled since you are going to have list tab selected
+        if (!mbAddItem.isEnabled())
+        {
+            mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+            mbAddItem.setEnabled(true);
+        }
     }
 
     /********************************************************************************************
      * Function name: onFinishListDialog
-     * <p/>
+     *
      * Description:   When dialog for adding list is done, add list and list tab with text from
-     * dialog as the new list name
-     * <p/>
+     *                dialog as the new list name
+     *
      * Parameters:    newListName - the new list's name
-     * <p/>
+     *
      * Returns:       none
      ******************************************************************************************/
 
@@ -349,9 +414,9 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     public void onFinishListDialog(String newListName)
     {
         //add List to Lists and create a tab
-        mKLists.addList(newListName);
+        mPoPLists.addList(newListName);
 
-        addListTab(mKLists.getList(mKLists.getSize() - 1), mKLists.getSize() - 1);
+        addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
 
     }
 
@@ -366,14 +431,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
     public void addItemToListView (ListItem newItem)
     {
-        //resort the list depending on the current sorting category
+        getCurrentPoPList().addItem(newItem);
 
-        getCurrentKList().addItem(newItem);
-
-        switch (getCurrentKList().getCurrentSortingValue())
+        //re-sort the list depending on the current sorting category
+        switch (getCurrentPoPList().getCurrentSortingValue())
         {
             case PoPList.SORT_ALPHA:
-                getCurrentKList().sortListByName();
+                getCurrentPoPList().sortListByName();
 
                 break;
             case PoPList.SORT_AISLE:
@@ -384,6 +448,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                 break;
 
         }
+        //notify list adapter that we added an item
         mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
     }
 
@@ -399,7 +464,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     public void showDeleteOnEdit (String itemName)
     {
-        int itemIndex = getCurrentKList().getItemIndex(itemName);
+        int itemIndex = getCurrentPoPList().getItemIndex(itemName);
         if (mbIsOnEdit && itemIndex != -1)
         {
             showDeleteButton(itemIndex);
@@ -408,38 +473,39 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     /********************************************************************************************
      * Function name: addListAdapter
-     * <p/>
-     * Description:   Adds a list adapter for mListView to keep track of the info in kList
-     * <p/>
-     * Parameters:    kList - the new list whose info needs to be kept track of
-     * <p/>
+     *
+     * Description:   Adds a list adapter for mListView to keep track of the info in gList
+     *
+     * Parameters:    gList - the new list whose info needs to be kept track of
+     *
      * Returns:       none
      ******************************************************************************************/
-    private void addListAdapter(KitchenList kList)
+
+    private void addListAdapter(PoPList popList)
     {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
-                R.layout.kitchen_list_item, kList.getItemArray()));
+                mItemLayout, popList.getItemArray()));
         ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
 
     /********************************************************************************************
-     * Function name: getCurrentKList
+     * Function name: getCurrentPoPList
      *
-     * Description:   Gets the KitchenList whose tab we have selected
+     * Description:   Gets the GroceryList whose tab we have selected
      *
      * Parameters:    none
      *
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public KitchenList getCurrentKList()
+    private PoPList getCurrentPoPList()
     {
-        KitchenList list = null;
+        PoPList list = null;
         int currentTabIndex = mListTabHost.getCurrentTab();
 
         if (TabHost.NO_ID != currentTabIndex) {
-            list = mKLists.getList(currentTabIndex);
+            list = mPoPLists.getList(currentTabIndex);
         }
 
         return list;
@@ -448,18 +514,18 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     /********************************************************************************************
      * Function name: getItemInfoListener
      *
-     * Description:
+     * Description:   returns the mItemInfoListener for other dialogs to use
      *
-     * Parameters:
+     * Parameters:     none
      *
-     * Returns:
+     * Returns:        mItemInfoListener
      ******************************************************************************************/
     public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 
     /********************************************************************************************
-     * Function name: showDeleteButton
+     * Function name: getQtyChangeListener
      *
      * Description:
      *
@@ -467,6 +533,22 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns:
      ******************************************************************************************/
+    public QtyChangeDialogListener getQtyChangeListener () {
+        return mQtyChangeListener;
+    }
+
+    /********************************************************************************************
+     * Function name: showDeleteButton
+     *
+     * Description:   Shows the delete button for the child view within listView and sets the
+     *                onClickListener for the delete button
+     *
+     * Parameters:    pos - the child position within the list view whose delete button will be
+     *                      shown
+     *
+     * Returns:       true if the child view with the button being hidden exists, else false
+     ******************************************************************************************/
+
     private boolean showDeleteButton(final int pos) {
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
@@ -477,8 +559,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                 @Override
                 public void onClick(View v)
                 {
-                    KitchenList kList = getCurrentKList();
-                    kList.delete(pos);
+                    PoPList poPList = getCurrentPoPList();
+                    poPList.delete(pos);
                     mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                 }
@@ -504,12 +586,13 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     /********************************************************************************************
      * Function name: hideDeleteButton
      *
-     * Description:
+     * Description:   Hides the delete button on each list view child
      *
-     * Parameters:
+     * Parameters:    pos - the child position within the list view
      *
-     * Returns:
+     * Returns:       true if the child view with the button being hidden exists, else false
      ******************************************************************************************/
+
     private boolean hideDeleteButton(final int pos) {
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
@@ -520,8 +603,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                 @Override
                 public void onClick(View v)
                 {
-                    KitchenList kList = getCurrentKList();
-                    kList.delete(pos);
+                    PoPList poPList = getCurrentPoPList();
+                    poPList.delete(pos);
                     mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                 }
@@ -549,57 +632,61 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     /********************************************************************************************
      * Function name: slideItemView
      *
-     * Description: Displays the slideItemView
+     * Description:   translates all objects in the view (inside of ListView) by the translation
+     *                amount
      *
-     * Parameters:
+     * Parameters:    child             - the view whose objects will be translated
+     *                translationAmount - how many pixels the objects in the view will be changed
+     *                                    by (on the x-axis)
      *
-     * Returns:
+     * Returns:       None
      ******************************************************************************************/
+
     private void slideItemView (View child, float translationAmount)
     {
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
-        Spinner spinner = (Spinner) child.findViewById(R.id.itemQuantitySpinner);
 
         checkBox.setTranslationX(translationAmount);
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
-        spinner.setTranslationX(translationAmount);
     }
+    /********************************************************************************************
+     * Function name: dispatchTouchEvent
+     *
+     * Description:   calls the super for fragment activity for swiping
+     *
+     * Parameters:    None
+     *
+     * Returns:       None
+     ******************************************************************************************/
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-
-        return super.dispatchTouchEvent(ev);
-    }
-    //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
-
-
-    public KitchenLists getLists () {
-        return mKLists;
+    public PoPLists getLists () {
+        return mPoPLists;
     }
 
     /********************************************************************************************
-     * Function name: writeKListsToKitchenFile
+     * Function name: writeGListsToGroceryFile
      *
-     * Description: Writes the current mKLists to KITCHEN_FILE_NAME to store the information stored in mKLists
+     * Description:   Writes the current mGLists to GROCERY_FILE_NAME to store the information
+     *                stored in mGLists
      *
-     * Parameters: None
+     * Parameters:    None
      *
-     * Returns: None
+     * Returns:       None
      ******************************************************************************************/
-    private void writeKListsToKitchenFile ()
+    private void writeListsToFile ()
     {
-        FileOutputStream kitchenOutput = null;
+        FileOutputStream popOutput = null;
         PrintWriter listsOutput = null;
 
         try
         {
-            kitchenOutput = openFileOutput(KitchenLists.KITCHEN_FILE_NAME, Context.MODE_PRIVATE);
+            popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
 
-            listsOutput = new PrintWriter(kitchenOutput);
-            mKLists.writeListsToFile(listsOutput);
+            listsOutput = new PrintWriter(popOutput);
+            mPoPLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
         }
@@ -609,31 +696,31 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     }
 
     /********************************************************************************************
-     * Function name: readKListsFromKitchenFile
+     * Function name: readGListsFromGroceryFile
      *
-     * Description: Reads from the KITCHEN_FILE_NAME the current KitchenLists
+     * Description:   Reads from the GROCERY_FILE_NAME the current GroceryLists
      *
-     * Parameters: None
+     * Parameters:    None
      *
-     * Returns: None
+     * Returns:       None
      ******************************************************************************************/
-    private void readKListsFromKitchenFile (KitchenLists kLists)
+    private void readListsFromFile (PoPLists popLists)
     {
-        FileInputStream kitchenInput;
+        FileInputStream popInput;
         Scanner listsInput;
 
         try {
-            kitchenInput = openFileInput(KitchenLists.KITCHEN_FILE_NAME);
+            popInput = openFileInput(mPoPFileName);
 
-            listsInput = new Scanner(kitchenInput);
-            kLists.readListsFromFile(listsInput);
+            listsInput = new Scanner(popInput);
+            popLists.readListsFromFile(listsInput);
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < kLists.getSize(); ++i) {
-            addListTab(kLists.getList(i), i);
+        for (int i = 0; i < popLists.getSize(); ++i) {
+            addListTab(popLists.getList(i), i);
         }
     }
 }

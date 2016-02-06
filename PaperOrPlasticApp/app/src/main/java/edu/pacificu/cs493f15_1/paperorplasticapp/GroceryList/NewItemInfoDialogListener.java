@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList;
 
 /**
  * Created by sull0678 on 11/9/2015.

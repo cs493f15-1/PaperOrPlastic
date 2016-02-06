@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,59 +10,53 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.QtyChangeDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+
 /**
- * Created by sull0678 on 11/3/2015.
+ * Created by sull0678 on 11/30/2015.
  */
-public class ListDFragment extends DialogFragment
+public class QuantityChangeDFragment extends DialogFragment
 {
-    private Button mbCancel;
     private Button mbOK;
-    private EditText mEditText;
+    private EditText mQtyText;
     private Dialog mDialog;
 
 
-    public interface EditNameDialogListener {
-        void onFinishListDialog(String inputText);
-    }
+    public QuantityChangeDFragment() {
 
-    public ListDFragment() {
         // Empty constructor required for DialogFragment
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.listdialogfragment, container,
+        View rootView = inflater.inflate(R.layout.dialog_quantity_change, container,
                 false);
 
         // Get field from view
-        mEditText = (EditText) rootView.findViewById(R.id.edit_text);
+        mQtyText = (EditText) rootView.findViewById(R.id.newQtyText);
 
         // Show soft keyboard automatically and request focus to field
-        mEditText.requestFocus();
+        mQtyText.requestFocus();
 
 
-        mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
-        mbCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-            }
-        });
 
         mbOK = (Button) rootView.findViewById (R.id.ok_button);
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                activity.onFinishListDialog(mEditText.getText().toString());
+                GroceryListActivity activity = (GroceryListActivity) getActivity();
+                QtyChangeDialogListener listener = activity.getQtyChangeListener();
+                listener.onFinishQtyChangeDialog(mQtyText.getText().toString());
                 mDialog.dismiss();
             }
         });
 
         mDialog = getDialog();
 
-        mDialog.setTitle("Add List");
+        //mDialog.setTitle("DialogFragment Tutorial");
+
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         // Do something else

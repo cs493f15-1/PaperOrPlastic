@@ -13,7 +13,7 @@
 ***************************************************************************************************/
 
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.SignIn;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -35,6 +35,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.Map;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
  *   Class:         MainSignInActivity

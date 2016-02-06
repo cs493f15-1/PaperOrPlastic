@@ -8,7 +8,7 @@
 *             grocery list button from the continue activity
 ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,7 +36,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.ListDFragment;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.ListItemAdapter;
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.QtyChangeDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;

@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,10 +10,14 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.NewItemInfoDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory.KitchenListActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+
 /**
  * Created by heyd5159 on 11/18/2015.
  */
-public class NewGroceryItemDFragment extends DialogFragment
+public class NewKitchenItemDFragment extends DialogFragment
 {
     private Button mbCancel;
     private Button mbOK;
@@ -21,7 +25,7 @@ public class NewGroceryItemDFragment extends DialogFragment
     private Dialog mDialog;
 
 
-    public NewGroceryItemDFragment() {
+    public NewKitchenItemDFragment() {
         // Empty constructor required for DialogFragment
     }
 
@@ -50,7 +54,7 @@ public class NewGroceryItemDFragment extends DialogFragment
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroceryListActivity activity = (GroceryListActivity) getActivity();
+                KitchenListActivity activity = (KitchenListActivity) getActivity();
                 NewItemInfoDialogListener listener = activity.getItemInfoListener();
                 listener.onFinishNewItemDialog(mItemNameText.getText().toString());
                 mDialog.dismiss();
@@ -60,7 +64,6 @@ public class NewGroceryItemDFragment extends DialogFragment
         mDialog = getDialog();
 
         mDialog.setTitle("Add Item");
-
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

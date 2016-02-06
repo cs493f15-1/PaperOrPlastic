@@ -8,7 +8,7 @@
  *             from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.Menu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.CouponsSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.GroceryListSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory.KitchenListSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.Coupons.CouponsSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.Nutrition.NutritionSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.Recipe.RecipesSettingsActivity;
 
 /***************************************************************************************************
  *   Class:         SettingsActivity

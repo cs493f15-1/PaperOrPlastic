@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,32 +10,32 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.DeleteListDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+
 /**
- * Created by heyd5159 on 11/18/2015.
+ * Created by sull0678 on 11/23/2015.
  */
-public class NewKitchenItemDFragment extends DialogFragment
+public class DeleteKitchenListDFragment extends DialogFragment
 {
+
     private Button mbCancel;
     private Button mbOK;
     private EditText mItemNameText;
     private Dialog mDialog;
+    private DeleteListDialogListener mListener;
 
 
-    public NewKitchenItemDFragment() {
+
+    public DeleteKitchenListDFragment() {
         // Empty constructor required for DialogFragment
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.new_item_dialog_fragment, container,
+        View rootView = inflater.inflate(R.layout.dfragment_delete_list, container,
                 false);
-
-        // Get field from view
-        mItemNameText = (EditText) rootView.findViewById(R.id.item_name_input);
-
-        // Show soft keyboard automatically and request focus to field
-        mItemNameText.requestFocus();
 
 
         mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
@@ -50,20 +50,21 @@ public class NewKitchenItemDFragment extends DialogFragment
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                KitchenListActivity activity = (KitchenListActivity) getActivity();
-                NewItemInfoDialogListener listener = activity.getItemInfoListener();
-                listener.onFinishNewItemDialog(mItemNameText.getText().toString());
+                KitchenListSettingsActivity activity = (KitchenListSettingsActivity) getActivity();
+                DeleteListDialogListener listener = activity.getDeleteDialogListener();
+                listener.onDeleted();
                 mDialog.dismiss();
             }
         });
 
         mDialog = getDialog();
 
-        mDialog.setTitle("Add Item");
+        mDialog.setTitle("Delete List");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         // Do something else
         return rootView;
     }
+
 }

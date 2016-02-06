@@ -1,10 +1,7 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.POPList;
 
-import android.content.Context;
 import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.View;
-import android.widget.ListView;
 
 import java.util.Timer;
 import java.util.TimerTask;

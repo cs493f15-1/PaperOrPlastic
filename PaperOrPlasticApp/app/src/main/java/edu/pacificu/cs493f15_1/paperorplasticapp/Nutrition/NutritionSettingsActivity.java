@@ -10,7 +10,7 @@
  *             from the continue activity.
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1.paperorplasticapp.Nutrition;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
  *   Class:         NutritionSettingsActivity
