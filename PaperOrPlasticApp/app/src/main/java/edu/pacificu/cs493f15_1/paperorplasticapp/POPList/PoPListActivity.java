@@ -36,12 +36,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.NewItemInfoDialogListener;
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
@@ -94,8 +91,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list); //TODO test line remove;
     }
 
     protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName)
@@ -176,7 +171,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroceryListActivity.this, ContinueActivity.class); //TODO Come back to this maybe if statements?
+                Intent intent = new Intent(PoPListActivity.this, ContinueActivity.class); //TODO Come back to this maybe if statements?
                 startActivity (intent);
             }
         });
@@ -186,7 +181,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(GroceryListActivity.this, GroceryListSettingsActivity.class); //TODO Come back to this maybe if statements?
+                Intent intent = new Intent(PoPListActivity.this, PoPListSettingsActivity.class); //TODO Come back to this maybe if statements?
                 intent.putExtra("Caller", "GroceryListActivity");
                 startActivity(intent);
             }
@@ -242,7 +237,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(GroceryListActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
