@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,6 +33,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.Map;
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
+
 /***************************************************************************************************
  *   Class:         MainSignInActivity
  *   Description:   Creates MainSignInActivity class that controls the initial sign in page

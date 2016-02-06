@@ -21,12 +21,12 @@
         </activity>
 
         <activity
-            android:name=".AboutActivity"
+            android:name=".Menu.AboutActivity"
             android:label="@string/title_activity_about">
         </activity>
 
         <activity
-            android:name=".ContinueActivity"
+            android:name=".Menu.ContinueActivity"
             android:label="@string/title_activity_continue">
         </activity>
 
@@ -66,12 +66,12 @@
         </activity>
 
         <activity
-            android:name=".CouponsActivity"
+            android:name=".Coupons.CouponsActivity"
             android:label="@string/title_activity_coupons">
         </activity>
 
         <activity
-            android:name=".CouponsSettingsActivity"
+            android:name=".Menu.CouponsSettingsActivity"
             android:label="@string/title_activity_coupons_settings">
         </activity>
 

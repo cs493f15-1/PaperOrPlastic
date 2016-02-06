@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.CouponsSettingsActivity;
+
 /***************************************************************************************************
  *   Class:         SettingsActivity
  *   Description:   Creates SettingsActivity class that controls what occurs when the user
