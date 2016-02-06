@@ -34,7 +34,12 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.Map;
-
+/***************************************************************************************************
+ *   Class:         MainSignInActivity
+ *   Description:   Creates MainSignInActivity class that controls the initial sign in page
+ *   Parameters:    N/A
+ *   Returned:      N/A
+ **************************************************************************************************/
 public class MainSignInActivity extends AppCompatActivity implements View.OnClickListener
 {
   private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
