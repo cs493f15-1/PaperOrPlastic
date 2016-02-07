@@ -237,7 +237,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         //For the Group By Spinner (sorting dropdown)
 
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,  //TODO Come back to this maybe if statements?
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
