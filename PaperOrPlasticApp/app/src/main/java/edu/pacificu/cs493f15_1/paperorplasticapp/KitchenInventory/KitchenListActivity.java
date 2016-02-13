@@ -10,42 +10,11 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TabHost;
-import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Scanner;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.ListDFragment;
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.ListItemAdapter;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.NewItemInfoDialogListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.PoPListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
-import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 
 /***************************************************************************************************
@@ -56,14 +25,17 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class KitchenListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public class KitchenListActivity  extends PoPListActivity {
+/*
 
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
     private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
-    private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); /* for later when you want to delete tabs?*/
+    private ArrayList<TabHost.TabSpec> list = new ArrayList<TabHost.TabSpec>(); */
+/* for later when you want to delete tabs?*//*
+
     private KitchenLists mKLists;
     private TabHost mListTabHost;
     private FragmentManager fm;
@@ -77,6 +49,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     Button delete;
 
     private NewItemInfoDialogListener mItemInfoListener;
+*/
 
     /********************************************************************************************
      * Function name: onCreate
@@ -92,7 +65,10 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_kitchen_list);
+        PoPOnCreate(savedInstanceState, new KitchenLists(), R.layout.activity_kitchen_list, R.layout.kitchen_list_item, KitchenLists.KITCHEN_FILE_NAME);
+    }
+}
+        /*setContentView(R.layout.activity_kitchen_list);
         mbIsOnEdit = false;
 
         //init my kitchen lists
@@ -273,7 +249,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             addListTab(mKLists.getList(i), i);
         }
     }
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onPause
      *
      * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
@@ -281,7 +257,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onPause ()
     {
@@ -290,7 +266,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         writeKListsToKitchenFile();
         mKLists.clearLists();
     }
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onResume
      *
      * Description:   When the activity is resumed reads in KitchenLists from KITCHEN_FILE_NAME and
@@ -299,7 +275,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onResume ()
     {
@@ -314,7 +290,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: addListTab
      *
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
@@ -324,7 +300,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * new tab spec id
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
 
     private void addListTab(KitchenList newList, int index)
     {
@@ -339,7 +315,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mListTabHost.setCurrentTab(index);
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onFinishListDialog
      * <p/>
      * Description:   When dialog for adding list is done, add list and list tab with text from
@@ -348,7 +324,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    newListName - the new list's name
      * <p/>
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
 
     @Override
     public void onFinishListDialog(String newListName)
@@ -360,7 +336,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: addItemToListView
      *
      * Description:   Adds item layout to listView as a new row and adds it to listadapter
@@ -368,7 +344,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    newItem - the new ListItem being added
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     public void addItemToListView (ListItem newItem)
     {
         //resort the list depending on the current sorting category
@@ -392,7 +368,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: showDeleteOnEdit
      *
      * Description:   Shows delete button for item if editing is on
@@ -400,7 +376,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    gList - the new list whose info needs to be kept track of
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
 
     public void showDeleteOnEdit (String itemName)
     {
@@ -411,7 +387,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: addListAdapter
      * <p/>
      * Description:   Adds a list adapter for mListView to keep track of the info in kList
@@ -419,7 +395,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    kList - the new list whose info needs to be kept track of
      * <p/>
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void addListAdapter(KitchenList kList)
     {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
@@ -428,7 +404,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mListView.setAdapter(newAdapter);
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: getCurrentKList
      *
      * Description:   Gets the KitchenList whose tab we have selected
@@ -436,7 +412,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:    none
      *
      * Returns:       the current list selected
-     ******************************************************************************************/
+     ******************************************************************************************//*
 
     public KitchenList getCurrentKList()
     {
@@ -450,7 +426,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return list;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: getItemInfoListener
      *
      * Description:
@@ -458,12 +434,12 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     public NewItemInfoDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: showDeleteButton
      *
      * Description:
@@ -471,7 +447,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean showDeleteButton(final int pos) {
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
@@ -506,7 +482,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return false;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: hideDeleteButton
      *
      * Description:
@@ -514,7 +490,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean hideDeleteButton(final int pos) {
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
@@ -551,7 +527,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return false;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: slideItemView
      *
      * Description: Displays the slideItemView
@@ -559,7 +535,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void slideItemView (View child, float translationAmount)
     {
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
@@ -585,7 +561,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         return mKLists;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: writeKListsToKitchenFile
      *
      * Description: Writes the current mKLists to KITCHEN_FILE_NAME to store the information stored in mKLists
@@ -593,7 +569,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters: None
      *
      * Returns: None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void writeKListsToKitchenFile ()
     {
         FileOutputStream kitchenOutput = null;
@@ -613,7 +589,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: readKListsFromKitchenFile
      *
      * Description: Reads from the KITCHEN_FILE_NAME the current KitchenLists
@@ -621,7 +597,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      * Parameters: None
      *
      * Returns: None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void readKListsFromKitchenFile (KitchenLists kLists)
     {
         FileInputStream kitchenInput;
@@ -642,3 +618,4 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         }
     }
 }
+*/

@@ -19,12 +19,9 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.DeleteListDialogListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.SettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
-import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 /**
  * Created by heyd5159 on 2/6/2016.
@@ -46,7 +43,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
     final float SLIDE_LEFT_ITEM = -145;
 
     private ListView mListOfListView;
-    private PoPList mPoPLists;
+    private PoPLists mPoPLists;
     private PoPListAdapter mListAdapter;
     private DeleteListDialogListener mDeleteListListener;
     private Button mbBack;
@@ -56,17 +53,22 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
     int position = 0;
     Button delete;
 
+    private String mPoPFileName;
+
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_grocery_list_settings);
+    }
+
+    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final String fileName)
+    {
+        setContentView(activitylayout);
         mbIsOnEdit = false;
 
-        //create grocery lists
-        mGLists = new GroceryLists ();
-
+        mPoPLists = popLists;
+        mPoPFileName = fileName;
 
         //set up button
         mbEdit = (Button) findViewById (R.id.bEdit);
@@ -74,7 +76,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
             @Override
             public void onClick(View v) {
                 //if its clicked, show or hide delete buttons
-                int size = mGLists.getSize();
+                int size = mPoPLists.getSize();
                 if (size > 0) {
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
@@ -105,9 +107,9 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
                 String caller = getIntent().getStringExtra("Caller");
                 Intent intent;
                 if (caller.equals("SettingsActivity")) {
-                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
+                    intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
                 } else {
-                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
+                    intent = new Intent(PoPListSettingsActivity.this, PoPListActivity.class);//TODO Come back to this maybe if statements?
                 }
 
                 startActivity(intent);
@@ -121,8 +123,9 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
         //set up list view to view lists
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
         //list adapter holds info of lists for listView
-        mListAdapter = new GroceryListAdapter(mListOfListView.getContext(),
-                R.layout.listview_list_row_settings, mGLists.getArrayOfLists());
+        mListAdapter = new PoPListAdapter(mListOfListView.getContext(),
+                R.layout.listview_list_row_settings, mPoPLists.getArrayOfLists()) {
+        };
 
         mListOfListView.setAdapter(mListAdapter);
 
@@ -146,10 +149,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
                 }
             }
         });
-
     }
-
-    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName)
 
 
     public void onClick (View view)
@@ -157,7 +157,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
     }
 
     /********************************************************************************************
-     * Function name: readGListsFromGroceryFile
+     * Function name: readListsFromFile
      *
      * Description:   Reads from the GROCERY_FILE_NAME the current GroceryLists
      *
@@ -165,15 +165,16 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
      *
      * Returns:       None
      ******************************************************************************************/
-    private void readGListsFromGroceryFile (GroceryLists gLists)
+    private void readListsFromFile (PoPLists popLists)
     {
-        FileInputStream groceryInput;
+        FileInputStream popInput;
         Scanner listsInput;
 
         try {
-            groceryInput = openFileInput(GroceryLists.GROCERY_FILE_NAME);
-            listsInput = new Scanner(groceryInput);
-            gLists.readListsFromFile(listsInput);
+            popInput = openFileInput(mPoPFileName);
+
+            listsInput = new Scanner(popInput);
+            popLists.readListsFromFile(listsInput);
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -190,20 +191,17 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
      *
      * Returns:       None
      ******************************************************************************************/
-    private void writeGListsToGroceryFile ()
+    private void writeListsToFile ()
     {
-        FileOutputStream groceryOutput = null;
+        FileOutputStream popOutput = null;
         PrintWriter listsOutput = null;
 
         try
         {
-            groceryOutput = openFileOutput(GroceryLists.GROCERY_FILE_NAME, Context.MODE_PRIVATE);
+            popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
 
-
-            listsOutput = new PrintWriter(groceryOutput);
-
-
-            mGLists.writeListsToFile(listsOutput);
+            listsOutput = new PrintWriter(popOutput);
+            mPoPLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
         }
@@ -242,7 +240,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
                         }
                     };
                     fm = getSupportFragmentManager();
-                    DeleteGroceryListDFragment deleteListFragment = new DeleteGroceryListDFragment();
+                    DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
                     deleteListFragment.show(fm, "Yeah");
 
                 }
@@ -343,12 +341,12 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
 
         //read list info from file
         Context context = getApplicationContext();
-        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
+        File groceryFile = context.getFileStreamPath(mPoPFileName);
 
         if (groceryFile.exists())
         {
-            mGLists.clearLists();
-            readGListsFromGroceryFile(mGLists);
+            mPoPLists.clearLists();
+            readListsFromFile(mPoPLists);
         }
     }
 
@@ -366,8 +364,8 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
     {
         super.onPause();
 
-        writeGListsToGroceryFile();
-        mGLists.clearLists();
+        writeListsToFile();
+        mPoPLists.clearLists();
 
     }
 
@@ -382,7 +380,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
      ******************************************************************************************/
     public void deleteList ()
     {
-        mGLists.deleteList(position);
+        mPoPLists.deleteList(position);
         mListAdapter.notifyDataSetChanged();
     }
 

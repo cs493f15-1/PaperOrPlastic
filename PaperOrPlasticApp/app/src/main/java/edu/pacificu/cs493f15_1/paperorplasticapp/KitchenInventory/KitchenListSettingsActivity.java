@@ -12,30 +12,10 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.DeleteListDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.PoPListSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
 
 
@@ -51,9 +31,8 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.KitchenLists;
  *   Returned:      N/A
  **************************************************************************************************/
 
-public class KitchenListSettingsActivity extends FragmentActivity implements View.OnClickListener
-{
-    final float SLIDE_RIGHT_ITEM = 5;
+public class KitchenListSettingsActivity  extends PoPListSettingsActivity {
+/*    final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
     private ListView mListOfListView;
@@ -66,13 +45,15 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
     private FragmentManager fm;
     int position = 0;
     Button delete;
-    //private Button mButtonShowGroceryList;
+    //private Button mButtonShowGroceryList;*/
 
     @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kitchen_list_settings);
+        PoPOnCreate(savedInstanceState, new KitchenLists(), R.layout.activity_kitchen_list_settings, KitchenLists.KITCHEN_FILE_NAME);
+    }
+}
+       /* setContentView(R.layout.activity_kitchen_list_settings);
         mbIsOnEdit = false;
 
         mbEdit = (Button) findViewById (R.id.bEdit);
@@ -100,7 +81,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
             }
         });
 
-        /*Do we need a back button?*/
+        *//*Do we need a back button?*//*
         mbBack = (Button) findViewById (R.id.bBack);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +136,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
     {
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: readKListsFromKitchenFile
      *
      * Description: Reads from the KITCHEN_FILE_NAME the current KitchenLists
@@ -163,7 +144,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters: kLists - the KitchenLists the file should be read into
      *
      * Returns: None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void readKListsFromKitchenFile (KitchenLists kLists)
     {
         FileInputStream kitchenInput;
@@ -184,7 +165,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: writeKListsToKitchenFile
      *
      * Description: Writes the current mGLists to KITCHEN_FILE_NAME to store the information stored in mKLists
@@ -192,7 +173,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters: None
      *
      * Returns: None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void writeGListsToGroceryFile ()
     {
         FileOutputStream kitchenOutput = null;
@@ -214,7 +195,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: showDeleteButton
      *
      * Description:
@@ -222,7 +203,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean showDeleteButton(final int pos) {
         position = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
@@ -265,7 +246,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
         return false;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: hideDeleteButton
      *
      * Description:
@@ -273,7 +254,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:
      *
      * Returns:
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean hideDeleteButton(final int pos) {
         position = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
@@ -315,7 +296,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
     }
 
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onResume
      *
      * Description:   When the activity is resumed reads in KitchenLists from KITCHEN_FILE_NAME and
@@ -324,7 +305,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onResume ()
     {
@@ -340,7 +321,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onPause
      *
      * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
@@ -348,7 +329,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onPause ()
     {
@@ -359,7 +340,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
 
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: deleteList
      *
      * Description:   When the activity is paused writes the KitchenLists to kitchenList.txt
@@ -367,14 +348,14 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     public void deleteList ()
     {
         mKLists.deleteList(position);
         mListAdapter.notifyDataSetChanged();
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name:
      *
      * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
@@ -382,10 +363,11 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     public DeleteListDialogListener getDeleteDialogListener()
     {
         return mDeleteListListener;
     }
 
 }
+*/

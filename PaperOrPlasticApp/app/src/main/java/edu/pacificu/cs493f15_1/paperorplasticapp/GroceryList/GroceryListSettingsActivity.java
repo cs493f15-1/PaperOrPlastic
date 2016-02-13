@@ -12,29 +12,10 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.OnSwipeTouchListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.DeleteListDialogListener;
+import edu.pacificu.cs493f15_1.paperorplasticapp.POPList.PoPListSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
 
 
@@ -49,9 +30,8 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
  *   Returned:      N/A
  **************************************************************************************************/
 
-public class GroceryListSettingsActivity extends FragmentActivity implements View.OnClickListener
-{
-    final float SLIDE_RIGHT_ITEM = 5;
+public class GroceryListSettingsActivity extends PoPListSettingsActivity {
+/*    final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
 
     private ListView mListOfListView;
@@ -63,13 +43,16 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
     private boolean mbIsOnEdit;
     private FragmentManager fm;
     int position = 0;
-    Button delete;
+    Button delete;*/
 
 
     @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list_settings, GroceryLists.GROCERY_FILE_NAME);
+    }
+}
+   /*
         setContentView(R.layout.activity_grocery_list_settings);
         mbIsOnEdit = false;
 
@@ -103,7 +86,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
             }
         });
 
-        /*Do we need a back button?*/
+        *//*Do we need a back button?*//*
         mbBack = (Button) findViewById (R.id.bBack);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +145,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
     {
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: readGListsFromGroceryFile
      *
      * Description:   Reads from the GROCERY_FILE_NAME the current GroceryLists
@@ -170,7 +153,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    None
      *
      * Returns:       None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void readGListsFromGroceryFile (GroceryLists gLists)
     {
         FileInputStream groceryInput;
@@ -186,7 +169,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: writeGListsToGroceryFile
      *
      * Description:   Writes the current mGLists to GROCERY_FILE_NAME to store the information
@@ -195,7 +178,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    None
      *
      * Returns:       None
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private void writeGListsToGroceryFile ()
     {
         FileOutputStream groceryOutput = null;
@@ -218,7 +201,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: showDeleteButton
      *
      * Description:   Shows the delete button for the child view within listView and sets the
@@ -228,7 +211,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      *                      shown
      *
      * Returns:       true if the child view with the button being hidden exists, else false
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean showDeleteButton(final int pos) {
         position = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
@@ -271,7 +254,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         return false;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: hideDeleteButton
      *
      * Description:   Hides the delete button on each list view child
@@ -279,7 +262,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    pos - the child position within the list view
      *
      * Returns:       true if the child view with the button being hidden exists, else false
-     ******************************************************************************************/
+     ******************************************************************************************//*
     private boolean hideDeleteButton(final int pos) {
         position = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
@@ -312,7 +295,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         return false;
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: slideItemView
      *
      * Description:   Slides the list view item over
@@ -321,7 +304,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      *                translationAmount - how much the view will slide
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
 
     private void slideItemView (View child, float translationAmount)
     {
@@ -331,7 +314,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
     }
 
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onResume
      *
      * Description:   When the activity is resumed reads in GroceryLists from GROCERY_FILE_NAME
@@ -340,7 +323,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onResume ()
     {
@@ -358,7 +341,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
         }
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: onPause
      *
      * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
@@ -366,7 +349,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
     @Override
     protected void onPause ()
     {
@@ -377,7 +360,7 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
 
     }
 
-    /********************************************************************************************
+    *//********************************************************************************************
      * Function name: deleteList
      *
      * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
@@ -385,14 +368,14 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       none
-     ******************************************************************************************/
+     ******************************************************************************************//*
      public void deleteList ()
      {
         mGLists.deleteList(position);
         mListAdapter.notifyDataSetChanged();
      }
 
-     /********************************************************************************************
+     *//********************************************************************************************
      * Function name: DeleteListDialogListener
      *
      * Description:   returns the mDeleteListListener for other class to use
@@ -400,10 +383,11 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
      * Parameters:    none
      *
      * Returns:       mDeleteListListener
-     ******************************************************************************************/
+     ******************************************************************************************//*
      public DeleteListDialogListener getDeleteDialogListener()
      {
          return mDeleteListListener;
      }
 
 }
+*/
