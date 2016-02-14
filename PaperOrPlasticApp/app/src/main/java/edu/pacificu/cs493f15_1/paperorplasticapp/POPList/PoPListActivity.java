@@ -8,7 +8,7 @@
  *             grocery list button from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.POPList;
+package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,9 +36,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.NewItemInfoDialogListener;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
@@ -93,7 +94,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         super.onCreate(savedInstanceState);
     }
 
-    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName)
+    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName, final boolean isGrocery)
     {
         setContentView(activitylayout);
 
@@ -116,8 +117,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                 }
 
                 if (mbIsOnEdit) {
-                    if (mListAdapters.size() != 0)
-                    {
+                    if (mListAdapters.size() != 0) {
                         int size = getCurrentPoPList().getSize();
                         if (size > 0) {
 
@@ -127,7 +127,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                         }
                     }
                 }
-            }});
+            }
+        });
 
         //setup edit button
         mbEdit = (Button) findViewById(R.id.bEdit);
@@ -171,22 +172,36 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PoPListActivity.this, ContinueActivity.class); //TODO Come back to this maybe if statements?
+                Intent intent = new Intent(PoPListActivity.this, ContinueActivity.class);
                 startActivity (intent);
             }
         });
 
-        //set up settings activity button
-        mbSettings = (Button) findViewById(R.id.bGListSettings);
-        mbSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PoPListActivity.this, PoPListSettingsActivity.class); //TODO Come back to this maybe if statements?
-                intent.putExtra("Caller", "GroceryListActivity");
-                startActivity(intent);
-            }
-        });
 
+        if (isGrocery) {
+            //set up settings activity button
+            mbSettings = (Button) findViewById(R.id.bListSettings);
+            mbSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PoPListActivity.this, GroceryListSettingsActivity.class);
+                    intent.putExtra("Caller", "GroceryListActivity");
+                    startActivity(intent);
+                }
+            });
+        }
+        else
+        {
+            mbSettings = (Button) findViewById(R.id.bListSettings);
+            mbSettings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(PoPListActivity.this, KitchenInventorySettingsActivity.class);
+                    intent.putExtra("Caller", "KitchenInventoryActivity");
+                    startActivity(intent);
+                }
+            });
+        }
         //set up addList button
         mbAddList = (Button) findViewById(R.id.bAddList);
         mbAddList.setOnClickListener(new View.OnClickListener() {

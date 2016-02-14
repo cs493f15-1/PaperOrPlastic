@@ -7,12 +7,12 @@ import java.util.Scanner;
 /**
  * Created by sull0678 on 10/12/2015.
  */
-public class KitchenList extends PoPList
+public class KitchenInventory extends PoPList
 {
     boolean bIsLinked;
     boolean bIsShared;
 
-    public KitchenList (String name)
+    public KitchenInventory(String name)
     {
         mListName = name;
         mItems = new ArrayList<ListItem>();
@@ -27,10 +27,6 @@ public class KitchenList extends PoPList
         unShareList ();
      */
 
-
-
-
-
     /*********************************
      * I/O
      ********************************/
@@ -40,7 +36,7 @@ public class KitchenList extends PoPList
      *
      * Description: Outputs the current list to the passed in PrintWriter
      *
-     * Parameters: listOutput - the printWriter which the kitchenList will be outputted to
+     * Parameters: listOutput - the printWriter which the KitchenInventory will be outputted to
      *
      * Returns: None
      ******************************************************************************************/
@@ -61,7 +57,7 @@ public class KitchenList extends PoPList
      *
      * Description: reads from a file using a scanner and inputs the information into the list
      *
-     * Parameters: listInput - the Scanner which the kitchenList will be read from
+     * Parameters: listInput - the Scanner which the KitchenInventory will be read from
      *
      * Returns: None
      ******************************************************************************************/

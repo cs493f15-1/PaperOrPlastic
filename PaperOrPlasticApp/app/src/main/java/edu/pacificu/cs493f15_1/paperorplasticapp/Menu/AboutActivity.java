@@ -8,7 +8,7 @@
  *             from the continue activity.
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.Menu;
+package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
 import android.app.Activity;
 import android.os.Bundle;

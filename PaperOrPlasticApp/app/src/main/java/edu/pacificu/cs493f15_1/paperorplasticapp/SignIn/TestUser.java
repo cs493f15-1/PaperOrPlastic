@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp.SignIn;
+package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
 /**
  * Created by alco8653 on 10/28/2015.

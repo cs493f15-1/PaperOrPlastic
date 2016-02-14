@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList;
+package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -13,56 +13,48 @@ import android.widget.EditText;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /**
- * Created by heyd5159 on 11/18/2015.
+ * Created by sull0678 on 11/30/2015.
  */
-public class NewGroceryItemDFragment extends DialogFragment
+public class QuantityChangeDFragment extends DialogFragment
 {
-    private Button mbCancel;
     private Button mbOK;
-    private EditText mItemNameText;
+    private EditText mQtyText;
     private Dialog mDialog;
 
 
-    public NewGroceryItemDFragment() {
+    public QuantityChangeDFragment() {
+
         // Empty constructor required for DialogFragment
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.new_item_dialog_fragment, container,
+        View rootView = inflater.inflate(R.layout.dialog_quantity_change, container,
                 false);
 
         // Get field from view
-        mItemNameText = (EditText) rootView.findViewById(R.id.item_name_input);
+        mQtyText = (EditText) rootView.findViewById(R.id.newQtyText);
 
         // Show soft keyboard automatically and request focus to field
-        mItemNameText.requestFocus();
+        mQtyText.requestFocus();
 
 
-        mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
-        mbCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-            }
-        });
 
         mbOK = (Button) rootView.findViewById (R.id.ok_button);
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroceryListActivity activity = (GroceryListActivity) getActivity();
-                NewItemInfoDialogListener listener = activity.getItemInfoListener();
-                listener.onFinishNewItemDialog(mItemNameText.getText().toString());
+                PoPListActivity activity = (PoPListActivity) getActivity();
+                QtyChangeDialogListener listener = activity.getQtyChangeListener();
+                listener.onFinishQtyChangeDialog(mQtyText.getText().toString());
                 mDialog.dismiss();
             }
         });
 
         mDialog = getDialog();
 
-        mDialog.setTitle("Add Item");
-
+        //mDialog.setTitle("DialogFragment Tutorial");
 
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

@@ -34,7 +34,7 @@
             <Button
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/bGListSettings"
+                android:id="@+id/bListSettings"
                 android:background="@drawable/settings"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"

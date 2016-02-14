@@ -10,7 +10,7 @@
     <string name="title_activity_grocery_lists_settings">Grocery Lists Settings</string>
 
     <string name="title_activity_kitchen_lists">Kitchen Lists</string>
-    <string name="title_activity_kitchen_lists_settings">Kitchen Lists Settings</string>
+    <string name="title_activity_kitchen_inventory_settings">Kitchen Lists Settings</string>
 
     <string name="title_activity_nutrition">Nutrition</string>
     <string name="title_activity_nutrition_settings">Nutrition Settings</string>

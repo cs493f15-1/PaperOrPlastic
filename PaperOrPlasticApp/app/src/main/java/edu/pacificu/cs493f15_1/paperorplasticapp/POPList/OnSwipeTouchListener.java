@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp.POPList;
+package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
 import android.view.GestureDetector;

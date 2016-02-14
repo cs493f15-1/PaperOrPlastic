@@ -8,7 +8,7 @@
  *             from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.Menu;
+package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,12 +16,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.GroceryListSettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory.KitchenListSettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Coupons.CouponsSettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Nutrition.NutritionSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Recipe.RecipesSettingsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesSettingsActivity;
 
 /***************************************************************************************************
  *   Class:         SettingsActivity
@@ -78,7 +78,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener
         if (mButtonKitchenList == view)
         {
             //will start a new activity using the intents
-            intent = new Intent (this, KitchenListSettingsActivity.class);
+            intent = new Intent (this, KitchenInventorySettingsActivity.class);
             intent.putExtra("Caller", "SettingsActivity");
             startActivity (intent);
         }

@@ -8,7 +8,7 @@
 *             application or when a user presses continue without signing in
 ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.Menu;
+package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -18,12 +18,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.Coupons.CouponsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.GroceryList.GroceryListActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.KitchenInventory.KitchenListActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Nutrition.NutritionActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.Recipe.RecipesActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
 
 /***************************************************************************************************
  *   Class:         ContinueActivity
@@ -212,7 +212,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         if (mButtonKitchenList == view)
         {
             //will start a new activity using the intents
-            intent = new Intent (this, KitchenListActivity.class);
+            intent = new Intent (this, KitchenInventoryActivity.class);
             startActivity (intent);
         }
 

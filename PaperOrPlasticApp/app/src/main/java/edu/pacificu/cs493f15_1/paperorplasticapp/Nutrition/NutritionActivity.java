@@ -8,7 +8,7 @@
  *             nutrition button from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.Nutrition;
+package edu.pacificu.cs493f15_1.paperorplasticapp.nutrition;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp.POPList;
+package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,8 +19,10 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.Menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 /**
@@ -37,7 +39,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
  *   Returned:      N/A
  **************************************************************************************************/
 
-public class PoPListSettingsActivity extends FragmentActivity implements View.OnClickListener
+public abstract class PoPListSettingsActivity extends FragmentActivity implements View.OnClickListener
 {
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
@@ -62,7 +64,7 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
         super.onCreate(savedInstanceState);
     }
 
-    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final String fileName)
+    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final String fileName, final boolean isGrocery)
     {
         setContentView(activitylayout);
         mbIsOnEdit = false;
@@ -109,7 +111,14 @@ public class PoPListSettingsActivity extends FragmentActivity implements View.On
                 if (caller.equals("SettingsActivity")) {
                     intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
                 } else {
-                    intent = new Intent(PoPListSettingsActivity.this, PoPListActivity.class);//TODO Come back to this maybe if statements?
+                    if (isGrocery) //whether the caller was groceryList
+                    {
+                        intent = new Intent(PoPListSettingsActivity.this, GroceryListActivity.class);
+                    }
+                    else
+                    {
+                        intent = new Intent(PoPListSettingsActivity.this, KitchenInventoryActivity.class);
+                    }
                 }
 
                 startActivity(intent);

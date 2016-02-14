@@ -6,11 +6,11 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
 
 import java.util.ArrayList;
 
-public class KitchenLists extends PoPLists {
-    public static final String KITCHEN_FILE_NAME = "kitchenLists.txt";
+public class KitchenInventories extends PoPLists {
+    public static final String KITCHEN_FILE_NAME = "kitchenInventories.txt";
 
 
-    public KitchenLists() {
+    public KitchenInventories() {
         mLists = new ArrayList<PoPList>();
     }
 
@@ -19,7 +19,7 @@ public class KitchenLists extends PoPLists {
      ********************************/
 
     public void addList(String listName) {
-        KitchenList newList = new KitchenList(listName);
+        KitchenInventory newList = new KitchenInventory(listName);
         mLists.add(newList);
     }
 }

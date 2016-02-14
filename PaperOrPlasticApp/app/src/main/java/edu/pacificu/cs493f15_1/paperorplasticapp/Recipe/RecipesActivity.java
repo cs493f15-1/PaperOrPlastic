@@ -8,7 +8,7 @@
  *             recipes button from the continue activity
  ***************************************************************************************************/
 
-package edu.pacificu.cs493f15_1.paperorplasticapp.Recipe;
+package edu.pacificu.cs493f15_1.paperorplasticapp.recipe;
 
 import android.app.Activity;
 import android.os.Bundle;
