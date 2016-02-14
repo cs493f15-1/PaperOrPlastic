@@ -46,12 +46,12 @@
         </activity>
 
         <activity
-            android:name=".kitchenInventory.KitchenListActivity"
-            android:label="@string/title_activity_kitchen_lists">
+            android:name=".kitchenInventory.KitchenInventoryActivity"
+            android:label="@string/title_activity_kitchen_inventories">
         </activity>
 
         <activity
-            android:name=".kitchenInventory.KitchenListSettingsActivity"
+            android:name=".kitchenInventory.KitchenInventorySettingsActivity"
             android:label="@string/title_activity_kitchen_inventory_settings">
         </activity>
 

@@ -59,7 +59,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sKList"
+        android:text="@string/sKInv"
         android:id="@+id/bSettKList"
         android:layout_below="@+id/bSettGList"
         android:layout_alignRight="@+id/bSettGList"

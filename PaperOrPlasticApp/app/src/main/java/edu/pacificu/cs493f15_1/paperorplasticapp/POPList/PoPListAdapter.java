@@ -39,11 +39,11 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
     /********************************************************************************************
      * Function name: getItem
      *
-     * Description:   returns GroceryList with corresponding index of variable position
+     * Description:   returns PoPList with corresponding index of variable position
      *
      * Parameters:    position
      *
-     * Returns:       GroceryList
+     * Returns:       PoPList
      ******************************************************************************************/
     @Override
     public PoPList getItem (int position) {
@@ -54,7 +54,7 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
     /********************************************************************************************
      * Function name: getItems
      *
-     * Description:   returns array of GroceryList objects
+     * Description:   returns array of PoPList objects
      *
      * Parameters:    none
      *

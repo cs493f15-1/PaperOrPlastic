@@ -26,14 +26,14 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.menu.SettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 /**
- * Created by heyd5159 on 2/6/2016.
+ * Altered by heyd5159 on 2/6/2016.
  */
 /***************************************************************************************************
- *   Class:         GroceryListSettingsActivity
- *   Description:   Creates GroceryListSettingsActivity class that controls what occurs when the
- *                  user reaches the grocery list settings page. Specifically, handles what happens
- *                  when the user specifies whether the grocery list button should be displayed on
- *                  the continue activity.
+ *   Class:         PoPListSettingsActivity
+ *   Description:   Creates PoPListSettingsActivity class that controls what occurs when the
+ *                  user reaches either the kitchen or grocery list settings page. Specifically,
+ *                  handles what happens when the user specifies whether the PoP list
+ *                  button should be displayed on the continue activity.
  *                  creates intents that take users to those specific pages.
  *   Parameters:    N/A
  *   Returned:      N/A
@@ -168,7 +168,7 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     /********************************************************************************************
      * Function name: readListsFromFile
      *
-     * Description:   Reads from the GROCERY_FILE_NAME the current GroceryLists
+     * Description:   Reads from the mPoPFileName the current GroceryLists
      *
      * Parameters:    None
      *
@@ -193,8 +193,8 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     /********************************************************************************************
      * Function name: writeGListsToGroceryFile
      *
-     * Description:   Writes the current mGLists to GROCERY_FILE_NAME to store the information
-     *                stored in mGLists
+     * Description:   Writes the current mPoPLists to mPoPFileName to store the information
+     *                stored in mPoPLists
      *
      * Parameters:    None
      *
@@ -335,8 +335,8 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     /********************************************************************************************
      * Function name: onResume
      *
-     * Description:   When the activity is resumed reads in GroceryLists from GROCERY_FILE_NAME
-     *                and updates mGLists with the information.
+     * Description:   When the activity is resumed reads in PoPLists from mPoPFileName
+     *                and updates mPoPLists with the information.
      *
      * Parameters:    none
      *
@@ -362,7 +362,7 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     /********************************************************************************************
      * Function name: onPause
      *
-     * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
+     * Description:   When the activity is paused writes the PoPLists to mPoPFileName
      *
      * Parameters:    none
      *
@@ -381,7 +381,7 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     /********************************************************************************************
      * Function name: deleteList
      *
-     * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
+     * Description:   When the activity is paused writes the PoPLists to mPoPFileName
      *
      * Parameters:    none
      *

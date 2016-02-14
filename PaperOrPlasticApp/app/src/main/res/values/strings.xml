@@ -9,8 +9,8 @@
     <string name="title_activity_grocery_lists">Grocery Lists</string>
     <string name="title_activity_grocery_lists_settings">Grocery Lists Settings</string>
 
-    <string name="title_activity_kitchen_lists">Kitchen Lists</string>
-    <string name="title_activity_kitchen_inventory_settings">Kitchen Lists Settings</string>
+    <string name="title_activity_kitchen_inventories">Kitchen Inventories</string>
+    <string name="title_activity_kitchen_inventory_settings">Kitchen Inventory Settings</string>
 
     <string name="title_activity_nutrition">Nutrition</string>
     <string name="title_activity_nutrition_settings">Nutrition Settings</string>
@@ -36,8 +36,8 @@
     <string name="sMyList">My List</string>
     <string name="sGList">Grocery List</string>
     <string name="sGListSettings">Grocery List Settings</string>
-    <string name="sKList">Kitchen List</string>
-    <string name="sKListSettings">Kitchen List Settings</string>
+    <string name="sKInv">Kitchen Inv.</string>
+    <string name="sKInvSettings">Kitchen Inv. Settings</string>
     <string name="sNutrition">Nutrition</string>
     <string name="sNutritionSettings">Nutrition Settings</string>
     <string name="sCoupons">Coupons</string>

@@ -110,7 +110,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
 //        initializeButtons (mButtonKitchenList, R.id.bContKList, laneNarrowFont);
 
-        mButtonKitchenList = (Button) findViewById (R.id.bContKList);
+        mButtonKitchenList = (Button) findViewById (R.id.bContKInv);
         mButtonKitchenList.setOnClickListener(this);
         mButtonKitchenList.getBackground().setAlpha(ALPHA_SETTING);
         mButtonKitchenList.setTypeface(laneNarrowFont, Typeface.BOLD);
@@ -140,7 +140,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         mButtonRecipes.setTypeface(laneNarrowFont, Typeface.BOLD);
 
         bGListButtonStatusFromSettings = (Button) findViewById (R.id.bContGList);
-        bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKList);
+        bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKInv);
         bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
         bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
         bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);

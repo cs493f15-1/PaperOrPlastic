@@ -107,8 +107,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sKList"
-        android:id="@+id/bContKList"
+        android:text="@string/sKInv"
+        android:id="@+id/bContKInv"
         android:alpha="75"
         android:background="#f6eaea"
         android:textStyle="bold"
@@ -152,7 +152,7 @@
         android:textAlignment="textStart"
         android:paddingStart="42dp"
         android:paddingTop="25dp"
-        android:layout_below="@+id/bContKList"
+        android:layout_below="@+id/bContKInv"
         android:layout_alignParentLeft="true" />
 
     <Button

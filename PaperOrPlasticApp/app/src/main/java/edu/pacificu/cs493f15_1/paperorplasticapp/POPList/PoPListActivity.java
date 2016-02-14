@@ -93,10 +93,27 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
         super.onCreate(savedInstanceState);
     }
-
-    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final int itemLayout, final String fileName, final boolean isGrocery)
+    /********************************************************************************************
+     * Function name: onCreate
+     * <p/>
+     * Description:   a function that is used in the OnCreate of GroceryListActivity and
+     *                KitchenInventoryActivity and is used to implement the functionality of the
+     *                Activity.
+     * <p/>
+     * Parameters:    savedInstanceState  - a bundle object
+     *                popList             - The lists object created in GroceryListActivity or KitchenInventoryActivity
+     *                activityLayout      - the layout of GroceryListActivity or KitchenInventoryActivity
+     *                itemLayout          - the layout of the items in GroceryListActivity or KitchenInventoryActivity
+     *                fileName            - the file which the PoPLists should be stored in
+     *                isGrocery           - A boolean on whether the activity is called from GroceryListActivity or not
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
+    protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists,
+                                final int activityLayout, final int itemLayout,
+                                final String fileName, final boolean isGrocery)
     {
-        setContentView(activitylayout);
+        setContentView(activityLayout);
 
         mPoPLists = popLists;
         mItemLayout = itemLayout;
@@ -328,7 +345,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     /********************************************************************************************
      * Function name: onPause
      *
-     * Description:   When the activity is paused writes the GroceryLists to groceryList.txt
+     * Description:   When the activity is paused writes the PoPLists to the file passed in OnCreate
      *
      * Parameters:    none
      *
@@ -345,8 +362,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     /********************************************************************************************
      * Function name: onResume
      *
-     * Description:   When the activity is resumed reads in GroceryLists from GROCERY_FILE_NAME and
-     *                updates mGLists with the information.
+     * Description:   When the activity is resumed reads in PoPLists from the file passed in OnCreate
+     *                and updates mPoPLists with the information.
      *
      * Parameters:    none
      *
@@ -383,7 +400,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
      *
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     *                index   - the index of the newList in the GroceryLists object, also the
+     *                index   - the index of the newList in the PoPLists object, also the
      *                          new tab spec id
      *
      * Returns:       none
@@ -467,7 +484,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      *
      * Description:   Shows delete button for item if editing is on
      *
-     * Parameters:    gList - the new list whose info needs to be kept track of
+     * Parameters:    itemName - the item that will be deleted
      *
      * Returns:       none
      ******************************************************************************************/
@@ -484,9 +501,9 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     /********************************************************************************************
      * Function name: addListAdapter
      *
-     * Description:   Adds a list adapter for mListView to keep track of the info in gList
+     * Description:   Adds a list adapter for mListView to keep track of the info in popList
      *
-     * Parameters:    gList - the new list whose info needs to be kept track of
+     * Parameters:    popList - the new list whose info needs to be kept track of
      *
      * Returns:       none
      ******************************************************************************************/
@@ -502,7 +519,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     /********************************************************************************************
      * Function name: getCurrentPoPList
      *
-     * Description:   Gets the GroceryList whose tab we have selected
+     * Description:   Gets the PoPList whose tab we have selected
      *
      * Parameters:    none
      *
@@ -677,10 +694,10 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     }
 
     /********************************************************************************************
-     * Function name: writeGListsToGroceryFile
+     * Function name: writeListsToFile
      *
-     * Description:   Writes the current mGLists to GROCERY_FILE_NAME to store the information
-     *                stored in mGLists
+     * Description:   Writes the current mPoPLists to mPoPFileName to store the information
+     *                stored in mPoPLists
      *
      * Parameters:    None
      *
@@ -706,9 +723,9 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     }
 
     /********************************************************************************************
-     * Function name: readGListsFromGroceryFile
+     * Function name: readListsFromFile
      *
-     * Description:   Reads from the GROCERY_FILE_NAME the current GroceryLists
+     * Description:   Reads from mPoPFileName the current PoPLists
      *
      * Parameters:    None
      *
