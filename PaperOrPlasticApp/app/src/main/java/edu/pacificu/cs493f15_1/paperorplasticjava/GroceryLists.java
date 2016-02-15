@@ -21,8 +21,10 @@ public class GroceryLists extends PoPLists
 
     public void addList (String listName)
     {
-        GroceryList newList = new GroceryList (listName);
-        mLists.add(newList);
+        if (!ListNameExists(listName)) {
+            GroceryList newList = new GroceryList(listName.toUpperCase());
+            mLists.add(newList);
+        }
     }
 
 }

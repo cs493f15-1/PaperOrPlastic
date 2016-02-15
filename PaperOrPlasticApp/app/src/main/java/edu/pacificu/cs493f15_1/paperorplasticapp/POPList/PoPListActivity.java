@@ -440,10 +440,17 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     @Override
     public void onFinishListDialog(String newListName)
     {
-        //add List to Lists and create a tab
-        mPoPLists.addList(newListName);
+        if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
+        {
+            //add List to Lists and create a tab
+            mPoPLists.addList(newListName);
 
-        addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
+            addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
+        }
+        else
+        {
+            //TODO output error to user saying List Name already exists
+        }
 
     }
 

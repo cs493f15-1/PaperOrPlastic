@@ -65,6 +65,32 @@ public abstract class PoPLists
     }
 
     /*********************************
+     * Exists
+     ********************************/
+
+    /**
+     * ListNameExists
+     *
+     * Checks if the list names exists in the list. Captilization does not matter.
+     *
+     * @param listName - the name of the list being checked
+     * @return whether the list name is in the list already
+     */
+    public boolean ListNameExists (String listName)
+    {
+        boolean bExists = false;
+        int i;
+        PoPList tempList;
+
+        for (i = 0; i < getSize() && !bExists; ++i)
+        {
+            tempList = getList(i);
+            bExists = (tempList.getListName().toUpperCase().contains (listName.toUpperCase()));
+        }
+
+        return bExists;
+    }
+    /*********************************
      * Adding
      ********************************/
 
