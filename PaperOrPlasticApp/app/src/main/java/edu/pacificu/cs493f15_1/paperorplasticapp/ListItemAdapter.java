@@ -3,12 +3,15 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -68,7 +71,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
     }*/
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(final int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
 
@@ -125,10 +128,31 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                        mTimerTask.cancel();
                     }
                 }
-
             });
 
-            row.setTag(itemHolder);
+            itemHolder.itemQuantity = (EditText)row.findViewById(R.id.input_qty);
+            itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
+            itemHolder.itemQuantity.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    mItemArray.get(position).setQuantity(Integer.parseInt(s.toString()));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // TODO Auto-generated method stub
+
+                }
+            });
+
+                    row.setTag(itemHolder);
         }
         else
         {
@@ -147,6 +171,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
     {
         Button itemButton;
         CheckBox checkBox;
+        EditText itemQuantity;
     }
 
 

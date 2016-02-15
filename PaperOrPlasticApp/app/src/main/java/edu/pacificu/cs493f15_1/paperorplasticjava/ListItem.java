@@ -131,6 +131,11 @@ public class ListItem
         mQuantity += quantityToAdd;
     }
 
+    public void setQuantity (int quantity)
+    {
+        mQuantity = quantity;
+    }
+
     public void setPrice (double price)
     {
         mPrice = price;

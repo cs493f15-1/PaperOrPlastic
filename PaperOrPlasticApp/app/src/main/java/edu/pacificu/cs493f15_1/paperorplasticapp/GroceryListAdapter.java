@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
  * Created by sull0678 on 11/23/2015.
+ *
+ * Used to show GroceryList names and properties in a list (Like in grocery list settings)
  */
 public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 {
@@ -27,7 +30,6 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
     int mLayoutResourceId;
     Context mContext;
     public int mPosition;
-    public int mQuantity;
 
     public GroceryListAdapter (Context context, int layoutResourceId, ArrayList<GroceryList> items)
     {
@@ -63,7 +65,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
      *
      * Returns:       mListArray
      ******************************************************************************************/
-    public ArrayList<GroceryList> getItems ()
+    public ArrayList<GroceryList> getLists ()
     {
         return mListArray;
     }
@@ -95,7 +97,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
      * Returns:       None
      ******************************************************************************************/
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(final int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
 
@@ -115,25 +117,6 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
             listHolder.listName = (TextView)row.findViewById(R.id.listName);
 
 
-            //get items in row and set them to layout items
-            /*listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
-            // listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mQtyChangeListeners.add (new QtyChangeDialogListener() {
-                        @Override
-                        public void onFinishQtyChangeDialog (String inputText) {
-                            mQuantity = (Integer.parseInt(inputText));
-
-                        }});
-
-                            FragmentActivity activity = (FragmentActivity)(mContext);
-                    FragmentManager fm = activity.getSupportFragmentManager();
-                    QuantityChangeDFragment dialog = new QuantityChangeDFragment();
-                    dialog.show(fm, "fragment");
-                }
-            });
-            */
 
            /* mItemInfoListener = new NewItemInfoDialogListener() {
                 @Override
@@ -166,13 +149,6 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
         QtyChangeDialogListener mQtyChangeListener;
         TextView listName;
         CheckBox checkBox;
-        TextView txtQuantity;
-       // Button bMinusQty;
-       //Button bAddQty;
-        int mQuantity = 1;
-
-
-
     }
 
 }
