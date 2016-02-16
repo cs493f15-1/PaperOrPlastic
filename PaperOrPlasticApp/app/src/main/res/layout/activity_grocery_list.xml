@@ -138,7 +138,8 @@
                 android:layout_marginBottom="5dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/sAddItem" />
+                android:text="@string/sAddItem"
+                style="@style/Base.Widget.AppCompat.Button.Borderless" />
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"
