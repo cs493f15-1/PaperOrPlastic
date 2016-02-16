@@ -13,6 +13,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.firebase.client.Firebase;
+
+import edu.pacificu.cs493f15_1.Utils.Constants;
+
 /**
  * Created by alco8653 on 11/19/2015.
 */
@@ -22,12 +25,16 @@ public class FirebaseUser implements Parcelable
   private Firebase  mMyRef = null;
   private boolean   mbRememberPass;
 
-  private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
+  //private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
+
+  public FirebaseUser ()
+  {}
+
 
   public FirebaseUser ( String uid )
   {
     mUID = uid;
-    mMyRef = new Firebase(FIREBASE_URL + "users/" + mUID + "/");
+    mMyRef = new Firebase(Constants.FIREBASE_URL + "users/" + mUID + "/");
     mbRememberPass = false;
   }
 

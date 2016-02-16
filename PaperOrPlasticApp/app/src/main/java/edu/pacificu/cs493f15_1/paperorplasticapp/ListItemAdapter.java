@@ -137,7 +137,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
         //set list row info
         ListItem item = mItemArray.get(position);
-        itemHolder.itemButton.setText(item.getItemName());
+        itemHolder.itemButton.setText(item.getmName());
 
 
         return row;

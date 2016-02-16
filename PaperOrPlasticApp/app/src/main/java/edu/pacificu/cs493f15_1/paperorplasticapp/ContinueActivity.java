@@ -57,6 +57,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
     //Controls the transparency of buttons
     final int ALPHA_SETTING = 35;
+
+
     private FirebaseUser fUserTest;
 
     /***********************************************************************************************

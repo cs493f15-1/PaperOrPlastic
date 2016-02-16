@@ -28,9 +28,11 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -75,6 +77,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
     private NewItemInfoDialogListener mItemInfoListener;
 
+
     private FirebaseUser mfCurrentUser;
 
 
@@ -100,6 +103,10 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         //init my kitchen lists
 
         mKLists = new KitchenLists();
+
+        mKLists.readKListsFromFirebase(mfCurrentUser);
+
+        System.out
 
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
@@ -147,7 +154,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             public void onClick(View v) {
                 //note, KitchenList object doesn't keep track of size, only the array of items within
                 // it does
-                int size = getCurrentKList().getSize();
+                int size = getCurrentKList().returnSize();
                 if (size > 0) {
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
@@ -241,26 +248,26 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
                     switch (position)
                     {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
-                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_NONE);
                             break;
                         case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
-                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_ALPHA);
                             currentList.sortListByName();
                             mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                             break;
                         case PoPList.SORT_CAL: //calories
-                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_CAL);
                             break;
                         case PoPList.SORT_DATE: //date entered
-                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_DATE);
                             break;
                         case PoPList.SORT_AISLE: //aisle
-                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_AISLE);
                             break;
                         case PoPList.SORT_PRICE: //price
-                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_PRICE);
                             break;
                     }
                 }
@@ -274,9 +281,11 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
 
         //add all existing lists in KitchenLists to tabs
-        for (int i = 0; i < mKLists.getSize(); i++) {
+        for (int i = 0; i < mKLists.returnSize(); i++) {
             addListTab(mKLists.getList(i), i);
         }
+
+
     }
     /********************************************************************************************
      * Function name: onPause
@@ -292,11 +301,11 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
       super.onPause();
 
-      writeKListsToKitchenFile();
+      //writeKListsToKitchenFile();
 
       mKLists.writeKListsToFirebase(mfCurrentUser);
 
-      mKLists.clearLists();
+      //KLists.clearLists();
 
 
     }
@@ -315,14 +324,17 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
       super.onResume();
 
-        Context context = getApplicationContext();
-        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
+//        Context context = getApplicationContext();
+//        File kitchenFile = context.getFileStreamPath(KitchenLists.KITCHEN_FILE_NAME);
+//
+//        if (kitchenFile.exists()) {
+//            mKLists.clearLists();
+//            //mListAdapters.clear();
+//          readKListsFromKitchenFile(mKLists);
+//        }
 
-        if (kitchenFile.exists()) {
-            mKLists.clearLists();
-            //mListAdapters.clear();
-          readKListsFromKitchenFile(mKLists);
-        }
+      //readKListsFromFirebase(mfCurrentUser);
+      mKLists.readKListsFromFirebase(mfCurrentUser);
     }
 
     /********************************************************************************************
@@ -341,7 +353,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
         spec.setContent(R.id.fragment);
-        spec.setIndicator(newList.getListName());
+        spec.setIndicator(newList.getmListName());
         mListTabHost.addTab(spec);
 
 
@@ -367,8 +379,8 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         //add List to Lists and create a tab
       mKLists.addList(newListName);
 
-      addListTab(mKLists.getList(mKLists.getSize() - 1), mKLists.getSize() - 1);
-
+      addListTab(mKLists.getList(mKLists.returnSize() - 1), mKLists.returnSize() - 1);
+      mKLists.writeKListsToFirebase(mfCurrentUser);
     }
 
     /********************************************************************************************
@@ -386,7 +398,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
 
         getCurrentKList().addItem(newItem);
 
-        switch (getCurrentKList().getCurrentSortingValue())
+        switch (getCurrentKList().getmCurrentSortingValue())
         {
             case PoPList.SORT_ALPHA:
                 getCurrentKList().sortListByName();
@@ -415,7 +427,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     public void showDeleteOnEdit (String itemName)
 
     {
-        int itemIndex = getCurrentKList().getItemIndex(itemName);
+        int itemIndex = getCurrentKList().returnItemIndex(itemName);
         if (mbIsOnEdit && itemIndex != -1)
         {
             showDeleteButton(itemIndex);
@@ -434,7 +446,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     private void addListAdapter(KitchenList kList)
     {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
-                R.layout.kitchen_list_item, kList.getItemArray()));
+                R.layout.kitchen_list_item, kList.returnItemArray()));
         ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }
@@ -648,10 +660,53 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
             e.printStackTrace();
         }
 
-        for (int i = 0; i < kLists.getSize(); ++i) {
+        for (int i = 0; i < kLists.returnSize(); ++i) {
             addListTab(kLists.getList(i), i);
         }
     }
+
+  /********************************************************************************************
+   * Function name: readKListsFromFirebase
+   *
+   * Description: Reads the Kitchen Lists from Firebase and sets the list of kitchen lists
+   *
+   * Parameters: currentUser - the user which we will read kitchen lists from
+   *
+   * Returns: None
+   *******************************************************************************************/
+  public void readKListsFromFirebase(FirebaseUser currentUser)
+  {
+    if (null != currentUser.getMyRef())
+    {
+      Firebase ref = new Firebase(currentUser.getMyRef().toString());
+
+
+      ref.child("Kitchen Lists").addListenerForSingleValueEvent(new ValueEventListener()
+      {
+        @Override
+        public void onDataChange(DataSnapshot snapshot)
+        {
+          int numLists = (int) snapshot.getChildrenCount();
+
+          for (int i = 0; i < numLists; ++i)
+          {
+            //create a list based on the data...
+
+            //currentUser.getMyRef().child("Kitchen Lists").child(getKListName(i)).setValue(getList(i));
+          }
+
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError)
+        {
+        }
+      });
+
+
+
+    }
+  }
 
 
 }

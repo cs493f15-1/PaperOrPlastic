@@ -2,20 +2,16 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
-import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
  * Created by sull0678 on 11/23/2015.
@@ -40,7 +36,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 
 
     /********************************************************************************************
-     * Function name: getItem
+     * Function name: returnItem
      *
      * Description:   returns GroceryList with corresponding index of variable position
      *
@@ -155,7 +151,7 @@ public class GroceryListAdapter extends ArrayAdapter<GroceryList>
 
         //set list row info
         GroceryList list = mListArray.get(position);
-        listHolder.listName.setText(list.getListName());
+        listHolder.listName.setText(list.getmListName());
 
 
         return row;

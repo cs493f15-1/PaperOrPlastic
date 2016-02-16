@@ -16,7 +16,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -28,7 +27,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -110,10 +108,10 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                 if (mbIsOnEdit) {
                     //show delete buttons
-                    // showDeleteOnEdit(getCurrentGList().getSize());
+                    // showDeleteOnEdit(getCurrentGList().returnSize());
                     if (mListAdapters.size() != 0)
                     {
-                        int size = getCurrentGList().getSize();
+                        int size = getCurrentGList().returnSize();
                         if (size > 0) {
 
                             for (int i = 0; i < size; i++) {
@@ -130,7 +128,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             @Override
             public void onClick(View v) {
                 if (mListAdapters.size() != 0) {
-                    int size = getCurrentGList().getSize();
+                    int size = getCurrentGList().returnSize();
                     if (size > 0) {
 
                         if (!mbIsOnEdit) {
@@ -247,26 +245,26 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                     switch (position)
                     {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
-                            currentList.setCurrentSortingValue(PoPList.SORT_NONE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_NONE);
                             break;
                         case PoPList.SORT_ALPHA: //second item in dropdown currently alphabetical
 
-                            currentList.setCurrentSortingValue(PoPList.SORT_ALPHA);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_ALPHA);
                             currentList.sortListByName();
                             mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                             break;
                         case PoPList.SORT_CAL: //calories
-                            currentList.setCurrentSortingValue(PoPList.SORT_CAL);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_CAL);
                             break;
                         case PoPList.SORT_DATE: //date entered
-                            currentList.setCurrentSortingValue(PoPList.SORT_DATE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_DATE);
                             break;
                         case PoPList.SORT_AISLE: //aisle
-                            currentList.setCurrentSortingValue(PoPList.SORT_AISLE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_AISLE);
                             break;
                         case PoPList.SORT_PRICE: //price
-                            currentList.setCurrentSortingValue(PoPList.SORT_PRICE);
+                            currentList.setmCurrentSortingValue(PoPList.SORT_PRICE);
                             break;
                     }
                 }
@@ -374,7 +372,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
         spec.setContent(R.id.fragment);
-        spec.setIndicator(newList.getListName());
+        spec.setIndicator(newList.getmListName());
         mListTabHost.addTab(spec);
 
 
@@ -425,7 +423,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         getCurrentGList().addItem(newItem);
 
         //re-sort the list depending on the current sorting category
-        switch (getCurrentGList().getCurrentSortingValue())
+        switch (getCurrentGList().getmCurrentSortingValue())
         {
             case PoPList.SORT_ALPHA:
                 getCurrentGList().sortListByName();
@@ -455,7 +453,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
     public void showDeleteOnEdit (String itemName)
     {
-        int itemIndex = getCurrentGList().getItemIndex(itemName);
+        int itemIndex = getCurrentGList().returnItemIndex(itemName);
         if (mbIsOnEdit && itemIndex != -1)
         {
             showDeleteButton(itemIndex);
@@ -475,7 +473,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private void addListAdapter(GroceryList gList)
     {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
-                R.layout.grocery_list_item, gList.getItemArray()));
+                R.layout.grocery_list_item, gList.returnItemArray()));
         ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
         mListView.setAdapter(newAdapter);
     }

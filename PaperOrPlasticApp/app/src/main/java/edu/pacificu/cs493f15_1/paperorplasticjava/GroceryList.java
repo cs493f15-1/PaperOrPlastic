@@ -9,8 +9,7 @@ import java.util.Scanner;
  */
 public class GroceryList extends PoPList
 {
-  boolean bIsLinked;
-  boolean bIsShared;
+
 
   public GroceryList (String name)
   {
@@ -27,6 +26,10 @@ public class GroceryList extends PoPList
         unShareList ();
     */
 
+
+
+
+
     /*********************************
      * I/O
      ********************************/
@@ -42,8 +45,8 @@ public class GroceryList extends PoPList
    ******************************************************************************************/
   public void writeListToFile (PrintWriter listOutput)
   {
-    listOutput.println(getListName());
-    listOutput.println(getSize() + " " + getCurrentSortingValue());
+    listOutput.println(getmListName());
+    listOutput.println(returnSize() + " " + getmCurrentSortingValue());
     for (ListItem item : mItems)
     {
       item.writeItemToFile(listOutput);
@@ -68,11 +71,11 @@ public class GroceryList extends PoPList
     ListItem tempItem;
 
     listInput.nextLine(); //get the new line character left from before
-    setListName(listInput.nextLine());
+    setmListName(listInput.nextLine());
 
     size = listInput.nextInt();
 
-    setCurrentSortingValue(listInput.nextInt());
+    setmCurrentSortingValue(listInput.nextInt());
 
     for (int i = 0; i < size; ++i)
     {

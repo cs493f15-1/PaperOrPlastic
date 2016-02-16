@@ -84,7 +84,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
             @Override
             public void onClick(View v) {
 
-                int size = mKLists.getSize();
+                int size = mKLists.returnSize();
                 if (size > 0) {
                     if (!mbIsOnEdit) {
                         mbIsOnEdit = true;
@@ -183,7 +183,7 @@ public class KitchenListSettingsActivity extends FragmentActivity implements Vie
             e.printStackTrace();
         }
 
-        for (int i = 0; i < kLists.getSize(); ++i) {
+        for (int i = 0; i < kLists.returnSize(); ++i) {
            Log.d("List" + i, kLists.getKListName(i));
         }
     }

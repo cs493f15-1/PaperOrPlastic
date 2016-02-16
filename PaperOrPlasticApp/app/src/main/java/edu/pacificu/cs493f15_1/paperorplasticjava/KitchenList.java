@@ -9,8 +9,11 @@ import java.util.Scanner;
  */
 public class KitchenList extends PoPList
 {
-    boolean bIsLinked;
-    boolean bIsShared;
+
+    public KitchenList ()
+    {
+
+    }
 
     public KitchenList (String name)
     {
@@ -28,10 +31,7 @@ public class KitchenList extends PoPList
      */
 
 
-
-
-
-    /*********************************
+/*********************************
      * I/O
      ********************************/
 
@@ -46,8 +46,8 @@ public class KitchenList extends PoPList
      ******************************************************************************************/
     public void writeListToFile (PrintWriter listOutput)
     {
-        listOutput.println(getListName());
-        listOutput.println(getSize() + " " + getCurrentSortingValue());
+        listOutput.println(getmListName());
+        listOutput.println(returnSize() + " " + getmCurrentSortingValue());
         for (ListItem item : mItems)
         {
             item.writeItemToFile(listOutput);
@@ -72,11 +72,11 @@ public class KitchenList extends PoPList
         ListItem tempItem;
 
         listInput.nextLine(); //get the new line character left from before
-        setListName(listInput.nextLine());
+        setmListName(listInput.nextLine());
 
         size = listInput.nextInt();
 
-        setCurrentSortingValue(listInput.nextInt());
+        setmCurrentSortingValue(listInput.nextInt());
 
         for (int i = 0; i < size; ++i)
         {

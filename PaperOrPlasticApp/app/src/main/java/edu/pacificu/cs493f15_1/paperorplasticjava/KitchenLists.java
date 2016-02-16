@@ -4,6 +4,11 @@ package edu.pacificu.cs493f15_1.paperorplasticjava;
  */
 
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -30,7 +35,7 @@ public class KitchenLists
 
     public String getKListName(int listIndex)
     {
-        return mLists.get (listIndex).getListName();
+        return mLists.get (listIndex).getmListName();
     }
 
     public KitchenList getList (int listIndex)
@@ -45,7 +50,7 @@ public class KitchenLists
 
     }
 
-    public int getSize()
+    public int returnSize()
     {
         return mLists.size();
     }
@@ -56,7 +61,7 @@ public class KitchenLists
 
     public void setListName (int listIndex, String newListName)
     {
-        mLists.get (listIndex).setListName (newListName);
+        mLists.get (listIndex).setmListName(newListName);
     }
 
     /*********************************
@@ -118,7 +123,7 @@ public class KitchenLists
 
         for (KitchenList list : mLists)
         {
-            list.getListName();
+            list.getmListName();
             list.writeListToFile(listsOutput);
             listsOutput.flush();
         }
@@ -163,7 +168,7 @@ public class KitchenLists
      * Description: Writes the current mKLists to Firebase (will write lists to the user's
      *              cloud if they are signed in)
      *
-     * Parameters: None
+     * Parameters: currentUser - the user whose data we will update
      *
      * Returns: None
      *******************************************************************************************/
@@ -171,11 +176,68 @@ public class KitchenLists
     {
         if (null != currentUser.getMyRef())
         {
-            for (int i = 0; i < getSize(); ++i)
+            for (int i = 0; i < returnSize(); ++i)
             {
                 currentUser.getMyRef().child("Kitchen Lists").child(getKListName(i)).setValue(getList(i));
             }
+          //currentUser.getMyRef().child("Kitchen Lists").setValue(mLists);
+
         }
     }
+
+  /********************************************************************************************
+   * Function name: readKListsFromFirebase
+   *
+   * Description: Reads the Kitchen Lists from Firebase and sets the list of kitchen lists
+   *
+   * Parameters: currentUser - the user which we will read kitchen lists from
+   *
+   * Returns: None
+   *******************************************************************************************/
+  public void readKListsFromFirebase(FirebaseUser currentUser)
+  {
+    if (null != currentUser.getMyRef())
+    {
+      final Firebase ref = new Firebase(currentUser.getMyRef().toString());
+
+
+      ref.child("Kitchen Lists").addListenerForSingleValueEvent(new ValueEventListener()
+      {
+        @Override
+        public void onDataChange(DataSnapshot snapshot)
+        {
+          int numLists = 0;
+          System.out.println("There are " + snapshot.getChildrenCount() + " lists");
+          for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+            //String listName = postSnapshot.getValue().toString();
+            //System.out.println("Current list is " + listName);
+            KitchenList kList = postSnapshot.getValue(KitchenList.class);
+            System.out.println("Current list is " + numLists);
+            //System.out.println("Current list is " + kList.getmListName());
+            mLists.add(numLists, kList);
+            ++numLists;
+          }
+
+
+//          for (int i = 0; i < numLists; ++i)
+//          {
+//            //create a list based on the data...
+//
+//            //mLists.add(i, );
+//            ref.child("Kitchen Lists").child(getKListName(i)).setValue(getList(i));
+//          }
+
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError)
+        {
+        }
+      });
+
+
+
+    }
+  }
 
 }

@@ -36,7 +36,7 @@ public class GroceryLists
 
     public String getGListName(int listIndex)
     {
-        return mLists.get (listIndex).getListName();
+        return mLists.get (listIndex).getmListName();
     }
 
     public GroceryList getList (int listIndex)
@@ -67,7 +67,7 @@ public class GroceryLists
 
     public void setListName (int listIndex, String newListName)
     {
-        mLists.get (listIndex).setListName (newListName);
+        mLists.get (listIndex).setmListName (newListName);
     }
 
     /*********************************
@@ -118,7 +118,7 @@ public class GroceryLists
 
         for (GroceryList glist : mLists)
         {
-            glist.getListName();
+            glist.getmListName();
             glist.writeListToFile(listsOutput);
             listsOutput.flush();
         }

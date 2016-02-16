@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.paperorplasticapp;
+package edu.pacificu.cs493f15_1;
 
 import com.firebase.client.Firebase;
 

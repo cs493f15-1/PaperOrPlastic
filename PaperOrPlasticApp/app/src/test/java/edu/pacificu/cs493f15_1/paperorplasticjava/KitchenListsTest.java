@@ -34,12 +34,12 @@ public class KitchenListsTest
     @Test
     public void TestAddItemWith0Items ()
     {
-        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.getSize());
+        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.returnSize());
 
         KLists.addList(kListName0);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getListName());
+        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.returnSize());
+        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getmListName());
     }
 
     /**
@@ -48,18 +48,18 @@ public class KitchenListsTest
     @Test
     public void TestAddItemWith1Item ()
     {
-        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.getSize());
+        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.returnSize());
 
         KLists.addList(kListName0);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getListName());
+        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.returnSize());
+        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getmListName());
 
         KLists.addList(kListName1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 2, KLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getListName());
-        Assert.assertEquals("The List1 returned was not as expected.", kListName1, KLists.getList(1).getListName());
+        Assert.assertEquals("The size of the List was not as expected.", 2, KLists.returnSize());
+        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getmListName());
+        Assert.assertEquals("The List1 returned was not as expected.", kListName1, KLists.getList(1).getmListName());
     }
 
     /**
@@ -67,16 +67,16 @@ public class KitchenListsTest
      */
     @Test
     public void TestDeleteListWith1Items () {
-        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.getSize());
+        Assert.assertEquals("The number of Lists was not as expected.", 0, KLists.returnSize());
 
         KLists.addList(kListName0);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getListName());
+        Assert.assertEquals("The size of the List was not as expected.", 1, KLists.returnSize());
+        Assert.assertEquals("The List1 returned was not as expected.", kListName0, KLists.getList(0).getmListName());
 
         KLists.deleteList(0);
 
-        Assert.assertEquals("The size of the List was not as expected.", 0, KLists.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, KLists.returnSize());
     }
 
 }

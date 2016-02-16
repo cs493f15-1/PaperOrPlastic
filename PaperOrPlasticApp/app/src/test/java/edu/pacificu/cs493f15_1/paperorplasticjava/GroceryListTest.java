@@ -41,12 +41,12 @@ public class GroceryListTest
     @Test
     public void TestGetItemReturnItem ()
     {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The List Item returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The List Item returned was not as expected.", item1, GList.returnItem(0));
     }
 
     /**
@@ -55,8 +55,8 @@ public class GroceryListTest
     @Test
     public void TestGetItemReturnNull ()
     {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
-        Assert.assertEquals("The List Item returned was not as expected.", null, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
+        Assert.assertEquals("The List Item returned was not as expected.", null, GList.returnItem(0));
     }
 
     /**
@@ -65,12 +65,12 @@ public class GroceryListTest
     @Test
     public void TestAddItemWith0Items ()
     {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
     }
 
     /**
@@ -79,18 +79,18 @@ public class GroceryListTest
     @Test
     public void TestAddItemWith1Item ()
     {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
 
         GList.addItem(item2);
 
-        Assert.assertEquals("The size of the List was not as expected.", 2, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
-        Assert.assertEquals("The List Item2 returned was not as expected.", item2, GList.getItem(1));
+        Assert.assertEquals("The size of the List was not as expected.", 2, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
+        Assert.assertEquals("The List Item2 returned was not as expected.", item2, GList.returnItem(1));
     }
 
     /**
@@ -98,20 +98,20 @@ public class GroceryListTest
      */
     @Test
     public void TestAddDuplicateItem () {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
 
         int expectedItem1Quantity = item1.getQuantity() + 1;
 
         GList.addItem(item1);
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The quantity of the list item was not as expected.", expectedItem1Quantity, GList.getItem(0).getQuantity());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The quantity of the list item was not as expected.", expectedItem1Quantity, GList.returnItem(0).getQuantity());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
     }
 
     /**
@@ -119,11 +119,11 @@ public class GroceryListTest
      */
     @Test
     public void TestDeleteListWith0Items () {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.deleteItem(item1.getItemName());
 
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
     }
 
     /**
@@ -131,17 +131,17 @@ public class GroceryListTest
      */
     @Test
     public void TestDeleteListWith1Items () {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1); //add an item to delete it
 
-        Assert.assertEquals("The size of the List was not as expected.", 1, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 1, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
 
         GList.deleteItem(item1.getItemName());
 
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", null, GList.getItem(0));
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", null, GList.returnItem(0));
     }
 
 
@@ -150,22 +150,22 @@ public class GroceryListTest
      */
     @Test
     public void TestDeleteListWith3Items () {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1); //add an item to delete it
         GList.addItem(item2); //add an item to delete it
         GList.addItem(item3); //add an item to delete it
 
-        Assert.assertEquals("The size of the List was not as expected.", 3, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
-        Assert.assertEquals("The List Item1 returned was not as expected.", item2, GList.getItem(1));
-        Assert.assertEquals("The List Item1 returned was not as expected.", item3, GList.getItem(2));
+        Assert.assertEquals("The size of the List was not as expected.", 3, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
+        Assert.assertEquals("The List Item1 returned was not as expected.", item2, GList.returnItem(1));
+        Assert.assertEquals("The List Item1 returned was not as expected.", item3, GList.returnItem(2));
 
         GList.deleteItem(item2.getItemName());
 
-        Assert.assertEquals("The size of the List was not as expected.", 2, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item3, GList.getItem(1));
-        Assert.assertEquals("The List Item1 returned was not as expected.", null, GList.getItem(2));
+        Assert.assertEquals("The size of the List was not as expected.", 2, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item3, GList.returnItem(1));
+        Assert.assertEquals("The List Item1 returned was not as expected.", null, GList.returnItem(2));
     }
 
     /**
@@ -174,24 +174,24 @@ public class GroceryListTest
     @Test
     public void TestSortbyName ()
     {
-        Assert.assertEquals("The size of the List was not as expected.", 0, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 0, GList.returnSize());
 
         GList.addItem(item1); //add an item to delete it
         GList.addItem(item2); //add an item to delete it
         GList.addItem(item3); //add an item to delete it
 
-        Assert.assertEquals("The size of the List was not as expected.", 3, GList.getSize());
-        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.getItem(0));
-        Assert.assertEquals("The List Item2 returned was not as expected.", item2, GList.getItem(1));
-        Assert.assertEquals("The List Item3 returned was not as expected.", item3, GList.getItem(2));
+        Assert.assertEquals("The size of the List was not as expected.", 3, GList.returnSize());
+        Assert.assertEquals("The List Item1 returned was not as expected.", item1, GList.returnItem(0));
+        Assert.assertEquals("The List Item2 returned was not as expected.", item2, GList.returnItem(1));
+        Assert.assertEquals("The List Item3 returned was not as expected.", item3, GList.returnItem(2));
 
         GList.sortListByName();
 
-        Assert.assertEquals("The size of the List was not as expected.", 3, GList.getSize());
+        Assert.assertEquals("The size of the List was not as expected.", 3, GList.returnSize());
 
-        Assert.assertEquals("The List Item1 returned was not as expected.", GList.getItem(0).getItemName(), item3.getItemName());
-        Assert.assertEquals("The List Item2 returned was not as expected.", GList.getItem(1).getItemName(), item1.getItemName());
-        Assert.assertEquals("The List Item3 returned was not as expected.", GList.getItem(2).getItemName(), item2.getItemName());
+        Assert.assertEquals("The List Item1 returned was not as expected.", GList.returnItem(0).getItemName(), item3.getItemName());
+        Assert.assertEquals("The List Item2 returned was not as expected.", GList.returnItem(1).getItemName(), item1.getItemName());
+        Assert.assertEquals("The List Item3 returned was not as expected.", GList.returnItem(2).getItemName(), item2.getItemName());
     }
 
 }

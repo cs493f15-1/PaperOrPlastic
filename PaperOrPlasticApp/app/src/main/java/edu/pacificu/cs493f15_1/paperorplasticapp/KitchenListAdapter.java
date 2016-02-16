@@ -82,7 +82,7 @@ public class KitchenListAdapter extends ArrayAdapter<KitchenList>
 
         //set list row info
         KitchenList list = mListArray.get(position);
-        listHolder.listName.setText(list.getListName());
+        listHolder.listName.setText(list.getmListName());
 
 
         return row;

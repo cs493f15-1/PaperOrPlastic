@@ -29,14 +29,12 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import edu.pacificu.cs493f15_1.Utils.Constants;
 import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 
 /***************************************************************************************************
@@ -47,7 +45,6 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
  **************************************************************************************************/
 public class MainSignInActivity extends AppCompatActivity implements View.OnClickListener
 {
-  private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
   private String SIGNIN_PREFS = "signinPrefs";
   private String SIGNIN_PREFS_BOOLEAN = "saveSignIn";
 
@@ -204,7 +201,7 @@ private void initializeSignInPrefs()
 private void initializeFirebase()
 {
   //Firebase.setAndroidContext(this.getApplication());
-  myFirebaseRef = new Firebase (FIREBASE_URL);
+  myFirebaseRef = new Firebase (Constants.FIREBASE_URL);
 }
 
 /***************************************************************************************************
@@ -484,9 +481,9 @@ public void rememberPass(String email, String password)
     mbResetSuccess = false;
     mbResetDismiss = false;
 
-    final EditText  txtUser = (EditText) login.findViewById(R.id.userEmail),
-                    txtToken = (EditText) login.findViewById(R.id.passwordToken),
-                    txtNewPass = (EditText) login.findViewById(R.id.newPassword);
+    final EditText  txtUser = (EditText) login.findViewById(R.id.txtUserEmail),
+                    txtToken = (EditText) login.findViewById(R.id.txtPassToken),
+                    txtNewPass = (EditText) login.findViewById(R.id.txtNewPass);
 
     //recoverPasswordDialog();
 
@@ -558,35 +555,39 @@ public void rememberPass(String email, String password)
   public String captureFirebaseError (FirebaseError error)
   {
     String errorMessage = "Firebase Error.";
-    switch (error.getCode())
+    if (null != error)
     {
-      case FirebaseError.EMAIL_TAKEN:
-        errorMessage = "Error: Email taken.";
-        break;
-      case FirebaseError.EXPIRED_TOKEN:
-        errorMessage = "Error: Expired token.";
-        break;
-      case FirebaseError.INVALID_EMAIL:
-        errorMessage = "Error: Invalid email.";
-        break;
-      case FirebaseError.INVALID_PASSWORD:
-        errorMessage = "Error: Invalid password.";
-        break;
-      case FirebaseError.INVALID_TOKEN:
-        errorMessage = "Error: Invalid token.";
-        break;
-      case FirebaseError.INVALID_CREDENTIALS:
-        errorMessage = "Error: Invalid credentials.";
-        break;
-      case FirebaseError.PERMISSION_DENIED:
-        errorMessage = "Error: Permission denied.";
-        break;
-      case FirebaseError.OPERATION_FAILED:
-        errorMessage = "Error: Operation failed.";
-        break;
-      default:
-        System.out.println("Firebase error");
+      switch (error.getCode())
+      {
+        case FirebaseError.EMAIL_TAKEN:
+          errorMessage = "Error: Email taken.";
+          break;
+        case FirebaseError.EXPIRED_TOKEN:
+          errorMessage = "Error: Expired token.";
+          break;
+        case FirebaseError.INVALID_EMAIL:
+          errorMessage = "Error: Invalid email.";
+          break;
+        case FirebaseError.INVALID_PASSWORD:
+          errorMessage = "Error: Invalid password.";
+          break;
+        case FirebaseError.INVALID_TOKEN:
+          errorMessage = "Error: Invalid token.";
+          break;
+        case FirebaseError.INVALID_CREDENTIALS:
+          errorMessage = "Error: Invalid credentials.";
+          break;
+        case FirebaseError.PERMISSION_DENIED:
+          errorMessage = "Error: Permission denied.";
+          break;
+        case FirebaseError.OPERATION_FAILED:
+          errorMessage = "Error: Operation failed.";
+          break;
+        default:
+          System.out.println("Firebase error");
+      }
     }
+
     return errorMessage;
   }
 
