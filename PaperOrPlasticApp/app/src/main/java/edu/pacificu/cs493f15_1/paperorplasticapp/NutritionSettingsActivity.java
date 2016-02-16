@@ -13,9 +13,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /***************************************************************************************************
  *   Class:         NutritionSettingsActivity
@@ -28,7 +30,8 @@ import android.widget.Button;
  **************************************************************************************************/
 public class NutritionSettingsActivity extends Activity implements View.OnClickListener
 {
-    private Button mButtonShowNutritionList;
+    //Used to change fonts
+    private TextView titleText;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -36,22 +39,22 @@ public class NutritionSettingsActivity extends Activity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nutrition_settings);
 
-        mButtonShowNutritionList = (Button) findViewById (R.id.bShowNutritionList);
-        mButtonShowNutritionList.setOnClickListener(this);
+        titleText = (TextView) findViewById (R.id.NutritionSettingsTitleText);
+
+        Typeface laneUpperFont = Typeface.createFromAsset (getAssets (), "fonts/laneWUnderLine.ttf");
+
+        titleText.setTypeface(laneUpperFont);
     }
 
+    /***********************************************************************************************
+     *   Method:      onClick
+     *   Description: Called when a click has been captured.
+     *
+     *   Parameters:  view - the view that has been clicked
+     *   Returned:    N/A
+     ***********************************************************************************************/
     public void onClick (View view)
     {
-        if (mButtonShowNutritionList == view)
-        {
-            if (ContinueActivity.bNutritionButtonStatusFromSettings.getVisibility() == View.VISIBLE)
-            {
-                ContinueActivity.bNutritionButtonStatusFromSettings.setVisibility(View.GONE);
-            }
-            else if (ContinueActivity.bNutritionButtonStatusFromSettings.getVisibility() == View.GONE)
-            {
-                ContinueActivity.bNutritionButtonStatusFromSettings.setVisibility(View.VISIBLE);
-            }
-        }
+
     }
 }
