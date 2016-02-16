@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,11 +32,11 @@ import java.util.List;
  **************************************************************************************************/
 public class ContinueActivity extends Activity implements View.OnClickListener
 {
-    //Buttons found on continue page
-   // static final int NUM_CONT_BUTTONS = 7;
-    //Button buttons[] = new Button[NUM_CONT_BUTTONS];
-
-    private enum Buttons { G_LIST,  }
+//    //Buttons found on continue page
+//   // static final int NUM_CONT_BUTTONS = 7;
+//    //Button buttons[] = new Button[NUM_CONT_BUTTONS];
+//
+//    private enum Buttons { G_LIST,  }
 
     static final int G_LIST = 0;
     static final int K_LIST = 1;
@@ -85,7 +84,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_continue);
 
         //Initialize text fields
-        titleText = (TextView) findViewById (R.id.PaperOrPlasticTitleText);
+        titleText = (TextView) findViewById (R.id.SettingsPageTitleText);
         Typeface laneUpperFont = Typeface.createFromAsset (getAssets (), "fonts/laneWUnderLine.ttf");
         Typeface laneNarrowFont = Typeface.createFromAsset (getAssets (), "fonts/LANENAR.ttf");
         titleText.setTypeface (laneUpperFont);

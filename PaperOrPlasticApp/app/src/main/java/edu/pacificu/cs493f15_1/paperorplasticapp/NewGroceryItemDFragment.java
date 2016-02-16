@@ -37,7 +37,6 @@ public class NewGroceryItemDFragment extends DialogFragment
         // Show soft keyboard automatically and request focus to field
         mItemNameText.requestFocus();
 
-
         mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
         mbCancel.setOnClickListener(new View.OnClickListener() {
             @Override

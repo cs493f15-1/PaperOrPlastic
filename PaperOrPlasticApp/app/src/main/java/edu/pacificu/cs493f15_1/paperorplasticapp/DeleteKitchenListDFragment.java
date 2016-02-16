@@ -53,6 +53,7 @@ public class DeleteKitchenListDFragment extends DialogFragment
                 false);
 
 
+
         mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
         mbCancel.setOnClickListener(new View.OnClickListener() {
             @Override

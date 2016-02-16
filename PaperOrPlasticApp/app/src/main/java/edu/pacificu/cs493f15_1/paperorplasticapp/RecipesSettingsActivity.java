@@ -13,9 +13,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 /***************************************************************************************************
  *   Class:         RecipesSettingsActivity
@@ -28,7 +30,8 @@ import android.widget.Button;
  **************************************************************************************************/
 public class RecipesSettingsActivity extends Activity implements View.OnClickListener
 {
-    private Button mButtonShowRecipesList;
+    //Used to change fonts
+    private TextView titleText;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -36,22 +39,15 @@ public class RecipesSettingsActivity extends Activity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes_settings);
 
-        mButtonShowRecipesList = (Button) findViewById (R.id.bShowRecipesList);
-        mButtonShowRecipesList.setOnClickListener(this);
+        titleText = (TextView) findViewById (R.id.RecipeSettingsTitleText);
+
+        Typeface laneUpperFont = Typeface.createFromAsset (getAssets (), "fonts/laneWUnderLine.ttf");
+
+        titleText.setTypeface(laneUpperFont);
     }
 
     public void onClick (View view)
     {
-        if (mButtonShowRecipesList == view)
-        {
-            if (ContinueActivity.bRecipesButtonStatusFromSettings.getVisibility() == View.VISIBLE)
-            {
-                ContinueActivity.bRecipesButtonStatusFromSettings.setVisibility(View.GONE);
-            }
-            else if (ContinueActivity.bRecipesButtonStatusFromSettings.getVisibility() == View.GONE)
-            {
-                ContinueActivity.bRecipesButtonStatusFromSettings.setVisibility(View.VISIBLE);
-            }
-        }
+
     }
 }

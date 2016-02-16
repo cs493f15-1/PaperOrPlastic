@@ -61,60 +61,75 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
     Button delete;
     //private Button mButtonShowGroceryList;
 
+
+    /********************************************************************************************
+     * Function name: onCreate
+     *
+     * Description:   Initializes all needed setup for objects in page
+     *
+     * Parameters:    savedInstanceState  - a bundle object
+     *
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_grocery_list_settings);
         mbIsOnEdit = false;
 
         //mButtonShowGroceryList = (Button) findViewById (R.id.bShowGroceryList);
         //mButtonShowGroceryList.setOnClickListener(this);
 
-        mbEdit = (Button) findViewById (R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int size = mGLists.getSize();
-                if (size > 0) {
-                    if (!mbIsOnEdit) {
-                        mbIsOnEdit = true;
-                        for (int i = 0; i < size; i++) {
-                            showDeleteButton(i);
-                        }
-                    } else {
-
-                        //showDeleteButton also gets rid of the delete button so we might not need this check
-                        //TODO might need to show again if tab is changed
-                        mbIsOnEdit = false;
-                        for (int i = 0; i < size; i++) {
-                            hideDeleteButton(i);
-                        }
-                    }
-                }
-            }
-        });
+        setupEditDeleteButtonsForGLists ();
+//        mbEdit = (Button) findViewById (R.id.bEdit);
+//        mbEdit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                int size = mGLists.getSize();
+//                if (size > 0) {
+//                    if (!mbIsOnEdit) {
+//                        mbIsOnEdit = true;
+//                        for (int i = 0; i < size; i++) {
+//                            showDeleteButton(i);
+//                        }
+//                    } else {
+//
+//                        //showDeleteButton also gets rid of the delete button so we might not need this check
+//                        //TODO might need to show again if tab is changed
+//                        mbIsOnEdit = false;
+//                        for (int i = 0; i < size; i++) {
+//                            hideDeleteButton(i);
+//                        }
+//                    }
+//                }
+//            }
+//        });
 
         /*Do we need a back button?*/
-        mbBack = (Button) findViewById (R.id.bBack);
-        mbBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                //go back to activity that called this page (possible pages are settings
-                // or grocery list page
-                String caller = getIntent().getStringExtra("Caller");
-                Intent intent;
-                if (caller.equals("SettingsActivity")) {
-                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
-                } else {
-                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
-                }
+        setupBackButton ();
 
-                startActivity(intent);
-            }
-        });
+//        mbBack = (Button) findViewById (R.id.bBack);
+//        mbBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //go back to activity that called this page (possible pages are settings
+//                // or grocery list page
+//                String caller = getIntent().getStringExtra("Caller");
+//                Intent intent;
+//                if (caller.equals("SettingsActivity")) {
+//                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
+//                } else {
+//                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
+//                }
+//
+//                startActivity(intent);
+//            }
+//        });
 
 
 
@@ -129,10 +144,6 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
 
         Context context = getApplicationContext();
         File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
-
-        if (groceryFile.exists()) {
-            readGListsFromGroceryFile(mGLists);
-        }
 
         //set up list view
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
@@ -178,6 +189,56 @@ public class GroceryListSettingsActivity extends FragmentActivity implements Vie
                 ContinueActivity.bGListButtonStatusFromSettings.setVisibility(View.VISIBLE);
             }
         }*/
+    }
+
+
+    private void setupBackButton () {
+        mbBack = (Button) findViewById(R.id.bBack);
+        mbBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //go back to activity that called this page (possible pages are settings
+                // or grocery list page
+                String caller = getIntent().getStringExtra("Caller");
+                Intent intent;
+                if (caller.equals("SettingsActivity")) {
+                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
+                } else {
+                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
+                }
+
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupEditDeleteButtonsForGLists ()
+    {
+        mbEdit = (Button) findViewById (R.id.bEdit);
+        mbEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int size = mGLists.getSize();
+                if (size > 0) {
+                    if (!mbIsOnEdit) {
+                        mbIsOnEdit = true;
+                        for (int i = 0; i < size; i++) {
+                            showDeleteButton(i);
+                        }
+                    } else {
+
+                        //showDeleteButton also gets rid of the delete button so we might not need this check
+                        //TODO might need to show again if tab is changed
+                        mbIsOnEdit = false;
+                        for (int i = 0; i < size; i++) {
+                            hideDeleteButton(i);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /********************************************************************************************

@@ -50,9 +50,10 @@
         android:paddingStart="40sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContRecipes"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
     <Button
         android:layout_width="150dp"
@@ -63,20 +64,21 @@
         android:background="#f6eaea"
         android:textSize="20dp"
         android:textAlignment="textStart"
-        android:paddingStart="49sp"
+        android:paddingStart="40sp"
         android:id="@+id/bContAbout"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContSettings"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Paper or Plastic"
-        android:id="@+id/PaperOrPlasticTitleText"
+        android:text="Paper Or Plastic"
+        android:id="@+id/SettingsPageTitleText"
         style="@style/Base.DialogWindowTitle.AppCompat"
         android:layout_below="@+id/tableLayout"
         android:layout_alignParentLeft="true"
@@ -95,14 +97,15 @@
         android:textAlignment="viewStart"
         android:textStyle="bold"
         android:textSize="20dp"
-        android:paddingStart="25sp"
-        android:layout_marginTop="44dp"
-        android:paddingTop="25dp"
-        android:layout_below="@+id/PaperOrPlasticTitleText"
+        android:paddingStart="40sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/SettingsPageTitleText"
+        android:layout_alignRight="@+id/bContLists"
+        android:layout_alignEnd="@+id/bContLists"
+        android:layout_marginTop="65dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -116,10 +119,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:textAlignment="textStart"
-        android:paddingStart="27dp"
-        android:paddingTop="25dp"
+        android:paddingStart="40sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContGList"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
     <Button
         android:layout_width="wrap_content"
@@ -131,12 +135,13 @@
         android:textStyle="bold"
         android:textSize="20dp"
         android:textAlignment="textStart"
-        android:paddingStart="39dp"
+        android:paddingStart="40sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContCoupons"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
     <Button
         android:layout_width="wrap_content"
@@ -150,10 +155,11 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:textAlignment="textStart"
-        android:paddingStart="42dp"
-        android:paddingTop="25dp"
+        android:paddingStart="40sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContKList"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
     <Button
         android:layout_width="wrap_content"
@@ -165,11 +171,12 @@
         android:textStyle="bold"
         android:textSize="20dp"
         android:textAlignment="textStart"
-        android:paddingStart="44dp"
+        android:paddingStart="40sp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:paddingTop="25dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_below="@+id/bContNutrition"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignRight="@+id/bContLists" />
 
 </RelativeLayout>
