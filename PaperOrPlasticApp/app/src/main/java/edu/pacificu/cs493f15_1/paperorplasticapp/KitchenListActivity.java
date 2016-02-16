@@ -105,9 +105,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mKLists = new KitchenLists();
 
         mKLists.readKListsFromFirebase(mfCurrentUser);
-
-        System.out
-
+      
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
         mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
