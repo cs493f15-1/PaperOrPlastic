@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +85,9 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             row = inflater.inflate(mLayoutResourceId, parent, false);
 
-
-           itemHolder = new ItemHolder();
             //get items in row and set them to layout items
+            itemHolder = new ItemHolder();
+
             itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
 
             //set up check box functionality
@@ -96,7 +97,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                 @Override
                 public void onClick (View v)
                 {
-                    //to wait for a certain amount of time
+                    //to wait to remove for a certain amount of time
                     if (!mbWaiting)
                     {
                         mbWaiting = Boolean.TRUE;
@@ -130,25 +131,26 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                 }
             });
 
+            //set up item quantity editText
             itemHolder.itemQuantity = (EditText)row.findViewById(R.id.input_qty);
             itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
             itemHolder.itemQuantity.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    mItemArray.get(position).setQuantity(Integer.parseInt(s.toString()));
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    // TODO Auto-generated method stub
-
+                    //if editText is not empty, assign new quantity to item
+                    if (!s.toString().isEmpty())
+                    {
+                        mItemArray.get(position).setQuantity(Integer.parseInt(s.toString()));
+                    }
                 }
 
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     // TODO Auto-generated method stub
-
                 }
             });
 

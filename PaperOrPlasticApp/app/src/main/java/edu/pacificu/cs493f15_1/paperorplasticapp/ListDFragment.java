@@ -40,7 +40,7 @@ public class ListDFragment extends DialogFragment
         // Get field from view
         mEditText = (EditText) rootView.findViewById(R.id.edit_text);
 
-        // Show soft keyboard automatically and request focus to field
+        // makes editText selected
         mEditText.requestFocus();
 
 

@@ -31,7 +31,7 @@ public class ListItem
     public ListItem ( String name)
     {
         mName = name;
-        mQuantity = 0;
+        mQuantity = 1;
         mCheckedOff = false;
         mNutritionFacts = new NutritionFacts();
         mNotes = "init";
