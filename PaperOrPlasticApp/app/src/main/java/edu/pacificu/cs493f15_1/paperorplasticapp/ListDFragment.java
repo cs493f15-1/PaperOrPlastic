@@ -29,11 +29,13 @@ public class ListDFragment extends DialogFragment
         // Empty constructor required for DialogFragment
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.listdialogfragment, container,
                 false);
+
 
         // Get field from view
         mEditText = (EditText) rootView.findViewById(R.id.edit_text);
@@ -64,7 +66,7 @@ public class ListDFragment extends DialogFragment
 
         mDialog.setTitle("Add List");
 
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
         // Do something else
         return rootView;
     }
