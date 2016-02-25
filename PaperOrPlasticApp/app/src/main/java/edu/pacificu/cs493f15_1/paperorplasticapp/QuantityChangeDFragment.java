@@ -44,8 +44,8 @@ public class QuantityChangeDFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 GroceryListActivity activity = (GroceryListActivity) getActivity();
-                QtyChangeDialogListener listener = activity.getQtyChangeListener();
-                listener.onFinishQtyChangeDialog(mQtyText.getText().toString());
+               // QtyChangeDialogListener listener = activity.getQtyChangeListener();
+            //    listener.onFinishQtyChangeDialog(mQtyText.getText().toString());
                 mDialog.dismiss();
             }
         });

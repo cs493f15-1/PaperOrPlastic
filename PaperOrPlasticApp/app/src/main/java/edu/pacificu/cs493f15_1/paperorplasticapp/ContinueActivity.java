@@ -12,8 +12,10 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -32,36 +34,21 @@ import java.util.List;
  **************************************************************************************************/
 public class ContinueActivity extends Activity implements View.OnClickListener
 {
-//    //Buttons found on continue page
-//   // static final int NUM_CONT_BUTTONS = 7;
-//    //Button buttons[] = new Button[NUM_CONT_BUTTONS];
-//
-//    private enum Buttons { G_LIST,  }
-
     static final int G_LIST = 0;
     static final int K_LIST = 1;
     static final int COUPONS = 2;
     static final int NUTRITION = 3;
-    static final int RECIPIES = 4;
+    static final int RECIPES = 4;
     static final int SETTINGS = 5;
     static final int ABOUT = 6;
+    static final int NUM_BUTTONS = 5;
 
-    private List<Button> buttons;
+    public static List<Button> buttons;
 
     private static final int[] BUTTON_IDS = {R.id.bContGList,   R.id.bContKList,
                                              R.id.bContCoupons, R.id.bContNutrition,
-                                             R.id.bContRecipes, R.id.bContSettings, R.id.bContAbout};
-
-
-    //Button status used to control which buttons appears as specified by settings
-    public static Button bGListButtonStatusFromSettings;
-    public static Button bKListButtonStatusFromSettings;
-    public static Button bNutritionButtonStatusFromSettings;
-    public static Button bCouponsButtonStatusFromSettings;
-    public static Button bRecipesButtonStatusFromSettings;
-
-    //Used to specify whether a button should be seen or not as specified by the settings
-    private boolean visibilityFlag = true;
+                                             R.id.bContRecipes, R.id.bContSettings,
+                                             R.id.bContAbout};
 
     //Used to change fonts
     private TextView titleText;
@@ -90,23 +77,18 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         titleText.setTypeface (laneUpperFont);
 
         //Create and initialize buttons
-        buttons = new ArrayList<Button>(BUTTON_IDS.length);
+        buttons = new ArrayList<Button> (BUTTON_IDS.length);
 
         for (int id: BUTTON_IDS)
         {
             Button button = (Button) findViewById(id);
             button.setOnClickListener(this);
-            button.getBackground().setAlpha(ALPHA_SETTING);
-            button.setTypeface(laneNarrowFont, Typeface.BOLD);
-            buttons.add(button);
+            button.getBackground ().setAlpha(ALPHA_SETTING);
+            button.setTypeface (laneNarrowFont, Typeface.BOLD);
+            buttons.add (button);
         }
 
-        //Determine whether or not buttons should be shown based on settings preferences
-        bGListButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[G_LIST]);
-        bKListButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[K_LIST]);
-        bCouponsButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[COUPONS]);
-        bNutritionButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[NUTRITION]);
-        bRecipesButtonStatusFromSettings = (Button) findViewById (BUTTON_IDS[RECIPIES]);
+        loadSavedPreferences ();
     }
 
 
@@ -119,13 +101,13 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     ***********************************************************************************************/
     public void onSaveInstanceState (Bundle savedInstanceState)
     {
-        super.onSaveInstanceState (savedInstanceState);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
-
-    private void setVisible( )
+    @Override
+    protected void onResume ()
     {
-        visibilityFlag = true;
+        super.onResume();
     }
 
     /***********************************************************************************************
@@ -147,47 +129,59 @@ public class ContinueActivity extends Activity implements View.OnClickListener
             intent = new Intent (this, GroceryListActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (K_LIST) == view)
+        else if (buttons.get (K_LIST) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, KitchenListActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (COUPONS) == view)
+        else if (buttons.get (COUPONS) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, CouponsActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (NUTRITION) == view)
+        else if (buttons.get (NUTRITION) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, NutritionActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (RECIPIES) == view)
+        else if (buttons.get (RECIPES) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, RecipesActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (SETTINGS) == view)
+        else if (buttons.get (SETTINGS) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, SettingsActivity.class);
             startActivity (intent);
         }
-
-        if (buttons.get (ABOUT) == view)
+        else if (buttons.get (ABOUT) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, AboutActivity.class);
             startActivity (intent);
+        }
+    }
+
+    public void loadSavedPreferences ()
+    {
+        for (int index = 0; index < NUM_BUTTONS; index++)
+        {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean switchIsChecked = sharedPreferences.getBoolean(SettingsActivity.SWITCH_PREF_KEYS[index], true);
+
+            if (switchIsChecked)
+            {
+                buttons.get (index).setVisibility(View.VISIBLE);
+
+            } else
+            {
+                buttons.get (index).setVisibility(View.GONE);
+            }
         }
     }
 }
