@@ -143,7 +143,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         //setup the sorting group by spinner (drop down list sorting)
         setUpGroupSpinnerHandleSorting();
 
-        addAllExistingListsInGroceryListsToTabs();
+        addAllExistingListsInPoPListsToTabs();
     }
 
 
@@ -363,7 +363,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     private void setUpGroupSpinnerHandleSorting ()
     {
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,  //TODO Come back to this maybe if statements?
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -409,7 +409,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     }
 
 
-    private void addAllExistingListsInGroceryListsToTabs()
+    private void addAllExistingListsInPoPListsToTabs()
     {
         for (int i = 0; i < mPoPLists.getSize(); i++)
         {

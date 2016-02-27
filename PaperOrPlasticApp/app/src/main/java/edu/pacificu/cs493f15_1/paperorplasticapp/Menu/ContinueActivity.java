@@ -20,17 +20,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
-=======
-import java.util.ArrayList;
-import java.util.List;
->>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
 
 /***************************************************************************************************
  *   Class:         ContinueActivity
@@ -54,7 +52,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
     public static List<Button> buttons;
 
-    private static final int[] BUTTON_IDS = {R.id.bContGList,   R.id.bContKList,
+    private static final int[] BUTTON_IDS = {R.id.bContGList,   R.id.bContKInv,
                                              R.id.bContCoupons, R.id.bContNutrition,
                                              R.id.bContRecipes, R.id.bContSettings,
                                              R.id.bContAbout};
@@ -85,8 +83,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         Typeface laneNarrowFont = Typeface.createFromAsset (getAssets (), "fonts/LANENAR.ttf");
         titleText.setTypeface (laneUpperFont);
 
-<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
-        //Initialize buttons
+/*        //Initialize buttons
         mButtonLists = (Button) findViewById (R.id.bContLists);
         mButtonLists.setOnClickListener(this);
 
@@ -147,8 +144,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKInv);
         bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
         bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
-        bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);
-=======
+        bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);*/
+
         //Create and initialize buttons
         buttons = new ArrayList<Button> (BUTTON_IDS.length);
 
@@ -160,7 +157,6 @@ public class ContinueActivity extends Activity implements View.OnClickListener
             button.setTypeface (laneNarrowFont, Typeface.BOLD);
             buttons.add (button);
         }
->>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
 
         loadSavedPreferences ();
     }
@@ -206,7 +202,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         else if (buttons.get (K_LIST) == view)
         {
             //will start a new activity using the intents
-            intent = new Intent (this, KitchenListActivity.class);
+            intent = new Intent (this, KitchenInventoryActivity.class);
             startActivity (intent);
         }
         else if (buttons.get (COUPONS) == view)
@@ -218,11 +214,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         else if (buttons.get (NUTRITION) == view)
         {
             //will start a new activity using the intents
-<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
-            intent = new Intent (this, KitchenInventoryActivity.class);
-=======
             intent = new Intent (this, NutritionActivity.class);
->>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
             startActivity (intent);
         }
         else if (buttons.get (RECIPES) == view)

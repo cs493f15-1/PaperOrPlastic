@@ -79,12 +79,15 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
         setContentView(activitylayout);
         mbIsOnEdit = false;
 
+        mPoPLists = popLists;
+        mPoPFileName = fileName;
+
         setupEditDeleteButtonsForGLists ();
 
         setupBackButton (isGrocery);
 
 /*<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/POPList/PoPListSettingsActivity.java
-        mPoPLists = popLists;
+      mPoPLists = popLists;
         mPoPFileName = fileName;
 
         //set up button

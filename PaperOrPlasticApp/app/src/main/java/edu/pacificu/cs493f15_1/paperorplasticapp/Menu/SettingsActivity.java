@@ -145,18 +145,11 @@ public class SettingsActivity extends Activity implements View.OnClickListener
 
         if (buttons.get (G_LIST) == view)
         {
-<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/SettingsActivity.java
-            //will start a new activity using the intents
-            intent = new Intent (this, KitchenInventorySettingsActivity.class);
-            intent.putExtra("Caller", "SettingsActivity");
-            startActivity (intent);
-=======
             startIntent (G_LIST, GroceryListSettingsActivity.class);
->>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/SettingsActivity.java
         }
         else if (buttons.get (K_LIST) == view)
         {
-            startIntent (K_LIST, KitchenListSettingsActivity.class);
+            startIntent (K_LIST, KitchenInventorySettingsActivity.class);
         }
         else if (buttons.get (NUTRITION) == view)
         {
