@@ -43,4 +43,5 @@ public class KitchenInventoryActivity  extends PoPListActivity {
 
         PoPOnCreate(savedInstanceState, new KitchenInventories(), R.layout.activity_kitchen_inventory, R.layout.kitchen_inventory_item, KitchenInventories.KITCHEN_FILE_NAME, false);
     }
+
 }

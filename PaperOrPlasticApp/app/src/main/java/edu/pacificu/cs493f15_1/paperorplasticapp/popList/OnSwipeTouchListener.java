@@ -1,6 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener
     ListView list;
     private GestureDetector gestureDetector;
     protected MotionEvent mLastOnDownEvent = null;
+    protected MotionEvent mLastOnUpEvent = null;
 
     private Context context;
 
@@ -30,6 +32,13 @@ public class OnSwipeTouchListener implements View.OnTouchListener
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Log.d ("OnSwipeTouchListener", "onTouch called");
+        if (event.getAction() == MotionEvent.ACTION_UP)
+        {
+            Log.d ("OnSwipeTouchListener", "onUpEvent set");
+            mLastOnUpEvent = event;
+        }
+
         return gestureDetector.onTouchEvent(event);
     }
 
@@ -48,7 +57,7 @@ public class OnSwipeTouchListener implements View.OnTouchListener
 
         @Override
         public boolean onDown(MotionEvent e) {
-
+            Log.d ("OnSwipeTouchListener", "onDown called");
             mLastOnDownEvent = e;
             return super.onDown(e);
 
@@ -60,11 +69,20 @@ public class OnSwipeTouchListener implements View.OnTouchListener
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
-            if (e1==null) {
+            Log.d ("OnSwipeTouchListener", "onFling called");
+            if (e1==null && mLastOnDownEvent != null) {
                 e1 = mLastOnDownEvent;
+                Log.d ("OnSwipeTouchListener", "e1 was null");
+            }
+            if (e2 == null && mLastOnUpEvent != null)
+            {
+                e2 = mLastOnUpEvent;
+                Log.d ("OnSwipeTouchListener", "e2 was null");
             }
             if (e1==null || e2==null) {
+                if (e1==null) {Log.d ("OnSwipeTouchListener", " e1 is null");}
+                if (e1==null) {Log.d ("OnSwipeTouchListener", "e2 is null");}
+
                 return false;
             }
             float distanceX = e2.getX() - e1.getX();

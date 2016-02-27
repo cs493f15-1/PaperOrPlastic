@@ -31,7 +31,7 @@ public class ListItem
     public ListItem ( String name)
     {
         mName = name;
-        mQuantity = 0;
+        mQuantity = 1;
         mCheckedOff = false;
         mNutritionFacts = new NutritionFacts();
         mNotes = "init";
@@ -129,6 +129,11 @@ public class ListItem
     public void setAddQuantity (int quantityToAdd)
     {
         mQuantity += quantityToAdd;
+    }
+
+    public void setQuantity (int quantity)
+    {
+        mQuantity = quantity;
     }
 
     public void setPrice (double price)

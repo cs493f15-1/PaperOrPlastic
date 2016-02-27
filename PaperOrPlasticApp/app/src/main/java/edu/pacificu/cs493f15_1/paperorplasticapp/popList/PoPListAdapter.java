@@ -15,7 +15,9 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 /**
- * Created by heyd5159 on 2/6/2016.
+ * Updated by heyd5159 on 2/27/2016.
+
+ * Used to show PoPList names and properties in a list (Like in kitchen/grocery list settings)
  */
 public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
 {
@@ -24,7 +26,6 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
     int mLayoutResourceId;
     Context mContext;
     public int mPosition;
-    public int mQuantity;
 
     public PoPListAdapter (Context context, int layoutResourceId, ArrayList<PoPList> items)
     {
@@ -92,7 +93,7 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
      * Returns:       None
      ******************************************************************************************/
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    public View getView(final int position, View convertView, ViewGroup parent)
     {
         View row = convertView;
 
@@ -109,25 +110,6 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
             //get items in row and set them to layout items
             listHolder.listName = (TextView)row.findViewById(R.id.listName);
 
-            //get items in row and set them to layout items
-            /*listHolder.txtQuantity = (TextView)row.findViewById(R.id.quantityValue);
-            // listHolder.txtQuantity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mQtyChangeListeners.add (new QtyChangeDialogListener() {
-                        @Override
-                        public void onFinishQtyChangeDialog (String inputText) {
-                            mQuantity = (Integer.parseInt(inputText));
-
-                        }});
-
-                            FragmentActivity activity = (FragmentActivity)(mContext);
-                    FragmentManager fm = activity.getSupportFragmentManager();
-                    QuantityChangeDFragment dialog = new QuantityChangeDFragment();
-                    dialog.show(fm, "fragment");
-                }
-            });
-            */
 
            /* mItemInfoListener = new NewItemInfoDialogListener() {
                 @Override
@@ -160,13 +142,6 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
         QtyChangeDialogListener mQtyChangeListener;
         TextView listName;
         CheckBox checkBox;
-        TextView txtQuantity;
-        // Button bMinusQty;
-        //Button bAddQty;
-        int mQuantity = 1;
-
-
-
     }
 
 }

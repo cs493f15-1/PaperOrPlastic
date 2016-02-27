@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -158,6 +160,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     ***********************************************************************************************/
     private void handleSwipingToDelete ()
     {
+/*
         mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
             @Override
             public void onSwipeRight(int pos) {
@@ -185,6 +188,31 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                 //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
                 if (!mbIsOnEdit) {
                     showDeleteButton(pos);
+                }
+            }
+        });
+*/
+
+        //to view items in list
+        mListView = (ListView) findViewById(R.id.listView);
+        //to be able to swipe list items over for delete
+        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
+            @Override
+            public void onSwipeRight(int pos) {
+                // Log.d("GroceryListActivity", "onSwipeRight function entered");
+
+                if (!mbIsOnEdit) {
+                    hideDeleteButton(pos);
+                }
+
+            }
+
+            @Override
+            public void onSwipeLeft(int pos) {
+                // Log.d("GroceryListActivity", "onSwipeLeft function entered");
+                if (!mbIsOnEdit) {
+                    showDeleteButton(pos);
+                    showDeleteButton(pos); //TODO can this be removed?
                 }
             }
         });
@@ -313,6 +341,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
                         addItemToListView(newItem);
                         mLastAddedItemName = inputText;
+
                     }
                 };
 
@@ -343,8 +372,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     Intent intent = new Intent(PoPListActivity.this, GroceryListSettingsActivity.class);
                     intent.putExtra("Caller", "GroceryListActivity");
                     startActivity(intent);
-                }
-                else {
+                } else {
                     Intent intent = new Intent(PoPListActivity.this, KitchenInventorySettingsActivity.class);
                     intent.putExtra("Caller", "KitchenInventoryActivity");
                     startActivity(intent);
@@ -408,15 +436,11 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         });
     }
 
-
-    private void addAllExistingListsInPoPListsToTabs()
-    {
-        for (int i = 0; i < mPoPLists.getSize(); i++)
-        {
+    private void addAllExistingListsInPoPListsToTabs() {
+        for (int i = 0; i < mPoPLists.getSize(); i++) {
             addListTab(mPoPLists.getList(i), i);
         }
     }
-
     /********************************************************************************************
      * Function name: onPause
      *
@@ -630,6 +654,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Returns:
      ******************************************************************************************/
     private boolean showDeleteButton(final int pos) {
+        Log.d("GroceryListActivity", "showDeleteButton function entered");
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
         if (child != null) {
@@ -673,6 +698,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Returns:
      ******************************************************************************************/
     private boolean hideDeleteButton(final int pos) {
+        Log.d("GroceryListActivity", "hideDeleteButton function entered");
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
         if (child != null) {
@@ -690,7 +716,9 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
             });
             if (delete != null)
             {
+                Log.d("GroceryListActivity", "swiping delete button");
                 if (delete.getVisibility() == View.VISIBLE) {
+                    Log.d("GroceryListActivity", " delete button not visible");
                     Animation deleteAnimation =
                             AnimationUtils.loadAnimation(this,
                                     R.anim.slide_in_right);
@@ -702,6 +730,10 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     slideItemView(child, SLIDE_RIGHT_ITEM);
 
                 }
+            }
+            else
+            {
+                Log.d("GroceryListActivity", "delete button is null");
             }
             return true;
         }
@@ -722,12 +754,12 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
-        Spinner spinner = (Spinner) child.findViewById(R.id.itemQuantitySpinner);
+        EditText qtyInput = (EditText) child.findViewById(R.id.input_qty);
 
         checkBox.setTranslationX(translationAmount);
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
-        spinner.setTranslationX(translationAmount);
+        qtyInput.setTranslationX(translationAmount);
     }
     /********************************************************************************************
      * Function name: dispatchTouchEvent
