@@ -1,10 +1,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,33 +19,24 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.List;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.ExecuteQueryTask;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
-/**
- * Created by heyd5159 on 11/18/2015.
- */
-public class ItemSearchActivity extends DialogFragment
+public class ItemSearchDialog extends DialogFragment
 {
-    private Button mbCancel;
-    private Button mbOK;
     private EditText mItemSearchQuery;
     private Dialog mDialog;
-    private ListView mSearchSuggestion;
-    private ListItem mItemResult;
+    private ListView mItemListView;
     private String mJSONItemResult;
-    private ListItemAdapter ListItemAdapter1;
-    private GroceryList gList;
+    private ListItemAdapter mListItemAdapter;
+    private ListItem mItemResult;
 
+    private ArrayList<ListItem> mSuggestions = new ArrayList<ListItem>();
 
-    public ItemSearchActivity() {
+    public ItemSearchDialog() {
         // Empty constructor required for DialogFragment
     }
 
@@ -55,30 +47,21 @@ public class ItemSearchActivity extends DialogFragment
         View rootView = inflater.inflate(R.layout.activity_new_item, container,
                 false);
 
-        mDialog = getDialog();
-
-        gList = new GroceryList ("Test");
-
-        //mSearchSuggestion = (ListView) rootView.findViewById(R.id.itemSearchList);
+        mItemListView = (ListView) rootView.findViewById(R.id.itemListView);
 
         // Get field from view
         mItemSearchQuery = (EditText) rootView.findViewById(R.id.action_search);
 
         mItemResult = new ListItem("Testing123");
 
-        gList.addItem(mItemResult);
+        //gList.addItem(mItemResult);
 
-        //ListItemAdapter1 = new ListItemAdapter (mSearchSuggestion.getContext(), R.layout.activity_new_item, gList.getItemArray());
+        mSuggestions.add(mItemResult);
 
-        //mSearchSuggestion.setAdapter(ListItemAdapter1);
+        mListItemAdapter = (new ListItemAdapter(mItemListView.getContext(),
+                R.layout.search_sug_item, mSuggestions));
 
-       // addListAdapter(gList);
-        //mSearchSuggestion.setAdapter(mListAdapters.get(0));
-        //addItemToListView (mItemResult);
-
-
-
-
+        mItemListView.setAdapter(mListItemAdapter);
 
         // Show soft keyboard automatically and request focus to field
         mItemSearchQuery.requestFocus();
@@ -92,8 +75,7 @@ public class ItemSearchActivity extends DialogFragment
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (null != s)
-                {
+                if (null != s) {
                     String searchData = mItemSearchQuery.getText().toString();
 
                     //Executes the QueryTask.
@@ -108,16 +90,37 @@ public class ItemSearchActivity extends DialogFragment
             }
         });
 
-
-        mItemSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        //Search key is pressed
+        mItemSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener()
+        {
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String searchData = mItemSearchQuery.getText().toString();
 
-                    //Executes the QueryTask.
-                    ExecuteQueryTask queryTask = new ExecuteQueryTask();
-                    queryTask.execute(searchData, null, mJSONItemResult);
+                if (actionId == EditorInfo.IME_ACTION_SEARCH)
+                {
+                    GroceryListActivity activity = (GroceryListActivity) getActivity();
+
+                    if (0 < activity.getNumGList())
+                    {
+                        ItemSearchDialogListener listener = activity.getItemInfoListener();
+                        listener.onFinishNewItemDialog(mItemSearchQuery.getText().toString());
+                        mDialog.dismiss();
+                    }
+
+                    else
+                    {
+                        AlertDialog noListDialog = new AlertDialog.Builder(mDialog.getContext()).create();
+                        noListDialog.setTitle("Item Not Added");
+                        noListDialog.setMessage("The item could not be added because there is no list available. Please create a list first.");
+                        noListDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                        noListDialog.show();
+                    }
 
                     return true;
                 }
@@ -126,7 +129,13 @@ public class ItemSearchActivity extends DialogFragment
             }
         });
 
+        mDialog = getDialog();
+        mDialog.setTitle("Add Item");
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        // Do something else
 
+
+        /*
         mbCancel = (Button) rootView.findViewById(R.id.cancel_button);
         mbCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,23 +144,21 @@ public class ItemSearchActivity extends DialogFragment
             }
         });
 
+
+
         mbOK = (Button) rootView.findViewById (R.id.ok_button);
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GroceryListActivity activity = (GroceryListActivity) getActivity();
-                NewItemInfoDialogListener listener = activity.getItemInfoListener();
-                //listener.onFinishNewItemDialog(mItemSearchQuery.getText().toString());
+                ItemSearchDialogListener listener = activity.getItemInfoListener();
+                listener.onFinishNewItemDialog(mItemSearchQuery.getText().toString());
                 mDialog.dismiss();
             }
-
-
         });
+        */
 
 
-
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        // Do something else
 
         return rootView;
         }

@@ -3,9 +3,9 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 /**
  * Created by sull0678 on 11/9/2015.
  */
-public class NewItemInfoDialogListener
+public class ItemSearchDialogListener
 {
-    public NewItemInfoDialogListener ()
+    public ItemSearchDialogListener()
     {
 
     }
@@ -20,10 +20,7 @@ public class NewItemInfoDialogListener
     private String serv_size_unit;
     private double serv_size_weight;
 
-     public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
-                                       String item_type, String item_description,
-                                       int serv_per_cont, double serv_size_qty,
-                                       String serv_size_unit, double serv_size_weight)
+     public void onFinishNewItemDialog(String item_name)
      {
 
      }

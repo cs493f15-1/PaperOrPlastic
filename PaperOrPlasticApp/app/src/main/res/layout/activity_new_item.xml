@@ -23,23 +23,32 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="200dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="false"
         android:id="@+id/FrameLayoutItems"
         android:layout_alignParentEnd="false"
         android:layout_below="@+id/action_search">
-
+<!--
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/itemSearchList"
+            android:id="@+id/itemListView"
             android:layout_below="@+id/action_search"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="false"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"/>-->
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/itemListView"
+            android:layout_gravity="left|top" />
+
+
     </FrameLayout>
 
+    <!--
     <Button
         android:id="@+id/ok_button"
         android:layout_width="wrap_content"
@@ -64,6 +73,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/FrameLayoutItems"/>
-
+    -->
 
 </RelativeLayout>

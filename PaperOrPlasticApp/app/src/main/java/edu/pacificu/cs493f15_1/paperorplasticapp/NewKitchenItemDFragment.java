@@ -51,7 +51,7 @@ public class NewKitchenItemDFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 KitchenListActivity activity = (KitchenListActivity) getActivity();
-                NewItemInfoDialogListener listener = activity.getItemInfoListener();
+                ItemSearchDialogListener listener = activity.getItemInfoListener();
                // listener.onFinishNewItemDialog(mItemNameText.getText().toString());
                 mDialog.dismiss();
             }

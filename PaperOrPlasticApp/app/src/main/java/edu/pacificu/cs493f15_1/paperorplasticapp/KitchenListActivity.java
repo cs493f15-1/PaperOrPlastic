@@ -45,7 +45,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
     Button delete;
 
     private long mLastClickTime;
-    private NewItemInfoDialogListener mItemInfoListener;
+    private ItemSearchDialogListener mItemInfoListener;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -120,12 +120,15 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemInfoListener = new NewItemInfoDialogListener() {
+                mItemInfoListener = new ItemSearchDialogListener() {
+                    /*
                     @Override
                     public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
                                                       String item_type, String item_description,
                                                       int serv_per_cont, double serv_size_qty, String serv_size_unit,
-                                                      double serv_size_weight) {
+                                                      double serv_size_weight) {*/
+                    @Override
+                    public void onFinishNewItemDialog(String item_name) {
                         ListItem newItem = new ListItem(item_name);
                         addItemToListView(newItem);
                     }
@@ -363,7 +366,7 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns:
      ******************************************************************************************/
-    public NewItemInfoDialogListener getItemInfoListener () {
+    public ItemSearchDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 

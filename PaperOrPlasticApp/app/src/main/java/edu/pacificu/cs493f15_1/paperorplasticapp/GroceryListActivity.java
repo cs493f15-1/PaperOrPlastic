@@ -1,12 +1,12 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ListFragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -52,13 +52,14 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private Button mbEdit;
     private boolean mbIsOnEdit;
     private String mLastAddedItemName;
+    private ListFragment listFrag;
 
     private ArrayList<ListItemAdapter> mListAdapters = new ArrayList<ListItemAdapter>();
     int position = 0;
     Button delete;
 
 
-    private NewItemInfoDialogListener mItemInfoListener;
+    private ItemSearchDialogListener mItemInfoListener;
 
     /********************************************************************************************
      * Function name: onCreate
@@ -71,6 +72,8 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         //Used for add item
         Intent intent;
 
@@ -119,6 +122,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                 }
             }
         });
+
 
 
         //on click listener for buttons (connect to the view)
@@ -188,15 +192,16 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mItemInfoListener = new NewItemInfoDialogListener() {
+                mItemInfoListener = new ItemSearchDialogListener() {
+                    /*
                     @Override
                     public void onFinishNewItemDialog(String itemId, String item_name, String brand_name,
 													  String item_type, String item_description,
 													  int serv_per_cont, double serv_size_qty, String serv_size_unit,
-													  double serv_size_weight) {
-                        ListItem newItem = new ListItem(itemId, item_name, brand_name,
-                                item_type, item_description, serv_per_cont, serv_size_qty,
-                                serv_size_unit, serv_size_weight);
+													  double serv_size_weight) {*/
+                    @Override
+                    public void onFinishNewItemDialog(String item_name) {
+                        ListItem newItem = new ListItem(item_name);
 
                         addItemToListView(newItem);
                         mLastAddedItemName = item_name;
@@ -205,7 +210,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
 
                 fm = getSupportFragmentManager();
-                ItemSearchActivity newItemFragment = new ItemSearchActivity();
+
+                //Search Dialog - not activity, have to change name to ItemSearchDialog 12/9
+                ItemSearchDialog newItemFragment = new ItemSearchDialog();
                 newItemFragment.show(fm, "Hi");
             }
         });
@@ -326,7 +333,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     private void addListTab(GroceryList newList, int index)
     {
         TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
-        spec.setContent(R.id.fragment);
+        spec.setContent(R.id.listView);
         spec.setIndicator(newList.getListName());
         mListTabHost.addTab(spec);
 
@@ -334,6 +341,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         //for keeping track of items in list
         addListAdapter(mGLists.getList(index));
         mListTabHost.setCurrentTab(index);
+
     }
 
     /********************************************************************************************
@@ -449,6 +457,21 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     }
 
     /********************************************************************************************
+     * Function name: getNumGLists
+     *
+     * Description:   Gets the total number of GroceryLists
+     *
+     * Parameters:    none
+     *
+     * Returns:       the total number of GLists
+     ******************************************************************************************/
+
+    public int getNumGList()
+    {
+        return mGLists.getSize();
+    }
+
+    /********************************************************************************************
      * Function name: getItemInfoListener
      *
      * Description:
@@ -457,7 +480,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      *
      * Returns:
      ******************************************************************************************/
-    public NewItemInfoDialogListener getItemInfoListener () {
+    public ItemSearchDialogListener getItemInfoListener () {
         return mItemInfoListener;
     }
 
