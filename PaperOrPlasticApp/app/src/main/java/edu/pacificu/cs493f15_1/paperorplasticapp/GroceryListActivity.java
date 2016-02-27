@@ -16,7 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -24,11 +24,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,7 +88,6 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_grocery_list);
         mbIsOnEdit = false;
 
@@ -210,6 +209,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                         addItemToListView(newItem);
                         mLastAddedItemName = inputText;
+
                     }
                 };
 
@@ -244,8 +244,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
                 //functionality when we're using drop down sorting menu
                 if (null != currentList) {
-                    switch (position)
-                    {
+                    switch (position) {
                         case PoPList.SORT_NONE: // first item in dropdown currently blank
                             currentList.setCurrentSortingValue(PoPList.SORT_NONE);
                             break;
@@ -282,10 +281,11 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
         //to view items in list
         mListView = (ListView) findViewById(R.id.listView);
+        //to be able to swipe list items over for delete
         mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
             @Override
             public void onSwipeRight(int pos) {
-
+                Log.d("GroceryListActivity", "onSwipeRight function entered");
 
                 if (!mbIsOnEdit) {
                     hideDeleteButton(pos);
@@ -295,8 +295,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
 
             @Override
             public void onSwipeLeft(int pos) {
-
+                Log.d("GroceryListActivity", "onSwipeLeft function entered");
                 if (!mbIsOnEdit) {
+                    showDeleteButton(pos);
                     showDeleteButton(pos);
                 }
             }
@@ -541,6 +542,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
 
     private boolean showDeleteButton(final int pos) {
+        Log.d("GroceryListActivity", "showDeleteButton function entered");
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
         if (child != null) {
@@ -585,6 +587,7 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
      ******************************************************************************************/
 
     private boolean hideDeleteButton(final int pos) {
+        Log.d("GroceryListActivity", "hideDeleteButton function entered");
         position = pos;
         View child = mListView.getChildAt(pos - mListView.getFirstVisiblePosition());
         if (child != null) {
@@ -602,7 +605,9 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
             });
             if (delete != null)
             {
+                Log.d("GroceryListActivity", "swiping delete button");
                 if (delete.getVisibility() == View.VISIBLE) {
+                    Log.d("GroceryListActivity", " delete button not visible");
                     Animation deleteAnimation =
                             AnimationUtils.loadAnimation(this,
                                     R.anim.slide_in_right);
@@ -614,6 +619,10 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
                     slideItemView(child, SLIDE_RIGHT_ITEM);
 
                 }
+            }
+            else
+            {
+                Log.d("GroceryListActivity", "delete button is null");
             }
             return true;
         }
@@ -638,10 +647,12 @@ public class GroceryListActivity extends FragmentActivity implements ListDFragme
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
+        EditText qtyInput = (EditText) child.findViewById(R.id.input_qty);
 
         checkBox.setTranslationX(translationAmount);
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
+        qtyInput.setTranslationX(translationAmount);
     }
     /********************************************************************************************
      * Function name: dispatchTouchEvent

@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -559,12 +560,12 @@ public class KitchenListActivity extends FragmentActivity implements ListDFragme
         CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
-        Spinner spinner = (Spinner) child.findViewById(R.id.itemQuantitySpinner);
+        EditText inputQty = (EditText) child.findViewById(R.id.input_qty);
 
         checkBox.setTranslationX(translationAmount);
         itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
-        spinner.setTranslationX(translationAmount);
+        inputQty.setTranslationX(translationAmount);
     }
 
     @Override
