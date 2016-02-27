@@ -211,5 +211,24 @@
         android:layout_alignRight="@+id/bOpenGListSett"
         android:layout_alignEnd="@+id/bOpenGListSett" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:id="@+id/bGoHome"
+        android:layout_below="@+id/bOpenRecipeSett"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/SettingsPageTitleText"
+        android:layout_alignEnd="@+id/SettingsPageTitleText"
+        android:background="#f6eaea"
+        android:paddingStart="49dp"
+        android:textAlignment="viewStart"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:width="320dp"
+        android:layout_marginTop="10dp" />
+
 
 </RelativeLayout>

@@ -13,14 +13,20 @@ package edu.pacificu.cs493f15_1.paperorplasticapp;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.PreferenceChangeEvent;
 
 /***************************************************************************************************
  *   Class:         SettingsActivity
@@ -38,8 +44,9 @@ public class SettingsActivity extends Activity implements View.OnClickListener
     static final int COUPONS = 2;
     static final int NUTRITION = 3;
     static final int RECIPES = 4;
+    static final int HOME = 5;
 
-    private List<Button> switches;
+    private List<Switch> switches;
     private List<Button> buttons;
 
     private static final int[] SWITCH_IDS = {R.id.bSettGList,   R.id.bSettKList,
@@ -48,14 +55,17 @@ public class SettingsActivity extends Activity implements View.OnClickListener
 
     private static final int[] BUTTON_IDS = {R.id.bOpenGListSett,  R.id.bOpenKListSett,
                                              R.id.bOpenCouponSett, R.id.bOpenNutritionSett,
-                                             R.id.bOpenRecipeSett};
+                                             R.id.bOpenRecipeSett, R.id.bGoHome};
+
+    public static final String[] SWITCH_PREF_KEYS = {"showGListOnContPg",  "showKInventoryOnContPg",
+                                                     "showCouponOnContPg", "showNutritionOnContPg",
+                                                     "showRecipeOnContPg"};
 
     //Used to change fonts
     private TextView titleText;
 
     //Controls the transparency of buttons
     final int ALPHA_SETTING = 35;
-
 
     /********************************************************************************************
      * Function name: onCreate
@@ -91,14 +101,17 @@ public class SettingsActivity extends Activity implements View.OnClickListener
             buttons.add(button);
         }
 
-        //Create and initialize switches
-        switches = new ArrayList<Button>(SWITCH_IDS.length);
+        //Create and initialize switches and load saved preferences
+        switches = new ArrayList<Switch>(SWITCH_IDS.length);
 
+        int count = 0;
         for (int id: SWITCH_IDS)
         {
-            Button buttonSwitches = (Button) findViewById(id);
-            buttonSwitches.setOnClickListener(this);
-            switches.add(buttonSwitches);
+            Switch theSwitch = (Switch) findViewById(id);
+            theSwitch.setOnClickListener(this);
+            switches.add(theSwitch);
+            loadSavedPreferences(SWITCH_PREF_KEYS[count], count, ContinueActivity.buttons.get (count));
+            count++;
         }
     }
 
@@ -106,7 +119,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener
     *   Method:      onClick
     *
     *   Description: Called when a click has been captured.
-    *                Clicks can occur on toggle switches to turn settings pages on or off
+    *                Clicks can occur on toggles to turn settings pages on or off
     *                Users can also click on buttons to settings if toggle is on
     *
     *   Parameters:  view - the view that has been clicked
@@ -115,65 +128,41 @@ public class SettingsActivity extends Activity implements View.OnClickListener
     ***********************************************************************************************/
     public void onClick (View view)
     {
-        /*********************GROCERY LIST SETTINGS********************************************/
 
-        if (switches.get (G_LIST) == view)
+        //Handle the clicking of switches
+        for (int i = G_LIST; i <= RECIPES; i++)
         {
-            checkAndSetSettingsSwitchesAndButtons (view, ContinueActivity.bGListButtonStatusFromSettings, G_LIST);
-       }
+            if (switches.get(i) == view)
+            {
+                saveSwitchPrefsAndSetContButtonVisibility(SWITCH_PREF_KEYS[i], view, i);
+            }
+        }
+
+        //Handle the clicking of buttons
 
         if (buttons.get (G_LIST) == view)
         {
             startIntent (G_LIST, GroceryListSettingsActivity.class);
         }
-
-        /*********************KITCHEN INVENTORY SETTINGS***************************************/
-
-
-        if (switches.get (K_LIST) == view)
-        {
-            checkAndSetSettingsSwitchesAndButtons (view, ContinueActivity.bKListButtonStatusFromSettings, K_LIST);
-        }
-
-        if (buttons.get (K_LIST) == view)
+        else if (buttons.get (K_LIST) == view)
         {
             startIntent (K_LIST, KitchenListSettingsActivity.class);
         }
-
-        /*********************NUTRITION SETTINGS***********************************************/
-
-        if (switches.get (NUTRITION) == view)
-        {
-            checkAndSetSettingsSwitchesAndButtons (view, ContinueActivity.bNutritionButtonStatusFromSettings, NUTRITION);
-        }
-
-        if (buttons.get (NUTRITION) == view)
+        else if (buttons.get (NUTRITION) == view)
         {
             startIntent (NUTRITION, NutritionSettingsActivity.class);
         }
-
-        /*********************COUPON SETTINGS**************************************************/
-
-        if (switches.get (COUPONS) == view)
-        {
-            checkAndSetSettingsSwitchesAndButtons (view, ContinueActivity.bCouponsButtonStatusFromSettings, COUPONS);
-        }
-
-        if (buttons.get (COUPONS) == view)
+        else if (buttons.get (COUPONS) == view)
         {
             startIntent (COUPONS, CouponsSettingsActivity.class);
         }
-
-        /*********************RECIPE SETTINGS**************************************************/
-
-        if (switches.get (RECIPES) == view)
-        {
-            checkAndSetSettingsSwitchesAndButtons (view, ContinueActivity.bRecipesButtonStatusFromSettings, RECIPES);
-        }
-
-        if (buttons.get (RECIPES) == view)
+        else if (buttons.get (RECIPES) == view)
         {
             startIntent (RECIPES, RecipesSettingsActivity.class);
+        }
+        else if (buttons.get (HOME) == view)
+        {
+            startIntent(HOME, ContinueActivity.class);
         }
     }
 
@@ -189,18 +178,22 @@ public class SettingsActivity extends Activity implements View.OnClickListener
      *
      *   Returned:    N/A
      ***********************************************************************************************/
-    private void checkAndSetSettingsSwitchesAndButtons (View view, Button statusFromSettings, int index)
+    private void saveSwitchPrefsAndSetContButtonVisibility (String switchPrefKey, View view, int index)
     {
-            if (statusFromSettings.getVisibility() == View.VISIBLE)
+        boolean bIsChecked = switches.get (index).isChecked ();
+
+            if (bIsChecked)
             {
-                statusFromSettings.setVisibility(View.GONE);
+                ContinueActivity.buttons.get (index).setVisibility(View.VISIBLE);
+                buttons.get (index).setClickable(true);
+            }
+            else
+            {
+                ContinueActivity.buttons.get (index).setVisibility(View.VISIBLE);
                 buttons.get (index).setClickable(false);
             }
-            else if (statusFromSettings.getVisibility() == View.GONE)
-            {
-                statusFromSettings.setVisibility(View.VISIBLE);
-                buttons.get(index).setClickable(true);
-            }
+
+        savePreferences(SWITCH_PREF_KEYS[index], bIsChecked);
     }
 
     /***********************************************************************************************
@@ -223,7 +216,7 @@ public class SettingsActivity extends Activity implements View.OnClickListener
             //will start a new activity using the intents
             intent = new Intent (this, activityClass);
             intent.putExtra("Caller", "SettingsActivity");
-            startActivity (intent);
+            startActivity(intent);
         }
         else
         {
@@ -232,5 +225,36 @@ public class SettingsActivity extends Activity implements View.OnClickListener
             startActivity (intent);
         }
     }
+
+    public void loadSavedPreferences (String prefToLoad, int index, Button contActivityButton)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences (this);
+        boolean switchIsChecked = sharedPreferences.getBoolean (prefToLoad, true);
+
+        if (switchIsChecked)
+        {
+            switches.get (index).setChecked(true);
+            contActivityButton.setVisibility(View.VISIBLE);
+            buttons.get (index).setClickable(true);
+
+        }
+        else
+        {
+            switches.get (index).setChecked(false);
+            contActivityButton.setVisibility(View.GONE);
+            buttons.get (index).setClickable(false);
+        }
+    }
+
+    private void savePreferences (String prefToSave, boolean bIsChecked)
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences (this);
+        SharedPreferences.Editor editor = sharedPreferences.edit ();
+        editor.putBoolean (prefToSave, bIsChecked);
+        editor.commit ();
+    }
+
+
+
 }
 
