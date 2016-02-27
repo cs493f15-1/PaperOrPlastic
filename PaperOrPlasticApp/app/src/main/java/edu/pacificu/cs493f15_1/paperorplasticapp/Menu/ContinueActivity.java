@@ -12,18 +12,25 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
 import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
+=======
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
 
 /***************************************************************************************************
  *   Class:         ContinueActivity
@@ -36,25 +43,21 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
  **************************************************************************************************/
 public class ContinueActivity extends Activity implements View.OnClickListener
 {
-    //Buttons found on continue page
-    private Button  mButtonLists,
-                    mButtonSettings,
-                    mButtonAbout,
-                    mButtonGroceryList,
-                    mButtonKitchenList,
-                    mButtonNutrition,
-                    mButtonCoupons,
-                    mButtonRecipes;
+    static final int G_LIST = 0;
+    static final int K_LIST = 1;
+    static final int COUPONS = 2;
+    static final int NUTRITION = 3;
+    static final int RECIPES = 4;
+    static final int SETTINGS = 5;
+    static final int ABOUT = 6;
+    static final int NUM_BUTTONS = 5;
 
-    //Button status used to control which buttons appears as specified by settings
-    public static Button bGListButtonStatusFromSettings;
-    public static Button bKListButtonStatusFromSettings;
-    public static Button bNutritionButtonStatusFromSettings;
-    public static Button bCouponsButtonStatusFromSettings;
-    public static Button bRecipesButtonStatusFromSettings;
+    public static List<Button> buttons;
 
-    //Used to specify weather a button should be seen or not as specified by the settings
-    private boolean visibilityFlag = true;
+    private static final int[] BUTTON_IDS = {R.id.bContGList,   R.id.bContKList,
+                                             R.id.bContCoupons, R.id.bContNutrition,
+                                             R.id.bContRecipes, R.id.bContSettings,
+                                             R.id.bContAbout};
 
     //Used to change fonts
     private TextView titleText;
@@ -77,11 +80,12 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.activity_continue);
 
         //Initialize text fields
-        titleText = (TextView) findViewById (R.id.PaperOrPlasticTitleText);
+        titleText = (TextView) findViewById (R.id.SettingsPageTitleText);
         Typeface laneUpperFont = Typeface.createFromAsset (getAssets (), "fonts/laneWUnderLine.ttf");
         Typeface laneNarrowFont = Typeface.createFromAsset (getAssets (), "fonts/LANENAR.ttf");
         titleText.setTypeface (laneUpperFont);
 
+<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
         //Initialize buttons
         mButtonLists = (Button) findViewById (R.id.bContLists);
         mButtonLists.setOnClickListener(this);
@@ -144,17 +148,23 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
         bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
         bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);
+=======
+        //Create and initialize buttons
+        buttons = new ArrayList<Button> (BUTTON_IDS.length);
 
+        for (int id: BUTTON_IDS)
+        {
+            Button button = (Button) findViewById(id);
+            button.setOnClickListener(this);
+            button.getBackground ().setAlpha(ALPHA_SETTING);
+            button.setTypeface (laneNarrowFont, Typeface.BOLD);
+            buttons.add (button);
+        }
+>>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
+
+        loadSavedPreferences ();
     }
 
-
-//    private void initializeButtons (Button button, int bButtonID, Typeface font)
-//    {
-//        button = (Button) findViewById (bButtonID);
-//        button.setOnClickListener(this);
-//        button.getBackground().setAlpha(ALPHA_SETTING);
-//        button.setTypeface(font, Typeface.BOLD);
-//    }
 
     /***********************************************************************************************
     *   Method:        onSaveInstanceState
@@ -165,16 +175,16 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     ***********************************************************************************************/
     public void onSaveInstanceState (Bundle savedInstanceState)
     {
-        super.onSaveInstanceState (savedInstanceState);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
-
-    private void setVisible( )
+    @Override
+    protected void onResume ()
     {
-        visibilityFlag = true;
+        super.onResume();
     }
 
-    /***************************************************************************************************
+    /***********************************************************************************************
     *   Method:      onClick
     *   Description: Called when a click has been captured.
     *                If the about, settings, kitchen lists, grocery list, nutrition, or coupon
@@ -182,61 +192,75 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     *                is started
     *   Parameters:  view - the view that has been clicked
     *   Returned:    N/A
-    ***************************************************************************************************/
+    ***********************************************************************************************/
     public void onClick (View view)
     {
         Intent intent;
 
-        if (mButtonSettings == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, SettingsActivity.class);
-            startActivity (intent);
-        }
-
-
-        if (mButtonAbout == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, AboutActivity.class);
-            startActivity (intent);
-        }
-
-        if (mButtonGroceryList == view)
+        if (buttons.get (G_LIST) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, GroceryListActivity.class);
             startActivity (intent);
         }
-
-        if (mButtonKitchenList == view)
+        else if (buttons.get (K_LIST) == view)
         {
             //will start a new activity using the intents
-            intent = new Intent (this, KitchenInventoryActivity.class);
+            intent = new Intent (this, KitchenListActivity.class);
             startActivity (intent);
         }
-
-        if (mButtonNutrition == view)
-        {
-            //will start a new activity using the intents
-            intent = new Intent (this, NutritionActivity.class);
-            startActivity (intent);
-        }
-
-        if (mButtonCoupons == view)
+        else if (buttons.get (COUPONS) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, CouponsActivity.class);
             startActivity (intent);
         }
-
-        if (mButtonRecipes == view)
+        else if (buttons.get (NUTRITION) == view)
+        {
+            //will start a new activity using the intents
+<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/Menu/ContinueActivity.java
+            intent = new Intent (this, KitchenInventoryActivity.class);
+=======
+            intent = new Intent (this, NutritionActivity.class);
+>>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/ContinueActivity.java
+            startActivity (intent);
+        }
+        else if (buttons.get (RECIPES) == view)
         {
             //will start a new activity using the intents
             intent = new Intent (this, RecipesActivity.class);
             startActivity (intent);
         }
+        else if (buttons.get (SETTINGS) == view)
+        {
+            //will start a new activity using the intents
+            intent = new Intent (this, SettingsActivity.class);
+            startActivity (intent);
+        }
+        else if (buttons.get (ABOUT) == view)
+        {
+            //will start a new activity using the intents
+            intent = new Intent (this, AboutActivity.class);
+            startActivity (intent);
+        }
     }
 
+    public void loadSavedPreferences ()
+    {
+        for (int index = 0; index < NUM_BUTTONS; index++)
+        {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            boolean switchIsChecked = sharedPreferences.getBoolean(SettingsActivity.SWITCH_PREF_KEYS[index], true);
+
+            if (switchIsChecked)
+            {
+                buttons.get (index).setVisibility(View.VISIBLE);
+
+            } else
+            {
+                buttons.get (index).setVisibility(View.GONE);
+            }
+        }
+    }
 }
 

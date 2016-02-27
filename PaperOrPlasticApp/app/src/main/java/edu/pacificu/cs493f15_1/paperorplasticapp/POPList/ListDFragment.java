@@ -37,7 +37,8 @@ public class ListDFragment extends DialogFragment
         View rootView = inflater.inflate(R.layout.listdialogfragment, container,
                 false);
 
-        // Get field from view
+
+                // Get field from view
         mEditText = (EditText) rootView.findViewById(R.id.edit_text);
 
         // Show soft keyboard automatically and request focus to field
@@ -63,6 +64,7 @@ public class ListDFragment extends DialogFragment
         });
 
         mDialog = getDialog();
+
 
         mDialog.setTitle("Add List");
 

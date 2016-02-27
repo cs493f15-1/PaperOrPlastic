@@ -1,70 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#b8d0d4">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Settings"
-        android:id="@+id/textView"
+        android:id="@+id/SettingsPageTitleText"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp" />
+        android:layout_marginTop="29dp"
+        android:textSize="45dp"
+        android:textAlignment="center" />
 
-    <Button
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sGList"
         android:id="@+id/bSettGList"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:checked="true"
+        android:layout_below="@+id/SettingsPageTitleText"
+        android:layout_marginTop="56dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingStart="49dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:layout_alignLeft="@+id/bSettCoupons"
+        android:layout_alignStart="@+id/bSettCoupons" />
 
-    <Button
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sNutrition"
+        android:id="@+id/bSettKList"
+        android:checked="true"
+        android:layout_below="@+id/bSettGList"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingStart="49sp"
+        android:paddingBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:paddingRight="10dp"
+        android:layout_alignStart="@+id/bSettCoupons" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/bSettNutrition"
-        android:layout_below="@+id/bSettKList"
-        android:layout_alignRight="@+id/bSettKList"
-        android:layout_alignEnd="@+id/bSettKList"
-        android:layout_alignLeft="@+id/bSettGList"
-        android:layout_alignStart="@+id/bSettGList" />
+        android:checked="true"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingStart="49sp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/bOpenKInvSett"
+        android:layout_alignStart="@+id/bSettCoupons"
+        android:layout_marginTop="10dp" />
+
 
     <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sCoupons"
-        android:id="@+id/bSettCoupons"
-        android:layout_below="@+id/bSettNutrition"
-        android:layout_alignRight="@+id/bSettNutrition"
-        android:layout_alignEnd="@+id/bSettNutrition"
-        android:layout_alignLeft="@+id/bSettNutrition"
-        android:layout_alignStart="@+id/bSettNutrition" />
+        android:id="@+id/bOpenCouponSett"
+        android:width="320dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="49dp"
+        android:textSize="20dp"
+        android:textAlignment="viewStart"
+        android:background="#f6eaea"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:layout_below="@+id/bOpenNutritionSett"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/bOpenGListSett"
+        android:layout_alignEnd="@+id/bOpenGListSett" />
 
-    <Button
+    <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sRecipes"
         android:id="@+id/bSettRecipes"
-        android:layout_below="@+id/bSettCoupons"
-        android:layout_alignRight="@+id/bSettNutrition"
-        android:layout_alignEnd="@+id/bSettNutrition"
-        android:layout_alignLeft="@+id/bSettGList"
-        android:layout_alignStart="@+id/bSettGList" />
+        android:checked="true"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingStart="49sp"
+        android:layout_below="@+id/bOpenCouponSett"
+        android:layout_alignLeft="@+id/bSettCoupons"
+        android:layout_alignStart="@+id/bSettCoupons"
+        android:layout_marginTop="10dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bSettCoupons"
+        android:checked="true"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingStart="49sp"
+        android:width="75dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/bSettRecipes" />
 
     <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sGList"
+        android:id="@+id/bOpenGListSett"
+        android:width="320dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="49dp"
+        android:textSize="20dp"
+        android:textAlignment="viewStart"
+        android:background="#f6eaea"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:layout_alignBottom="@+id/bSettGList"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/SettingsPageTitleText"
+        android:layout_alignEnd="@+id/SettingsPageTitleText" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/sKInv"
-        android:id="@+id/bSettKList"
+        android:id="@+id/bOpenKInvSett"
+        android:width="320dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="49dp"
+        android:textSize="20dp"
+        android:textAlignment="viewStart"
+        android:background="#f6eaea"
+        android:textStyle="bold"
+        android:gravity="start"
         android:layout_below="@+id/bSettGList"
-        android:layout_alignRight="@+id/bSettGList"
-        android:layout_alignEnd="@+id/bSettGList"
-        android:layout_alignLeft="@+id/bSettGList"
-        android:layout_alignStart="@+id/bSettGList" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/bOpenGListSett"
+        android:layout_alignEnd="@+id/bOpenGListSett" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sNutrition"
+        android:id="@+id/bOpenNutritionSett"
+        android:width="320dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="49dp"
+        android:textSize="20dp"
+        android:textAlignment="viewStart"
+        android:background="#f6eaea"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/bOpenGListSett"
+        android:layout_alignEnd="@+id/bOpenGListSett"
+        android:layout_alignBottom="@+id/bSettNutrition" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sRecipes"
+        android:id="@+id/bOpenRecipeSett"
+        android:width="320dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingStart="49dp"
+        android:textSize="20dp"
+        android:textAlignment="viewStart"
+        android:background="#f6eaea"
+        android:textStyle="bold"
+        android:gravity="start"
+        android:layout_below="@+id/bOpenCouponSett"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_alignRight="@+id/bOpenGListSett"
+        android:layout_alignEnd="@+id/bOpenGListSett" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:id="@+id/bGoHome"
+        android:layout_below="@+id/bOpenRecipeSett"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/SettingsPageTitleText"
+        android:layout_alignEnd="@+id/SettingsPageTitleText"
+        android:background="#f6eaea"
+        android:paddingStart="49dp"
+        android:textAlignment="viewStart"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:width="320dp"
+        android:layout_marginTop="10dp" />
+
 
 </RelativeLayout>

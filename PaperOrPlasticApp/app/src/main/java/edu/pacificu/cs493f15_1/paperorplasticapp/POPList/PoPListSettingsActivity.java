@@ -58,6 +58,16 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     private String mPoPFileName;
 
 
+
+    /********************************************************************************************
+     * Function name: onCreate
+     *
+     * Description:   Initializes all needed setup for objects in page
+     *
+     * Parameters:    savedInstanceState  - a bundle object
+     *
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
@@ -69,6 +79,11 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
         setContentView(activitylayout);
         mbIsOnEdit = false;
 
+        setupEditDeleteButtonsForGLists ();
+
+        setupBackButton (isGrocery);
+
+/*<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/POPList/PoPListSettingsActivity.java
         mPoPLists = popLists;
         mPoPFileName = fileName;
 
@@ -98,7 +113,7 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
             }
         });
 
-        /*Do we need a back button?*/
+        *//*Do we need a back button?*//*
         mbBack = (Button) findViewById (R.id.bBack);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,16 +135,36 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
                         intent = new Intent(PoPListSettingsActivity.this, KitchenInventoryActivity.class);
                     }
                 }
+=======
+        setupEditDeleteButtonsForGLists ();
 
-                startActivity(intent);
-            }
-        });
+
+        *//*Do we need a back button?*//*
+>>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/GroceryListSettingsActivity.java*/
+
+//        mbBack = (Button) findViewById (R.id.bBack);
+//        mbBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                //go back to activity that called this page (possible pages are settings
+//                // or grocery list page
+//                String caller = getIntent().getStringExtra("Caller");
+//                Intent intent;
+//                if (caller.equals("SettingsActivity")) {
+//                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
+//                } else {
+//                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
+//                }
+//
+//                startActivity(intent);
+//            }
+//        });
 
 //        Context context = getApplicationContext();
 //        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
 
 
-        //set up list view to view lists
         mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
         //list adapter holds info of lists for listView
         mListAdapter = new PoPListAdapter(mListOfListView.getContext(),
@@ -163,6 +198,62 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
 
     public void onClick (View view)
     {
+    }
+
+
+    private void setupBackButton (final boolean isGrocery) {
+        mbBack = (Button) findViewById(R.id.bBack);
+        mbBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //go back to activity that called this page (possible pages are settings
+                // or grocery list page
+                String caller = getIntent().getStringExtra("Caller");
+                Intent intent;
+                if (caller.equals("SettingsActivity")) {
+                    intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
+                } else {
+                    if (isGrocery) //whether the caller was groceryList
+                    {
+                        intent = new Intent(PoPListSettingsActivity.this, GroceryListActivity.class);
+                    }
+                    else
+                    {
+                        intent = new Intent(PoPListSettingsActivity.this, KitchenInventoryActivity.class);
+                    }
+                }
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupEditDeleteButtonsForGLists ()
+    {
+        mbEdit = (Button) findViewById (R.id.bEdit);
+        mbEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //if its clicked, show or hide delete buttons
+                int size = mPoPLists.getSize();
+                if (size > 0) {
+                    if (!mbIsOnEdit) {
+                        mbIsOnEdit = true;
+                        for (int i = 0; i < size; i++) {
+                            showDeleteButton(i);
+                        }
+                    } else {
+
+                        //showDeleteButton also gets rid of the delete button so we might not need this check
+                        //TODO might need to show again if tab is changed
+                        mbIsOnEdit = false;
+                        for (int i = 0; i < size; i++) {
+                            hideDeleteButton(i);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /********************************************************************************************

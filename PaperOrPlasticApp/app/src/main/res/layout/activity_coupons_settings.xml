@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#b8d0d4">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/sCouponsSettings"
-        android:id="@+id/textView17"
+        android:id="@+id/CouponSettingsTitleText"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Show Coupons Option"
-        android:id="@+id/bShowCouponsList"
-        android:layout_below="@+id/textView17"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="91dp"
-        android:checked="false" />
+        android:textSize="45dp" />
+
 </RelativeLayout>

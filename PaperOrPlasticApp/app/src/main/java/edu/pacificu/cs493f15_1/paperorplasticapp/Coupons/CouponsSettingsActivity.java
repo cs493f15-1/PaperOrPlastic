@@ -13,9 +13,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.coupons;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
@@ -32,7 +34,8 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  **************************************************************************************************/
 public class CouponsSettingsActivity extends Activity implements View.OnClickListener
 {
-    private Button mButtonShowCouponsList;
+    //Used to change fonts
+    private TextView titleText;
 
     @Override
     protected void onCreate (Bundle savedInstanceState)
@@ -40,22 +43,24 @@ public class CouponsSettingsActivity extends Activity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupons_settings);
 
-        mButtonShowCouponsList = (Button) findViewById (R.id.bShowCouponsList);
-        mButtonShowCouponsList.setOnClickListener(this);
+        titleText = (TextView) findViewById (R.id.CouponSettingsTitleText);
+
+        Typeface laneUpperFont = Typeface.createFromAsset (getAssets (), "fonts/laneWUnderLine.ttf");
+
+        titleText.setTypeface(laneUpperFont);
     }
 
+    /***********************************************************************************************
+    *   Method:      onClick
+     *
+    *   Description: Called when a click has been captured.
+    *
+    *   Parameters:  view - the view that has been clicked
+     *
+    *   Returned:    N/A
+    ***********************************************************************************************/
     public void onClick (View view)
     {
-        if (mButtonShowCouponsList == view)
-        {
-            if (ContinueActivity.bCouponsButtonStatusFromSettings.getVisibility() == View.VISIBLE)
-            {
-                ContinueActivity.bCouponsButtonStatusFromSettings.setVisibility(View.GONE);
-            }
-            else if (ContinueActivity.bCouponsButtonStatusFromSettings.getVisibility() == View.GONE)
-            {
-                ContinueActivity.bCouponsButtonStatusFromSettings.setVisibility(View.VISIBLE);
-            }
-        }
+
     }
 }
