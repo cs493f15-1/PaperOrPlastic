@@ -52,6 +52,11 @@ dependencies
         //firebase
         compile 'com.firebase:firebase-client-android:2.4.0+'
 
+        compile 'com.firebaseui:firebase-ui:0.2.2'
+
+        /* For Google Play Services */
+        compile 'com.google.android.gms:play-services-safetynet:8.3.0'
+        compile 'com.google.android.gms:play-services-auth:8.3.0'
 
         testCompile 'junit:junit:4.12'
         testCompile 'junit:junit:4.12'
