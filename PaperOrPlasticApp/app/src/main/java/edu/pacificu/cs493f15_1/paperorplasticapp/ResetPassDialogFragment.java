@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * Reset Password Dialog Fragment (dialog to reset the user's password)

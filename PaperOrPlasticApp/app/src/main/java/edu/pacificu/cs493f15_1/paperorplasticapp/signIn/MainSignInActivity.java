@@ -27,14 +27,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.android.gms.common.SignInButton;
 
 import java.util.Map;
 
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
@@ -96,6 +98,7 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
   {
     super.onCreate(savedInstanceState);
 
+    //setContentView(R.layout.activity_main_sign_in);
     setContentView(R.layout.activity_main_sign_in);
 
     initializeActivity();
@@ -115,8 +118,11 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
     initializeFirebase();
     initializeSignInPrefs();
 
-    mAuthSuccess = false;
     mLoginFormView = findViewById(R.id.loginForm);
+    LinearLayout linearLayout = (LinearLayout) mLoginFormView;
+    linearLayout.setBackgroundResource(R.drawable.grocerybackportrait2);
+
+    mAuthSuccess = false;
   }
 
 
@@ -134,6 +140,10 @@ private void initializeButtons ()
   mButtonRecoverPassword = (Button) findViewById (R.id.bRecoverPassword);
   mButtonContinue = (Button) findViewById (R.id.bContinue);
   mButtonResetPassword = (Button) findViewById (R.id.bResetPassword);
+
+
+  SignInButton signInButton = (SignInButton)findViewById(R.id.login_with_google);
+  signInButton.setSize(SignInButton.SIZE_WIDE);
 
   //  on click listener for buttons (connect to the view)
   mButtonSignIn.setOnClickListener(this);
