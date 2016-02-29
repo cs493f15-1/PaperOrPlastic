@@ -58,10 +58,10 @@ public class ItemSearchDialog extends DialogFragment
 
         mSuggestions.add(mItemResult);
 
-        mListItemAdapter = (new ListItemAdapter(mItemListView.getContext(),
-                R.layout.search_sug_item, mSuggestions));
+        //mListItemAdapter = (new ListItemAdapter(mItemListView.getContext(),
+        //        R.layout.search_sug_item, mSuggestions));
 
-        mItemListView.setAdapter(mListItemAdapter);
+        //mItemListView.setAdapter(mListItemAdapter);
 
         // Show soft keyboard automatically and request focus to field
         mItemSearchQuery.requestFocus();
