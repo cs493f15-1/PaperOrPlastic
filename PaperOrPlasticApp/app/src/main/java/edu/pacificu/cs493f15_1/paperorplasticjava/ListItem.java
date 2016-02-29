@@ -13,263 +13,244 @@ import java.util.Scanner;
 
 public class ListItem
 {
-    /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
-    (which will be name in list)*/
-    private int mFoodType ;
-    private int mCustomCategory;
-    private double mPrice;
-    private int mAisle;
-    private int mQuantity;
-    private boolean mCheckedOff;
-    private String mNotes;
-    private String mName;
-    private NutritionFacts mNutritionFacts;
-    private boolean mbShowsDelete;
+  /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
+  (which will be name in list)*/
+  private int mFoodType ;
+  private int mCustomCategory;
+  private double mPrice;
+  private int mAisle;
+  private int mQuantity;
+  private boolean mCheckedOff;
+  private String mNotes;
+  private String mName;
+  private NutritionFacts mNutritionFacts;
+  private boolean mbShowsDelete;
 
-    public static final int MAX_LENGTH = 200; //arbitrary number
+  public final int MAX_LENGTH = 200; //arbitrary number
 
-    public ListItem ()
-    {}
-
-
-    public ListItem ( String name)
-    {
-        mName = name;
-        mQuantity = 0;
-        mCheckedOff = false;
-        mNutritionFacts = new NutritionFacts();
-        mNotes = "init";
-    }
-
-  public static int getMaxLength()
+  public ListItem ( String name)
   {
-    return MAX_LENGTH;
+    mName = name;
+    mQuantity = 1;
+    mCheckedOff = false;
+    mNutritionFacts = new NutritionFacts();
+    mNotes = "init";
   }
 
   /***********************************
-     * GETS*
-     **********************************/
+   * GETS*
+   **********************************/
 
-
-
-    public void printAll ()
-    {
-        System.out.println (mName);
-        System.out.println (mFoodType);
-        System.out.println (mAisle);
-        System.out.println (mQuantity);
-        System.out.println (mPrice);
-        System.out.println (mCustomCategory);
-        System.out.println (mCheckedOff);
-        System.out.println (mNotes);
-    }
-
-  public int getmFoodType()
-  {
-    return mFoodType;
-  }
-
-  public int getmCustomCategory()
-  {
-    return mCustomCategory;
-  }
-
-  public double getmPrice()
-  {
-    return mPrice;
-  }
-
-  public int getmAisle()
-  {
-    return mAisle;
-  }
-
-  public int getmQuantity()
-  {
-    return mQuantity;
-  }
-
-  public boolean ismCheckedOff()
-  {
-    return mCheckedOff;
-  }
-
-  public String getmNotes()
-  {
-    return mNotes;
-  }
-
-  public String getmName()
-  {
-    return mName;
-  }
-
-  public NutritionFacts getmNutritionFacts()
-  {
-    return mNutritionFacts;
-  }
-
-  public boolean isMbShowsDelete()
+  public boolean isShowingDelete ()
   {
     return mbShowsDelete;
   }
 
-
-
-  public void setmFoodType(int mFoodType)
+  public void printAll ()
   {
-    this.mFoodType = mFoodType;
+    System.out.println (mName);
+    System.out.println (mFoodType);
+    System.out.println (mAisle);
+    System.out.println (mQuantity);
+    System.out.println (mPrice);
+    System.out.println (mCustomCategory);
+    System.out.println (mCheckedOff);
+    System.out.println (mNotes);
   }
 
-  public void setmCustomCategory(int mCustomCategory)
+  public String getItemName ()
   {
-    this.mCustomCategory = mCustomCategory;
+    return mName;
   }
 
-  public void setmPrice(double mPrice)
+  public int getFoodType ()
   {
-    this.mPrice = mPrice;
+    return mFoodType;
   }
 
-  public void setmAisle(int mAisle)
+  public int getAisle ()
   {
-    this.mAisle = mAisle;
+    return mAisle;
   }
 
-  public void setmQuantity(int mQuantity)
+  public int getQuantity ()
   {
-    this.mQuantity = mQuantity;
+    return mQuantity;
   }
 
-  public void setmCheckedOff(boolean mCheckedOff)
+  public double getPrice ()
   {
-    this.mCheckedOff = mCheckedOff;
+    return mPrice;
   }
 
-  public void setmNotes(String mNotes)
+  public int getCustomCategory ()
   {
-    if (mNotes.length() <= MAX_LENGTH)
-    {
-      this.mNotes = mNotes;
-    }
-    else
-    {
-      this.mNotes = mNotes.substring(0, MAX_LENGTH);
-    }
+    return mCustomCategory;
   }
 
-  public void setmName(String mName)
+  public boolean getCheckedOff ()
   {
-    this.mName = mName;
+    return mCheckedOff;
   }
 
-  public void setmNutritionFacts(NutritionFacts mNutritionFacts)
+  public String getNotes ()
   {
-    this.mNutritionFacts = mNutritionFacts;
+    return mNotes;
   }
 
-  public void setmNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
+  public NutritionFacts getNutritionFacts ()
   {
-    this.mNutritionFacts.mCalories = calories;
-    this.mNutritionFacts.mCarbohydrates = carbohydrate;
-    this.mNutritionFacts.mProtein = protein;
-    this.mNutritionFacts.mSugars = sugar;
-    this.mNutritionFacts.mFiber = fiber;
-    this.mNutritionFacts.mTotalFat = fat;
-  }
-
-  public void setMbShowsDelete(boolean mbShowsDelete)
-  {
-    this.mbShowsDelete = mbShowsDelete;
+    return mNutritionFacts;
   }
 
   /*******************************
-     * SETS
-     ******************************/
+   * SETS
+   ******************************/
 
-    public void addQuantity (int quantityToAdd)
+
+  public void setShowingDelete (boolean bIsShowingDelete)
+  {
+    mbShowsDelete = bIsShowingDelete;
+  }
+
+  private void setName (String name) {mName = name;}
+
+
+  public void setFoodType (int foodType)
+  {
+    mFoodType = foodType;
+  }
+
+  public void setAisle (int aisle)
+  {
+    mAisle = aisle;
+  }
+
+  public void setAddQuantity (int quantityToAdd)
+  {
+    mQuantity += quantityToAdd;
+  }
+
+  public void setQuantity (int quantity)
+  {
+    mQuantity = quantity;
+  }
+
+  public void setPrice (double price)
+  {
+    mPrice = price;
+  }
+
+  public void setCustomCategory (int customCategory)
+  {
+    mCustomCategory = customCategory;
+  }
+
+  public void setCheckedOff (boolean checkedOff)
+  {
+    mCheckedOff = checkedOff;
+  }
+
+  public void setNotes (String notes)
+  {
+    if (notes.length() <= MAX_LENGTH)
     {
-      this.mQuantity+=quantityToAdd;
+      mNotes = notes;
     }
-
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFacts NFacts)
+    else
     {
-      setmFoodType(foodType);
-      setmAisle(aisle);
-      addQuantity(quantityToAdd);
-      setmPrice(price);
-      setmCustomCategory(customCategory);
-      setmCheckedOff(checkedOff);
-      setmNotes(notes);
-      mNutritionFacts = NFacts;
+      mNotes = notes.substring(0, MAX_LENGTH);
     }
+  }
 
-    /*******************************
-     * SORTING
-     ******************************/
+  public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
+  {
+    mNutritionFacts.mCalories = calories;
+    mNutritionFacts.mCarbohydrates = carbohydrate;
+    mNutritionFacts.mProtein = protein;
+    mNutritionFacts.mSugars = sugar;
+    mNutritionFacts.mFiber = fiber;
+    mNutritionFacts.mTotalFat = fat;
+  }
 
-    public static class Comparators
+  public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFacts NFacts)
+  {
+    setFoodType (foodType);
+    setAisle(aisle);
+    setAddQuantity(quantityToAdd);
+    setPrice(price);
+    setCustomCategory(customCategory);
+    setCheckedOff(checkedOff);
+    setNotes(notes);
+    mNutritionFacts = NFacts;
+  }
+
+  /*******************************
+   * SORTING
+   ******************************/
+
+  public static class Comparators
+  {
+    /**
+     * A Comparator<ListItem> that compares two ListItems by their names using the Java string comparison
+     */
+    public static Comparator<ListItem> NAME = new Comparator<ListItem>()
     {
-        /**
-         * A Comparator<ListItem> that compares two ListItems by their names using the Java string comparison
-         */
-        public static Comparator<ListItem> NAME = new Comparator<ListItem>()
-        {
-            @Override
-            public int compare(ListItem listitem1, ListItem listitem2)
-            {
-                return listitem1.getmName().compareTo(listitem2.getmName());
-            }
-        };
-    }
+      @Override
+      public int compare(ListItem listitem1, ListItem listitem2)
+      {
+        return listitem1.getItemName().compareTo(listitem2.getItemName());
+      }
+    };
+  }
 
 
-    /*********************************
-     * I/O
-     ********************************/
+  /*********************************
+   * I/O
+   ********************************/
 
-    /********************************************************************************************
-     * Function name: writeItemToFile
-     *
-     * Description: Outputs the current item to the passed in PrintWriter
-     *
-     * Parameters: itemOutput - the printWriter which the listItem will be outputted to
-     *
-     * Returns: None
-     ******************************************************************************************/
-    public void writeItemToFile (PrintWriter itemOutput)
-    {
-        String content = getmFoodType() + " " + getmAisle() + " " + getmQuantity() + " " + getmPrice()
-                + " " + getmCustomCategory() + " " + ismCheckedOff() + " " + getmNotes() + " ";
+  /********************************************************************************************
+   * Function name: writeItemToFile
+   *
+   * Description: Outputs the current item to the passed in PrintWriter
+   *
+   * Parameters: itemOutput - the printWriter which the listItem will be outputted to
+   *
+   * Returns: None
+   ******************************************************************************************/
+  public void writeItemToFile (PrintWriter itemOutput)
+  {
+    String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " " + getPrice()
+      + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
 
-        itemOutput.println(getmName());
-        itemOutput.print(content);
-        mNutritionFacts.writeNutritionToFile(itemOutput);
-        itemOutput.print("\n");
-        itemOutput.flush();
-    }
+    itemOutput.println(getItemName());
+    itemOutput.print(content);
+    mNutritionFacts.writeNutritionToFile(itemOutput);
+    itemOutput.print("\n");
+    itemOutput.flush();
+  }
 
-    /********************************************************************************************
-     * Function name: readItemFromFile
-     *
-     * Description: reads from a file using a scanner and inputs the information into the listItem
-     *
-     * Parameters: itemInput - the Scanner which the listItem will be read from
-     *
-     * Returns: None
-     ******************************************************************************************/
-    public void readItemFromFile (Scanner itemInput)
-    {
-        itemInput.nextLine(); //get new line character leftover from before
-        setmName(itemInput.nextLine());
-        setmFoodType(itemInput.nextInt());
-        setmAisle(itemInput.nextInt());
-        setmQuantity(itemInput.nextInt());
-        setmPrice(itemInput.nextDouble());
-        setmCustomCategory(itemInput.nextInt());
-        setmCheckedOff(itemInput.nextBoolean());
-        setmNotes(itemInput.next());
-        mNutritionFacts.readNutritionFromFile(itemInput);
-    }
+  /********************************************************************************************
+   * Function name: readItemFromFile
+   *
+   * Description: reads from a file using a scanner and inputs the information into the listItem
+   *
+   * Parameters: itemInput - the Scanner which the listItem will be read from
+   *
+   * Returns: None
+   ******************************************************************************************/
+  public void readItemFromFile (Scanner itemInput)
+  {
+    itemInput.nextLine(); //get new line character leftover from before
+    setName(itemInput.nextLine());
+    setFoodType(itemInput.nextInt());
+    setAisle(itemInput.nextInt());
+    setAddQuantity(itemInput.nextInt());
+    setPrice(itemInput.nextDouble());
+    setCustomCategory(itemInput.nextInt());
+    setCheckedOff(itemInput.nextBoolean());
+    setNotes(itemInput.next());
+    mNutritionFacts.readNutritionFromFile(itemInput);
+  }
 
 }

@@ -9,14 +9,15 @@ import java.util.Scanner;
  */
 public class GroceryList extends PoPList
 {
-
+  boolean bIsLinked;
+  boolean bIsShared;
 
   public GroceryList (String name)
   {
     mListName = name;
 
-      mItems = new ArrayList<ListItem>();
-      mCurrentSortingValue = SORT_NONE;
+    mItems = new ArrayList<ListItem>();
+    mCurrentSortingValue = SORT_NONE;
   }
 
     /*Functions
@@ -26,13 +27,9 @@ public class GroceryList extends PoPList
         unShareList ();
     */
 
-
-
-
-
-    /*********************************
-     * I/O
-     ********************************/
+  /*********************************
+   * I/O
+   ********************************/
 
   /********************************************************************************************
    * Function name: writeListToFile
@@ -45,8 +42,8 @@ public class GroceryList extends PoPList
    ******************************************************************************************/
   public void writeListToFile (PrintWriter listOutput)
   {
-    listOutput.println(getmListName());
-    listOutput.println(returnSize() + " " + getmCurrentSortingValue());
+    listOutput.println(getListName());
+    listOutput.println(getSize() + " " + getCurrentSortingValue());
     for (ListItem item : mItems)
     {
       item.writeItemToFile(listOutput);
@@ -71,11 +68,11 @@ public class GroceryList extends PoPList
     ListItem tempItem;
 
     listInput.nextLine(); //get the new line character left from before
-    setmListName(listInput.nextLine());
+    setListName(listInput.nextLine());
 
     size = listInput.nextInt();
 
-    setmCurrentSortingValue(listInput.nextInt());
+    setCurrentSortingValue(listInput.nextInt());
 
     for (int i = 0; i < size; ++i)
     {

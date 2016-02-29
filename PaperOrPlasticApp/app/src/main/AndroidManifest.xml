@@ -12,8 +12,9 @@
         android:theme="@style/AppTheme"
         android:name = "edu.pacificu.cs493f15_1.MyApplication">
         <activity
-            android:name=".MainSignInActivity"
-            android:label="@string/app_name" >
+            android:name=".signIn.MainSignInActivity"
+            android:label="@string/title_activity_main_sign_in" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,67 +23,67 @@
         </activity>
 
         <activity
-            android:name=".AboutActivity"
+            android:name=".menu.AboutActivity"
             android:label="@string/title_activity_about">
         </activity>
 
         <activity
-            android:name=".ContinueActivity"
+            android:name=".menu.ContinueActivity"
             android:label="@string/title_activity_continue">
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".menu.SettingsActivity"
             android:label="@string/title_activity_settings">
         </activity>
 
         <activity
-            android:name=".GroceryListActivity"
+            android:name=".groceryList.GroceryListActivity"
             android:label="@string/title_activity_grocery_lists">
         </activity>
 
         <activity
-            android:name=".GroceryListSettingsActivity"
+            android:name=".groceryList.GroceryListSettingsActivity"
             android:label="@string/title_activity_grocery_lists_settings">
         </activity>
 
         <activity
-            android:name=".KitchenListActivity"
-            android:label="@string/title_activity_kitchen_lists">
+            android:name=".kitchenInventory.KitchenInventoryActivity"
+            android:label="@string/title_activity_kitchen_inventories">
         </activity>
 
         <activity
-            android:name=".KitchenListSettingsActivity"
-            android:label="@string/title_activity_kitchen_lists_settings">
+            android:name=".kitchenInventory.KitchenInventorySettingsActivity"
+            android:label="@string/title_activity_kitchen_inventory_settings">
         </activity>
 
         <activity
-            android:name=".NutritionActivity"
+            android:name=".nutrition.NutritionActivity"
             android:label="@string/title_activity_nutrition">
         </activity>
 
         <activity
-            android:name=".NutritionSettingsActivity"
+            android:name=".nutrition.NutritionSettingsActivity"
             android:label="@string/title_activity_nutrition_settings">
         </activity>
 
         <activity
-            android:name=".CouponsActivity"
+            android:name=".coupons.CouponsActivity"
             android:label="@string/title_activity_coupons">
         </activity>
 
         <activity
-            android:name=".CouponsSettingsActivity"
+            android:name=".coupons.CouponsSettingsActivity"
             android:label="@string/title_activity_coupons_settings">
         </activity>
 
         <activity
-            android:name=".RecipesActivity"
+            android:name=".recipe.RecipesActivity"
             android:label="@string/title_activity_recipes">
         </activity>
 
         <activity
-            android:name=".RecipesSettingsActivity"
+            android:name=".recipe.RecipesSettingsActivity"
             android:label="@string/title_activity_recipes_settings">
         </activity>
 
