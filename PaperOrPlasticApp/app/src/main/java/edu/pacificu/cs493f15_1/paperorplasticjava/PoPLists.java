@@ -145,8 +145,8 @@ public abstract class PoPLists
 
         size = listsInput.nextInt();
 
-        for (int i = 0; i < size; ++i)
-        {
+       for (int i = 0; i < size; ++i)
+       {
             addList("temp");
             tempList = getList(i);
             tempList.readListFromFile(listsInput);

@@ -95,6 +95,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        Log.i("lifecycle", "In On Create");
     }
     /********************************************************************************************
      * Function name: PoPOnCreate
@@ -122,6 +124,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mItemLayout = itemLayout;
         mPoPFileName = fileName;
         mbIsOnEdit = false;
+
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
 
@@ -455,6 +458,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     {
         super.onPause();
 
+        Log.i("lifecycle", "In On Pause");
+
         writeListsToFile();
         mPoPLists.clearLists();
     }
@@ -472,6 +477,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     protected void onResume ()
     {
         super.onResume();
+
+        Log.i("lifecycle", "In On Resume");
 
         Context context = getApplicationContext();
         File popFile = context.getFileStreamPath(mPoPFileName);

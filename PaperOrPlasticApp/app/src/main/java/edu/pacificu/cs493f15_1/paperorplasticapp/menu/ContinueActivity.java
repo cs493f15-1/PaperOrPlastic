@@ -83,69 +83,6 @@ public class ContinueActivity extends Activity implements View.OnClickListener
         Typeface laneNarrowFont = Typeface.createFromAsset (getAssets (), "fonts/LANENAR.ttf");
         titleText.setTypeface (laneUpperFont);
 
-/*        //Initialize buttons
-        mButtonLists = (Button) findViewById (R.id.bContLists);
-        mButtonLists.setOnClickListener(this);
-
-//        initializeButtons (mButtonSettings, R.id.bContSettings, laneNarrowFont);
-
-        mButtonSettings = (Button) findViewById (R.id.bContSettings);
-        mButtonSettings.setOnClickListener(this);
-        mButtonSettings.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonSettings.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonAbout, R.id.bContAbout, laneNarrowFont);
-
-        mButtonAbout = (Button) findViewById (R.id.bContAbout);
-        mButtonAbout.setOnClickListener(this);
-        mButtonAbout.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonAbout.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonGroceryList, R.id.bContGList, laneNarrowFont);
-
-        mButtonGroceryList = (Button) findViewById (R.id.bContGList);
-        mButtonGroceryList.setOnClickListener(this);
-        mButtonGroceryList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonGroceryList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonKitchenList, R.id.bContKList, laneNarrowFont);
-
-        mButtonKitchenList = (Button) findViewById (R.id.bContKInv);
-        mButtonKitchenList.setOnClickListener(this);
-        mButtonKitchenList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonKitchenList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonNutrition, R.id.bContNutrition, laneNarrowFont);
-
-        mButtonNutrition = (Button) findViewById (R.id.bContNutrition);
-        mButtonNutrition.setOnClickListener(this);
-        mButtonNutrition.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonNutrition.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonCoupons, R.id.bContCoupons, laneNarrowFont);
-
-        mButtonCoupons = (Button) findViewById (R.id.bContCoupons);
-        mButtonCoupons.setOnClickListener(this);
-        mButtonCoupons.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonCoupons.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonRecipes, R.id.bContRecipes, laneNarrowFont);
-
-
-        mButtonRecipes = (Button) findViewById (R.id.bContRecipes);
-        mButtonRecipes.setOnClickListener(this);
-        mButtonRecipes.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonRecipes.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-        bGListButtonStatusFromSettings = (Button) findViewById (R.id.bContGList);
-        bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKInv);
-        bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
-        bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
-        bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);*/
-
         //Create and initialize buttons
         buttons = new ArrayList<Button> (BUTTON_IDS.length);
 

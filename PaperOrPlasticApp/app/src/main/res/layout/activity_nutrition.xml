@@ -10,4 +10,34 @@
         android:id="@+id/textView12"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scan"
+        android:id="@+id/scan_button"
+        android:layout_below="@+id/textView12"
+        android:layout_alignRight="@+id/textView12"
+        android:layout_alignEnd="@+id/textView12"
+        android:layout_marginTop="134dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="scan format"
+        android:id="@+id/scan_format"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="scan content"
+        android:id="@+id/scan_content"
+        android:layout_below="@+id/scan_format"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="66dp" />
+
 </RelativeLayout>
