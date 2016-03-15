@@ -21,8 +21,8 @@
             <TextView
                 android:layout_width="165dp"
                 android:layout_height="match_parent"
-                android:text="My Grocery Lists"
-                android:id="@+id/groceryListText"
+                android:text="My Kitchen Inventory"
+                android:id="@+id/kitchenInventoryText"
                 style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
                 android:layout_weight="24.94"
                 android:layout_span="30"
@@ -105,7 +105,7 @@
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="34dp"
-                android:text="@string/sGroupBy"
+                android:text="Group By"
                 android:id="@+id/groupByText"
                 style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:textColor="#737373"
@@ -138,8 +138,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentTop="true"
-                android:text="@string/sAddItem"
-                style="@style/Base.Widget.AppCompat.Button.Borderless" />
+                android:text="@string/sAddItem" />
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"
@@ -159,11 +158,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:id="@+id/listView"
-                android:layout_gravity="top" />
-
+                android:layout_gravity="left|top" />
 
         </FrameLayout>
 
     </LinearLayout>
-
 </TabHost>

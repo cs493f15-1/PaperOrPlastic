@@ -8,7 +8,7 @@ import org.junit.*;
  */
 public class KitchenListTest
 {
-    private KitchenList KList;
+    private KitchenInventory KList;
     private ListItem item1, item2, item3;
 
     /**
@@ -16,7 +16,7 @@ public class KitchenListTest
      */
     @Before
     public void setUp () {
-        KList = new KitchenList("Temp List");
+        KList = new KitchenInventory("Temp List");
         item1 = new ListItem("A");
         item2 = new ListItem("B");
         item3 = new ListItem("3");

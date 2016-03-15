@@ -110,8 +110,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sKList"
-        android:id="@+id/bContKList"
+        android:text="@string/sKInv"
+        android:id="@+id/bContKInv"
         android:alpha="75"
         android:background="#f6eaea"
         android:textStyle="bold"
@@ -158,9 +158,8 @@
         android:paddingStart="40sp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:layout_below="@+id/bContKList"
+        android:layout_below="@+id/bContKInv"
         android:layout_alignRight="@+id/bContLists" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
