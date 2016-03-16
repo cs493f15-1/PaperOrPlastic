@@ -21,6 +21,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+import com.firebase.client.Firebase;
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 
 /***************************************************************************************************
@@ -43,7 +47,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class ContinueActivity extends Activity implements View.OnClickListener
+public class ContinueActivity extends BaseActivity implements View.OnClickListener
 {
   static final int G_LIST = 0;
   static final int K_LIST = 1;
@@ -67,8 +71,8 @@ public class ContinueActivity extends Activity implements View.OnClickListener
   //Controls the transparency of buttons
   final int ALPHA_SETTING = 35;
 
-
-  private FirebaseUser fUserTest;
+  private Firebase mUserRef;
+  //private FirebaseUser fUserTest;
 
   /***********************************************************************************************
    *   Method:        onCreate
@@ -89,76 +93,18 @@ public class ContinueActivity extends Activity implements View.OnClickListener
     Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
     titleText.setTypeface(laneUpperFont);
 
-/*        //Initialize buttons
-        mButtonLists = (Button) findViewById (R.id.bContLists);
-        mButtonLists.setOnClickListener(this);
+    mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
 
-//        initializeButtons (mButtonSettings, R.id.bContSettings, laneNarrowFont);
-
-        mButtonSettings = (Button) findViewById (R.id.bContSettings);
-        mButtonSettings.setOnClickListener(this);
-        mButtonSettings.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonSettings.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonAbout, R.id.bContAbout, laneNarrowFont);
-
-        mButtonAbout = (Button) findViewById (R.id.bContAbout);
-        mButtonAbout.setOnClickListener(this);
-        mButtonAbout.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonAbout.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonGroceryList, R.id.bContGList, laneNarrowFont);
-
-        mButtonGroceryList = (Button) findViewById (R.id.bContGList);
-        mButtonGroceryList.setOnClickListener(this);
-        mButtonGroceryList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonGroceryList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonKitchenList, R.id.bContKList, laneNarrowFont);
-
-        mButtonKitchenList = (Button) findViewById (R.id.bContKInv);
-        mButtonKitchenList.setOnClickListener(this);
-        mButtonKitchenList.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonKitchenList.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonNutrition, R.id.bContNutrition, laneNarrowFont);
-
-        mButtonNutrition = (Button) findViewById (R.id.bContNutrition);
-        mButtonNutrition.setOnClickListener(this);
-        mButtonNutrition.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonNutrition.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-
-//        initializeButtons (mButtonCoupons, R.id.bContCoupons, laneNarrowFont);
-
-        mButtonCoupons = (Button) findViewById (R.id.bContCoupons);
-        mButtonCoupons.setOnClickListener(this);
-        mButtonCoupons.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonCoupons.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-//        initializeButtons (mButtonRecipes, R.id.bContRecipes, laneNarrowFont);
-
-
-        mButtonRecipes = (Button) findViewById (R.id.bContRecipes);
-        mButtonRecipes.setOnClickListener(this);
-        mButtonRecipes.getBackground().setAlpha(ALPHA_SETTING);
-        mButtonRecipes.setTypeface(laneNarrowFont, Typeface.BOLD);
-
-        bGListButtonStatusFromSettings = (Button) findViewById (R.id.bContGList);
-        bKListButtonStatusFromSettings = (Button) findViewById (R.id.bContKInv);
-        bNutritionButtonStatusFromSettings = (Button) findViewById (R.id.bContNutrition);
-        bCouponsButtonStatusFromSettings = (Button) findViewById (R.id.bContCoupons);
-        bRecipesButtonStatusFromSettings = (Button) findViewById (R.id.bContRecipes);*/
-
-    fUserTest = getIntent().getParcelableExtra("currentUser");
-    //now since we have user TODO: create a sign out button
-    if (fUserTest.getMyRef() != null)
-    {
-      System.out.println(fUserTest.getmEmail());
-      System.out.println(this.getApplicationContext().toString());
-    }
+//    fUserTest = getIntent().getParcelableExtra("currentUser");
+//    //now since we have user TODO: create a sign out button
+//    if (null != fUserTest)
+//    {
+//      if (fUserTest.getMyRef() != null)
+//      {
+//        System.out.println(fUserTest.getmEmail());
+//        System.out.println(this.getApplicationContext().toString());
+//      }
+//    }
 
 
     //Create and initialize buttons
@@ -233,7 +179,7 @@ public class ContinueActivity extends Activity implements View.OnClickListener
 
       intent = new Intent(this, NutritionActivity.class);
 
-      intent.putExtra("currentUser", fUserTest);
+      //intent.putExtra("currentUser", fUserTest);
 
       startActivity(intent);
     }

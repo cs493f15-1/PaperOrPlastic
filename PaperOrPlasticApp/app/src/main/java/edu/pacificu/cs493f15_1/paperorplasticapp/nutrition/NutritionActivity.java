@@ -13,6 +13,7 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.nutrition;
 import android.app.Activity;
 import android.os.Bundle;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
@@ -22,7 +23,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class NutritionActivity extends Activity
+public class NutritionActivity extends BaseActivity
 {
     @Override
     protected void onCreate (Bundle savedInstanceState)

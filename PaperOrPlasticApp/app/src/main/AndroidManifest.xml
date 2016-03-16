@@ -2,91 +2,92 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.pacificu.cs493f15_1.paperorplasticapp" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="edu.pacificu.cs493f15_1.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name = "edu.pacificu.cs493f15_1.MyApplication">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".signIn.MainSignInActivity"
-            android:label="@string/title_activity_main_sign_in" >
-
+            android:label="Sign In" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".signIn.CreateAccountActivity"
+            android:label="Create Account"
+            android:parentActivityName=".signIn.MainSignInActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".signIn.MainSignInActivity" />
+        </activity>
+        <activity
+            android:name=".signIn.PasswordRecoveryActivity"
+            android:label="Recover Password"
+            android:parentActivityName=".signIn.MainSignInActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".signIn.MainSignInActivity" />
+        </activity>
         <activity
             android:name=".menu.AboutActivity"
-            android:label="@string/title_activity_about">
+            android:label="@string/title_activity_about" >
         </activity>
-
         <activity
             android:name=".menu.ContinueActivity"
-            android:label="@string/title_activity_continue">
+            android:label="@string/title_activity_continue" >
         </activity>
-
         <activity
             android:name=".menu.SettingsActivity"
-            android:label="@string/title_activity_settings">
+            android:label="@string/title_activity_settings" >
         </activity>
-
         <activity
             android:name=".groceryList.GroceryListActivity"
-            android:label="@string/title_activity_grocery_lists">
+            android:label="@string/title_activity_grocery_lists" >
         </activity>
-
         <activity
             android:name=".groceryList.GroceryListSettingsActivity"
-            android:label="@string/title_activity_grocery_lists_settings">
+            android:label="@string/title_activity_grocery_lists_settings" >
         </activity>
-
         <activity
             android:name=".kitchenInventory.KitchenInventoryActivity"
-            android:label="@string/title_activity_kitchen_inventories">
+            android:label="@string/title_activity_kitchen_inventories" >
         </activity>
-
         <activity
             android:name=".kitchenInventory.KitchenInventorySettingsActivity"
-            android:label="@string/title_activity_kitchen_inventory_settings">
+            android:label="@string/title_activity_kitchen_inventory_settings" >
         </activity>
-
         <activity
             android:name=".nutrition.NutritionActivity"
-            android:label="@string/title_activity_nutrition">
+            android:label="@string/title_activity_nutrition" >
         </activity>
-
         <activity
             android:name=".nutrition.NutritionSettingsActivity"
-            android:label="@string/title_activity_nutrition_settings">
+            android:label="@string/title_activity_nutrition_settings" >
         </activity>
-
         <activity
             android:name=".coupons.CouponsActivity"
-            android:label="@string/title_activity_coupons">
+            android:label="@string/title_activity_coupons" >
         </activity>
-
         <activity
             android:name=".coupons.CouponsSettingsActivity"
-            android:label="@string/title_activity_coupons_settings">
+            android:label="@string/title_activity_coupons_settings" >
         </activity>
-
         <activity
             android:name=".recipe.RecipesActivity"
-            android:label="@string/title_activity_recipes">
+            android:label="@string/title_activity_recipes" >
         </activity>
-
         <activity
             android:name=".recipe.RecipesSettingsActivity"
-            android:label="@string/title_activity_recipes_settings">
+            android:label="@string/title_activity_recipes_settings" >
         </activity>
-
     </application>
 
 </manifest>
