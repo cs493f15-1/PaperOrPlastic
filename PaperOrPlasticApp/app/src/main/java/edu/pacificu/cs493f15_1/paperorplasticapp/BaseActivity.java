@@ -45,6 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   protected Firebase mFirebaseRef;
   protected Firebase.AuthStateListener mAuthListener;
 
+  protected boolean bUsingOffline;
 
   @Override
   protected void onCreate(Bundle savedInstanceState)
@@ -74,7 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
 
     if (!((this instanceof MainSignInActivity) || (this instanceof CreateAccountActivity) ||
-      (this instanceof PasswordRecoveryActivity)))
+      (this instanceof PasswordRecoveryActivity) || bUsingOffline))
     {
       mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
       mAuthListener = new Firebase.AuthStateListener()
@@ -121,7 +122,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   public boolean onCreateOptionsMenu(Menu menu)
   {
           /* Inflate the menu; this adds items to the action bar if it is present. */
-    //TODO: getMenuInflater().inflate(R.menu.menu_base, menu);
+    getMenuInflater().inflate(R.menu.menu_base, menu);
     return true;
   }
 

@@ -19,6 +19,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
@@ -39,7 +40,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
  *   Returned:      N/A
  **************************************************************************************************/
 
-public abstract class PoPListSettingsActivity extends FragmentActivity implements View.OnClickListener
+public abstract class PoPListSettingsActivity extends BaseActivity implements View.OnClickListener
 {
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;

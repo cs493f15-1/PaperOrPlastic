@@ -36,6 +36,7 @@ public class KitchenInventorySettingsActivity extends PoPListSettingsActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PoPOnCreate(savedInstanceState, new KitchenInventories(), R.layout.activity_kitchen_inventory_settings, KitchenInventories.KITCHEN_FILE_NAME, false);
+        PoPOnCreate(savedInstanceState, new KitchenInventories(),
+          R.layout.activity_kitchen_inventory_settings, KitchenInventories.KITCHEN_FILE_NAME, false);
     }
 }

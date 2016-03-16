@@ -39,6 +39,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
@@ -56,7 +57,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public abstract class PoPListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public abstract class PoPListActivity extends BaseActivity implements ListDFragment.EditNameDialogListener {
 
   final float SLIDE_RIGHT_ITEM = 5;
   final float SLIDE_LEFT_ITEM = -145;

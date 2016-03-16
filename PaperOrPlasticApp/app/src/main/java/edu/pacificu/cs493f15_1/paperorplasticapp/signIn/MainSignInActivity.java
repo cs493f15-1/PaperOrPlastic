@@ -294,14 +294,18 @@ public void rememberPass(String email, String password)
 {
   if (mcbRememberPass.isChecked())
   {
-    mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
-    mSignInPrefsEditor.putString("email", email);
-    mSignInPrefsEditor.putString("password", password);
-    mSignInPrefsEditor.commit();
-    if (mfCurrentUser != null)
+    if (mAuthSuccess)
     {
-      mfCurrentUser.setmbRememberPass(true);
+      mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
+      mSignInPrefsEditor.putString("email", email);
+      mSignInPrefsEditor.putString("password", password);
+      mSignInPrefsEditor.commit();
+      if (mfCurrentUser != null)
+      {
+        mfCurrentUser.setmbRememberPass(true);
+      }
     }
+
   }
   else
   {
@@ -395,11 +399,16 @@ public void rememberPass(String email, String password)
   {
     Intent intent = new Intent (MainSignInActivity.this, ContinueActivity.class);
 
-//    if (!mAuthSuccess)
-//    {
-//      mfCurrentUser = new FirebaseUser("offline");
-//    }
-//    intent.putExtra("currentUser", mfCurrentUser);
+    if (!mAuthSuccess)
+    {
+      //mfCurrentUser = new FirebaseUser("offline");
+
+      //then we are choosing to continue with use of the app offline... TODO for now a quick fix
+      bUsingOffline = true;
+    }
+
+    //intent.putExtra("currentUser", mfCurrentUser);
+
     startActivity(intent);
   }
 
@@ -465,29 +474,11 @@ public void rememberPass(String email, String password)
     final String email = mEmailView.getText().toString();
     final String password = mEditPassword.getText().toString();
 
-
+    /* authenticate the user with the information in the fields!! */
     myFirebaseRef.authWithPassword(email, password,
       new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
-//    //capture text from password editText and email editText ->pass this to firebase authentication
-//    myFirebaseRef.authWithPassword(email, password, new Firebase.AuthResultHandler()
-//    {
-//      @Override
-//      public void onAuthenticated(AuthData authData)
-//      {
-//        setMfCurrentUser(authData, email, password);
-//
-//        messageDialog("Sign-In", "Successful login.", true);
-//      }
-//
-//      @Override
-//      public void onAuthenticationError(FirebaseError firebaseError)
-//      {
-//        // there was an error
-//        System.out.println("Error authenticating user. ");
-//        messageDialog("Unable to Sign-In", "Invalid password or email.", false);
-//      }
-//    });
+    rememberPass(email, password);
   }
 
   /** NEW CLASS -- Declaring our own methods of authenticating the user
@@ -507,6 +498,8 @@ public void rememberPass(String email, String password)
     @Override
     public void onAuthenticated (AuthData authData)
     {
+      mAuthSuccess = true;
+      bUsingOffline = false;
       mAuthProgressDialog.dismiss();
       Log.i(LOG_TAG, provider + " " + "auth successful.");
 

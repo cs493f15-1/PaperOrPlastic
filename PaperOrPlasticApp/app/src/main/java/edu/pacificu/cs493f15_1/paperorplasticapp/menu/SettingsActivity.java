@@ -24,6 +24,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsSettingsActivity;
@@ -40,7 +41,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesSettingsActivity;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class SettingsActivity extends Activity implements View.OnClickListener
+public class SettingsActivity extends BaseActivity implements View.OnClickListener
 {
     static final int G_LIST = 0;
     static final int K_LIST = 1;
