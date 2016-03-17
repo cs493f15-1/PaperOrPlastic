@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter password"
                 android:inputType="textPassword"
-                android:id="@+id/editTextPassword"
+                android:id="@+id/editTextPasswordInput"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:padding="5dp" android:background="#99ffffff"

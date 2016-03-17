@@ -41,7 +41,7 @@ public class CreateAccountActivity extends BaseActivity
   private ProgressDialog mProgressDialog;
 
   //firebase
-  private Firebase myFirebaseRef;
+  private Firebase mFirebaseRef;
 
   //edit text fields
   private EditText mEditTextUsernameCreate, mEditTextEmailCreate;
@@ -56,7 +56,7 @@ public class CreateAccountActivity extends BaseActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_create_account);
 
-    myFirebaseRef = new Firebase(Constants.FIREBASE_URL);
+    mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
 
     initializeActivity();
   }
@@ -112,7 +112,7 @@ public class CreateAccountActivity extends BaseActivity
   {
     mUserName = mEditTextUsernameCreate.getText().toString();
     mUserEmail = mEditTextEmailCreate.getText().toString();
-    mPassword = new BigInteger(64, mRandom).toString(); //creating a new random password for the user
+    mPassword = new BigInteger(130, mRandom).toString(32); //creating a new random password for the user
 
     boolean validEmail = isEmailValid(mUserEmail);
     boolean validName = isUserNameValid(mUserName);
@@ -125,13 +125,13 @@ public class CreateAccountActivity extends BaseActivity
     mProgressDialog.show();
 
 
-    myFirebaseRef.createUser(mUserEmail, mPassword, new Firebase.ValueResultHandler<Map<String, Object>>()
+    mFirebaseRef.createUser(mUserEmail, mPassword, new Firebase.ValueResultHandler<Map<String, Object>>()
     {
       @Override
       public void onSuccess(Map<String, Object> result)
       {
         //after create sign-in
-        myFirebaseRef.resetPassword(mUserEmail, new Firebase.ResultHandler()
+        mFirebaseRef.resetPassword(mUserEmail, new Firebase.ResultHandler()
         {
           @Override
           public void onSuccess()
@@ -152,11 +152,21 @@ public class CreateAccountActivity extends BaseActivity
             //setMfCurrentUser(authData, email, password);
 
             messageDialog("Create Account", "Account has been created.");
+
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_APP_EMAIL);
+            try {
+              startActivity(intent);
+              finish();
+            } catch (android.content.ActivityNotFoundException ex) {
+                                    /* User does not have any app to handle email */
+            }
           }
 
           @Override
           public void onError(FirebaseError firebaseError)
           {
+            mProgressDialog.dismiss();
             messageDialog("Unable to Sign-In", "Invalid password or email.");
           }
 

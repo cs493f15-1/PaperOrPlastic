@@ -85,7 +85,7 @@ public class MainSignInActivity extends BaseActivity
   private boolean saveSignIn = false;
 
   //  firebase reference
-  private Firebase  myFirebaseRef;
+  private Firebase mFirebaseRef;
   private FirebaseUser mfCurrentUser;
 
   private boolean mAuthSuccess = false, mbResetSuccess, mbResetDismiss;
@@ -136,7 +136,27 @@ public class MainSignInActivity extends BaseActivity
   protected void onResume ()
   {
     super.onResume();
-    initializeSignInPrefs();
+    //initializeSignInPrefs();
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+    SharedPreferences.Editor spe = sp.edit();
+
+    /**
+     * Get the newly registered user email if present, use null as default value
+     */
+    String signupEmail = sp.getString(Constants.KEY_SIGNUP_EMAIL, null);
+
+    /**
+     * Fill in the email editText and remove value from SharedPreferences if email is present
+     */
+    if (signupEmail != null)
+    {
+      mEmailView.setText(signupEmail);
+
+      /**
+       * Clear signupEmail sharedPreferences to make sure that they are used just once
+       */
+      spe.putString(Constants.KEY_SIGNUP_EMAIL, null).apply();
+    }
   }
 
   /***************************************************************************************************
@@ -222,7 +242,7 @@ private void initializeCheckboxes()
 private void initializeEditFields()
 {
   mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-  mEditPassword = (EditText) findViewById (R.id.editTextPassword);
+  mEditPassword = (EditText) findViewById (R.id.editTextPasswordInput);
   mLoginFormView = findViewById(R.id.loginForm);
 }
 
@@ -259,7 +279,7 @@ private void initializeSignInPrefs()
 private void initializeFirebase()
 {
   //Firebase.setAndroidContext(this.getApplication());
-  myFirebaseRef = new Firebase (Constants.FIREBASE_URL);
+  mFirebaseRef = new Firebase (Constants.FIREBASE_URL);
 }
 
 /***************************************************************************************************
@@ -475,7 +495,7 @@ public void rememberPass(String email, String password)
     final String password = mEditPassword.getText().toString();
 
     /* authenticate the user with the information in the fields!! */
-    myFirebaseRef.authWithPassword(email, password,
+    mFirebaseRef.authWithPassword(email, password,
       new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
     rememberPass(email, password);
@@ -595,7 +615,7 @@ public void rememberPass(String email, String password)
              * to make sure that user will be able to use temporary password
              * from the email more than 24 hours
              */
-            mFirebaseRef.changePassword(unprocessedEmail, mEmailView.getText().toString(),
+            mFirebaseRef.changePassword(unprocessedEmail, mEditPassword.getText().toString(),
               mEditPassword.getText().toString(), new Firebase.ResultHandler()
               {
                 @Override
