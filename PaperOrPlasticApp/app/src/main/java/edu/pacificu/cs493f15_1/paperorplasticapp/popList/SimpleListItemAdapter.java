@@ -68,16 +68,16 @@ public class SimpleListItemAdapter extends FirebaseListAdapter<SimpleListItem>
     HashMap<String, Object> updatedRemoveItemMap = new HashMap<String, Object>();
 
         /* Remove the item by passing null */
-    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_SHOPPING_LIST_ITEMS + "/"
-      + mListId + "/" + itemId, null);
+//    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_SHOPPING_LIST_ITEMS + "/"
+//      + mListId + "/" + itemId, null);
 
         /* Make the timestamp for last changed */
     HashMap<String, Object> changedTimestampMap = new HashMap<>();
     changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
         /* Add the updated timestamp */
-    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_ACTIVE_LISTS +
-      "/" + mListId + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+//    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_ACTIVE_LISTS +
+//      "/" + mListId + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
 
         /* Do the update */
     firebaseRef.updateChildren(updatedRemoveItemMap);
