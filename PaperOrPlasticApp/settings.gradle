@@ -1,1 +1,1 @@
-include ':app', ':nutrtiondbtest'
+include ':app'

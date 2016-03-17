@@ -44,5 +44,4 @@ dependencies
             compile 'com.android.support:support-v4:23.0.1'
             compile 'com.firebase:firebase-client-android:2.4.0+'
             testCompile 'junit:junit:4.12'
-            testCompile 'junit:junit:4.12'
         }
