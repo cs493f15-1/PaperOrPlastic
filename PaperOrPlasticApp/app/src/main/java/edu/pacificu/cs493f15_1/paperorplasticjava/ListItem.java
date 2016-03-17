@@ -15,6 +15,16 @@ public class ListItem
 {
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
+    private String itemID;
+    private String item_name;
+    private String brand_name;
+    private String item_type;
+    private String item_description;
+    private int serv_per_cont;
+    private double serv_size_qty;
+    private String serv_size_unit;
+    private double serv_size_weight;
+
     private int mFoodType ;
     private int mCustomCategory;
     private double mPrice;
@@ -23,7 +33,7 @@ public class ListItem
     private boolean mCheckedOff;
     private String mNotes;
     private String mName;
-    private NutritionFacts mNutritionFacts;
+    private NutritionFactModel mNutritionFactModel;
     private boolean mbShowsDelete;
 
     public final int MAX_LENGTH = 200; //arbitrary number
@@ -31,11 +41,27 @@ public class ListItem
     public ListItem ( String name)
     {
         mName = name;
-        mQuantity = 0;
+        mQuantity = 1;
         mCheckedOff = false;
-        mNutritionFacts = new NutritionFacts();
+        mNutritionFactModel = new NutritionFactModel();
         mNotes = "init";
     }
+
+    public ListItem (String itemId, String itemName, String brandName, String itemType,
+                     String itemDescription, int servPerCont, double servSizeQty,
+                     String servSizeUnit, double servSizeWeight)
+    {
+        itemID = itemId;
+        item_name = itemName;
+        brand_name = brandName;
+        item_type = itemType;
+        item_description = itemDescription;
+        serv_per_cont = servPerCont;
+        serv_size_qty = servSizeQty;
+        serv_size_unit = servSizeUnit;
+        serv_size_weight = servSizeWeight;
+    }
+
 
     /***********************************
      * GETS*
@@ -98,9 +124,9 @@ public class ListItem
         return mNotes;
     }
 
-    public NutritionFacts getNutritionFacts ()
+    public NutritionFactModel getNutritionFacts ()
     {
-        return mNutritionFacts;
+        return mNutritionFactModel;
     }
 
     /*******************************
@@ -129,6 +155,11 @@ public class ListItem
     public void setAddQuantity (int quantityToAdd)
     {
         mQuantity += quantityToAdd;
+    }
+
+    public void setQuantity (int quantity)
+    {
+        mQuantity = quantity;
     }
 
     public void setPrice (double price)
@@ -160,15 +191,15 @@ public class ListItem
 
     public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
     {
-        mNutritionFacts.mCalories = calories;
-        mNutritionFacts.mCarbohydrates = carbohydrate;
-        mNutritionFacts.mProtein = protein;
-        mNutritionFacts.mSugars = sugar;
-        mNutritionFacts.mFiber = fiber;
-        mNutritionFacts.mTotalFat = fat;
+        mNutritionFactModel.mCalories = calories;
+        mNutritionFactModel.mTotal_Carbs = carbohydrate;
+        mNutritionFactModel.mProtein = protein;
+        mNutritionFactModel.mSugars = sugar;
+        mNutritionFactModel.mFiber = fiber;
+        mNutritionFactModel.mTotal_Fat = fat;
     }
 
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFacts NFacts)
+    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
     {
         setFoodType (foodType);
         setAisle(aisle);
@@ -177,7 +208,7 @@ public class ListItem
         setCustomCategory(customCategory);
         setCheckedOff(checkedOff);
         setNotes(notes);
-        mNutritionFacts = NFacts;
+        mNutritionFactModel = NFacts;
     }
 
     /*******************************
@@ -220,7 +251,7 @@ public class ListItem
 
         itemOutput.println(getItemName());
         itemOutput.print(content);
-        mNutritionFacts.writeNutritionToFile(itemOutput);
+        mNutritionFactModel.writeNutritionToFile(itemOutput);
         itemOutput.print("\n");
         itemOutput.flush();
     }
@@ -245,7 +276,7 @@ public class ListItem
         setCustomCategory(itemInput.nextInt());
         setCheckedOff(itemInput.nextBoolean());
         setNotes(itemInput.next());
-        mNutritionFacts.readNutritionFromFile(itemInput);
+        mNutritionFactModel.readNutritionFromFile(itemInput);
     }
 
 }
