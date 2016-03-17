@@ -17,9 +17,11 @@
             android:elegantTextHeight="false"
             android:background="@android:color/transparent"
             android:maxWidth="200dp"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/itemCheckBox"
-            android:layout_toEndOf="@+id/itemCheckBox" />
+            android:layout_toLeftOf="@+id/quantityText"
+            android:layout_toStartOf="@+id/quantityText"
+            android:layout_toEndOf="@id/itemCheckBox"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -62,7 +64,8 @@
             android:layout_alignStart="@+id/bDelete"
             android:layout_alignRight="@+id/bDelete"
             android:layout_alignEnd="@+id/bDelete"
-            android:autoText="true" />
+            android:autoText="true"
+            android:layout_alignParentEnd="false"/>
 
 
     </RelativeLayout>

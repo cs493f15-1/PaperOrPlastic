@@ -214,9 +214,13 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
                 // or grocery list page
                 String caller = getIntent().getStringExtra("Caller");
                 Intent intent;
-                if (caller.equals("SettingsActivity")) {
+                if (caller.equals("SettingsActivity"))
+                {
                     intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
-                } else {
+                }
+
+                else
+                {
                     if (isGrocery) //whether the caller was groceryList
                     {
                         intent = new Intent(PoPListSettingsActivity.this, GroceryListActivity.class);

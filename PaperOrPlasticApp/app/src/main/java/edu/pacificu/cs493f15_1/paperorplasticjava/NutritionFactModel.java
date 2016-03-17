@@ -6,35 +6,34 @@ import java.util.Scanner;
 /**
  * Created by jo9026 on 10/22/2015.
  */
-public class NutritionFacts
+public class NutritionFactModel
 {
-	/* Nutritional Facts */
-	// Will most likely add more.
+	/******************************
+	 * Nutrition Data Model for MVC
+	 ******************************/
+
 	int mCalories;
+	int mCaloriesFat;
+	int mTotal_Fat;
+	int mSat_Fat;
+	int mTotal_Carbs;
 	int mProtein;
-	int mTotalFat;
-	int mCarbohydrates;
 	int mSugars;
 	int mFiber;
+	int mSodium;
 
-	public NutritionFacts ()
+	public NutritionFactModel()
 	{
-		mCalories = 0;
-		mProtein = 0;
-		mCarbohydrates = 0;
-		mTotalFat = 0;
-		mSugars = 0;
-		mFiber = 0;
 	}
 
 	public void setAll (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
 	{
 		mCalories = calories;
-		mCarbohydrates = carbohydrate;
+		mTotal_Carbs = carbohydrate;
 		mProtein = protein;
 		mSugars = sugar;
 		mFiber = fiber;
-		mTotalFat = fat;
+		mTotal_Fat = fat;
 	}
 
 	/*********************************
@@ -52,7 +51,7 @@ public class NutritionFacts
 	 ******************************************************************************************/
 	public void writeNutritionToFile (PrintWriter NutritionOutput)
 	{
-		NutritionOutput.print(mCalories + " " + mProtein + " " + mTotalFat + " " + mCarbohydrates + " " + mSugars + " " + mFiber);
+		NutritionOutput.print(mCalories + " " + mProtein + " " + mTotal_Fat + " " + mTotal_Carbs + " " + mSugars + " " + mFiber);
 		NutritionOutput.flush();
 	}
 
@@ -68,10 +67,10 @@ public class NutritionFacts
 	public void readNutritionFromFile (Scanner Nutritioninput)
 	{
 		mCalories = Nutritioninput.nextInt();
-		mCarbohydrates = Nutritioninput.nextInt();
+		mTotal_Carbs = Nutritioninput.nextInt();
 		mProtein = Nutritioninput.nextInt();
 		mSugars = Nutritioninput.nextInt();
 		mFiber = Nutritioninput.nextInt();
-		mTotalFat = Nutritioninput.nextInt();
+		mTotal_Fat = Nutritioninput.nextInt();
 	}
 }

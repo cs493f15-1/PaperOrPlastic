@@ -10,11 +10,13 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.groceryList;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.popList.PoPListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryLists;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 
 /***************************************************************************************************
@@ -43,4 +45,6 @@ public class GroceryListActivity extends PoPListActivity {
 
         PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list, R.layout.grocery_list_item, GroceryLists.GROCERY_FILE_NAME, true);
     }
+
+
 }
