@@ -38,6 +38,9 @@ The best way to get in touch with project leads concerning code contribution is 
 ## License 
 - Project
    - [MIT](http://opensource.org/licenses/MIT)
+   - 
+##Acknowledgements
+   -some icons designed by Freepik 
 
 ## Original Authors
 Evan Heydemann (eheydemann)
