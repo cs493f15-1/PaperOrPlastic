@@ -30,6 +30,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +57,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public abstract class PoPListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public abstract class PoPListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener{
 
     final float SLIDE_RIGHT_ITEM = 5;
     final float SLIDE_LEFT_ITEM = -145;
@@ -67,7 +68,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private Button mbEdit;
+    private ToggleButton mbEdit;
     private boolean mbIsOnEdit;
     private String mLastAddedItemName;
 
@@ -227,8 +228,9 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      ***********************************************************************************************/
     private void setupEditDeleteButtonsForLists()
     {
-        mbEdit = (Button) findViewById(R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener() {
+        mbEdit = (ToggleButton) findViewById(R.id.bEdit);
+        mbEdit.setChecked(mbIsOnEdit);
+       /* mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mListAdapters.size() != 0) {
@@ -259,7 +261,61 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     }
                 }
             }
-        });
+        });*/
+    }
+
+    public void onClickEditButton (View view)
+    {
+        if (mListAdapters.size() != 0) {
+            int size = getCurrentPoPList().getSize();
+            if (size > 0) {
+                if (!mbIsOnEdit) {
+                    mbIsOnEdit = true;
+                    mbEdit.setChecked(mbIsOnEdit);
+                    //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
+                    showDeleteButtons(size);
+                    mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+                    mbAddItem.setEnabled(false);
+                } else {
+
+                    //showDeleteButton also gets rid of the delete button so we might not need this check
+
+                    mbIsOnEdit = false;
+                    mbEdit.setChecked(mbIsOnEdit);
+                    //TODO might need to show again if tab is changed
+                    hideDeleteButtons(size);
+                    mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+                    mbAddItem.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    /***********************************************************************************************
+     *   Method:      showDeleteButtons
+     *   Description: shows a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void showDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++) {
+            showDeleteButton(i);
+        }
+    }
+
+    /***********************************************************************************************
+     *   Method:      hideDeleteButtons
+     *   Description: hides a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void hideDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            hideDeleteButton(i);
+        }
     }
 
     /***********************************************************************************************
@@ -277,8 +333,19 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
 
                 if (mListAdapters.size() > 0) {
+
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
+
+                    if (mbIsOnEdit)
+                    {
+                        //Todo: cjanging tabs doesn't keep editting mode on
+                        Log.d("GroceryListActivity", "tab changed, on edit");
+                        int size = getCurrentPoPList().getSize();
+                        showDeleteButtons(size);
+                    }
                 }
+
+
 
             }
         });
@@ -475,6 +542,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
         Context context = getApplicationContext();
         File popFile = context.getFileStreamPath(mPoPFileName);
+
+        mbIsOnEdit = false;
 
         if (popFile.exists()) {
             mPoPLists.clearLists();
@@ -751,13 +820,13 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      ******************************************************************************************/
     private void slideItemView (View child, float translationAmount)
     {
-        CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
-        Button itemName = (Button) child.findViewById(R.id.bListItem);
+       // CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
+        //Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
         EditText qtyInput = (EditText) child.findViewById(R.id.input_qty);
 
-        checkBox.setTranslationX(translationAmount);
-        itemName.setTranslationX(translationAmount);
+       //checkBox.setTranslationX(translationAmount);
+       // itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
         qtyInput.setTranslationX(translationAmount);
     }

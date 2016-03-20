@@ -420,8 +420,9 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
 
     private void slideItemView (View child, float translationAmount)
     {
-        TextView listName = (TextView) child.findViewById(R.id.listName);
-        listName.setTranslationX(translationAmount);
+        //can use this function to slide any other items in view over, does not slide over list name since we want to see the name
+        // listName = (TextView) child.findViewById(R.id.listName);
+        //listName.setTranslationX(translationAmount);
 
     }
 
