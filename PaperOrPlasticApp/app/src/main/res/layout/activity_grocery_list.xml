@@ -32,7 +32,9 @@
                 android:layout_alignTop="@+id/bBackToHome"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
                 android:layout_toEndOf="@id/bBackToHome"
+                android:layout_toRightOf="@id/bBackToHome"
                 android:layout_marginLeft="25dp" />
 
             <Button
@@ -67,7 +69,9 @@
                 android:layout_toRightOf="@+id/groceryListText"
                 android:layout_toEndOf="@+id/groceryListText"
                 android:layout_toStartOf="@id/bListSettings"
+                android:layout_toLeftOf="@id/bListSettings"
                 android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center"
@@ -88,7 +92,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/bAddList"
                 android:textSize="17dp"
-                android:text="@string/sAddList" />
+                android:text="@string/sAddList"
+                android:onClick="onAddListClick" />
 
             <HorizontalScrollView android:layout_width="321dp"
                 android:layout_height="match_parent"
@@ -153,7 +158,8 @@
                 android:layout_alignParentTop="true"
                 android:text="@string/sAddItem"
                 style="@style/Base.Widget.AppCompat.Button.Borderless"
-                android:gravity="center_vertical|center_horizontal" />
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="onAddItemClick" />
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"

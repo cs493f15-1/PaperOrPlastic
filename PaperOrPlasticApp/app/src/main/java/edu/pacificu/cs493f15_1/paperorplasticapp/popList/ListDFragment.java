@@ -59,8 +59,8 @@ public class ListDFragment extends DialogFragment
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditNameDialogListener activity = (EditNameDialogListener) getActivity();
-                activity.onFinishListDialog(mEditText.getText().toString());
+                PoPListActivity activity = (PoPListActivity) getActivity();
+                (activity.getListInfoListener()).onFinishNewListDialog(mEditText.getText().toString());
                 mDialog.dismiss();
             }
         });

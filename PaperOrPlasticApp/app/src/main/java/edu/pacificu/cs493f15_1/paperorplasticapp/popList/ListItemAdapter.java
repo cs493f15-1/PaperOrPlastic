@@ -13,12 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
 /**
  * Created by sull0678 on 11/5/2015.
@@ -71,6 +73,12 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
         super.notifyDataSetChanged();
 
     }*/
+
+
+    public Context getContext ()
+    {
+        return mContext;
+    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent)
@@ -155,7 +163,52 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                 }
             });
 
-                    row.setTag(itemHolder);
+            //set upDeleteButton
+            itemHolder.bDelete = (Button) row.findViewById(R.id.bDelete);
+            itemHolder.bDelete.setOnClickListener(new View.OnClickListener() {
+
+                private View mView = null;
+
+                @Override
+                public void onClick(View v) {
+                    mView = v;
+                    PoPList poPList = ((PoPListActivity) getContext()).getCurrentPoPList();
+                    Button delete = (Button)v;
+                    int pos = (Integer) v.getTag();
+
+                    delete.setVisibility(View.INVISIBLE);
+
+                    //delete item
+                    poPList.delete(pos);
+                    //notify list adapter
+                    ((PoPListActivity) getContext()).getCurrentListAdapter().notifyDataSetChanged();
+
+                    //wait a moment before sliding view so that list can be updated in time
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            // Actions to do after 100 milliseconds
+                            slideView();
+
+                        }
+                    }, 100);
+
+                }
+
+                //method of the delete button's onClickListener
+                public void slideView ()
+                {
+                    if (!((PoPListActivity) getContext()).isOnEdit()) {
+                        ((PoPListActivity) getContext()).slideItemView(((View) mView.getParent()), PoPListActivity.SLIDE_RIGHT_ITEM);
+                    }
+                }
+
+
+            });
+
+            //used later when the row's button methods are already initialized but the information (like position and name are not)
+            row.setTag(itemHolder);
+
         }
         else
         {
@@ -164,8 +217,9 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
         //set list row info
         ListItem item = mItemArray.get(position);
-       itemHolder.itemButton.setText(item.getItemName());
-
+        itemHolder.itemButton.setText(item.getItemName());
+        itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
+        itemHolder.bDelete.setTag(position);
 
         return row;
     }
@@ -175,6 +229,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
         Button itemButton;
         CheckBox checkBox;
         EditText itemQuantity;
+        Button bDelete;
     }
 
 

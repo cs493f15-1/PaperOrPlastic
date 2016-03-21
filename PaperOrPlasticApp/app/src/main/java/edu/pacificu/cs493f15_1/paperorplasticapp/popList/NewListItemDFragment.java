@@ -53,7 +53,7 @@ public class NewListItemDFragment extends DialogFragment
             @Override
             public void onClick(View v) {
                 PoPListActivity activity = (PoPListActivity) getActivity();
-                NewItemInfoDialogListener listener = activity.getItemInfoListener();
+                DialogListener listener = activity.getItemInfoListener();
                 listener.onFinishNewItemDialog(mItemNameText.getText().toString());
                 mDialog.dismiss();
             }
