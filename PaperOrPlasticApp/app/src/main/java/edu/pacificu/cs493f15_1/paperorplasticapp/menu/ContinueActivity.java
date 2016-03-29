@@ -16,6 +16,8 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -139,6 +141,31 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   protected void onResume()
   {
     super.onResume();
+  }
+
+
+  /**
+   * Override onOptionsItemSelected to use main_menu instead of BaseActivity menu
+   *
+   * @param menu
+   */
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+        /* Inflate the menu; this adds items to the action bar if it is present. */
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  /**
+   * Override onOptionsItemSelected to add action_settings only to the MainActivity
+   *
+   * @param item
+   */
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    return super.onOptionsItemSelected(item);
   }
 
   /***********************************************************************************************

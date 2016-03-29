@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,6 +32,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +54,8 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /***************************************************************************************************
  *   Class:         POPListActivity
@@ -83,6 +92,9 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   private NewItemInfoDialogListener mItemInfoListener;
 
+  private Firebase mUserRef, mListsRef;
+  private ValueEventListener mUserRefListener;
+
   /********************************************************************************************
    * Function name: onCreate
    *
@@ -97,6 +109,7 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
     super.onCreate(savedInstanceState);
   }
+
   /********************************************************************************************
    * Function name: PoPOnCreate
    * <p/>
@@ -147,9 +160,79 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     setUpGroupSpinnerHandleSorting();
 
     addAllExistingListsInPoPListsToTabs();
+
+
+
+    setUpActivityTitle(isGrocery);
   }
 
 
+
+  /**
+   * Override onOptionsItemSelected to use main_menu instead of BaseActivity menu
+   *
+   * @param menu
+   */
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+        /* Inflate the menu; this adds items to the action bar if it is present. */
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  /**
+   * Override onOptionsItemSelected to add action_settings only to the MainActivity
+   *
+   * @param item
+   */
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    return super.onOptionsItemSelected(item);
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  private void setUpActivityTitle(boolean isGrocery)
+  {
+    final boolean bGrocery = isGrocery;
+
+    mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+    mUserRefListener = mUserRef.addValueEventListener(new ValueEventListener()
+    {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot)
+      {
+        User user = dataSnapshot.getValue(User.class);
+
+        if (user != null)
+        {
+          String title;
+          String name = user.getmName().split("\\s")[0];
+          if (bGrocery)
+          {
+            title = name + "'s Lists";
+          }
+          else
+          {
+            title = name + "'s Inventory";
+          }
+          setTitle(title);
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError)
+      {
+
+      }
+    });
+  }
 
 
   /***********************************************************************************************

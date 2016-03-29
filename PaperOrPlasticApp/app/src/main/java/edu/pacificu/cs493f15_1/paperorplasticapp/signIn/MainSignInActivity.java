@@ -22,6 +22,7 @@ import android.app.usage.ConfigurationStats;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -32,17 +33,29 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.Scope;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
@@ -377,7 +390,9 @@ public void rememberPass(String email, String password)
 ***************************************************************************************************/
   public void onSignInGooglePressed(View view)
   {
-
+    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+    startActivityForResult(signInIntent, RC_GOOGLE_LOGIN);
+    mAuthProgressDialog.show();
   }
 
 
@@ -570,6 +585,58 @@ public void rememberPass(String email, String password)
 ***************************************************************************************************/
   private void setAuthUserGoogle(AuthData authData)
   {
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    SharedPreferences.Editor spe = sp.edit();
+    String unprocessedEmail;
+
+
+    if (mGoogleApiClient.isConnected())
+    {
+      unprocessedEmail = mGoogleAccount.getEmail().toLowerCase();
+      spe.putString(Constants.KEY_GOOGLE_EMAIL, unprocessedEmail).apply();
+    }
+    else
+    {
+
+      /**
+       * Otherwise get email from sharedPreferences, use null as default value
+       * (this mean that user resumes his session)
+       */
+      unprocessedEmail = sp.getString(Constants.KEY_GOOGLE_EMAIL, null);
+    }
+    /**
+     * Encode user email replacing "." with "," to be able to use it
+     * as a Firebase db key
+     */
+    mEncodedEmail = Utils.encodeEmail(unprocessedEmail);
+
+            /* Get username from authData */
+    final String userName = (String) authData.getProviderData().get(Constants.PROVIDER_DATA_DISPLAY_NAME);
+
+            /* If no user exists, make a user */
+    final Firebase userLocation = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+    userLocation.addListenerForSingleValueEvent(new ValueEventListener()
+    {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot)
+      {
+                    /* If nothing is there ...*/
+        if (dataSnapshot.getValue() == null)
+        {
+          HashMap<String, Object> timestampJoined = new HashMap<>();
+          timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+          User newUser = new User(userName, mEncodedEmail, timestampJoined);
+          userLocation.setValue(newUser);
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError)
+      {
+        Log.d(LOG_TAG, "Error occurred: " + firebaseError.getMessage());
+      }
+    });
 
   }
 
@@ -647,5 +714,132 @@ public void rememberPass(String email, String password)
     });
   }
 
+
+  @Override
+  public void onConnectionFailed(ConnectionResult result)
+  {
+    /**
+     * An unresolvable error has occurred and Google APIs (including Sign-In) will not
+     * be available.
+     */
+    mAuthProgressDialog.dismiss();
+    //showErrorToast(result.toString());
+  }
+
+  /**
+   * Show error toast to users
+   */
+  private void showErrorToast(String message)
+  {
+    Toast.makeText(MainSignInActivity.this, message, Toast.LENGTH_LONG).show();
+  }
+
+
+  /**
+   * This callback is triggered when any startActivityForResult finishes. The requestCode maps to
+   * the value passed into startActivityForResult.
+   */
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    super.onActivityResult(requestCode, resultCode, data);
+        /* Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); */
+    if (requestCode == RC_GOOGLE_LOGIN)
+    {
+      GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+      handleSignInResult(result);
+    }
+
+  }
+
+  private void handleSignInResult(GoogleSignInResult result)
+  {
+    Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
+    if (result.isSuccess())
+    {
+            /* Signed in successfully, get the OAuth token */
+      mGoogleAccount = result.getSignInAccount();
+      getGoogleOAuthTokenAndLogin();
+
+
+    }
+    else
+    {
+      if (result.getStatus().getStatusCode() == GoogleSignInStatusCodes.SIGN_IN_CANCELLED)
+      {
+        showErrorToast("The sign in was cancelled. Make sure you're connected to the internet and try again.");
+      }
+      else
+      {
+        showErrorToast("Error handling the sign in: " + result.getStatus().getStatusMessage());
+      }
+      mAuthProgressDialog.dismiss();
+    }
+  }
+
+  /**
+   * Gets the GoogleAuthToken and logs in.
+   */
+  private void getGoogleOAuthTokenAndLogin()
+  {
+        /* Get OAuth token in Background */
+    AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>()
+    {
+      String mErrorMessage = null;
+
+      @Override
+      protected String doInBackground(Void... params)
+      {
+        String token = null;
+
+        try
+        {
+          String scope = String.format("oath2:%s" , new Scope(Scopes.PROFILE)) + " email";
+
+          token = GoogleAuthUtil.getToken(MainSignInActivity.this, mGoogleAccount.getEmail(), scope);
+        } catch (IOException transientEx)
+        {
+                    /* Network or server error */
+          //Log.e(LOG_TAG, getString(R.string.google_error_auth_with_google) + transientEx);
+          mErrorMessage = "Network error: " + transientEx.getMessage();
+        } catch (UserRecoverableAuthException e)
+        {
+          //Log.w(LOG_TAG, getString(R.string.google_error_recoverable_oauth_error) + e.toString());
+
+                    /* We probably need to ask for permissions, so start the intent if there is none pending */
+          if (!mGoogleIntentInProgress)
+          {
+            mGoogleIntentInProgress = true;
+            Intent recover = e.getIntent();
+            startActivityForResult(recover, RC_GOOGLE_LOGIN);
+          }
+        } catch (GoogleAuthException authEx)
+        {
+                    /* The call is not ever expected to succeed assuming you have already verified that
+                     * Google Play services is installed. */
+          Log.e(LOG_TAG, " " + authEx.getMessage(), authEx);
+         mErrorMessage = "Error auth with Google: " + authEx.getMessage();
+        }
+        return token;
+      }
+
+      @Override
+      protected void onPostExecute(String token)
+      {
+        mAuthProgressDialog.dismiss();
+        if (token != null)
+        {
+                    /* Successfully got OAuth token, now login with Google */
+          mFirebaseRef.authWithOAuthToken(Constants.GOOGLE_PROVIDER, token, new PoPAuthResultHandler(Constants.GOOGLE_PROVIDER));
+        }
+        else if (mErrorMessage != null)
+        {
+          showErrorToast(mErrorMessage);
+        }
+      }
+    };
+
+    task.execute();
+  }
 
 }

@@ -23,14 +23,16 @@ public class SimpleListItemAdapter extends FirebaseListAdapter<SimpleListItem>
 {
   private SimpleList mList;
   private String mListId, mEncodedEmail;
+  private boolean bIsGrocery;
 
   public SimpleListItemAdapter(Activity activity, Class<SimpleListItem> modelClass, int modelLayout,
-                               Query ref, String listId, String encodedEmail)
+                               Query ref, String listId, String encodedEmail, boolean grocery)
   {
     super(activity, modelClass, modelLayout, ref);
     this.mActivity = activity;
     this.mListId = listId;
     this.mEncodedEmail = encodedEmail;
+    this.bIsGrocery = grocery;
   }
 
 
@@ -68,16 +70,37 @@ public class SimpleListItemAdapter extends FirebaseListAdapter<SimpleListItem>
     HashMap<String, Object> updatedRemoveItemMap = new HashMap<String, Object>();
 
         /* Remove the item by passing null */
-//    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_SHOPPING_LIST_ITEMS + "/"
-//      + mListId + "/" + itemId, null);
+    if (bIsGrocery)
+    {
+      updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LIST_ITEMS + "/"
+        + mListId + "/" + itemId, null);
+    }
+    else
+    {
+      updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS + "/"
+        + mListId + "/" + itemId, null);
+    }
+
+
 
         /* Make the timestamp for last changed */
     HashMap<String, Object> changedTimestampMap = new HashMap<>();
     changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
-        /* Add the updated timestamp */
-//    updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_ACTIVE_LISTS +
-//      "/" + mListId + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+
+    if (bIsGrocery)
+    {
+              /* Add the updated timestamp */
+      updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LISTS +
+        "/" + mListId + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+    }
+    else
+    {
+                    /* Add the updated timestamp */
+      updatedRemoveItemMap.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY +
+        "/" + mListId + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+    }
+
 
         /* Do the update */
     firebaseRef.updateChildren(updatedRemoveItemMap);
