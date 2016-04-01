@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -25,12 +26,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,11 +59,11 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public abstract class PoPListActivity extends FragmentActivity implements ListDFragment.EditNameDialogListener {
+public abstract class PoPListActivity extends FragmentActivity {
 
-    final float SLIDE_RIGHT_ITEM = 5;
-    final float SLIDE_LEFT_ITEM = -145;
     final int REQUEST_OK = 1;
+    public static final float SLIDE_RIGHT_ITEM = 5;
+    public static final float SLIDE_LEFT_ITEM = -145;
 
     private Button mbAddList, mbAddItem, mbSettings, mbBack;
     private Spinner mGroupBySpinner;
@@ -69,14 +71,14 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     private TabHost mListTabHost;
     private FragmentManager fm;
     private ListView mListView;
-    private Button mbEdit;
-    private boolean mbIsOnEdit, mbAddingItem;
-    private String mLastAddedItemName;
+    private boolean mbIsOnEdit, mbAddingItem, mbIsGrocery;
     private ListFragment listFrag;
     private ListItem newItem;
-
+    private ToggleButton mbEdit;
+    private int mLastClicked;
     private String mPoPFileName;
     private PoPLists mPoPLists;
+    private DialogListener mListInfoListener;
 
     private int mItemLayout;
 
@@ -84,7 +86,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     int position = 0;
     Button delete;
 
-    private NewItemInfoDialogListener mItemInfoListener;
+    private DialogListener mItemInfoListener;
 
 
     @Override
@@ -153,6 +155,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mPoPFileName = fileName;
         mbIsOnEdit = false;
         mbAddingItem = false;
+        mbIsGrocery = isGrocery;
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
 
@@ -165,15 +168,15 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         setupEditDeleteButtonsForLists();
 
         //setup back buttons
-        setupBackButton(isGrocery);
+        setupBackButton();
 
         //setup settings activity button
-        setupSettingsActivityButton(isGrocery);
+        setupSettingsActivityButton();
 
         //setup addList and addItem buttons
         setupAddListButtons();
 
-        setupAddItemButtons(isGrocery);
+        setupAddItemButtons();
 
         //setup the sorting group by spinner (drop down list sorting)
         setUpGroupSpinnerHandleSorting();
@@ -193,38 +196,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Returned:    NONE
      ***********************************************************************************************/
     private void handleSwipingToDelete() {
-/*
-        mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
-            @Override
-            public void onSwipeRight(int pos) {
-                //Toast.makeText (GroceryListActivity.this, "right", Toast.LENGTH_LONG).show();
-
-                if (!mbIsOnEdit) {
-                    hideDeleteButton(pos);
-                }
-
-                if (mbIsOnEdit) {
-                    if (mListAdapters.size() != 0) {
-                        int size = getCurrentPoPList().getSize();
-                        if (size > 0) {
-
-                            for (int i = 0; i < size; i++) {
-                                showDeleteButton(i);
-                            }
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onSwipeLeft(int pos) {
-                //Toast.makeText (GroceryListActivity.this, "left", Toast.LENGTH_LONG).show();
-                if (!mbIsOnEdit) {
-                    showDeleteButton(pos);
-                }
-            }
-        });
-*/
 
         //to view items in list
         mListView = (ListView) findViewById(R.id.listView);
@@ -248,6 +219,17 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     showDeleteButton(pos); //TODO can this be removed?
                 }
             }
+
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // selected item
+                mLastClicked = position;
+
+                Toast toast = Toast.makeText(getApplicationContext(), mLastClicked, Toast.LENGTH_SHORT);
+                toast.show();
+
+            }
         });
     }
 
@@ -258,7 +240,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Parameters:  NONE
      * Returned:    NONE
      ***********************************************************************************************/
-    private void setupEditDeleteButtonsForLists() {
+/*    private void setupEditDeleteButtonsForLists() {
         mbEdit = (Button) findViewById(R.id.bEdit);
         mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -268,30 +250,77 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     if (size > 0) {
                         if (!mbIsOnEdit) {
                             mbIsOnEdit = true;
-
-                            //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
-                            for (int i = 0; i < size; i++) {
-                                showDeleteButton(i);
-                            }
-                            mbAddItem.setTextColor(Color.rgb(170, 170, 170));
-                            mbAddItem.setEnabled(false);
-                        } else {
-
-                            //showDeleteButton also gets rid of the delete button so we might not need this check
-
-                            mbIsOnEdit = false;
-
-                            //showDeleteButton also gets rid of the delete button so we might not need this check
-                            //TODO might need to show again if tab is changed
-                            mbIsOnEdit = false;
-                            for (int i = 0; i < size; i++) {
-                                hideDeleteButton(i);
-                            }
                         }
                     }
                 }
             }
         });
+    }*/
+
+    private void setupEditDeleteButtonsForLists()
+    {
+        mbEdit = (ToggleButton) findViewById(R.id.bEdit);
+        mbEdit.setChecked(mbIsOnEdit);
+    }
+
+    /***********************************************************************************************
+     *   Method:      onClickEditButton
+     *   Description: Handles click of edit button
+     *   Parameters:  view
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    public void onClickEditButton (View view)
+    {
+        if (mListAdapters.size() != 0) {
+            int size = getCurrentPoPList().getSize();
+
+            if (size > 0) {
+
+                if (!mbIsOnEdit) {
+                    mbIsOnEdit = true;
+                    mbEdit.setChecked(mbIsOnEdit);
+                    //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
+                    showDeleteButtons(size);
+                    mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+                    mbAddItem.setEnabled(false);
+                } else {
+
+                    mbIsOnEdit = false;
+                    mbEdit.setChecked(mbIsOnEdit);
+                    //TODO might need to show again if tab is changed
+                    hideDeleteButtons(size);
+                    mbAddItem.setTextColor(Color.rgb(0, 0, 0));
+                    mbAddItem.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    /***********************************************************************************************
+     *   Method:      showDeleteButtons
+     *   Description: shows a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void showDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++) {
+            showDeleteButton(i);
+        }
+    }
+
+    /***********************************************************************************************
+     *   Method:      hideDeleteButtons
+     *   Description: hides a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void hideDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            hideDeleteButton(i);
+        }
     }
 
     /***********************************************************************************************
@@ -305,10 +334,29 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         mListTabHost.setup();
         mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
+
                 mListTabHost.setCurrentTab(Integer.parseInt(tabId));
 
                 if (mListAdapters.size() > 0) {
+
                     mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
+
+                    if (mbIsOnEdit) {
+                        Log.d("GroceryListActivity", "tab changed, on edit");
+
+                        Handler handler = new Handler();
+                        //wait for tab to be changed
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                // Actions to do after 1 seconds
+                                int size = getCurrentPoPList().getSize();
+
+                                showDeleteButtons(size);
+
+                            }
+                        }, 100);
+
+                    }
                 }
             }
         });
@@ -320,12 +368,12 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Parameters:  NONE
      * Returned:    NONE
      ***********************************************************************************************/
-    private void setupBackButton(final boolean isGrocery) {
+    private void setupBackButton() {
         mbBack = (Button) findViewById(R.id.bBackToHome);
         mbBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isGrocery) {
+                if (mbIsGrocery) {
                     Intent intent = new Intent(PoPListActivity.this, ContinueActivity.class);
                     intent.putExtra("Caller", "GroceryListActivity");
                     startActivity(intent);
@@ -347,14 +395,15 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     private void setupAddListButtons() {
         //set up addList button
         mbAddList = (Button) findViewById(R.id.bAddList);
-        mbAddList.setOnClickListener(new View.OnClickListener() {
+
+/*        mbAddList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fm = getSupportFragmentManager();
                 ListDFragment listDFragment = new ListDFragment();
                 listDFragment.show(fm, "Hi");
             }
-        });
+        });*/
     }
 
     /***********************************************************************************************
@@ -363,28 +412,82 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Parameters:  NONE
      * Returned:    NONE
      ***********************************************************************************************/
-    private void setupAddItemButtons(final boolean isGrocery) {
+    private void setupAddItemButtons () {
 
         //set up add item button
         mbAddItem = (Button) findViewById(R.id.bAddItem);
 
-
+/*
         mbAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String item_name;
                 Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
-                addItemIntent.putExtra("num_list_items", getNumGList());
+                addItemIntent.putExtra("num_list_items", getNumPoPList());
 
-                if (isGrocery) {
+                if (mbIsGrocery) {
                     addItemIntent.putExtra("Caller", "GroceryListActivity");
                 } else {
                     addItemIntent.putExtra("Caller", "KitchenInventoryActivity");
                 }
 
-                startActivityForResult(addItemIntent, REQUEST_OK);
+        //set up add item button
+        mbAddItem = (Button) findViewById(R.id.bAddItem);*/
+    }
+
+    /***********************************************************************************************
+     *   Method:      onAddListClick
+     *   Description: If addList button is clicked, create dialog box and listener for finishing
+     *                dialog
+     *   Parameters:  view - the button that was clicked
+     *   Returned:    NONE
+     ***********************************************************************************************/
+
+    public void onAddListClick (View view)
+    {
+        mListInfoListener = new DialogListener() {
+            @Override
+            public void onFinishNewListDialog(String newListName) {
+
+                if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
+                {
+                    //add List to Lists and create a tab
+                    mPoPLists.addList(newListName);
+
+                    addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
+                }
+                else
+                {
+                    //TODO output error to user saying List Name already exists
+                    Log.d ("PoPListActivity", "Error with duplicate list names, not handled");
+                }
+
             }
-        });
+        };
+
+        fm = getSupportFragmentManager();
+        ListDFragment listDFragment = new ListDFragment();
+        listDFragment.show(fm, "Hi");
+    }
+
+    /***********************************************************************************************
+     *   Method:      onAddItemClick
+     *   Description: If addItem button is clicked, call activity for searching for an item
+     *   Parameters:  view - the button that was clicked
+     *   Returned:    NONE
+     ***********************************************************************************************/
+
+    public void onAddItemClick (View view)
+    {
+        Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
+        addItemIntent.putExtra("num_list_items", getNumPoPList());
+
+        if (mbIsGrocery) {
+            addItemIntent.putExtra("Caller", "GroceryListActivity");
+        } else {
+            addItemIntent.putExtra("Caller", "KitchenInventoryActivity");
+        }
+        startActivityForResult(addItemIntent, REQUEST_OK);
     }
 
     /***********************************************************************************************
@@ -395,12 +498,12 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      *   Parameters:  NONE
      *   Returned:    NONE
      ***********************************************************************************************/
-    private void setupSettingsActivityButton (final boolean isGrocery) {
+    private void setupSettingsActivityButton () {
         mbSettings = (Button) findViewById(R.id.bListSettings);
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isGrocery) {
+                if (mbIsGrocery) {
                     Intent intent = new Intent(PoPListActivity.this, GroceryListSettingsActivity.class);
                     intent.putExtra("Caller", "GroceryListActivity");
                     startActivity(intent);
@@ -468,14 +571,36 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         });
     }
 
-
-
-
+    /********************************************************************************************
+     * Function name: addAllExistingListsInPoPListsToTabs
+     *
+     * Description:   Creates a tab for every existing List in the mPopLists array
+     *
+     * Parameters:    none
+     *
+     * Returns:       none
+     ******************************************************************************************/
     private void addAllExistingListsInPoPListsToTabs() {
         for (int i = 0; i < mPoPLists.getSize(); i++) {
             addListTab(mPoPLists.getList(i), i);
         }
     }
+
+    /********************************************************************************************
+     * Function name: getCurrentListAdapter
+     *
+     * Description:   Returns the current List adapter being shown on the screen
+     *
+     * Parameters:    none
+     *
+     * Returns:       the current ListItemAdapter
+     ******************************************************************************************/
+
+    public ListItemAdapter getCurrentListAdapter()
+    {
+        return mListAdapters.get(mListTabHost.getCurrentTab());
+    }
+
     /********************************************************************************************
      * Function name: onPause
      *
@@ -511,6 +636,10 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
         Context context = getApplicationContext();
         File popFile = context.getFileStreamPath(mPoPFileName);
+
+        mbIsOnEdit = false;
+
+        //popFile.delete();
 
         if (popFile.exists()) {
             mPoPLists.clearLists();
@@ -564,33 +693,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         }
     }
 
-    /********************************************************************************************
-     * Function name: onFinishListDialog
-     * <p/>
-     * Description:   When dialog for adding list is done, add list and list tab with text from
-     * dialog as the new list name
-     * <p/>
-     * Parameters:    newListName - the new list's name
-     * <p/>
-     * Returns:       none
-     ******************************************************************************************/
-
-    @Override
-    public void onFinishListDialog(String newListName)
-    {
-        if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
-        {
-            //add List to Lists and create a tab
-            mPoPLists.addList(newListName);
-
-            addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
-        }
-        else
-        {
-            //TODO output error to user saying List Name already exists
-        }
-
-    }
 
     /********************************************************************************************
      * Function name: addItemToListView
@@ -625,25 +727,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     }
 
     /********************************************************************************************
-     * Function name: showDeleteOnEdit
-     *
-     * Description:   Shows delete button for item if editing is on
-     *
-     * Parameters:    itemName - the item that will be deleted
-     *
-     * Returns:       none
-     ******************************************************************************************/
-
-    public void showDeleteOnEdit (String itemName)
-    {
-        int itemIndex = getCurrentPoPList().getItemIndex(itemName);
-        if (mbIsOnEdit && itemIndex != -1)
-        {
-            showDeleteButton(itemIndex);
-        }
-    }
-
-    /********************************************************************************************
      * Function name: addListAdapter
      *
      * Description:   Adds a list adapter for mListView to keep track of the info in popList
@@ -671,7 +754,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    private PoPList getCurrentPoPList()
+    public PoPList getCurrentPoPList()
     {
         PoPList list = null;
         int currentTabIndex = mListTabHost.getCurrentTab();
@@ -682,7 +765,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
         return list;
     }
-
     /********************************************************************************************
      * Function name: getNumGLists
      *
@@ -693,22 +775,9 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      * Returns:       the total number of GLists
      ******************************************************************************************/
 
-    public int getNumGList()
+    public int getNumPoPList()
     {
         return mPoPLists.getSize();
-    }
-
-    /********************************************************************************************
-     * Function name: getItemInfoListener
-     *
-     * Description:
-     *
-     * Parameters:
-     *
-     * Returns:
-     ******************************************************************************************/
-    public NewItemInfoDialogListener getItemInfoListener () {
-        return mItemInfoListener;
     }
 
     /********************************************************************************************
@@ -727,16 +796,16 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         if (child != null) {
 
             delete = (Button) child.findViewById(R.id.bDelete);
-            delete.setOnClickListener(new View.OnClickListener() {
+           /* delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
                     PoPList poPList = getCurrentPoPList();
-                    poPList.delete(pos);
+                    poPList.delete(getLastClickedItem());
                     mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                 }
-            });
+            });*/
             if (delete != null)
             {
                 if (delete.getVisibility() == View.INVISIBLE) {
@@ -771,7 +840,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         if (child != null) {
 
             delete = (Button) child.findViewById(R.id.bDelete);
-            delete.setOnClickListener(new View.OnClickListener() {
+            /*delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
@@ -780,7 +849,7 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
                     mListAdapters.get(mListTabHost.getCurrentTab()).notifyDataSetChanged();
 
                 }
-            });
+            });*/
             if (delete != null)
             {
                 Log.d("GroceryListActivity", "swiping delete button");
@@ -816,15 +885,15 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
      *
      * Returns:
      ******************************************************************************************/
-    private void slideItemView (View child, float translationAmount)
+    public void slideItemView (View child, float translationAmount)
     {
-        CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
-        Button itemName = (Button) child.findViewById(R.id.bListItem);
+       // CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
+        //Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
         EditText qtyInput = (EditText) child.findViewById(R.id.input_qty);
 
-        checkBox.setTranslationX(translationAmount);
-        itemName.setTranslationX(translationAmount);
+       //checkBox.setTranslationX(translationAmount);
+       // itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
         qtyInput.setTranslationX(translationAmount);
     }
@@ -906,5 +975,45 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         for (int i = 0; i < popLists.getSize(); ++i) {
             addListTab(popLists.getList(i), i);
         }
+    }
+
+    /********************************************************************************************
+     * Function name: isOnEdit
+     *
+     * Description:   Returns whether or not the edit button is clicked
+     *
+     * Parameters: None
+     *
+     * Returns: mbIsOnEdit
+     ******************************************************************************************/
+    public boolean isOnEdit ()
+    {
+        return mbIsOnEdit;
+    }
+
+    /***********************************************************************************************
+     *   Method:      getListInfoListener
+     *   Description: If addList button is clicked, create dialog box and listener for finishing
+     *                dialog
+     *   Parameters:  view - the button that was clicked
+     *   Returned:    NONE
+     ***********************************************************************************************/
+
+    public DialogListener getListInfoListener ()
+    {
+        return mListInfoListener;
+    }
+
+    /***********************************************************************************************
+     *   Method:      getItemInfoListener
+     *   Description: If addList button is clicked, create dialog box and listener for finishing
+     *                dialog
+     *   Parameters:  view - the button that was clicked
+     *   Returned:    NONE
+     ***********************************************************************************************/
+
+    public DialogListener getItemInfoListener ()
+    {
+        return mItemInfoListener;
     }
 }
