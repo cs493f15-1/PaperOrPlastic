@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ import android.widget.TextView;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
 import java.io.File;
@@ -44,6 +46,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
@@ -54,6 +57,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
+import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
 
@@ -94,6 +98,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   private Firebase mUserRef, mListsRef;
   private ValueEventListener mUserRefListener;
+
+  private boolean bIsGrocery;
 
   /********************************************************************************************
    * Function name: onCreate
@@ -138,6 +144,20 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     mbIsOnEdit = false;
     //to view items
     mListView = (ListView) findViewById(R.id.listView);
+    bIsGrocery = isGrocery;
+
+    if (null == mEncodedEmail)
+    {
+      bUsingOffline = true;
+    }
+
+    Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        /* Common toolbar setup */
+    setSupportActionBar(toolbar);
+        /* Add back button to the action bar */
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     handleSwipingToDelete();
 
@@ -164,6 +184,7 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
 
     setUpActivityTitle(isGrocery);
+    invalidateOptionsMenu();
   }
 
 
@@ -177,7 +198,11 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   public boolean onCreateOptionsMenu(Menu menu)
   {
         /* Inflate the menu; this adds items to the action bar if it is present. */
-    getMenuInflater().inflate(R.menu.menu_main, menu);
+    getMenuInflater().inflate(R.menu.menu_inventory, menu);
+
+    MenuItem edit = menu.findItem(R.id.action_edit_lists);
+    MenuItem settings = menu.findItem(R.id.action_settings);
+
     return true;
   }
 
@@ -189,6 +214,52 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
+    int id = item.getItemId();
+
+    if (id == R.id.action_edit_lists)
+    {
+
+      int size = getCurrentPoPList().getSize();
+      if (size > 0)
+      {
+        if (!mbIsOnEdit)
+        {
+          mbIsOnEdit = true;
+
+          //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
+          for (int i = 0; i < size; i++)
+          {
+            showDeleteButton(i);
+          }
+          mbAddItem.setTextColor(Color.rgb(170, 170, 170));
+          mbAddItem.setEnabled(false);
+        }
+        else
+        {
+
+          //showDeleteButton also gets rid of the delete button so we might not need this check
+
+          mbIsOnEdit = false;
+
+          //showDeleteButton also gets rid of the delete button so we might not need this check
+          //TODO might need to show again if tab is changed
+          mbIsOnEdit = false;
+          for (int i = 0; i < size; i++)
+          {
+            hideDeleteButton(i);
+          }
+        }
+      }
+
+     return true;
+    }
+
+    if (id == R.id.action_settings)
+    {
+      onSettingsClicked();
+      return true;
+    }
+
     return super.onOptionsItemSelected(item);
   }
 
@@ -202,36 +273,54 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   {
     final boolean bGrocery = isGrocery;
 
-    mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
-    mUserRefListener = mUserRef.addValueEventListener(new ValueEventListener()
+    if (bUsingOffline)
     {
-      @Override
-      public void onDataChange(DataSnapshot dataSnapshot)
+      if (bGrocery)
       {
-        User user = dataSnapshot.getValue(User.class);
+        setTitle("Your Grocery Lists");
+      }
+      else
+      {
+        setTitle("Your Inventory");
+      }
 
-        if (user != null)
+    }
+    else
+    {
+      mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+      mUserRefListener = mUserRef.addValueEventListener(new ValueEventListener()
+      {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot)
         {
-          String title;
-          String name = user.getmName().split("\\s")[0];
-          if (bGrocery)
+          User user = dataSnapshot.getValue(User.class);
+
+          if (user != null)
           {
-            title = name + "'s Lists";
+            String title;
+            String name = user.getmName().split("\\s")[0];
+            if (bGrocery)
+            {
+              title = name + "'s Lists";
+            }
+            else
+            {
+              title = name + "'s Inventory";
+            }
+            setTitle(title);
           }
-          else
-          {
-            title = name + "'s Inventory";
-          }
-          setTitle(title);
         }
-      }
 
-      @Override
-      public void onCancelled(FirebaseError firebaseError)
-      {
+        @Override
+        public void onCancelled(FirebaseError firebaseError)
+        {
 
-      }
-    });
+        }
+      });
+    }
+
+
+
   }
 
 
@@ -276,21 +365,26 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     //to view items in list
     mListView = (ListView) findViewById(R.id.listView);
     //to be able to swipe list items over for delete
-    mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView) {
+    mListView.setOnTouchListener(new OnSwipeTouchListener(this, mListView)
+    {
       @Override
-      public void onSwipeRight(int pos) {
+      public void onSwipeRight(int pos)
+      {
         // Log.d("GroceryListActivity", "onSwipeRight function entered");
 
-        if (!mbIsOnEdit) {
+        if (!mbIsOnEdit)
+        {
           hideDeleteButton(pos);
         }
 
       }
 
       @Override
-      public void onSwipeLeft(int pos) {
+      public void onSwipeLeft(int pos)
+      {
         // Log.d("GroceryListActivity", "onSwipeLeft function entered");
-        if (!mbIsOnEdit) {
+        if (!mbIsOnEdit)
+        {
           showDeleteButton(pos);
           showDeleteButton(pos); //TODO can this be removed?
         }
@@ -308,22 +402,30 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   private void setupEditDeleteButtonsForLists()
   {
     mbEdit = (Button) findViewById(R.id.bEdit);
-    mbEdit.setOnClickListener(new View.OnClickListener() {
+    mbEdit.setOnClickListener(new View.OnClickListener()
+    {
       @Override
-      public void onClick(View v) {
-        if (mListAdapters.size() != 0) {
+      public void onClick(View v)
+      {
+        if (mListAdapters.size() != 0)
+        {
           int size = getCurrentPoPList().getSize();
-          if (size > 0) {
-            if (!mbIsOnEdit) {
+          if (size > 0)
+          {
+            if (!mbIsOnEdit)
+            {
               mbIsOnEdit = true;
 
               //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
-              for (int i = 0; i < size; i++) {
+              for (int i = 0; i < size; i++)
+              {
                 showDeleteButton(i);
               }
               mbAddItem.setTextColor(Color.rgb(170, 170, 170));
               mbAddItem.setEnabled(false);
-            } else {
+            }
+            else
+            {
 
               //showDeleteButton also gets rid of the delete button so we might not need this check
 
@@ -332,7 +434,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
               //showDeleteButton also gets rid of the delete button so we might not need this check
               //TODO might need to show again if tab is changed
               mbIsOnEdit = false;
-              for (int i = 0; i < size; i++) {
+              for (int i = 0; i < size; i++)
+              {
                 hideDeleteButton(i);
               }
             }
@@ -352,11 +455,14 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   {
     mListTabHost = (TabHost) findViewById(R.id.listTabHost);
     mListTabHost.setup();
-    mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-      public void onTabChanged(String tabId) {
+    mListTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener()
+    {
+      public void onTabChanged(String tabId)
+      {
         mListTabHost.setCurrentTab(Integer.parseInt(tabId));
 
-        if (mListAdapters.size() > 0) {
+        if (mListAdapters.size() > 0)
+        {
           mListView.setAdapter(mListAdapters.get(Integer.parseInt(tabId)));
         }
 
@@ -411,12 +517,16 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
     //set up add item button
     mbAddItem = (Button) findViewById(R.id.bAddItem);
-    mbAddItem.setOnClickListener(new View.OnClickListener() {
+    mbAddItem.setOnClickListener(new View.OnClickListener()
+    {
       @Override
-      public void onClick(View v) {
-        mItemInfoListener = new NewItemInfoDialogListener() {
+      public void onClick(View v)
+      {
+        mItemInfoListener = new NewItemInfoDialogListener()
+        {
           @Override
-          public void onFinishNewItemDialog(String inputText) {
+          public void onFinishNewItemDialog(String inputText)
+          {
             ListItem newItem = new ListItem(inputText);
 
             addItemToListView(newItem);
@@ -445,14 +555,19 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   private void setupSettingsActivityButton (final boolean isGrocery)
   {
     mbSettings = (Button) findViewById(R.id.bListSettings);
-    mbSettings.setOnClickListener(new View.OnClickListener() {
+    mbSettings.setOnClickListener(new View.OnClickListener()
+    {
       @Override
-      public void onClick(View v) {
-        if (isGrocery) {
+      public void onClick(View v)
+      {
+        if (isGrocery)
+        {
           Intent intent = new Intent(PoPListActivity.this, GroceryListSettingsActivity.class);
           intent.putExtra("Caller", "GroceryListActivity");
           startActivity(intent);
-        } else {
+        }
+        else
+        {
           Intent intent = new Intent(PoPListActivity.this, KitchenInventorySettingsActivity.class);
           intent.putExtra("Caller", "KitchenInventoryActivity");
           startActivity(intent);
@@ -476,13 +591,17 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     mGroupBySpinner.setAdapter(adapter);
-    mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    mGroupBySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+    {
       @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+      {
         PoPList currentList = getCurrentPoPList();
 
-        if (null != currentList) {
-          switch (position) {
+        if (null != currentList)
+        {
+          switch (position)
+          {
             case PoPList.SORT_NONE: // first item in dropdown currently blank
               currentList.setCurrentSortingValue(PoPList.SORT_NONE);
               break;
@@ -510,16 +629,44 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
       }
 
       @Override
-      public void onNothingSelected(AdapterView<?> parent) {
+      public void onNothingSelected(AdapterView<?> parent)
+      {
         //Nothing to do if the dropdown is not selected.
       }
     });
   }
 
-  private void addAllExistingListsInPoPListsToTabs() {
-    for (int i = 0; i < mPoPLists.getSize(); i++) {
-      addListTab(mPoPLists.getList(i), i);
+
+  /********************************************************************************************
+   * Function name: addAllExistingListsInPoPListsToTabs
+   *
+   * Description:   if offline, read the existing lists into tabs. if online, read from database
+   *                to add the list tab...
+   *
+   * Parameters:    none
+   *
+   * Returns:       none
+   ******************************************************************************************/
+  private void addAllExistingListsInPoPListsToTabs()
+  {
+    if (bUsingOffline)
+    {
+        for (int i = 0; i < mPoPLists.getSize(); i++)
+        {
+        addListTab(mPoPLists.getList(i), i);
+        }
     }
+    else
+    {
+      //TODO stuff in here for FB
+
+
+    }
+
+
+
+
+
   }
   /********************************************************************************************
    * Function name: onPause
@@ -611,6 +758,13 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     {
       //add List to Lists and create a tab
       mPoPLists.addList(newListName);
+
+
+      if (!bUsingOffline)
+      {
+        addListToFirebase(newListName);
+      }
+
 
       addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
     }
@@ -917,4 +1071,56 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
       addListTab(popLists.getList(i), i);
     }
   }
+
+  /********************************************************************************************
+   * Function name: addListToFirebase
+   *
+   * Description:   adds the list name to the database
+   *
+   * Parameters: None
+   *
+   * Returns: None
+   ******************************************************************************************/
+  private void addListToFirebase(String listName)
+  {
+    Firebase listsRef;
+
+    if (bIsGrocery)
+    {
+      listsRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+    }
+    else
+    {
+      listsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+    }
+
+    Firebase newListRef = listsRef.push();
+
+    final String listId = newListRef.getKey();
+
+    HashMap<String, Object> timestampCreated = new HashMap<>();
+    timestampCreated.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+    SimpleList newShoppingList = new SimpleList(listName, mEncodedEmail, timestampCreated);
+
+    newListRef.setValue(newShoppingList);
+  }
+
+  public void onSettingsClicked ()
+  {
+    if (bIsGrocery)
+    {
+      Intent intent = new Intent(PoPListActivity.this, GroceryListSettingsActivity.class);
+      intent.putExtra("Caller", "GroceryListActivity");
+      startActivity(intent);
+    }
+    else
+    {
+      Intent intent = new Intent(PoPListActivity.this, KitchenInventorySettingsActivity.class);
+      intent.putExtra("Caller", "KitchenInventoryActivity");
+      startActivity(intent);
+    }
+  }
+
+
 }

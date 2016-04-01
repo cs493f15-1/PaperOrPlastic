@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-                android:background="@drawable/grocery_background"
-                android:foregroundTint="@color/colorPrimaryDark"
+    android:background="@drawable/grocery_background"
                 android:nestedScrollingEnabled="false"
-                android:foregroundTintMode="src_over"
                 android:focusable="false"
-                android:outlineProvider="bounds">
+    android:outlineProvider="bounds">
 
     <TableLayout
         android:layout_width="match_parent"

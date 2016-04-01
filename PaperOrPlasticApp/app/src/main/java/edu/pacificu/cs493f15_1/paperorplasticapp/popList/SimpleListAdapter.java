@@ -37,11 +37,11 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
      */
     //todo is the below right?
     TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
-    //TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
+    TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
 
 
         /* Set the list name and owner */
     textViewListName.setText(list.getmListName());
-    //textViewCreatedByUser.setText(list.getmOwner());
+    textViewCreatedByUser.setText(list.getmOwner());
   }
 }

@@ -441,6 +441,7 @@ public void rememberPass(String email, String password)
       //then we are choosing to continue with use of the app offline... TODO for now a quick fix
       bUsingOffline = true;
     }
+    bUsingOffline = true;
 
     //intent.putExtra("currentUser", mfCurrentUser);
 

@@ -95,7 +95,18 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
     Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
     titleText.setTypeface(laneUpperFont);
 
-    mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+    if (null == mEncodedEmail)
+    {
+      bUsingOffline = true;
+    }
+    else
+    {
+      bUsingOffline = false;
+      mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+    }
+
+
+
 
 //    fUserTest = getIntent().getParcelableExtra("currentUser");
 //    //now since we have user TODO: create a sign out button
