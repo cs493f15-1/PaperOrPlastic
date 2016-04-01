@@ -6,7 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+    import android.widget.Button;
+    import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -120,6 +121,36 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
                     mLastAddedItemName = inputText;
                 }*/
 
+            listHolder.bDelete = (Button) row.findViewById(R.id.bDelete);
+            listHolder.bDelete.setOnClickListener(new View.OnClickListener() {
+
+                View mView = null;
+                @Override
+                public void onClick(View v)
+                {
+                    mView = v;
+
+                    //for activity to know which list to delete if they choose to delete it in dialog fragment
+                    ((PoPListSettingsActivity) getContext()).setPositionClicked ((Integer)v.getTag());
+
+                    ((PoPListSettingsActivity) getContext()).setDeleteListListener(new DeleteListDialogListener() {
+                        @Override
+                        public void onDeleted() {
+                            //
+                            ((PoPListSettingsActivity) getContext()).deleteList();
+                        }
+                    });
+
+                    v.setVisibility(View.INVISIBLE);
+
+                    ((PoPListSettingsActivity) getContext()).showDeleteListFragment ();
+
+
+                }
+
+            });
+
+
             row.setTag(listHolder);
 
         }
@@ -131,6 +162,7 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
         //set list row info
         PoPList list = mListArray.get(position);
         listHolder.listName.setText(list.getListName());
+        listHolder.bDelete.setTag(position);
 
 
         return row;
@@ -142,6 +174,7 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
         QtyChangeDialogListener mQtyChangeListener;
         TextView listName;
         CheckBox checkBox;
+        Button bDelete;
     }
 
 }
