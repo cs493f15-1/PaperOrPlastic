@@ -16,22 +16,24 @@
             style="@style/Base.Widget.AppCompat.ActionBar.TabText"
             android:elegantTextHeight="false"
             android:maxWidth="200dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp" />
 
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="@string/sDelete"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/delete_thin"
             android:id="@+id/bDelete"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentTop="false"
             android:layout_alignParentEnd="true"
             android:visibility="invisible"
-            android:background="#b32d2d"
             android:textColor="#d8d8d8"
-            android:textSize="20dp"
-            android:layout_alignParentRight="true" />
+            android:textSize="20sp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
 
 
     </RelativeLayout>

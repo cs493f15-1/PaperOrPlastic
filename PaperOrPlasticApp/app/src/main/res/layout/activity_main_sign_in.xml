@@ -14,7 +14,8 @@
               android:background="#bbd7da">
 
     <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/loginForm"
+                android:layout_height="match_parent"
+                android:id="@+id/loginForm"
                 android:fillViewport="false">
 
 
