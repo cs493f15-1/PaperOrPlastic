@@ -2,15 +2,18 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,10 +52,10 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     private PoPListAdapter mListAdapter;
     private DeleteListDialogListener mDeleteListListener;
     private Button mbBack;
-    private Button mbEdit;
+    private ToggleButton mbEdit;
     private boolean mbIsOnEdit;
     private FragmentManager fm;
-    int position = 0;
+    int mPositionClicked = 0;
     Button delete;
 
     private String mPoPFileName;
@@ -199,6 +202,11 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     }
 
 
+    public PoPLists getPoPLists()
+    {
+        return mPoPLists;
+    }
+
     public void onClick (View view)
     {
     }
@@ -237,8 +245,8 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
 
     private void setupEditDeleteButtonsForGLists ()
     {
-        mbEdit = (Button) findViewById (R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener() {
+        mbEdit = (ToggleButton) findViewById (R.id.bEdit);
+        /*mbEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //if its clicked, show or hide delete buttons
@@ -260,7 +268,63 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
                     }
                 }
             }
-        });
+        });*/
+    }
+
+    /***********************************************************************************************
+     *   Method:      onClickEditButton
+     *   Description: Handles click of edit button
+     *   Parameters:  view
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    public void onClickEditButton (View view)
+    {
+
+        //if its clicked, show or hide delete buttons
+        int size = mPoPLists.getSize();
+        if (size > 0) {
+
+            if (!mbIsOnEdit) {
+                mbIsOnEdit = true;
+                Log.d("PopListSettings", Boolean.toString(mbIsOnEdit));
+                mbEdit.setChecked(mbIsOnEdit);
+                showDeleteButtons(size);
+            } else {
+                mbIsOnEdit = false;
+                Log.d("PopListSettings", Boolean.toString(mbIsOnEdit));
+                mbEdit.setChecked(mbIsOnEdit);
+                hideDeleteButtons(size);
+            }
+        }
+
+    }
+
+
+    /***********************************************************************************************
+     *   Method:      showDeleteButtons
+     *   Description: shows a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void showDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++) {
+            showDeleteButton(i);
+        }
+    }
+
+    /***********************************************************************************************
+     *   Method:      hideDeleteButtons
+     *   Description: hides a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void hideDeleteButtons (int size)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            hideDeleteButton(i);
+        }
     }
 
     /********************************************************************************************
@@ -329,29 +393,12 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
      * Returns:       true if the child view with the button being hidden exists, else false
      ******************************************************************************************/
     private boolean showDeleteButton(final int pos) {
-        position = pos;
+        mPositionClicked = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
         if (child != null) {
 
-            delete = (Button) child.findViewById(R.id.bDelete);
-            delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v)
-                {
-                    mDeleteListListener = new DeleteListDialogListener()
-                    {
-                        @Override
-                        public void onDeleted ()
-                        {
-                            deleteList();
-                        }
-                    };
-                    fm = getSupportFragmentManager();
-                    DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
-                    deleteListFragment.show(fm, "Yeah");
+           delete = (Button) child.findViewById(R.id.bDelete);
 
-                }
-            });
             if (delete != null)
             {
                 if (delete.getVisibility() == View.INVISIBLE) {
@@ -380,17 +427,17 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
      * Returns:       true if the child view with the button being hidden exists, else false
      ******************************************************************************************/
     private boolean hideDeleteButton(final int pos) {
-        position = pos;
+        mPositionClicked = pos;
         View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
         if (child != null) {
 
             delete = (Button) child.findViewById(R.id.bDelete);
-            delete.setOnClickListener(new View.OnClickListener() {
+            /*delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v)
                 {
                 }
-            });
+            });*/
             if (delete != null)
             {
                 if (delete.getVisibility() == View.VISIBLE) {
@@ -424,8 +471,9 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
 
     private void slideItemView (View child, float translationAmount)
     {
-        TextView listName = (TextView) child.findViewById(R.id.listName);
-        listName.setTranslationX(translationAmount);
+        //can use this function to slide any other items in view over, does not slide over list name since we want to see the name
+        // listName = (TextView) child.findViewById(R.id.listName);
+        //listName.setTranslationX(translationAmount);
 
     }
 
@@ -481,14 +529,20 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
      *
      * Description:   When the activity is paused writes the PoPLists to mPoPFileName
      *
-     * Parameters:    none
+     * Parameters:    position - which list will be deleted
      *
      * Returns:       none
      ******************************************************************************************/
     public void deleteList ()
     {
-        mPoPLists.deleteList(position);
+        mPoPLists.deleteList(mPositionClicked);
         mListAdapter.notifyDataSetChanged();
+    }
+
+
+    public void setPositionClicked (int position)
+    {
+        mPositionClicked = position;
     }
 
     /********************************************************************************************
@@ -503,6 +557,18 @@ public abstract class PoPListSettingsActivity extends FragmentActivity implement
     public DeleteListDialogListener getDeleteDialogListener()
     {
         return mDeleteListListener;
+    }
+
+    public void setDeleteListListener (DeleteListDialogListener listener)
+    {
+        mDeleteListListener = listener;
+    }
+
+    public void showDeleteListFragment()
+    {
+        fm = getSupportFragmentManager();
+        DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
+        deleteListFragment.show(fm, "Yeah");
     }
 
 }
