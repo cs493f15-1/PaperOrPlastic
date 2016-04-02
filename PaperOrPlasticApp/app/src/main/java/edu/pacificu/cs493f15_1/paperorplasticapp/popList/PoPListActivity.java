@@ -233,7 +233,7 @@ public abstract class PoPListActivity extends FragmentActivity {
                 // selected item
                 mLastClicked = position;
 
-                Toast toast = Toast.makeText(getApplicationContext(), mLastClicked, Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(getApplicationContext(), mLastClicked, Toast.LENGTH_LONG);
                 toast.show();
 
             }
@@ -441,8 +441,6 @@ public abstract class PoPListActivity extends FragmentActivity {
 
                     addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
                 } else {
-                    //TODO output error to user saying List Name already exists
-                    Log.d("PoPListActivity", "Error with duplicate list names, not handled");
                     Toast toast = Toast.makeText(getApplicationContext(),
                             getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
                     toast.show();
@@ -627,7 +625,8 @@ public abstract class PoPListActivity extends FragmentActivity {
 
         mbIsOnEdit = false;
 
-        //  popFile.delete();
+      // popFile.delete();
+
         mPoPLists.clearLists();
 
         if (popFile.exists()) {
@@ -637,7 +636,8 @@ public abstract class PoPListActivity extends FragmentActivity {
             if (!mbAddingItem) {
 
             }
-            mListAdapters.clear();
+//            mListTabHost.clearAllTabs();
+//            mListTabHost.setup();
             fillTabs(mPoPLists);
 
             if (mLastTabIndex > -1) {
@@ -697,7 +697,13 @@ public abstract class PoPListActivity extends FragmentActivity {
      * Returns:       none
      ******************************************************************************************/
     public void addItemToListView(ListItem newItem) {
-        getCurrentPoPList().addItem(newItem);
+
+        if (getCurrentPoPList().addItem(newItem))
+        {
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    getResources().getString(R.string.sDuplicateItemError), Toast.LENGTH_LONG);
+            toast.show();
+        }
 
         //re-sort the list depending on the current sorting category
         switch (getCurrentPoPList().getCurrentSortingValue()) {
@@ -949,6 +955,7 @@ public abstract class PoPListActivity extends FragmentActivity {
             listsInput = new Scanner(popInput);
             mLastTabIndex = listsInput.nextInt();
             popLists.readListsFromFile(listsInput);
+
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
