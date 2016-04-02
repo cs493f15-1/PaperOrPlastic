@@ -47,6 +47,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettings
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
@@ -75,7 +76,7 @@ public abstract class PoPListActivity extends FragmentActivity {
     private ListFragment listFrag;
     private ListItem newItem;
     private ToggleButton mbEdit;
-    private int mLastClicked;
+    private int mLastClicked, mLastTabIndex;
     private String mPoPFileName;
     private PoPLists mPoPLists;
     private DialogListener mListInfoListener;
@@ -99,11 +100,18 @@ public abstract class PoPListActivity extends FragmentActivity {
                 String item_name = data.getStringExtra("item_name");
                 newItem = new ListItem(item_name);
 
+                newItem.setAll(0, 0, 1, 0.00, 0, false, "init", new NutritionFactModel());
+                newItem.setNutritionFacts(0, 0, 0, 0, 0, 0); //Initializing for outputing to a file;
+                OutputFileToLogcat("onActivityResult Part 1");
                 readListsFromFile(mPoPLists);
+                if (mLastTabIndex > -1) {
+                    mListTabHost.setCurrentTab(mLastTabIndex);
+                }
                 addItemToListView(newItem);
                 writeListsToFile();
-
-
+                OutputFileToLogcat("onActivityResult Part 2");
+                mPoPLists.clearLists();
+                mListAdapters.clear();
 
                 mbAddingItem = true;
             }
@@ -156,6 +164,7 @@ public abstract class PoPListActivity extends FragmentActivity {
         mbIsOnEdit = false;
         mbAddingItem = false;
         mbIsGrocery = isGrocery;
+        mLastTabIndex = -1;
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
 
@@ -183,10 +192,6 @@ public abstract class PoPListActivity extends FragmentActivity {
 
         addAllExistingListsInPoPListsToTabs();
     }
-
-
-
-
 
     /***********************************************************************************************
      * Method:      handleSwipingToDelete
@@ -240,22 +245,6 @@ public abstract class PoPListActivity extends FragmentActivity {
      * Parameters:  NONE
      * Returned:    NONE
      ***********************************************************************************************/
-/*    private void setupEditDeleteButtonsForLists() {
-        mbEdit = (Button) findViewById(R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListAdapters.size() != 0) {
-                    int size = getCurrentPoPList().getSize();
-                    if (size > 0) {
-                        if (!mbIsOnEdit) {
-                            mbIsOnEdit = true;
-                        }
-                    }
-                }
-            }
-        });
-    }*/
 
     private void setupEditDeleteButtonsForLists()
     {
@@ -614,10 +603,14 @@ public abstract class PoPListActivity extends FragmentActivity {
     protected void onPause ()
     {
         super.onPause();
-
+        mLastTabIndex = mListTabHost.getCurrentTab();
         writeListsToFile();
+
+     //   OutputFileToLogcat("onPause");
+
         mPoPLists.clearLists();
         mListAdapters.clear();
+        mLastTabIndex = -1;
     }
     /********************************************************************************************
      * Function name: onResume
@@ -634,24 +627,28 @@ public abstract class PoPListActivity extends FragmentActivity {
     {
         super.onResume();
 
+
         Context context = getApplicationContext();
         File popFile = context.getFileStreamPath(mPoPFileName);
 
         mbIsOnEdit = false;
 
-        //popFile.delete();
+     //  popFile.delete();
 
         if (popFile.exists()) {
             mPoPLists.clearLists();
             readListsFromFile(mPoPLists);
+         //   OutputFileToLogcat("onResume");
 
             if (!mbAddingItem)
             {
 
             }
-
-
             fillTabs(mPoPLists);
+
+            if (mLastTabIndex > -1) {
+                mListTabHost.setCurrentTab(mLastTabIndex);
+            }
 
             mbAddingItem = false;
         }
@@ -673,11 +670,16 @@ public abstract class PoPListActivity extends FragmentActivity {
     {
         if (!mbAddingItem)
         {
-            TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
+ /*           TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
             spec.setContent(R.id.listView);
             spec.setIndicator(newList.getListName());
-            mListTabHost.addTab(spec);
+            mListTabHost.addTab(spec);*/
         }
+
+        TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
+        spec.setContent(R.id.listView);
+        spec.setIndicator(newList.getListName());
+        mListTabHost.addTab(spec);
 
         //for keeping track of items in list
         addListAdapter(mPoPLists.getList(index));
@@ -762,6 +764,7 @@ public abstract class PoPListActivity extends FragmentActivity {
         if (TabHost.NO_ID != currentTabIndex) {
             list = mPoPLists.getList(currentTabIndex);
         }
+    //    Log.d ("CurrentPoPList:  ", list.getListName());
 
         return list;
     }
@@ -936,6 +939,7 @@ public abstract class PoPListActivity extends FragmentActivity {
             popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
 
             listsOutput = new PrintWriter(popOutput);
+            listsOutput.print(mLastTabIndex + " ");
             mPoPLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
@@ -963,7 +967,32 @@ public abstract class PoPListActivity extends FragmentActivity {
             popInput = openFileInput(mPoPFileName);
 
             listsInput = new Scanner(popInput);
+            mLastTabIndex = listsInput.nextInt();
             popLists.readListsFromFile(listsInput);
+            listsInput.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void OutputFileToLogcat(String where)
+    {
+        int i = 0;
+        FileInputStream popInput;
+        Scanner listsInput;
+
+        try {
+            popInput = openFileInput(mPoPFileName);
+            listsInput = new Scanner(popInput);
+
+            Log.d ("Called From", where);
+
+            while (listsInput.hasNextLine() || i > 20)
+            {
+                Log.d ("Line:" + i, listsInput.nextLine());
+                ++i;
+            }
+
             listsInput.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
