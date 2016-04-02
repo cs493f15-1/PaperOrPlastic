@@ -1,11 +1,11 @@
 /**************************************************************************************************
- *   File:     GroceryListActivity.java
- *   Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
- *   Date:     10/28/15
- *   Class:    Capstone/Software Engineering
- *   Project:  PaperOrPlastic Application
- *   Purpose:  This activity will be the activity that is opened when the user selects the
- *             grocery list button from the continue activity
+ * File:     GroceryListActivity.java
+ * Author:   Abigail Jones, Lauren Sullivan, Evan Heydemann
+ * Date:     10/28/15
+ * Class:    Capstone/Software Engineering
+ * Project:  PaperOrPlastic Application
+ * Purpose:  This activity will be the activity that is opened when the user selects the
+ * grocery list button from the continue activity
  ***************************************************************************************************/
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
@@ -52,13 +52,13 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 /***************************************************************************************************
- *   Class:         POPListActivity
- *   Description:   Creates POPListActivity class that is inherited by GroceryListActivity and
- *                  KitchenInventoryActivity that controls what occurs when the user
- *                  selects the grocery list option from the continue activity. Specifically
- *                  contains the list functionality.
- *   Parameters:    N/A
- *   Returned:      N/A
+ * Class:         POPListActivity
+ * Description:   Creates POPListActivity class that is inherited by GroceryListActivity and
+ * KitchenInventoryActivity that controls what occurs when the user
+ * selects the grocery list option from the continue activity. Specifically
+ * contains the list functionality.
+ * Parameters:    N/A
+ * Returned:      N/A
  **************************************************************************************************/
 public abstract class PoPListActivity extends FragmentActivity {
 
@@ -89,27 +89,30 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     private DialogListener mItemInfoListener;
 
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == REQUEST_OK)
-        {
-            if(resultCode == RESULT_OK)
-            {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_OK) {
+            if (resultCode == RESULT_OK) {
                 String item_name = data.getStringExtra("item_name");
                 newItem = new ListItem(item_name);
 
                 newItem.setAll(0, 0, 1, 0.00, 0, false, "init", new NutritionFactModel());
                 newItem.setNutritionFacts(0, 0, 0, 0, 0, 0); //Initializing for outputing to a file;
-                OutputFileToLogcat("onActivityResult Part 1");
+                //OutputFileToLogcat("onActivityResult Part 1");
+                mPoPLists.clearLists();
                 readListsFromFile(mPoPLists);
                 if (mLastTabIndex > -1) {
                     mListTabHost.setCurrentTab(mLastTabIndex);
+                    addItemToListView(newItem);
+                    writeListsToFile();
+                } else {
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.sCouldNotAddItemSinceNoListError),
+                            Toast.LENGTH_LONG);
+                    toast.show();
                 }
-                addItemToListView(newItem);
-                writeListsToFile();
-                OutputFileToLogcat("onActivityResult Part 2");
+
+                //OutputFileToLogcat("onActivityResult Part 2");
                 mPoPLists.clearLists();
                 mListAdapters.clear();
 
@@ -117,7 +120,6 @@ public abstract class PoPListActivity extends FragmentActivity {
             }
         }
     }
-
 
     /********************************************************************************************
      * Function name: onCreate
@@ -246,20 +248,18 @@ public abstract class PoPListActivity extends FragmentActivity {
      * Returned:    NONE
      ***********************************************************************************************/
 
-    private void setupEditDeleteButtonsForLists()
-    {
+    private void setupEditDeleteButtonsForLists() {
         mbEdit = (ToggleButton) findViewById(R.id.bEdit);
         mbEdit.setChecked(mbIsOnEdit);
     }
 
     /***********************************************************************************************
-     *   Method:      onClickEditButton
-     *   Description: Handles click of edit button
-     *   Parameters:  view
-     *   Returned:    NONE
+     * Method:      onClickEditButton
+     * Description: Handles click of edit button
+     * Parameters:  view
+     * Returned:    NONE
      ***********************************************************************************************/
-    public void onClickEditButton (View view)
-    {
+    public void onClickEditButton(View view) {
         if (mListAdapters.size() != 0) {
             int size = getCurrentPoPList().getSize();
 
@@ -286,28 +286,25 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
 
     /***********************************************************************************************
-     *   Method:      showDeleteButtons
-     *   Description: shows a delete button for every item in list view base on size passed in
-     *   Parameters:  size - size of list
-     *   Returned:    NONE
+     * Method:      showDeleteButtons
+     * Description: shows a delete button for every item in list view base on size passed in
+     * Parameters:  size - size of list
+     * Returned:    NONE
      ***********************************************************************************************/
-    private void showDeleteButtons (int size)
-    {
+    private void showDeleteButtons(int size) {
         for (int i = 0; i < size; i++) {
             showDeleteButton(i);
         }
     }
 
     /***********************************************************************************************
-     *   Method:      hideDeleteButtons
-     *   Description: hides a delete button for every item in list view base on size passed in
-     *   Parameters:  size - size of list
-     *   Returned:    NONE
+     * Method:      hideDeleteButtons
+     * Description: hides a delete button for every item in list view base on size passed in
+     * Parameters:  size - size of list
+     * Returned:    NONE
      ***********************************************************************************************/
-    private void hideDeleteButtons (int size)
-    {
-        for (int i = 0; i < size; i++)
-        {
+    private void hideDeleteButtons(int size) {
+        for (int i = 0; i < size; i++) {
             hideDeleteButton(i);
         }
     }
@@ -401,7 +398,7 @@ public abstract class PoPListActivity extends FragmentActivity {
      * Parameters:  NONE
      * Returned:    NONE
      ***********************************************************************************************/
-    private void setupAddItemButtons () {
+    private void setupAddItemButtons() {
 
         //set up add item button
         mbAddItem = (Button) findViewById(R.id.bAddItem);
@@ -425,15 +422,14 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
 
     /***********************************************************************************************
-     *   Method:      onAddListClick
-     *   Description: If addList button is clicked, create dialog box and listener for finishing
-     *                dialog
-     *   Parameters:  view - the button that was clicked
-     *   Returned:    NONE
+     * Method:      onAddListClick
+     * Description: If addList button is clicked, create dialog box and listener for finishing
+     * dialog
+     * Parameters:  view - the button that was clicked
+     * Returned:    NONE
      ***********************************************************************************************/
 
-    public void onAddListClick (View view)
-    {
+    public void onAddListClick(View view) {
         mListInfoListener = new DialogListener() {
             @Override
             public void onFinishNewListDialog(String newListName) {
@@ -444,11 +440,13 @@ public abstract class PoPListActivity extends FragmentActivity {
                     mPoPLists.addList(newListName);
 
                     addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
-                }
-                else
-                {
+                } else {
                     //TODO output error to user saying List Name already exists
-                    Log.d ("PoPListActivity", "Error with duplicate list names, not handled");
+                    Log.d("PoPListActivity", "Error with duplicate list names, not handled");
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
+                    toast.show();
+                    onAddListClick(findViewById(R.id.bAddList));
                 }
 
             }
@@ -460,14 +458,13 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
 
     /***********************************************************************************************
-     *   Method:      onAddItemClick
-     *   Description: If addItem button is clicked, call activity for searching for an item
-     *   Parameters:  view - the button that was clicked
-     *   Returned:    NONE
+     * Method:      onAddItemClick
+     * Description: If addItem button is clicked, call activity for searching for an item
+     * Parameters:  view - the button that was clicked
+     * Returned:    NONE
      ***********************************************************************************************/
 
-    public void onAddItemClick (View view)
-    {
+    public void onAddItemClick(View view) {
         Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
         addItemIntent.putExtra("num_list_items", getNumPoPList());
 
@@ -480,14 +477,14 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
 
     /***********************************************************************************************
-     *   Method:      setupSettingsActivityButton
-     *   Description: Sets up settings activity button so that when the user selects the settings
-     *                button from the grocery list activity they can be taken to the grocer list
-     *                settings activity
-     *   Parameters:  NONE
-     *   Returned:    NONE
+     * Method:      setupSettingsActivityButton
+     * Description: Sets up settings activity button so that when the user selects the settings
+     * button from the grocery list activity they can be taken to the grocer list
+     * settings activity
+     * Parameters:  NONE
+     * Returned:    NONE
      ***********************************************************************************************/
-    private void setupSettingsActivityButton () {
+    private void setupSettingsActivityButton() {
         mbSettings = (Button) findViewById(R.id.bListSettings);
         mbSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -506,14 +503,13 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
 
     /***********************************************************************************************
-     *   Method:      setUpGroupSpinnerHandleSorting
-     *   Description: Sets up the group by drop down menu and takes care of sorting the list items
-     *                within grocery lists.
-     *   Parameters:  NONE
-     *   Returned:    NONE
+     * Method:      setUpGroupSpinnerHandleSorting
+     * Description: Sets up the group by drop down menu and takes care of sorting the list items
+     * within grocery lists.
+     * Parameters:  NONE
+     * Returned:    NONE
      ***********************************************************************************************/
-    private void setUpGroupSpinnerHandleSorting ()
-    {
+    private void setUpGroupSpinnerHandleSorting() {
         mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListActivity.this,
                 android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
@@ -562,11 +558,11 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: addAllExistingListsInPoPListsToTabs
-     *
+     * <p/>
      * Description:   Creates a tab for every existing List in the mPopLists array
-     *
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
     private void addAllExistingListsInPoPListsToTabs() {
@@ -577,54 +573,52 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: getCurrentListAdapter
-     *
+     * <p/>
      * Description:   Returns the current List adapter being shown on the screen
-     *
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       the current ListItemAdapter
      ******************************************************************************************/
 
-    public ListItemAdapter getCurrentListAdapter()
-    {
+    public ListItemAdapter getCurrentListAdapter() {
         return mListAdapters.get(mListTabHost.getCurrentTab());
     }
 
     /********************************************************************************************
      * Function name: onPause
-     *
+     * <p/>
      * Description:   When the activity is paused writes the PoPLists to the file passed in OnCreate
-     *
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onPause ()
-    {
+    protected void onPause() {
         super.onPause();
         mLastTabIndex = mListTabHost.getCurrentTab();
         writeListsToFile();
 
-     //   OutputFileToLogcat("onPause");
+        //   OutputFileToLogcat("onPause");
 
         mPoPLists.clearLists();
         mListAdapters.clear();
         mLastTabIndex = -1;
     }
+
     /********************************************************************************************
      * Function name: onResume
-     *
+     * <p/>
      * Description:   When the activity is resumed reads in PoPLists from the file passed in OnCreate
-     *                and updates mPoPLists with the information.
-     *
+     * and updates mPoPLists with the information.
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onResume ()
-    {
+    protected void onResume() {
         super.onResume();
 
 
@@ -633,17 +627,17 @@ public abstract class PoPListActivity extends FragmentActivity {
 
         mbIsOnEdit = false;
 
-     //  popFile.delete();
+        //  popFile.delete();
+        mPoPLists.clearLists();
 
         if (popFile.exists()) {
-            mPoPLists.clearLists();
             readListsFromFile(mPoPLists);
-         //   OutputFileToLogcat("onResume");
+            //   OutputFileToLogcat("onResume");
 
-            if (!mbAddingItem)
-            {
+            if (!mbAddingItem) {
 
             }
+            mListAdapters.clear();
             fillTabs(mPoPLists);
 
             if (mLastTabIndex > -1) {
@@ -656,20 +650,18 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: addListTab
-     *
+     * <p/>
      * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
-     *
+     * <p/>
      * Parameters:    newList - a List object whose tab will be added to the top of the page
-     *                index   - the index of the newList in the PoPLists object, also the
-     *                          new tab spec id
-     *
+     * index   - the index of the newList in the PoPLists object, also the
+     * new tab spec id
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListTab(PoPList newList, int index)
-    {
-        if (!mbAddingItem)
-        {
+    private void addListTab(PoPList newList, int index) {
+        if (!mbAddingItem) {
  /*           TabHost.TabSpec spec = mListTabHost.newTabSpec(Integer.toString(index));
             spec.setContent(R.id.listView);
             spec.setIndicator(newList.getListName());
@@ -688,8 +680,7 @@ public abstract class PoPListActivity extends FragmentActivity {
 
 
         //change AddItem button to enabled since you are going to have list tab selected
-        if (!mbAddItem.isEnabled())
-        {
+        if (!mbAddItem.isEnabled()) {
             mbAddItem.setTextColor(Color.rgb(0, 0, 0));
             mbAddItem.setEnabled(true);
         }
@@ -698,20 +689,18 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: addItemToListView
-     *
+     * <p/>
      * Description:   Adds item layout to listView as a new row and adds it to listadapter
-     *
+     * <p/>
      * Parameters:    newItem - the new ListItem being added
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
-    public void addItemToListView (ListItem newItem)
-    {
+    public void addItemToListView(ListItem newItem) {
         getCurrentPoPList().addItem(newItem);
 
         //re-sort the list depending on the current sorting category
-        switch (getCurrentPoPList().getCurrentSortingValue())
-        {
+        switch (getCurrentPoPList().getCurrentSortingValue()) {
             case PoPList.SORT_ALPHA:
                 getCurrentPoPList().sortListByName();
 
@@ -730,16 +719,15 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: addListAdapter
-     *
+     * <p/>
      * Description:   Adds a list adapter for mListView to keep track of the info in popList
-     *
+     * <p/>
      * Parameters:    popList - the new list whose info needs to be kept track of
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
 
-    private void addListAdapter(PoPList popList)
-    {
+    private void addListAdapter(PoPList popList) {
         mListAdapters.add(new ListItemAdapter(mListView.getContext(),
                 mItemLayout, popList.getItemArray()));
         ListItemAdapter newAdapter = mListAdapters.get(mListAdapters.size() - 1);
@@ -748,48 +736,47 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: getCurrentPoPList
-     *
+     * <p/>
      * Description:   Gets the PoPList whose tab we have selected
-     *
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       the current list selected
      ******************************************************************************************/
 
-    public PoPList getCurrentPoPList()
-    {
+    public PoPList getCurrentPoPList() {
         PoPList list = null;
         int currentTabIndex = mListTabHost.getCurrentTab();
 
         if (TabHost.NO_ID != currentTabIndex) {
             list = mPoPLists.getList(currentTabIndex);
         }
-    //    Log.d ("CurrentPoPList:  ", list.getListName());
+        //    Log.d ("CurrentPoPList:  ", list.getListName());
 
         return list;
     }
+
     /********************************************************************************************
      * Function name: getNumGLists
-     *
+     * <p/>
      * Description:   Gets the total number of GroceryLists
-     *
+     * <p/>
      * Parameters:    none
-     *
+     * <p/>
      * Returns:       the total number of GLists
      ******************************************************************************************/
 
-    public int getNumPoPList()
-    {
+    public int getNumPoPList() {
         return mPoPLists.getSize();
     }
 
     /********************************************************************************************
      * Function name: showDeleteButton
-     *
+     * <p/>
      * Description:
-     *
+     * <p/>
      * Parameters:
-     *
+     * <p/>
      * Returns:
      ******************************************************************************************/
     private boolean showDeleteButton(final int pos) {
@@ -809,8 +796,7 @@ public abstract class PoPListActivity extends FragmentActivity {
 
                 }
             });*/
-            if (delete != null)
-            {
+            if (delete != null) {
                 if (delete.getVisibility() == View.INVISIBLE) {
                     Animation deleteAnimation =
                             AnimationUtils.loadAnimation(this,
@@ -829,11 +815,11 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: hideDeleteButton
-     *
+     * <p/>
      * Description:
-     *
+     * <p/>
      * Parameters:
-     *
+     * <p/>
      * Returns:
      ******************************************************************************************/
     private boolean hideDeleteButton(final int pos) {
@@ -853,8 +839,7 @@ public abstract class PoPListActivity extends FragmentActivity {
 
                 }
             });*/
-            if (delete != null)
-            {
+            if (delete != null) {
                 Log.d("GroceryListActivity", "swiping delete button");
                 if (delete.getVisibility() == View.VISIBLE) {
                     Log.d("GroceryListActivity", " delete button not visible");
@@ -869,9 +854,7 @@ public abstract class PoPListActivity extends FragmentActivity {
                     slideItemView(child, SLIDE_RIGHT_ITEM);
 
                 }
-            }
-            else
-            {
+            } else {
                 Log.d("GroceryListActivity", "delete button is null");
             }
             return true;
@@ -881,32 +864,32 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: slideItemView
-     *
+     * <p/>
      * Description: Displays the slideItemView
-     *
+     * <p/>
      * Parameters:
-     *
+     * <p/>
      * Returns:
      ******************************************************************************************/
-    public void slideItemView (View child, float translationAmount)
-    {
-       // CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
+    public void slideItemView(View child, float translationAmount) {
+        // CheckBox checkBox = (CheckBox) child.findViewById(R.id.itemCheckBox);
         //Button itemName = (Button) child.findViewById(R.id.bListItem);
         TextView qtyText = (TextView) child.findViewById(R.id.quantityText);
         EditText qtyInput = (EditText) child.findViewById(R.id.input_qty);
 
-       //checkBox.setTranslationX(translationAmount);
-       // itemName.setTranslationX(translationAmount);
+        //checkBox.setTranslationX(translationAmount);
+        // itemName.setTranslationX(translationAmount);
         qtyText.setTranslationX(translationAmount);
         qtyInput.setTranslationX(translationAmount);
     }
+
     /********************************************************************************************
      * Function name: dispatchTouchEvent
-     *
+     * <p/>
      * Description:   calls the super for fragment activity for swiping
-     *
+     * <p/>
      * Parameters:    None
-     *
+     * <p/>
      * Returns:       None
      ******************************************************************************************/
     @Override
@@ -916,26 +899,25 @@ public abstract class PoPListActivity extends FragmentActivity {
     }
     //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 
-    public PoPLists getLists () {
+    public PoPLists getLists() {
         return mPoPLists;
     }
 
     /********************************************************************************************
      * Function name: writeListsToFile
-     *
+     * <p/>
      * Description:   Writes the current mPoPLists to mPoPFileName to store the information
-     *                stored in mPoPLists
-     *
+     * stored in mPoPLists
+     * <p/>
      * Parameters: None
-     *
+     * <p/>
      * Returns: None
      ******************************************************************************************/
-    private void writeListsToFile ()  {
+    private void writeListsToFile() {
         FileOutputStream popOutput = null;
         PrintWriter listsOutput = null;
 
-        try
-        {
+        try {
             popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
 
             listsOutput = new PrintWriter(popOutput);
@@ -943,23 +925,21 @@ public abstract class PoPListActivity extends FragmentActivity {
             mPoPLists.writeListsToFile(listsOutput);
             listsOutput.flush();
             listsOutput.close();
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     /********************************************************************************************
      * Function name: readListsFromFile
-     *
+     * <p/>
      * Description:   Reads from mPoPFileName the current PoPLists
-     *
+     * <p/>
      * Parameters: None
-     *
+     * <p/>
      * Returns: None
      ******************************************************************************************/
-    private void readListsFromFile (PoPLists popLists)
-    {
+    private void readListsFromFile(PoPLists popLists) {
         FileInputStream popInput;
         Scanner listsInput;
 
@@ -975,8 +955,7 @@ public abstract class PoPListActivity extends FragmentActivity {
         }
     }
 
-    private void OutputFileToLogcat(String where)
-    {
+    private void OutputFileToLogcat(String where) {
         int i = 0;
         FileInputStream popInput;
         Scanner listsInput;
@@ -985,11 +964,10 @@ public abstract class PoPListActivity extends FragmentActivity {
             popInput = openFileInput(mPoPFileName);
             listsInput = new Scanner(popInput);
 
-            Log.d ("Called From", where);
+            Log.d("Called From", where);
 
-            while (listsInput.hasNextLine() || i > 20)
-            {
-                Log.d ("Line:" + i, listsInput.nextLine());
+            while (listsInput.hasNextLine() || i > 20) {
+                Log.d("Line:" + i, listsInput.nextLine());
                 ++i;
             }
 
@@ -999,8 +977,7 @@ public abstract class PoPListActivity extends FragmentActivity {
         }
     }
 
-    private void fillTabs (PoPLists popLists)
-    {
+    private void fillTabs(PoPLists popLists) {
         for (int i = 0; i < popLists.getSize(); ++i) {
             addListTab(popLists.getList(i), i);
         }
@@ -1008,41 +985,38 @@ public abstract class PoPListActivity extends FragmentActivity {
 
     /********************************************************************************************
      * Function name: isOnEdit
-     *
+     * <p/>
      * Description:   Returns whether or not the edit button is clicked
-     *
+     * <p/>
      * Parameters: None
-     *
+     * <p/>
      * Returns: mbIsOnEdit
      ******************************************************************************************/
-    public boolean isOnEdit ()
-    {
+    public boolean isOnEdit() {
         return mbIsOnEdit;
     }
 
     /***********************************************************************************************
-     *   Method:      getListInfoListener
-     *   Description: If addList button is clicked, create dialog box and listener for finishing
-     *                dialog
-     *   Parameters:  view - the button that was clicked
-     *   Returned:    NONE
+     * Method:      getListInfoListener
+     * Description: If addList button is clicked, create dialog box and listener for finishing
+     * dialog
+     * Parameters:  view - the button that was clicked
+     * Returned:    NONE
      ***********************************************************************************************/
 
-    public DialogListener getListInfoListener ()
-    {
+    public DialogListener getListInfoListener() {
         return mListInfoListener;
     }
 
     /***********************************************************************************************
-     *   Method:      getItemInfoListener
-     *   Description: If addList button is clicked, create dialog box and listener for finishing
-     *                dialog
-     *   Parameters:  view - the button that was clicked
-     *   Returned:    NONE
+     * Method:      getItemInfoListener
+     * Description: If addList button is clicked, create dialog box and listener for finishing
+     * dialog
+     * Parameters:  view - the button that was clicked
+     * Returned:    NONE
      ***********************************************************************************************/
 
-    public DialogListener getItemInfoListener ()
-    {
+    public DialogListener getItemInfoListener() {
         return mItemInfoListener;
     }
 }
