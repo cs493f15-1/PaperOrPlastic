@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_id": "pop-project-1270",
+    "project_number": "208743903372",
+    "name": "POP-Project"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208743903372:android:fa013e255d8f4ef8",
+        "client_id": "android:edu.pacificu.cs493f15_1.paperorplasticapp",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "edu.pacificu.cs493f15_1.paperorplasticapp",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208743903372-n1hspi5i2ocnagb5tooo5mna06ptgla2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.pacificu.cs493f15_1.paperorplasticapp",
+            "certificate_hash": "E4A79C4259E11CDA634C25A18A1D6D7783A257CB"
+          }
+        },
+        {
+          "client_id": "208743903372-qivsb5vpjal1mpgkk8l91natj3h1rd9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 2
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

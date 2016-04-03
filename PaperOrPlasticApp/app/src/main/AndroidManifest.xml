@@ -3,6 +3,8 @@
     package="edu.pacificu.cs493f15_1.paperorplasticapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUTNS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <application
         android:name="edu.pacificu.cs493f15_1.MyApplication"

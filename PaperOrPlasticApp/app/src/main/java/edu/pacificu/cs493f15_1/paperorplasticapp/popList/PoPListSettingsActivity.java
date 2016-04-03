@@ -2,9 +2,13 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -95,86 +99,18 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
 
     setupBackButton(isGrocery);
 
-/*<<<<<<< HEAD:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/POPList/PoPListSettingsActivity.java
-      mPoPLists = popLists;
-        mPoPFileName = fileName;
-
-        //set up button
-        mbEdit = (Button) findViewById (R.id.bEdit);
-        mbEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //if its clicked, show or hide delete buttons
-                int size = mPoPLists.getSize();
-                if (size > 0) {
-                    if (!mbIsOnEdit) {
-                        mbIsOnEdit = true;
-                        for (int i = 0; i < size; i++) {
-                            showDeleteButton(i);
-                        }
-                    } else {
-
-                        //showDeleteButton also gets rid of the delete button so we might not need this check
-                        //TODO might need to show again if tab is changed
-                        mbIsOnEdit = false;
-                        for (int i = 0; i < size; i++) {
-                            hideDeleteButton(i);
-                        }
-                    }
-                }
-            }
-        });
-
-        *//*Do we need a back button?*//*
-        mbBack = (Button) findViewById (R.id.bBack);
-        mbBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //go back to activity that called this page (possible pages are settings
-                // or grocery list page
-                String caller = getIntent().getStringExtra("Caller");
-                Intent intent;
-                if (caller.equals("SettingsActivity")) {
-                    intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
-                } else {
-                    if (isGrocery) //whether the caller was groceryList
-                    {
-                        intent = new Intent(PoPListSettingsActivity.this, GroceryListActivity.class);
-                    }
-                    else
-                    {
-                        intent = new Intent(PoPListSettingsActivity.this, KitchenInventoryActivity.class);
-                    }
-                }
-=======
-        setupEditDeleteButtonsForGLists ();
 
 
-        *//*Do we need a back button?*//*
->>>>>>> AbbyCode:PaperOrPlasticApp/app/src/main/java/edu/pacificu/cs493f15_1/paperorplasticapp/GroceryListSettingsActivity.java*/
+    Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        /* Common toolbar setup */
+    setSupportActionBar(toolbar);
+        /* Add back button to the action bar */
+    if (getSupportActionBar() != null) {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-//        mbBack = (Button) findViewById (R.id.bBack);
-//        mbBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                //go back to activity that called this page (possible pages are settings
-//                // or grocery list page
-//                String caller = getIntent().getStringExtra("Caller");
-//                Intent intent;
-//                if (caller.equals("SettingsActivity")) {
-//                    intent = new Intent(GroceryListSettingsActivity.this, SettingsActivity.class);
-//                } else {
-//                    intent = new Intent(GroceryListSettingsActivity.this, GroceryListActivity.class);
-//                }
-//
-//                startActivity(intent);
-//            }
-//        });
 
-//        Context context = getApplicationContext();
-//        File groceryFile = context.getFileStreamPath(GroceryLists.GROCERY_FILE_NAME);
+
 
 
     if (!bUsingOffline)
@@ -189,8 +125,6 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
         mListsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
       }
     }
-
-
 
 
 
@@ -228,6 +162,48 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
         }
       }
     });
+  }
+
+
+  /**
+   * Override onOptionsItemSelected to use main_menu instead of BaseActivity menu
+   *
+   * @param menu
+   */
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+        /* Inflate the menu; this adds items to the action bar if it is present. */
+    getMenuInflater().inflate(R.menu.menu_inventory, menu);
+
+    MenuItem edit = menu.findItem(R.id.action_edit_lists);
+    MenuItem settings = menu.findItem(R.id.action_settings);
+
+    return true;
+  }
+
+  /**
+   * Override onOptionsItemSelected to add action_settings only to the MainActivity
+   *
+   * @param item
+   */
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.action_edit_lists)
+    {
+
+      return true;
+    }
+
+    if (id == R.id.action_settings)
+    {
+      return true;
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 
 
