@@ -28,15 +28,24 @@
                 android:background="@drawable/back"
                 android:layout_marginTop="5dp" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ToggleButton
+                android:layout_width="55dp"
+                android:layout_height="30dp"
                 android:text="@string/sEdit"
                 android:id="@+id/bEdit"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/bBack"
-                android:layout_toEndOf="@+id/bBack" />
+                android:onClick="onClickEditButton"
+                android:textOff="@string/sEdit"
+                android:textOn="@string/sEdit"
+                android:textSize="15sp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center"
+                android:textColor="@color/ccBlack"
+                android:background="@drawable/edit_btn_toggle"
+                android:layout_alignParentRight="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,9 +58,8 @@
 
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="@color/cListTitleTextColor"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/bEdit"
-                android:layout_toEndOf="@+id/bEdit"/>
+                android:layout_alignTop="@+id/bBack"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
         <RelativeLayout

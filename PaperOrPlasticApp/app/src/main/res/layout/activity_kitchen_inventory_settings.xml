@@ -29,6 +29,25 @@ android:layout_height="match_parent"
             <!--android:background="@drawable/back"-->
             <!--android:layout_marginTop="5dp" />-->
 
+        <!--<ToggleButton-->
+            <!--android:layout_width="55dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:text="@string/sEdit"-->
+            <!--android:id="@+id/bEdit"-->
+            <!--android:onClick="onClickEditButton"-->
+            <!--android:textOff="@string/sEdit"-->
+            <!--android:textOn="@string/sEdit"-->
+            <!--android:textSize="15sp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentStart="false"-->
+            <!--android:layout_alignParentLeft="false"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@color/ccBlack"-->
+            <!--android:background="@drawable/edit_btn_toggle"-->
+            <!--android:layout_alignParentRight="true" />-->
+
         <!--<Button-->
             <!--style="?android:attr/buttonStyleSmall"-->
             <!--android:layout_width="wrap_content"-->

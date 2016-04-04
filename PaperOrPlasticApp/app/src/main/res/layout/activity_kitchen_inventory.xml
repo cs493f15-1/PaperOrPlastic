@@ -3,8 +3,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/ccGray"
-                tools:context=".ui.activeListDetails.ActiveListDetailsActivity">
+                android:background="@color/ccGray">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,24 +16,25 @@
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/Toolbar" />
 
-        <TabHost
-            android:id="@+id/listTabHost"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="#b8d0d4">
-
+        <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:tools="http://schemas.android.com/tools"
+                 android:id="@+id/listTabHost"
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:background="#b8d0d4">
 
             <LinearLayout android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/linearLayout"
-                android:weightSum="1"
-                android:nestedScrollingEnabled="false">
+                          android:layout_width="fill_parent"
+                          android:layout_height="fill_parent"
+                          android:id="@+id/linearLayout"
+                          android:weightSum="1"
+                          android:nestedScrollingEnabled="false">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="#c4c3c3" android:visibility="gone">
+                    android:background="#c4c3c3"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="165dp"
@@ -69,15 +69,27 @@
                         android:background="@drawable/back"
                         android:layout_marginTop="5dp" />
 
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <ToggleButton
+                        android:layout_width="70dp"
+                        android:layout_height="30dp"
                         android:text="@string/sEdit"
                         android:id="@+id/bEdit"
-                        android:layout_alignTop="@+id/bBackToHome"
-                        android:layout_toRightOf="@+id/bBackToHome"
-                        android:layout_toEndOf="@+id/bBackToHome" />
+                        android:onClick="onClickEditButton"
+                        android:textOff="@string/sEdit"
+                        android:textOn="@string/sEdit"
+                        android:textSize="15sp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/groceryListText"
+                        android:layout_toEndOf="@+id/groceryListText"
+                        android:layout_toStartOf="@id/bListSettings"
+                        android:layout_toLeftOf="@id/bListSettings"
+                        android:layout_alignParentStart="false"
+                        android:layout_alignParentLeft="false"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center"
+                        android:textColor="@color/ccBlack"
+                        android:background="@drawable/edit_btn_toggle" />
 
                 </RelativeLayout>
 
@@ -88,29 +100,30 @@
                     android:weightSum="1">
 
                     <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:layout_width="74dp"
                         android:layout_height="wrap_content"
-                        android:text="+"
                         android:id="@+id/bAddList"
-                        android:textSize="20dp" />
+                        android:textSize="17dp"
+                        android:text="@string/sAddList"
+                        android:onClick="onAddListClick" />
 
                     <HorizontalScrollView android:layout_width="321dp"
-                        android:layout_height="match_parent"
-                        android:fillViewport="true"
-                        android:scrollbars="horizontal"
-                        android:layout_gravity="right"
-                        android:backgroundTint="#48928d"
-                        android:backgroundTintMode="multiply"
-                        android:foregroundGravity="left"
-                        android:scrollIndicators="right">
+                                          android:layout_height="match_parent"
+                                          android:fillViewport="true"
+                                          android:scrollbars="horizontal"
+                                          android:layout_gravity="right"
+                                          android:backgroundTint="#48928d"
+                                          android:backgroundTintMode="multiply"
+                                          android:foregroundGravity="left"
+                                          android:scrollIndicators="right">
 
                         <TabWidget android:id="@android:id/tabs"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            style="@style/Base.Widget.AppCompat.ActionBar.TabBar"
-                            android:foregroundGravity="top|left|bottom|right"
-                            android:showDividers="beginning|end" />
+                                   android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   style="@style/Base.Widget.AppCompat.ActionBar.TabBar"
+                                   android:foregroundGravity="top|left|bottom|right"
+                                   android:showDividers="beginning|end" />
                     </HorizontalScrollView>
 
                 </TableRow>
@@ -146,7 +159,7 @@
 
                     <Button
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_height="fill_parent"
                         android:id="@+id/bAddItem"
                         android:layout_gravity="left|top"
                         android:longClickable="true"
@@ -156,13 +169,16 @@
                         android:layout_marginBottom="5dp"
                         android:layout_centerVertical="true"
                         android:layout_alignParentTop="true"
-                        android:text="@string/sAddItem" />
+                        android:text="@string/sAddItem"
+                        style="@style/Base.Widget.AppCompat.Button.Borderless"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:onClick="onAddItemClick" />
                 </RelativeLayout>
 
                 <FrameLayout android:id="@android:id/tabcontent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom">
+                             android:layout_width="fill_parent"
+                             android:layout_height="match_parent"
+                             android:layout_gravity="bottom">
 
                     <fragment
                         android:layout_width="wrap_content"

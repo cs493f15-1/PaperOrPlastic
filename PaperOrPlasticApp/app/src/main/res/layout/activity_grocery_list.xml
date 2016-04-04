@@ -29,8 +29,13 @@
 
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="#5e5e5e"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_alignTop="@+id/bBackToHome"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
+                android:layout_toEndOf="@id/bBackToHome"
+                android:layout_toRightOf="@id/bBackToHome"
+                android:layout_marginLeft="25dp" />
 
             <Button
                 android:layout_width="50dp"
@@ -51,15 +56,27 @@
                 android:background="@drawable/back"
                 android:layout_marginTop="5dp" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ToggleButton
+                android:layout_width="70dp"
+                android:layout_height="30dp"
                 android:text="@string/sEdit"
                 android:id="@+id/bEdit"
-                android:layout_alignTop="@+id/bBackToHome"
-                android:layout_toRightOf="@+id/bBackToHome"
-                android:layout_toEndOf="@+id/bBackToHome" />
+                android:onClick="onClickEditButton"
+                android:textOff="@string/sEdit"
+                android:textOn="@string/sEdit"
+                android:textSize="15sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/groceryListText"
+                android:layout_toEndOf="@+id/groceryListText"
+                android:layout_toStartOf="@id/bListSettings"
+                android:layout_toLeftOf="@id/bListSettings"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:textColor="@color/ccBlack"
+                android:background="@drawable/edit_btn_toggle" />
 
         </RelativeLayout>
 
@@ -70,12 +87,13 @@
             android:weightSum="1">
 
             <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="74dp"
                 android:layout_height="wrap_content"
-                android:text="+"
                 android:id="@+id/bAddList"
-                android:textSize="20dp" />
+                android:textSize="17dp"
+                android:text="@string/sAddList"
+                android:onClick="onAddListClick" />
 
             <HorizontalScrollView android:layout_width="321dp"
                 android:layout_height="match_parent"
@@ -128,7 +146,7 @@
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="fill_parent"
                 android:id="@+id/bAddItem"
                 android:layout_gravity="left|top"
                 android:longClickable="true"
@@ -139,7 +157,9 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentTop="true"
                 android:text="@string/sAddItem"
-                style="@style/Base.Widget.AppCompat.Button.Borderless" />
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:gravity="center_vertical|center_horizontal"
+                android:onClick="onAddItemClick" />
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"
@@ -147,13 +167,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom">
 
-            <fragment
-                android:layout_width="wrap_content"
-                android:layout_height="393dp"
-                android:name="android.app.ListFragment"
-                android:id="@+id/fragment"
-                android:layout_gravity="left|top"
-                tools:layout="@layout/design_navigation_menu" />
+
+
 
             <ListView
                 android:layout_width="wrap_content"

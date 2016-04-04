@@ -9,12 +9,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.firebase.client.Firebase;
 import com.firebase.client.ValueEventListener;
@@ -59,17 +61,17 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
   private PoPListAdapter mListAdapter;
   private DeleteListDialogListener mDeleteListListener;
   private Button mbBack;
-  private Button mbEdit;
   private boolean mbIsOnEdit;
   private FragmentManager fm;
   int position = 0;
+  int mPositionClicked = 0;
   Button delete;
-
   private String mPoPFileName;
-
 
   private Firebase mUserRef, mListsRef;
   private ValueEventListener mUserRefListener;
+
+
 
 
   /********************************************************************************************
@@ -95,11 +97,7 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     mPoPLists = popLists;
     mPoPFileName = fileName;
 
-    setupEditDeleteButtonsForGLists();
-
-    setupBackButton(isGrocery);
-
-
+    //setupBackButton(isGrocery);
 
     Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         /* Common toolbar setup */
@@ -108,10 +106,6 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     if (getSupportActionBar() != null) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
-
-
-
 
     if (!bUsingOffline)
     {
@@ -127,41 +121,51 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     }
 
 
-
     mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
-    //list adapter holds info of lists for listView
-    mListAdapter = new PoPListAdapter(mListOfListView.getContext(),
-      R.layout.listview_list_row_settings, mPoPLists.getArrayOfLists())
-    {
-    };
-
-    mListOfListView.setAdapter(mListAdapter);
-
-    //set up swipe listening
-    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView)
-    {
-      @Override
-      public void onSwipeRight(int pos)
+      //list adapter holds info of lists for listView
+      mListAdapter = new PoPListAdapter(mListOfListView.getContext(),
+        R.layout.listview_list_row_settings, mPoPLists.getArrayOfLists())
       {
+      };
 
+      mListOfListView.setAdapter(mListAdapter);
 
-        if (!mbIsOnEdit)
+      //set up swipe listening
+      mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView)
+      {
+        @Override
+        public void onSwipeRight(int pos)
         {
-          hideDeleteButton(pos);
+
+
+          if (!mbIsOnEdit)
+          {
+            hideDeleteButton(pos);
+          }
+
         }
 
-      }
-
-      @Override
-      public void onSwipeLeft(int pos)
-      {
-
-        if (!mbIsOnEdit)
+        @Override
+        public void onSwipeLeft(int pos)
         {
-          showDeleteButton(pos);
+
+          if (!mbIsOnEdit)
+          {
+            showDeleteButton(pos);
+          }
         }
-      }
-    });
+      });
+  }
+
+
+
+    public PoPLists getPoPLists()
+    {
+      return mPoPLists;
+    }
+
+  public void onClick(View view)
+  {
   }
 
 
@@ -174,7 +178,7 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
   public boolean onCreateOptionsMenu(Menu menu)
   {
         /* Inflate the menu; this adds items to the action bar if it is present. */
-    getMenuInflater().inflate(R.menu.menu_inventory, menu);
+    getMenuInflater().inflate(R.menu.menu_inventory_settings, menu);
 
     MenuItem edit = menu.findItem(R.id.action_edit_lists);
     MenuItem settings = menu.findItem(R.id.action_settings);
@@ -194,6 +198,7 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
 
     if (id == R.id.action_edit_lists)
     {
+      onClickEditButton();
 
       return true;
     }
@@ -207,19 +212,11 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
   }
 
 
-  public void onClick(View view)
-  {
-  }
-
-
-  private void setupBackButton(final boolean isGrocery)
-  {
+    private void setupBackButton (final boolean isGrocery) {
     mbBack = (Button) findViewById(R.id.bBack);
-    mbBack.setOnClickListener(new View.OnClickListener()
-    {
+    mbBack.setOnClickListener(new View.OnClickListener() {
       @Override
-      public void onClick(View v)
-      {
+      public void onClick(View v) {
 
         //go back to activity that called this page (possible pages are settings
         // or grocery list page
@@ -229,6 +226,7 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
         {
           intent = new Intent(PoPListSettingsActivity.this, SettingsActivity.class); //TODO Come back to this maybe if statements?
         }
+
         else
         {
           if (isGrocery) //whether the caller was groceryList
@@ -245,140 +243,138 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     });
   }
 
-  private void setupEditDeleteButtonsForGLists()
-  {
-    mbEdit = (Button) findViewById(R.id.bEdit);
-    mbEdit.setOnClickListener(new View.OnClickListener()
+    /***********************************************************************************************
+     *   Method:      onClickEditButton
+     *   Description: Handles click of edit button
+     *   Parameters:  view
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    public void onClickEditButton ()
     {
-      @Override
-      public void onClick(View v)
-      {
-        //if its clicked, show or hide delete buttons
-        int size = mPoPLists.getSize();
-        if (size > 0)
-        {
-          if (!mbIsOnEdit)
-          {
-            mbIsOnEdit = true;
-            for (int i = 0; i < size; i++)
-            {
-              showDeleteButton(i);
-            }
-          }
-          else
-          {
+      //if its clicked, show or hide delete buttons
+      int size = mPoPLists.getSize();
+      if (size > 0) {
 
-            //showDeleteButton also gets rid of the delete button so we might not need this check
-            //TODO might need to show again if tab is changed
-            mbIsOnEdit = false;
-            for (int i = 0; i < size; i++)
-            {
-              hideDeleteButton(i);
-            }
-          }
+        if (!mbIsOnEdit)
+        {
+          mbIsOnEdit = true;
+          Log.d("PopListSettings", Boolean.toString(mbIsOnEdit));
+          //mbEdit.setChecked(mbIsOnEdit);
+          showDeleteButtons(size);
+        } else
+        {
+          mbIsOnEdit = false;
+          Log.d("PopListSettings", Boolean.toString(mbIsOnEdit));
+          //mbEdit.setChecked(mbIsOnEdit);
+          hideDeleteButtons(size);
         }
       }
-    });
-  }
 
-  /********************************************************************************************
-   * Function name: readListsFromFile
-   * <p/>
-   * Description:   Reads from the mPoPFileName the current GroceryLists
-   * <p/>
-   * Parameters:    None
-   * <p/>
-   * Returns:       None
-   ******************************************************************************************/
-  private void readListsFromFile(PoPLists popLists)
-  {
-    FileInputStream popInput;
-    Scanner listsInput;
-
-    try
-    {
-      popInput = openFileInput(mPoPFileName);
-
-      listsInput = new Scanner(popInput);
-      popLists.readListsFromFile(listsInput);
-      listsInput.close();
-    } catch (FileNotFoundException e)
-    {
-      e.printStackTrace();
     }
-  }
 
-  /********************************************************************************************
-   * Function name: writeGListsToGroceryFile
-   * <p/>
-   * Description:   Writes the current mPoPLists to mPoPFileName to store the information
-   * stored in mPoPLists
-   * <p/>
-   * Parameters:    None
-   * <p/>
-   * Returns:       None
-   ******************************************************************************************/
-  private void writeListsToFile()
-  {
-    FileOutputStream popOutput = null;
-    PrintWriter listsOutput = null;
 
-    try
+    /***********************************************************************************************
+     *   Method:      showDeleteButtons
+     *   Description: shows a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void showDeleteButtons (int size)
     {
-      popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
-
-      listsOutput = new PrintWriter(popOutput);
-      mPoPLists.writeListsToFile(listsOutput);
-      listsOutput.flush();
-      listsOutput.close();
-    } catch (FileNotFoundException e)
-    {
-      e.printStackTrace();
+      for (int i = 0; i < size; i++) {
+        showDeleteButton(i);
+      }
     }
-  }
 
-  /********************************************************************************************
-   * Function name: showDeleteButton
-   * <p/>
-   * Description:   Shows the delete button for the child view within listView and sets the
-   * onClickListener for the delete button
-   * <p/>
-   * Parameters:    pos - the child position within the list view whose delete button will be
-   * shown
-   * <p/>
-   * Returns:       true if the child view with the button being hidden exists, else false
-   ******************************************************************************************/
-  private boolean showDeleteButton(final int pos)
-  {
-    position = pos;
+    /***********************************************************************************************
+     *   Method:      hideDeleteButtons
+     *   Description: hides a delete button for every item in list view base on size passed in
+     *   Parameters:  size - size of list
+     *   Returned:    NONE
+     ***********************************************************************************************/
+    private void hideDeleteButtons (int size)
+    {
+      for (int i = 0; i < size; i++)
+      {
+        hideDeleteButton(i);
+      }
+    }
+
+    /********************************************************************************************
+     * Function name: readListsFromFile
+     *
+     * Description:   Reads from the mPoPFileName the current GroceryLists
+     *
+     * Parameters:    None
+     *
+     * Returns:       None
+     ******************************************************************************************/
+    private void readListsFromFile (PoPLists popLists)
+    {
+      FileInputStream popInput;
+      Scanner listsInput;
+
+      try {
+        popInput = openFileInput(mPoPFileName);
+
+        listsInput = new Scanner(popInput);
+        popLists.readListsFromFile(listsInput);
+        listsInput.close();
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+
+    /********************************************************************************************
+     * Function name: writeGListsToGroceryFile
+     *
+     * Description:   Writes the current mPoPLists to mPoPFileName to store the information
+     *                stored in mPoPLists
+     *
+     * Parameters:    None
+     *
+     * Returns:       None
+     ******************************************************************************************/
+    private void writeListsToFile ()
+    {
+      FileOutputStream popOutput = null;
+      PrintWriter listsOutput = null;
+
+      try
+      {
+        popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
+
+        listsOutput = new PrintWriter(popOutput);
+        mPoPLists.writeListsToFile(listsOutput);
+        listsOutput.flush();
+        listsOutput.close();
+      }
+      catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
+    }
+
+    /********************************************************************************************
+     * Function name: showDeleteButton
+     *
+     * Description:   Shows the delete button for the child view within listView and sets the
+     *                onClickListener for the delete button
+     *
+     * Parameters:    pos - the child position within the list view whose delete button will be
+     *                      shown
+     *
+     * Returns:       true if the child view with the button being hidden exists, else false
+     ******************************************************************************************/
+    private boolean showDeleteButton(final int pos) {
+    mPositionClicked = pos;
     View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
-    if (child != null)
-    {
+    if (child != null) {
 
       delete = (Button) child.findViewById(R.id.bDelete);
-      delete.setOnClickListener(new View.OnClickListener()
-      {
-        @Override
-        public void onClick(View v)
-        {
-          mDeleteListListener = new DeleteListDialogListener()
-          {
-            @Override
-            public void onDeleted()
-            {
-              deleteList();
-            }
-          };
-          fm = getSupportFragmentManager();
-          DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
-          deleteListFragment.show(fm, "Yeah");
 
-        }
-      });
       if (delete != null)
       {
-        if (delete.getVisibility() == View.INVISIBLE)
-        {
+        if (delete.getVisibility() == View.INVISIBLE) {
           Animation deleteAnimation =
             AnimationUtils.loadAnimation(this,
               R.anim.slide_out_left);
@@ -394,34 +390,30 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     return false;
   }
 
-  /********************************************************************************************
-   * Function name: hideDeleteButton
-   * <p/>
-   * Description:   Hides the delete button on each list view child
-   * <p/>
-   * Parameters:    pos - the child position within the list view
-   * <p/>
-   * Returns:       true if the child view with the button being hidden exists, else false
-   ******************************************************************************************/
-  private boolean hideDeleteButton(final int pos)
-  {
-    position = pos;
+    /********************************************************************************************
+     * Function name: hideDeleteButton
+     *
+     * Description:   Hides the delete button on each list view child
+     *
+     * Parameters:    pos - the child position within the list view
+     *
+     * Returns:       true if the child view with the button being hidden exists, else false
+     ******************************************************************************************/
+    private boolean hideDeleteButton(final int pos) {
+    mPositionClicked = pos;
     View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
-    if (child != null)
-    {
+    if (child != null) {
 
       delete = (Button) child.findViewById(R.id.bDelete);
-      delete.setOnClickListener(new View.OnClickListener()
-      {
-        @Override
-        public void onClick(View v)
-        {
-        }
-      });
+            /*delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                }
+            });*/
       if (delete != null)
       {
-        if (delete.getVisibility() == View.VISIBLE)
-        {
+        if (delete.getVisibility() == View.VISIBLE) {
           Animation deleteAnimation =
             AnimationUtils.loadAnimation(this,
               R.anim.slide_in_right);
@@ -439,98 +431,117 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     return false;
   }
 
-  /********************************************************************************************
-   * Function name: slideItemView
-   * <p/>
-   * Description:   Slides the list view item over
-   * <p/>
-   * Parameters:    child             - the view that is sliding
-   * translationAmount - how much the view will slide
-   * <p/>
-   * Returns:       none
-   ******************************************************************************************/
+    /********************************************************************************************
+     * Function name: slideItemView
+     *
+     * Description:   Slides the list view item over
+     *
+     * Parameters:    child             - the view that is sliding
+     *                translationAmount - how much the view will slide
+     *
+     * Returns:       none
+     ******************************************************************************************/
 
-  private void slideItemView(View child, float translationAmount)
-  {
-    TextView listName = (TextView) child.findViewById(R.id.listName);
-    listName.setTranslationX(translationAmount);
-
-  }
-
-
-  /********************************************************************************************
-   * Function name: onResume
-   * <p/>
-   * Description:   When the activity is resumed reads in PoPLists from mPoPFileName
-   * and updates mPoPLists with the information.
-   * <p/>
-   * Parameters:    none
-   * <p/>
-   * Returns:       none
-   ******************************************************************************************/
-  @Override
-  protected void onResume()
-  {
-    super.onResume();
-
-
-    //read list info from file
-    Context context = getApplicationContext();
-    File groceryFile = context.getFileStreamPath(mPoPFileName);
-
-    if (groceryFile.exists())
+    private void slideItemView (View child, float translationAmount)
     {
-      mPoPLists.clearLists();
-      readListsFromFile(mPoPLists);
+      //can use this function to slide any other items in view over, does not slide over list name since we want to see the name
+      // listName = (TextView) child.findViewById(R.id.listName);
+      //listName.setTranslationX(translationAmount);
+
     }
+
+
+    /********************************************************************************************
+     * Function name: onResume
+     *
+     * Description:   When the activity is resumed reads in PoPLists from mPoPFileName
+     *                and updates mPoPLists with the information.
+     *
+     * Parameters:    none
+     *
+     * Returns:       none
+     ******************************************************************************************/
+    @Override
+    protected void onResume ()
+    {
+      super.onResume();
+
+
+      //read list info from file
+      Context context = getApplicationContext();
+      File groceryFile = context.getFileStreamPath(mPoPFileName);
+
+      if (groceryFile.exists())
+      {
+        mPoPLists.clearLists();
+        readListsFromFile(mPoPLists);
+      }
+    }
+
+    /********************************************************************************************
+     * Function name: onPause
+     *
+     * Description:   When the activity is paused writes the PoPLists to mPoPFileName
+     *
+     * Parameters:    none
+     *
+     * Returns:       none
+     ******************************************************************************************/
+    @Override
+    protected void onPause ()
+    {
+      super.onPause();
+
+      writeListsToFile();
+      mPoPLists.clearLists();
+
+    }
+
+    /********************************************************************************************
+     * Function name: deleteList
+     *
+     * Description:   When the activity is paused writes the PoPLists to mPoPFileName
+     *
+     * Parameters:    position - which list will be deleted
+     *
+     * Returns:       none
+     ******************************************************************************************/
+    public void deleteList ()
+    {
+      mPoPLists.deleteList(mPositionClicked);
+      mListAdapter.notifyDataSetChanged();
+    }
+
+
+    public void setPositionClicked (int position)
+    {
+      mPositionClicked = position;
+    }
+
+    /********************************************************************************************
+     * Function name: DeleteListDialogListener
+     *
+     * Description:   returns the mDeleteListListener for other class to use
+     *
+     * Parameters:    none
+     *
+     * Returns:       mDeleteListListener
+     ******************************************************************************************/
+    public DeleteListDialogListener getDeleteDialogListener()
+    {
+      return mDeleteListListener;
+    }
+
+    public void setDeleteListListener (DeleteListDialogListener listener)
+    {
+      mDeleteListListener = listener;
+    }
+
+    public void showDeleteListFragment()
+    {
+      fm = getSupportFragmentManager();
+      DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
+      deleteListFragment.show(fm, "Yeah");
+    }
+
   }
-
-  /********************************************************************************************
-   * Function name: onPause
-   * <p/>
-   * Description:   When the activity is paused writes the PoPLists to mPoPFileName
-   * <p/>
-   * Parameters:    none
-   * <p/>
-   * Returns:       none
-   ******************************************************************************************/
-  @Override
-  protected void onPause()
-  {
-    super.onPause();
-
-    writeListsToFile();
-    mPoPLists.clearLists();
-
-  }
-
-  /********************************************************************************************
-   * Function name: deleteList
-   * <p/>
-   * Description:   When the activity is paused writes the PoPLists to mPoPFileName
-   * <p/>
-   * Parameters:    none
-   * <p/>
-   * Returns:       none
-   ******************************************************************************************/
-  public void deleteList()
-  {
-    mPoPLists.deleteList(position);
-    mListAdapter.notifyDataSetChanged();
-  }
-
-  /********************************************************************************************
-   * Function name: DeleteListDialogListener
-   * <p/>
-   * Description:   returns the mDeleteListListener for other class to use
-   * <p/>
-   * Parameters:    none
-   * <p/>
-   * Returns:       mDeleteListListener
-   ******************************************************************************************/
-  public DeleteListDialogListener getDeleteDialogListener()
-  {
-    return mDeleteListListener;
-  }
-
-}

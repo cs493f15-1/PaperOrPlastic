@@ -149,6 +149,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
             startIntent (G_LIST, GroceryListSettingsActivity.class);
         }
         else if (buttons.get (K_LIST) == view)
+
         {
             startIntent (K_LIST, KitchenInventorySettingsActivity.class);
         }

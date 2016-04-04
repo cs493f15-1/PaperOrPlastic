@@ -32,4 +32,6 @@
 
     <color name="light_black">#747474</color>
 
+    <color name="cAccentColor">#2eb8b8</color>
+    <color name="cToggleButtonColor">#70dbdb</color>
 </resources>

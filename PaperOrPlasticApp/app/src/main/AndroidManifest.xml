@@ -52,7 +52,14 @@
         </activity>
         <activity
             android:name=".groceryList.GroceryListActivity"
-            android:label="@string/title_activity_grocery_lists" >
+            android:label="@string/title_activity_grocery_lists">
+
+        </activity>
+
+        <activity
+            android:name=".popList.ItemSearchActivity"
+            android:label="@string/title_activity_item_search">
+
         </activity>
         <activity
             android:name=".groceryList.GroceryListSettingsActivity"
