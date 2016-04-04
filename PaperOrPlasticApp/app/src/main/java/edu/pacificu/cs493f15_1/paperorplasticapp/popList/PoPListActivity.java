@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -45,6 +46,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettings
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
@@ -70,10 +72,12 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     private FragmentManager fm;
     private ListView mListView;
     private Button mbEdit;
-    private boolean mbIsOnEdit, mbAddingItem;
-    private String mLastAddedItemName;
+    private boolean mbIsOnEdit;
     private ListFragment listFrag;
     private ListItem newItem;
+
+    //For itemSearch purposes
+    private boolean mbAddingItem;
 
     private String mPoPFileName;
     private PoPLists mPoPLists;
@@ -84,9 +88,8 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     int position = 0;
     Button delete;
 
-    private NewItemInfoDialogListener mItemInfoListener;
 
-
+    //Return from ItemSearchActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -95,7 +98,28 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
             if(resultCode == RESULT_OK)
             {
                 String item_name = data.getStringExtra("item_name");
-                newItem = new ListItem(item_name);
+                String brand_name = data.getStringExtra("brand_name");
+                String desc = data.getStringExtra("item_desc");
+
+                newItem = new ListItem(item_name, brand_name, desc);
+
+                newItem.setNutritionFacts(data.getIntExtra("nf_calories", 0),
+                        data.getDoubleExtra("nf_total_fat", 0),
+                        data.getDoubleExtra("nf_saturated_fat", 0),
+                        data.getDoubleExtra("nf_polyunsaturated_fat", 0),
+                        data.getDoubleExtra("nf_monounsaturated_fat", 0),
+                        data.getDoubleExtra("nf_trans_fatty_acid", 0),
+                        data.getDoubleExtra("nf_cholesterol", 0),
+                        data.getDoubleExtra("nf_sodium", 0),
+                        data.getDoubleExtra("nf_total_carbohydrate", 0),
+                        data.getDoubleExtra("nf_dietary_fiber", 0),
+                        data.getDoubleExtra("nf_sugars", 0),
+                        data.getDoubleExtra("nf_protein", 0),
+                        data.getDoubleExtra("nf_potassium", 0),
+                        data.getIntExtra("nf_vitamin_a_dv", 0),
+                        data.getIntExtra("nf_vitamin_c_dv", 0),
+                        data.getIntExtra("nf_calcium_dv", 0),
+                        data.getIntExtra("nf_iron_dv", 0));
 
                 readListsFromFile(mPoPLists);
                 addItemToListView(newItem);
@@ -514,14 +538,10 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
 
         if (popFile.exists()) {
             mPoPLists.clearLists();
+
+            //popFile.delete();
+
             readListsFromFile(mPoPLists);
-
-            if (!mbAddingItem)
-            {
-
-            }
-
-
             fillTabs(mPoPLists);
 
             mbAddingItem = false;
@@ -699,19 +719,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
     }
 
     /********************************************************************************************
-     * Function name: getItemInfoListener
-     *
-     * Description:
-     *
-     * Parameters:
-     *
-     * Returns:
-     ******************************************************************************************/
-    public NewItemInfoDialogListener getItemInfoListener () {
-        return mItemInfoListener;
-    }
-
-    /********************************************************************************************
      * Function name: showDeleteButton
      *
      * Description:
@@ -865,7 +872,6 @@ public abstract class PoPListActivity extends FragmentActivity implements ListDF
         try
         {
             popOutput = openFileOutput(mPoPFileName, Context.MODE_PRIVATE);
-
             listsOutput = new PrintWriter(popOutput);
             mPoPLists.writeListsToFile(listsOutput);
             listsOutput.flush();

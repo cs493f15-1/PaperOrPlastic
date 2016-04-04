@@ -37,6 +37,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.popList.ListItemAdapter;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ExecuteQueryTask;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 public class ItemSearchActivity extends Activity implements ExecuteQueryTask.AsyncResponse {
@@ -50,6 +51,8 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
     private ItemSearchAdapter mItemSearchAdapter;
     private ArrayList<ListItem> mSuggestions = new ArrayList<>();
     private JSONArray JSONResults;
+
+    public String[] mNutritionFields = new String[17];
 
     public ExecuteQueryTask.AsyncResponse response = new ExecuteQueryTask.AsyncResponse() {
         @Override
@@ -65,19 +68,35 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
 
+        //For nutrtionix fields
+        mNutritionFields[0] = "nf_calories";
+        mNutritionFields[1] = "nf_total_fat";
+        mNutritionFields[2] = "nf_saturated_fat";
+        mNutritionFields[3] = "nf_total_carbohydrate";
+        mNutritionFields[4] = "nf_protein";
+        mNutritionFields[5] = "nf_sugars";
+        mNutritionFields[6] = "nf_dietary_fiber";
+        mNutritionFields[7] = "nf_sodium";
+        mNutritionFields[8] = "nf_monounsaturated_fat";
+        mNutritionFields[9] = "nf_polyunsaturated_fat";
+        mNutritionFields[10] = "nf_trans_fatty_acid";
+        mNutritionFields[11] = "nf_cholesterol";
+        mNutritionFields[12] = "nf_potassium";
+        mNutritionFields[13] = "nf_vitamin_a_dv";
+        mNutritionFields[14] = "nf_vitamin_c_dv";
+        mNutritionFields[15] = "nf_calcium_mg";
+        mNutritionFields[16] = "nf_iron_mg";
+
         mItemListView = (ListView) findViewById(R.id.item_suggestion);
 
         // Get search field
         mItemSearchQuery = (EditText) findViewById(R.id.action_search);
 
-        //Testing items to show for suggestions
-        mItemResult = new ListItem("Testing123");
-        mSuggestions.add(mItemResult);
 
         mItemSearchAdapter = (new ItemSearchAdapter(mItemListView.getContext(),
                 R.layout.search_sug_item, mSuggestions));
 
-        //For selecting any search suggestion
+        //For data exchange b/w I.S adapter, receiving.
         mItemSearchAdapter.setActivity(this);
 
         mItemListView.setAdapter(mItemSearchAdapter);
@@ -103,7 +122,7 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
                     queryTask.execute(searchData, null, null);
 
                     try {
-                        queryTask.get(5, TimeUnit.SECONDS);
+                        queryTask.get(10, TimeUnit.SECONDS);
                     } catch (InterruptedException i) {
                         i.printStackTrace();
                     } catch (ExecutionException ee) {
@@ -114,16 +133,58 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
 
                     mItemSearchAdapter.clear();
 
+                    /* Return of query. Putting into SearchArrayAdapter. All item info set here. */
                     if (null != JSONResults) {
-                        for (int i = 0; i < 5; i++) {
+                        int resultLength;
+
+                        resultLength = JSONResults.length();
+
+                        for (int i = 0; i < resultLength; i++) {
                             try {
                                 JSONObject resultItems = JSONResults.getJSONObject(i);
 
                                 JSONObject resultFields = resultItems.getJSONObject("fields");
 
-                                String itemName = resultFields.getString("item_name");
+                                for (int j = 0; j < 17; j++) {
+                                    boolean bIsNull = false;
 
-                                mItemResult = new ListItem(itemName);
+                                    bIsNull = resultFields.isNull(mNutritionFields[j]);
+
+                                    if (bIsNull) {
+                                        resultFields.put(mNutritionFields[j], 0);
+                                    }
+                                }
+
+                                String itemName = resultFields.getString("item_name");
+                                String brandName = resultFields.getString("brand_name");
+                                String itemDesc = resultFields.getString("item_description");
+                                int itemCal = resultFields.getInt("nf_calories");
+                                double itemTotalFat = resultFields.getDouble("nf_total_fat");
+                                double itemSatFat = resultFields.getDouble("nf_saturated_fat");
+                                double itemPolyFat = resultFields.getDouble("nf_polyunsaturated_fat");
+                                double itemMonoFat = resultFields.getDouble("nf_monounsaturated_fat");
+                                double itemTransFat = resultFields.getDouble("nf_trans_fatty_acid");
+                                double itemCholesterol = resultFields.getDouble("nf_cholesterol");
+                                double itemSodium = resultFields.getDouble("nf_sodium");
+                                double itemCarbs = resultFields.getDouble("nf_total_carbohydrate");
+                                double itemFiber = resultFields.getDouble("nf_dietary_fiber");
+                                double itemSugar = resultFields.getDouble("nf_sugars");
+                                double itemProtein = resultFields.getDouble("nf_protein");
+                                double itemPotassium = resultFields.getDouble("nf_potassium");
+                                int itemVitA = resultFields.getInt("nf_vitamin_a_dv");
+                                int itemVitC = resultFields.getInt("nf_vitamin_c_dv");
+                                int itemCalcium = resultFields.getInt("nf_calcium_mg");
+                                int itemIron = resultFields.getInt("nf_iron_mg");
+
+                                mItemResult = new ListItem(itemName, brandName, itemDesc);
+
+                                mItemResult.setNutritionFacts(itemCal, itemTotalFat,
+                                        itemSatFat, itemPolyFat, itemMonoFat,
+                                        itemTransFat, itemCholesterol, itemSodium,
+                                        itemCarbs, itemFiber, itemSugar,
+                                        itemProtein, itemPotassium, itemVitA,
+                                        itemVitC, itemCalcium, itemIron);
+
                                 mItemSearchAdapter.add(mItemResult);
 
                             } catch (JSONException e) {
@@ -144,79 +205,42 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
             }
         });
 
-        //Search key is pressed
-        mItemSearchQuery.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            public boolean onEditorAction(TextView v, int actionId,
-                                          KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String item_name;
-                    Intent intent = getIntent();
-
-                    int numListItems = intent.getIntExtra("num_list_items", 0);
-
-                    if (0 < numListItems) {
-                        item_name = mItemSearchQuery.getText().toString();
-                        sendItemNameToList(item_name);
-
-                    } else {
-                        AlertDialog noListDialog = new AlertDialog.Builder(mDialog.getContext()).create();
-                        noListDialog.setTitle("Item Not Added");
-                        noListDialog.setMessage("The item could not be added because there is no list available. Please create a list first.");
-                        noListDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                        noListDialog.show();
-                    }
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
-
-//        mDialog = getDialog();
-//        mDialog.setTitle("Add Item");
-//        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-//        // Do something else
-//
-//
-//        mbCancel = (Button) rootView.findViewById(R.id.cancel_button);
-//        mbCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDialog.dismiss();
-//            }
-//        });
-//
-//
-//
-//        mbOK = (Button) rootView.findViewById (R.id.ok_button);
-//        mbOK.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GroceryListActivity activity = (GroceryListActivity) getActivity();
-//                ItemSearchDialogListener listener = activity.getItemInfoListener();
-//                listener.onFinishNewItemDialog(mItemSearchQuery.getText().toString());
-//                mDialog.dismiss();
-//            }
-//        });
-//
     }
 
+
+    //Required because some bug
     @Override
     public void processFinish(JSONArray output) {
         JSONResults = output;
     }
 
-    public void sendItemNameToList(String itemName) {
+    //Sends item name and NF back to list activity
+    public void sendItemNameToList(String itemName, String brandName, String itemDesc, NutritionFactModel itemNF) {
         Intent dataBack = new Intent();
+
         dataBack.putExtra("item_name", itemName);
+        dataBack.putExtra("brand_name", brandName);
+        dataBack.putExtra("item_desc", itemDesc);
+        dataBack.putExtra("nf_calories", itemNF.getCalories());
+        dataBack.putExtra("nf_total_fat", itemNF.getTotalFat());
+        dataBack.putExtra("nf_saturated_fat", itemNF.getSatFat());
+        dataBack.putExtra("nf_total_carbohydrate", itemNF.getTotalCarbs());
+        dataBack.putExtra("nf_protein", itemNF.getProtein());
+        dataBack.putExtra("nf_sugars", itemNF.getSugars());
+        dataBack.putExtra("nf_dietary_fiber", itemNF.getFiber());
+        dataBack.putExtra("nf_sodium", itemNF.getSodium());
+
+        dataBack.putExtra("nf_polyunsaturated_fat", itemNF.getPolyFat());
+        dataBack.putExtra("nf_monounsaturated_fat", itemNF.getMonoFat());
+        dataBack.putExtra("nf_trans_fatty_acid", itemNF.getTransFat());
+        dataBack.putExtra("nf_cholesterol", itemNF.getCholesterol());
+        dataBack.putExtra("nf_potassium", itemNF.getPotassium() );
+        dataBack.putExtra("nf_vitamin_a_dv", itemNF.getVitA());
+        dataBack.putExtra("nf_vitamin_c_dv", itemNF.getVitC());
+        dataBack.putExtra("nf_calcium_mg", itemNF.getCalcium());
+        dataBack.putExtra("nf_iron_mg", itemNF.getIron());
+
+
         setResult(RESULT_OK, dataBack);
         finish();
     }

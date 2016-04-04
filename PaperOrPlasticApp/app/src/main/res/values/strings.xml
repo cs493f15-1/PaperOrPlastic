@@ -65,7 +65,7 @@
 
     <string name="sEdit">Edit</string>
 
-    <string name="sSearchBar">Item Name...</string>
+    <string name="sSearchBar" formatted="false">Item Name...</string>
 
     <string name="sSearchHint">Not Case Sens</string>
 
@@ -78,5 +78,15 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
+
+
+    <!--
+    For nutritional fact page
+    -->
+
+    <string name="sTotalFat">%15s</string>
+
+
+
 
 </resources>

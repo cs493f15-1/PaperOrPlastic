@@ -15,15 +15,10 @@ public class ListItem
 {
     /*all but price, quantity, calories and mName are indeces corresponding to the category they are in
     (which will be name in list)*/
-    private String itemID;
-    private String item_name;
-    private String brand_name;
-    private String item_type;
-    private String item_description;
-    private int serv_per_cont;
-    private double serv_size_qty;
-    private String serv_size_unit;
-    private double serv_size_weight;
+    private String mName;
+    private String mBrandName;
+    private String mDesc;
+    private NutritionFactModel mNFModel;
 
     private int mFoodType ;
     private int mCustomCategory;
@@ -32,34 +27,20 @@ public class ListItem
     private int mQuantity;
     private boolean mCheckedOff;
     private String mNotes;
-    private String mName;
-    private NutritionFactModel mNutritionFactModel;
+
     private boolean mbShowsDelete;
 
     public final int MAX_LENGTH = 200; //arbitrary number
 
-    public ListItem ( String name)
+    public ListItem (String name, String brand, String desc)
     {
         mName = name;
+        mBrandName = brand;
+        mDesc = desc;
         mQuantity = 1;
         mCheckedOff = false;
-        mNutritionFactModel = new NutritionFactModel();
+        mNFModel = new NutritionFactModel();
         mNotes = "init";
-    }
-
-    public ListItem (String itemId, String itemName, String brandName, String itemType,
-                     String itemDescription, int servPerCont, double servSizeQty,
-                     String servSizeUnit, double servSizeWeight)
-    {
-        itemID = itemId;
-        item_name = itemName;
-        brand_name = brandName;
-        item_type = itemType;
-        item_description = itemDescription;
-        serv_per_cont = servPerCont;
-        serv_size_qty = servSizeQty;
-        serv_size_unit = servSizeUnit;
-        serv_size_weight = servSizeWeight;
     }
 
 
@@ -89,6 +70,16 @@ public class ListItem
         return mName;
     }
 
+    public String getBrandName ()
+    {
+        return mBrandName;
+    }
+
+    public String getDesc ()
+    {
+        return mDesc;
+    }
+
     public int getFoodType ()
     {
         return mFoodType;
@@ -109,6 +100,15 @@ public class ListItem
         return mPrice;
     }
 
+    /*
+    Getters - nutrition facts
+     */
+
+    public NutritionFactModel getNutritionFacts ()
+    {
+        return mNFModel;
+    }
+
     public int getCustomCategory ()
     {
         return mCustomCategory;
@@ -124,10 +124,76 @@ public class ListItem
         return mNotes;
     }
 
-    public NutritionFactModel getNutritionFacts ()
+    public int getCalories()
     {
-        return mNutritionFactModel;
+        return mNFModel.getCalories();
     }
+
+    public double getFiber() {
+        return  mNFModel.getFiber();
+    }
+
+    public double getProtein() {
+        return  mNFModel.getProtein();
+    }
+
+    public double getSat_Fat() {
+        return  mNFModel.getSatFat();
+    }
+
+    public double getSodium() {
+        return  mNFModel.getSodium();
+    }
+
+    public double getSugars() {
+        return  mNFModel.getSugars();
+    }
+
+    public double getTotal_Carbs() {
+        return  mNFModel.getTotalCarbs();
+    }
+
+    public double getTotal_Fat() {
+        return  mNFModel.getTotalFat();
+    }
+
+    public int getVitC() {
+        return mNFModel.getVitC();
+    }
+
+    public int getCalcium() {
+        return mNFModel.getCalcium();
+    }
+
+    public double getCholesterol() {
+        return mNFModel.getCholesterol();
+    }
+
+    public int getIron() {
+        return mNFModel.getIron();
+    }
+
+    public double getMonoFat() {
+        return mNFModel.getMonoFat();
+    }
+
+    public double getPolyFat() {
+        return mNFModel.getPolyFat();
+    }
+
+    public double getPotassium() {
+        return mNFModel.getPotassium();
+    }
+
+    public double getTransFat() {
+        return mNFModel.getTransFat();
+    }
+
+    public int getVitA() {
+        return mNFModel.getVitA();
+    }
+
+
 
     /*******************************
      * SETS
@@ -141,6 +207,9 @@ public class ListItem
 
     private void setName (String name) {mName = name;}
 
+    private void setBrand (String brand) {mBrandName = brand;}
+
+    private void setDesc (String desc) {mDesc = desc;}
 
     public void setFoodType (int foodType)
     {
@@ -189,14 +258,19 @@ public class ListItem
         }
     }
 
-    public void setNutritionFacts (int calories, int protein, int fat, int carbohydrate, int sugar, int fiber)
+    public void setNutritionFacts (int itemCal, double itemTotalFat,
+                                   double itemSatFat, double itemPolyFat, double itemMonoFat,
+                                   double itemTransFat, double itemCholesterol, double itemSodium,
+                                   double itemCarbs, double itemFiber, double itemSugar,
+                                   double itemProtein, double itemPotassium, int itemVitA,
+                                   int itemVitC, int itemCalcium, int itemIron)
     {
-        mNutritionFactModel.mCalories = calories;
-        mNutritionFactModel.mTotal_Carbs = carbohydrate;
-        mNutritionFactModel.mProtein = protein;
-        mNutritionFactModel.mSugars = sugar;
-        mNutritionFactModel.mFiber = fiber;
-        mNutritionFactModel.mTotal_Fat = fat;
+        mNFModel.setAll(itemCal, itemTotalFat,
+        itemSatFat, itemPolyFat, itemMonoFat,
+        itemTransFat, itemCholesterol, itemSodium,
+        itemCarbs, itemFiber, itemSugar,
+        itemProtein, itemPotassium, itemVitA,
+        itemVitC, itemCalcium, itemIron);
     }
 
     public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
@@ -208,7 +282,7 @@ public class ListItem
         setCustomCategory(customCategory);
         setCheckedOff(checkedOff);
         setNotes(notes);
-        mNutritionFactModel = NFacts;
+        mNFModel = NFacts;
     }
 
     /*******************************
@@ -250,8 +324,10 @@ public class ListItem
                 + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
 
         itemOutput.println(getItemName());
+        itemOutput.println(getBrandName());
+        itemOutput.println(getDesc());
         itemOutput.print(content);
-        mNutritionFactModel.writeNutritionToFile(itemOutput);
+        mNFModel.writeNutritionToFile(itemOutput);
         itemOutput.print("\n");
         itemOutput.flush();
     }
@@ -269,6 +345,9 @@ public class ListItem
     {
         itemInput.nextLine(); //get new line character leftover from before
         setName(itemInput.nextLine());
+        setBrand(itemInput.nextLine());
+        setDesc(itemInput.nextLine());
+
         setFoodType(itemInput.nextInt());
         setAisle(itemInput.nextInt());
         setAddQuantity(itemInput.nextInt());
@@ -276,7 +355,7 @@ public class ListItem
         setCustomCategory(itemInput.nextInt());
         setCheckedOff(itemInput.nextBoolean());
         setNotes(itemInput.next());
-        mNutritionFactModel.readNutritionFromFile(itemInput);
+        mNFModel.readNutritionFromFile(itemInput);
     }
 
 }

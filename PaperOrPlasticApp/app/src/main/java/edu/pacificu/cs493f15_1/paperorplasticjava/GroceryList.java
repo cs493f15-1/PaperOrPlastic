@@ -76,7 +76,7 @@ public class GroceryList extends PoPList
 
     for (int i = 0; i < size; ++i)
     {
-      tempItem = new ListItem("temp");
+      tempItem = new ListItem("temp", "brand", "desc");
       tempItem.readItemFromFile(listInput);
       addItem(tempItem);
     }
