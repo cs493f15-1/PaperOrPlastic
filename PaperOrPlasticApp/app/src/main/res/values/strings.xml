@@ -60,9 +60,8 @@
     <string name="OK">OK</string>
     <string name="qty">Qty</string>
     <string name="delete">Delete</string>
-
-   <string name="sAddItem">+ Item</string>
-
+    <string name="sAddItem">+ Item</string>
+    <string name="sAddList">+ List</string>
     <string name="sEdit">Edit</string>
 
     <string name="sSearchBar" formatted="false">Item Name...</string>
