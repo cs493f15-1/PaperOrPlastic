@@ -4,6 +4,8 @@ import android.content.Context;
 
 import java.text.SimpleDateFormat;
 
+import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
+
 /**
  * Created by alco8653 on 2/28/2016.
  */
@@ -29,10 +31,10 @@ public class Utils
    * Return false otherwise
    */
 
-//  public static boolean checkIfOwner(ShoppingList shoppingList, String currentUserEmail)
-//  {
-//    return (shoppingList.getOwner() != null && shoppingList.getOwner().equals(currentUserEmail));
-//  }
+  public static boolean checkIfOwner(SimpleList simpleList, String currentUserEmail)
+  {
+    return (simpleList.getmOwner() != null && simpleList.getmOwner().equals(currentUserEmail));
+  }
 
 
   public static String encodeEmail(String userEmail)

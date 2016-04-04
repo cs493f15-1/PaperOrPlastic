@@ -53,8 +53,11 @@ public abstract class BaseActivity extends AppCompatActivity implements
     super.onCreate(savedInstanceState);
 
     /* Setting up the Google API object to allow Google logins */
-    GoogleSignInOptions GSO = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+    GoogleSignInOptions GSO = new GoogleSignInOptions
+      .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestEmail().build();
+
+
 
     /**
      * Building our GoogleApiClient so that is has access to the Google Sign-In API and

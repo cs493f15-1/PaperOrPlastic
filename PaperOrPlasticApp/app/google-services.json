@@ -15,20 +15,7 @@
           "certificate_hash": []
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "208743903372-n1hspi5i2ocnagb5tooo5mna06ptgla2.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "edu.pacificu.cs493f15_1.paperorplasticapp",
-            "certificate_hash": "E4A79C4259E11CDA634C25A18A1D6D7783A257CB"
-          }
-        },
-        {
-          "client_id": "208743903372-qivsb5vpjal1mpgkk8l91natj3h1rd9c.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [],
       "services": {
         "analytics_service": {
@@ -43,7 +30,7 @@
           "other_platform_oauth_client": []
         },
         "google_signin_service": {
-          "status": 2
+          "status": 1
         },
         "ads_service": {
           "status": 1

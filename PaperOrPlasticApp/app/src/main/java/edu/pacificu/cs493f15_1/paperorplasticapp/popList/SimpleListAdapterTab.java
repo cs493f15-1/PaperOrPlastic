@@ -11,14 +11,14 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 
 /**
- * Created by alco8653 on 3/15/2016.
+ * Created by alco8653 on 4/4/2016.
  */
-public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
+public class SimpleListAdapterTab extends FirebaseListAdapter<SimpleList>
 {
   /**
    * Public constructor that initializes private instance variables when adapter is created
    */
-  public SimpleListAdapter(Activity activity, Class<SimpleList> modelClass, int modelLayout, Query ref) {
+  public SimpleListAdapterTab(Activity activity, Class<SimpleList> modelClass, int modelLayout, Query ref) {
     super(activity, modelClass, modelLayout, ref);
     this.mActivity = activity;
   }
@@ -36,12 +36,15 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
      * Grab the needed Textivews and strings
      */
 
-    TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
+
+    //TextView txtTabInfo = (TextView) view.
+
+    //TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
     //TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
 
 
         /* Set the list name and owner */
-    textViewListName.setText(list.getmListName());
+    //textViewListName.setText(list.getmListName());
     //textViewCreatedByUser.setText(list.getmOwner());
   }
 }

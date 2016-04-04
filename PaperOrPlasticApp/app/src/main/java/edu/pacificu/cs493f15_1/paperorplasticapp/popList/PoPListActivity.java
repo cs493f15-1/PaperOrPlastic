@@ -103,46 +103,37 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   private DialogListener mItemInfoListener;
 
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data)
-  {
-    if (requestCode == REQUEST_OK)
-    {
-      if (resultCode == RESULT_OK)
-      {
-        String item_name = data.getStringExtra("item_name");
-        newItem = new ListItem(item_name);
-
-        readListsFromFile(mPoPLists);
-        addItemToListView(newItem);
-        writeListsToFile();
-
-
-        mbAddingItem = true;
-      }
-    }
-  }
-
-
   private Firebase mUserRef, mListsRef;
   private ValueEventListener mUserRefListener;
 
   private boolean bIsGrocery;
 
+
+  /**
+   *  NEW THINGS FOR TESTING
+   *
+   */
+  private Firebase mSimpleListRef;
+  private SimpleListItemAdapter mSimpleListItemAdapter;
+  private ListView mListViewFB;
+  private String mListId;
+
+  private boolean mbCurrentUserIsOwner = false;
+  private SimpleList mSimpleList;
+  private ValueEventListener mSimpleListRefListener;
+  private SimpleListAdapterTab mSimpleListAdapterTab;
+
+
+
   /********************************************************************************************
    * Function name: onCreate
-   * <p/>
    * Description:   Initializes all needed setup for objects in page
-   * <p/>
    * Parameters:    savedInstanceState  - a bundle object
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
-
     //Used for add item
     Intent intent;
 
@@ -151,18 +142,15 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: PoPOnCreate
-   * <p/>
    * Description:   a function that is used in the OnCreate of GroceryListActivity and
    * KitchenInventoryActivity and is used to implement the functionality of the
    * Activity.
-   * <p/>
    * Parameters:    savedInstanceState  - a bundle object
    * popList             - The lists object created in GroceryListActivity or KitchenInventoryActivity
    * activityLayout      - the layout of GroceryListActivity or KitchenInventoryActivity
    * itemLayout          - the layout of the items in GroceryListActivity or KitchenInventoryActivity
    * fileName            - the file which the PoPLists should be stored in
    * isGrocery           - A boolean on whether the activity is called from GroceryListActivity or not
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
   protected void PoPOnCreate(Bundle savedInstanceState, PoPLists popLists,
@@ -178,7 +166,7 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     mbAddingItem = false;
     mbIsGrocery = isGrocery;
     //to view items
-    mListView = (ListView) findViewById(R.id.listView);
+    mListView = (ListView) findViewById(R.id.listView); //this is the view for the list items
     bIsGrocery = isGrocery;
 
     if (null == mEncodedEmail)
@@ -186,14 +174,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
       bUsingOffline = true;
     }
 
-    Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
-        /* Common toolbar setup */
-    setSupportActionBar(toolbar);
-        /* Add back button to the action bar */
-    if (getSupportActionBar() != null)
-    {
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+    setupToolbar();
+    setupFirebase();
 
     handleSwipingToDelete();
 
@@ -223,6 +205,103 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     setUpActivityTitle(isGrocery);
     invalidateOptionsMenu();
   }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void setupToolbar()
+  {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        /* Common toolbar setup */
+    setSupportActionBar(toolbar);
+        /* Add back button to the action bar */
+    if (getSupportActionBar() != null)
+    {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void setupFirebase()
+  {
+    if (!bUsingOffline)
+    {
+      mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+      if (bIsGrocery)
+      {
+        mListsRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+      }
+      else
+      {
+        mListsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+      }
+    }
+  }
+
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void setupFBListAdapter()
+  {
+    Firebase listRef;
+
+    //list adapter holds info of lists for listView
+    if (bIsGrocery)
+    {
+      listRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+    }
+    else
+    {
+      listRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+    }
+
+    //subject to change... using this rn to grab all of the lists the user has access to TODO
+
+    //mSimpleListAdapterTab = new SimpleListAdapterTab(this, SimpleList.class, R.layout.single_active_list, listRef);
+
+    //mListView.setAdapter(mSimpleListAdapterTab);
+  }
+
+
+
+  /********************************************************************************************
+   * Function name:
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    if (requestCode == REQUEST_OK)
+    {
+      if (resultCode == RESULT_OK)
+      {
+        String item_name = data.getStringExtra("item_name");
+        newItem = new ListItem(item_name);
+
+        readListsFromFile(mPoPLists);
+        addItemToListView(newItem);
+        writeListsToFile();
+
+        mbAddingItem = true;
+      }
+    }
+  }
+
+
 
 
   /**
@@ -606,6 +685,12 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
           //add List to Lists and create a tab
           mPoPLists.addList(newListName);
 
+          if (!bUsingOffline)
+          {
+            addListToFirebase(newListName);
+          }
+
+
           addListTab(mPoPLists.getList(mPoPLists.getSize() - 1), mPoPLists.getSize() - 1);
         }
         else
@@ -831,7 +916,6 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
       }
 
-
       fillTabs(mPoPLists);
 
       mbAddingItem = false;
@@ -840,16 +924,12 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: addListTab
-   * <p/>
    * Description:   Adds a tab to the top of the page corresponding to the newList passed in.
-   * <p/>
    * Parameters:    newList - a List object whose tab will be added to the top of the page
    * index   - the index of the newList in the PoPLists object, also the
    * new tab spec id
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
-
   private void addListTab(PoPList newList, int index)
   {
     if (!mbAddingItem)
@@ -876,12 +956,9 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: onFinishListDialog
-   * <p/>
    * Description:   When dialog for adding list is done, add list and list tab with text from
    * dialog as the new list name
-   * <p/>
    * Parameters:    newListName - the new list's name
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
 
@@ -911,11 +988,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: addItemToListView
-   * <p/>
    * Description:   Adds item layout to listView as a new row and adds it to listadapter
-   * <p/>
    * Parameters:    newItem - the new ListItem being added
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
   public void addItemToListView(ListItem newItem)
@@ -942,11 +1016,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: showDeleteOnEdit
-   * <p/>
    * Description:   Shows delete button for item if editing is on
-   * <p/>
    * Parameters:    itemName - the item that will be deleted
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
 
@@ -961,11 +1032,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: addListAdapter
-   * <p/>
    * Description:   Adds a list adapter for mListView to keep track of the info in popList
-   * <p/>
    * Parameters:    popList - the new list whose info needs to be kept track of
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
 
@@ -979,11 +1047,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: getCurrentPoPList
-   * <p/>
    * Description:   Gets the PoPList whose tab we have selected
-   * <p/>
    * Parameters:    none
-   * <p/>
    * Returns:       the current list selected
    ******************************************************************************************/
 
@@ -1002,11 +1067,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: showDeleteButton
-   * <p/>
    * Description:
-   * <p/>
    * Parameters:
-   * <p/>
    * Returns:
    ******************************************************************************************/
   private boolean showDeleteButton(final int pos)
@@ -1039,11 +1101,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: getNumGLists
-   * <p/>
    * Description:   Gets the total number of GroceryLists
-   * <p/>
    * Parameters:    none
-   * <p/>
    * Returns:       the total number of GLists
    ******************************************************************************************/
 
@@ -1055,11 +1114,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: hideDeleteButton
-   * <p/>
    * Description:
-   * <p/>
    * Parameters:
-   * <p/>
    * Returns:
    ******************************************************************************************/
   private boolean hideDeleteButton(final int pos)
@@ -1109,11 +1165,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: slideItemView
-   * <p/>
    * Description: Displays the slideItemView
-   * <p/>
    * Parameters:
-   * <p/>
    * Returns:
    ******************************************************************************************/
   public void slideItemView(View child, float translationAmount)
@@ -1127,11 +1180,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: dispatchTouchEvent
-   * <p/>
    * Description:   calls the super for fragment activity for swiping
-   * <p/>
    * Parameters:    None
-   * <p/>
    * Returns:       None
    ******************************************************************************************/
   @Override
@@ -1141,6 +1191,12 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     return super.dispatchTouchEvent(ev);
   }
 
+  /********************************************************************************************
+   * Function name:
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
   public PoPLists getLists()
   {
     return mPoPLists;
@@ -1148,13 +1204,10 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: writeListsToFile
-   * <p/>
    * Description:   Writes the current mPoPLists to mPoPFileName to store the information
-   * stored in mPoPLists
-   * <p/>
-   * Parameters: None
-   * <p/>
-   * Returns: None
+   *                stored in mPoPLists
+   * Parameters:    None
+   * Returns:       None
    ******************************************************************************************/
   private void writeListsToFile()
   {
@@ -1177,11 +1230,8 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: readListsFromFile
-   * <p/>
    * Description:   Reads from mPoPFileName the current PoPLists
-   * <p/>
    * Parameters: None
-   * <p/>
    * Returns: None
    ******************************************************************************************/
   private void readListsFromFile(PoPLists popLists)
@@ -1202,6 +1252,12 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     }
   }
 
+  /********************************************************************************************
+   * Function name:
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
   private void fillTabs(PoPLists popLists)
   {
     for (int i = 0; i < popLists.getSize(); ++i)
@@ -1212,12 +1268,9 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
 
   /********************************************************************************************
    * Function name: addListToFirebase
-   * <p/>
    * Description:   adds the list name to the database
-   * <p/>
-   * Parameters: None
-   * <p/>
-   * Returns: None
+   * Parameters:    None
+   * Returns:       None
    ******************************************************************************************/
   private void addListToFirebase(String listName)
   {
@@ -1239,11 +1292,17 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
     HashMap<String, Object> timestampCreated = new HashMap<>();
     timestampCreated.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
-    SimpleList newShoppingList = new SimpleList(listName, mEncodedEmail, timestampCreated);
+    SimpleList newSimpleList = new SimpleList(listName, mEncodedEmail, timestampCreated);
 
-    newListRef.setValue(newShoppingList);
+    newListRef.setValue(newSimpleList);
   }
 
+  /********************************************************************************************
+   * Function name:
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
   public void onSettingsClicked()
   {
     if (bIsGrocery)

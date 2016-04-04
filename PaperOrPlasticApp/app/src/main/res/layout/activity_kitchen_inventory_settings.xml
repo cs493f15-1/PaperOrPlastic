@@ -10,43 +10,43 @@ android:layout_height="match_parent"
     android:layout_height="match_parent">
 
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="50dp"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:background="@color/cListTitleColor"-->
-        <!--android:id="@+id/relativeLayout2">-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/cListTitleColor"
+        android:id="@+id/relativeLayout2" android:visibility="gone">
 
-        <!--<Button-->
-            <!--android:layout_width="50dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/bBack"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:background="@drawable/back"-->
-            <!--android:layout_marginTop="5dp" />-->
+        <Button
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/bBack"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/back"
+            android:layout_marginTop="5dp" />
 
-        <!--<ToggleButton-->
-            <!--android:layout_width="55dp"-->
-            <!--android:layout_height="30dp"-->
-            <!--android:text="@string/sEdit"-->
-            <!--android:id="@+id/bEdit"-->
-            <!--android:onClick="onClickEditButton"-->
-            <!--android:textOff="@string/sEdit"-->
-            <!--android:textOn="@string/sEdit"-->
-            <!--android:textSize="15sp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_alignParentStart="false"-->
-            <!--android:layout_alignParentLeft="false"-->
-            <!--android:layout_marginLeft="10dp"-->
-            <!--android:layout_marginRight="15dp"-->
-            <!--android:gravity="center"-->
-            <!--android:textColor="@color/ccBlack"-->
-            <!--android:background="@drawable/edit_btn_toggle"-->
-            <!--android:layout_alignParentRight="true" />-->
+        <ToggleButton
+            android:layout_width="55dp"
+            android:layout_height="30dp"
+            android:text="@string/sEdit"
+            android:id="@+id/bEdit"
+            android:onClick="onClickEditButton"
+            android:textOff="@string/sEdit"
+            android:textOn="@string/sEdit"
+            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="false"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:textColor="@color/ccBlack"
+            android:background="@drawable/edit_btn_toggle"
+            android:layout_alignParentRight="true" />
 
         <!--<Button-->
             <!--style="?android:attr/buttonStyleSmall"-->
@@ -58,33 +58,33 @@ android:layout_height="match_parent"
             <!--android:layout_toRightOf="@+id/bBack"-->
             <!--android:layout_toEndOf="@+id/bBack" />-->
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:text="@string/title_activity_kitchen_inventory_settings"-->
-            <!--android:id="@+id/KitchenInventoryText"-->
-            <!--style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"-->
-            <!--android:layout_weight="24.94"-->
-            <!--android:layout_span="30"-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/title_activity_kitchen_inventory_settings"
+            android:id="@+id/KitchenInventoryText"
+            style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+            android:layout_weight="24.94"
+            android:layout_span="30"
 
-            <!--android:gravity="center_vertical|center_horizontal"-->
-            <!--android:textColor="@color/cListTitleTextColor"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_toRightOf="@+id/bEdit"-->
-            <!--android:layout_toEndOf="@+id/bEdit"/>-->
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="@color/cListTitleTextColor"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/bEdit"
+            android:layout_toEndOf="@+id/bEdit"/>
 
-<!--&lt;!&ndash;-->
-            <!--<Switch-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Show Kitchen List Settings"-->
-                <!--android:id="@+id/bShowKitchenList"-->
-                <!--android:layout_gravity="center_horizontal"-->
-                <!--android:layout_marginTop="77dp"-->
-                <!--android:layout_below="@+id/textView11"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:checked="false" />&ndash;&gt;-->
-    <!--</RelativeLayout>-->
+<!--
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Show Kitchen List Settings"
+                android:id="@+id/bShowKitchenList"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="77dp"
+                android:layout_below="@+id/textView11"
+                android:layout_centerHorizontal="true"
+                android:checked="false" />-->
+    </RelativeLayout>
 
 
         <android.support.v7.widget.Toolbar
