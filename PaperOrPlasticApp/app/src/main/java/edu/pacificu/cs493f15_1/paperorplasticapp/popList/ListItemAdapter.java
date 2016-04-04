@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.TimerTask;
@@ -102,12 +100,15 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
             //set up check box functionality
             itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
+            itemHolder.checkBox.setTag(mPosition);
             itemHolder.checkBox.setOnClickListener(new OnCheckListener()
             {
                 @Override
                 public void onClick (View v)
                 {
                     //to wait to remove for a certain amount of time
+                    mPosition = (Integer) v.getTag();
+
                     if (!mbWaiting)
                     {
                         mbWaiting = Boolean.TRUE;
@@ -118,8 +119,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
                             {
                                 mHandlerUI.post(new Runnable() {
                                     public void run() {
-                                        if (mbWaiting)
-                                        {
+                                        if (mbWaiting) {
                                             //remove item after certain amount of time?
                                             mItemArray.remove(mPosition);
                                             ListItemAdapter.this.notifyDataSetChanged();
