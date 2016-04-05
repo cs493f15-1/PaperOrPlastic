@@ -61,7 +61,7 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
     {
       if (ownerEmail.equals(mEncodedEmail))
       {
-        textViewCreatedByUser.setText(list.getmOwner());
+        textViewCreatedByUser.setText("You");
       }
       else
       {
