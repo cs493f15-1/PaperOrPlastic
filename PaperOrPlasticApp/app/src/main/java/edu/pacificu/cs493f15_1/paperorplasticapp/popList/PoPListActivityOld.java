@@ -129,6 +129,7 @@ public abstract class PoPListActivityOld extends BaseActivity implements ListDFr
    * Function name: onCreate
    * Description:   Initializes all needed setup for objects in page
    * Parameters:    savedInstanceState  - a bundle object
+   * Parameters:    savedInstanceState  - a bundle object
    * Returns:       none
    ******************************************************************************************/
   @Override

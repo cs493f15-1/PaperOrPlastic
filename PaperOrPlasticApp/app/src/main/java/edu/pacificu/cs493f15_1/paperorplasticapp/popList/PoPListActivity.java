@@ -24,6 +24,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
 import java.io.File;
@@ -32,6 +33,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
@@ -276,24 +278,35 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     mListOfListView.setAdapter(mSimpleListAdapter);
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
   public void setupSwipeListening()
   {
     //set up swipe listening
-    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView) {
+    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView)
+    {
       @Override
-      public void onSwipeRight(int pos) {
+      public void onSwipeRight(int pos)
+      {
 
 
-        if (!mbIsOnEdit) {
+        if (!mbIsOnEdit)
+        {
           hideDeleteButton(pos);
         }
 
       }
 
       @Override
-      public void onSwipeLeft(int pos) {
+      public void onSwipeLeft(int pos)
+      {
 
-        if (!mbIsOnEdit) {
+        if (!mbIsOnEdit)
+        {
           showDeleteButton(pos);
         }
       }
@@ -338,6 +351,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     if (id == R.id.action_settings)
     {
+
       return true;
     }
 
@@ -387,7 +401,37 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
         hideDeleteButtons(size);
       }
     }
+  }
 
+  /********************************************************************************************
+   * Function name: addListToFirebase
+   * Description:   adds the list name to the database
+   * Parameters:    None
+   * Returns:       None
+   ******************************************************************************************/
+  private void addListToFirebase(String listName)
+  {
+    Firebase listsRef;
+
+    if (mbIsGrocery)
+    {
+      listsRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+    }
+    else
+    {
+      listsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+    }
+
+    Firebase newListRef = listsRef.push();
+
+    final String listId = newListRef.getKey();
+
+    HashMap<String, Object> timestampCreated = new HashMap<>();
+    timestampCreated.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+    SimpleList newSimpleList = new SimpleList(listName, mEncodedEmail, timestampCreated);
+
+    newListRef.setValue(newSimpleList);
   }
 
   /*************************************************************************************************
@@ -407,6 +451,14 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
           //add List to Lists and create a tab
           mPoPLists.addList(newListName);
           mListAdapter.notifyDataSetChanged();
+
+
+          if (!bUsingOffline)
+          {
+            addListToFirebase(newListName);
+          }
+
+
         } else {
           Toast toast = Toast.makeText(getApplicationContext(),
             getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
