@@ -503,7 +503,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 //          {
 //            addListToFirebase(newListName);
 //          }
-            
+
           } else {
             Toast toast = Toast.makeText(getApplicationContext(),
               getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);

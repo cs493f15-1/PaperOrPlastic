@@ -202,12 +202,12 @@ public abstract class PoPListItemsActivity extends BaseActivity
   {
     if (mbIsGrocery)
     {
-      mListRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+      mListRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS).child(mListID);
       mListItemsRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LIST_ITEMS).child(mListID);
     }
     else
     {
-      mListRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+      mListRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY).child(mListID);
       mListItemsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS).child(mListID);
     }
   }
@@ -377,17 +377,35 @@ public abstract class PoPListItemsActivity extends BaseActivity
       HashMap<String, Object> itemToAdd =
         (HashMap<String, Object>) new ObjectMapper().convertValue(itemToAddObject, Map.class);
 
-            /* Add the item to the update map*/
-      updatedItemToAddMap.put("/" + mListRef.toString() + "/"
-        + mListID + "/" + itemId, itemToAdd);
+
+      if (mbIsGrocery)
+      {
+                    /* Add the item to the update map*/
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_GROCERY_LIST_ITEMS + "/"
+          + mListID + "/" + itemId, itemToAdd);
 
             /* Make the timestamp for last changed */
-      HashMap<String, Object> changedTimestampMap = new HashMap<>();
-      changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        HashMap<String, Object> changedTimestampMap = new HashMap<>();
+        changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
             /* Add the updated timestamp */
-      updatedItemToAddMap.put("/" + mListRef.toString() +
-        "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_GROCERY_LIST_ITEMS +
+          "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+      }
+      else
+      {
+                    /* Add the item to the update map*/
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS + "/"
+          + mListID + "/" + itemId, itemToAdd);
+
+            /* Make the timestamp for last changed */
+        HashMap<String, Object> changedTimestampMap = new HashMap<>();
+        changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+            /* Add the updated timestamp */
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS +
+          "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+      }
 
             /* Do the update */
       fbRef.updateChildren(updatedItemToAddMap);
