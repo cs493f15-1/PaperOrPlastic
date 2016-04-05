@@ -223,7 +223,7 @@ public abstract class PoPListSettingsActivity extends BaseActivity implements Vi
     }
 
     mSimpleListAdapter = new SimpleListAdapter(this, SimpleList.class,
-      R.layout.single_active_list, listRef);
+      R.layout.single_active_list, listRef, mEncodedEmail);
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);

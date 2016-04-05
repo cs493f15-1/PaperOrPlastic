@@ -121,7 +121,8 @@
             android:layout_height="wrap_content"
             android:text="Continue Offline"
             android:id="@+id/bContinue"
-            android:textSize="16sp" android:onClick="onContinueOfflinePressed"/>
+            android:textSize="16sp" android:onClick="onContinueOfflinePressed"
+            android:paddingBottom="5dp" android:paddingTop="5dp"/>
         <Button
             style="@style/ButtonClear" android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:text="Recover"

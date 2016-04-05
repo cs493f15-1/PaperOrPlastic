@@ -65,7 +65,7 @@ public class ListsFragment extends Fragment
      *  the list and finally, a reference to the Firebase location with the list data
      */
     mListAdapter = new SimpleListAdapter(getActivity(), SimpleList.class,
-      R.layout.single_active_list, activeListsRef);
+      R.layout.single_active_list, activeListsRef, "EMAIL");
 
     /**
      * Set the adapter to the mListView

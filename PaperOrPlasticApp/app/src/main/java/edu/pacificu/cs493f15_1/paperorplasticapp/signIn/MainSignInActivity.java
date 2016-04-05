@@ -749,14 +749,13 @@ public void rememberPass(String email, String password)
     {
       GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
       GoogleSignInAccount account = result.getSignInAccount();
-      Log.d(LOG_TAG, "Google Sign in result email:" + account.getEmail());
-      Log.d(LOG_TAG, "Google Sign in result display:" + account.getDisplayName());
-      Log.d(LOG_TAG, "Google Sign in result token:" + account.getIdToken());
-      Log.d(LOG_TAG, "Google Sign in result server auth code:" + account.getServerAuthCode());
-      Log.d(LOG_TAG, "Google Sign in result id:" + account.getId());
 
 
-
+//      Log.d(LOG_TAG, "Google Sign in result email:" + account.getEmail());
+//      Log.d(LOG_TAG, "Google Sign in result display:" + account.getDisplayName());
+//      Log.d(LOG_TAG, "Google Sign in result token:" + account.getIdToken());
+//      Log.d(LOG_TAG, "Google Sign in result server auth code:" + account.getServerAuthCode());
+//      Log.d(LOG_TAG, "Google Sign in result id:" + account.getId());
 
       handleSignInResult(result);
     }
