@@ -313,7 +313,7 @@ public abstract class PoPListActivity extends BaseActivity implements ListDFragm
   public boolean onCreateOptionsMenu(Menu menu)
   {
         /* Inflate the menu; this adds items to the action bar if it is present. */
-    getMenuInflater().inflate(R.menu.menu_inventory, menu);
+    getMenuInflater().inflate(R.menu.menu_pop_list_items, menu);
 
     MenuItem edit = menu.findItem(R.id.action_edit_lists);
     MenuItem settings = menu.findItem(R.id.action_settings);

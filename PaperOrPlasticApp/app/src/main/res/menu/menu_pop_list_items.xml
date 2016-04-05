@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_share_list"
+        android:animateLayoutChanges="true"
+        android:icon="@drawable/barcode_add"
+        android:orderInCategory="100"
+        android:title="Barcode Add"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_edit_lists"
+        android:orderInCategory="100"
+        android:title="Edit"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="Settings"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        android:visible="true"
+        app:showAsAction="never" />
+
+</menu>

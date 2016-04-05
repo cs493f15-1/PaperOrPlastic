@@ -11,10 +11,6 @@
         <item name="colorAccent">@color/cAccentColor</item>
     </style>
 
-    <style name="Toolbar" parent="Widget.AppCompat.Light.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-    </style>
 
     <style name="CustomTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
     </style>
@@ -47,5 +43,18 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="FAB">
+        <item name="android:layout_margin">0dp</item>
+        <item name="fabSize">normal</item>
+        <item name="rippleColor">@android:color/white</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="Toolbar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
 
 </resources>
