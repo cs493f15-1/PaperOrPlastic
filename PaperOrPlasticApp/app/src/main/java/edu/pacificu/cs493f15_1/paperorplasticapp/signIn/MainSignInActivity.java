@@ -510,11 +510,13 @@ public void rememberPass(String email, String password)
     final String email = mEmailView.getText().toString();
     final String password = mEditPassword.getText().toString();
 
+    rememberPass(email, password);
+
     /* authenticate the user with the information in the fields!! */
     mFirebaseRef.authWithPassword(email, password,
       new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
-    rememberPass(email, password);
+
   }
 
   /** NEW CLASS -- Declaring our own methods of authenticating the user

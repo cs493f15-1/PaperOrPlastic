@@ -13,10 +13,16 @@
         android:weightSum="1"
         android:nestedScrollingEnabled="false">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Toolbar" android:visibility="visible"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#c4c3c3">
+            android:background="#c4c3c3" android:visibility="gone">
 
             <TextView
                 android:layout_width="165dp"
