@@ -136,6 +136,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
 
       readListsFromFile(popLists);
       mPoPList = popLists.getListByName(mPoPListName);
+      setUpListView();
     }
 
 
@@ -153,7 +154,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
 
     setupEditDeleteButtonsForGLists();
 
-    setUpListView();
+
 
     //setupBackButton (isGrocery);
 
@@ -221,7 +222,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
   private void setupFirebaseListItems()
   {
     mSimpleListItemAdapter = new SimpleListItemAdapter(this, SimpleListItem.class,
-      R.layout.single_active_list_item,mListItemsRef, mListID, mEncodedEmail, mbIsGrocery);
+      R.layout.single_active_list_item, mListItemsRef, mListID, mEncodedEmail, mbIsGrocery);
 
     mItemListView.setAdapter(mSimpleListItemAdapter);
 

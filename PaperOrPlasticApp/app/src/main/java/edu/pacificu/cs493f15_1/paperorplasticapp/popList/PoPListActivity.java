@@ -90,6 +90,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private ValueEventListener mSimpleListRefListener;
 
   private SimpleListAdapter mSimpleListAdapter;
+  private boolean bUseFB = true;
 
 
   /********************************************************************************************
@@ -484,24 +485,33 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       @Override
       public void onFinishNewListDialog(String newListName) {
 
-        if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
+
+        if (bUseFB)
         {
-          //add List to Lists and create a tab
-          mPoPLists.addList(newListName);
-          mListAdapter.notifyDataSetChanged();
-
-
-          if (!bUsingOffline)
-          {
-            addListToFirebase(newListName);
-          }
-
-
-        } else {
-          Toast toast = Toast.makeText(getApplicationContext(),
-            getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
-          toast.show();
+          addListToFirebase(newListName);
         }
+        else
+        {
+          if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
+          {
+            //add List to Lists and create a tab
+            mPoPLists.addList(newListName);
+            mListAdapter.notifyDataSetChanged();
+
+
+//          if (!bUsingOffline)
+//          {
+//            addListToFirebase(newListName);
+//          }
+            
+          } else {
+            Toast toast = Toast.makeText(getApplicationContext(),
+              getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
+            toast.show();
+          }
+        }
+
+
 
       }
     };
