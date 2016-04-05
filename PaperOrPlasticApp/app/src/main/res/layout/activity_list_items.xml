@@ -56,14 +56,17 @@
             android:layout_gravity="top"
             android:layout_below="@+id/relativeLayout2">
 
-            <ListView
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/listViewOfItems"
+                android:id="@+id/app_bar"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/relativeLayout" />
-
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="visible"
+                android:background="@color/colorPrimary" android:theme="@style/Toolbar"/>
             <android.support.design.widget.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,19 +78,6 @@
                 android:layout_marginBottom="10dp"
                 android:src="@drawable/icon_add"
                 android:onClick="onAddItemClick" />
-
-            <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/app_bar"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:visibility="visible"
-                android:background="@color/colorPrimary" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,6 +108,13 @@
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true" />
             </RelativeLayout>
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listViewOfItems"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/relativeLayout" />
 
         </RelativeLayout>
     </RelativeLayout>

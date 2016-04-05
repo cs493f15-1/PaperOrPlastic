@@ -163,6 +163,31 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     startActivity(intent);
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void onFBListClick (String listId)
+  {
+    Intent intent;
+
+    if (mbIsGrocery)
+    {
+      intent = new Intent(this, GroceryListItemsActivity.class);
+    }
+    else
+    {
+      intent = new Intent(this, KitchenInventoryItemsActivity.class);
+    }
+
+    intent.putExtra(Constants.KEY_LIST_ID, listId);
+
+    startActivity(intent);
+  }
+
+
 
   /*************************************************************************************************
    *   Method:
@@ -276,6 +301,21 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);
+
+
+    mListOfListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+    {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+      {
+        SimpleList selectedList = mSimpleListAdapter.getItem(position);
+        if (null != selectedList)
+        {
+          String listId = mSimpleListAdapter.getRef(position).getKey();
+          onFBListClick(listId);
+        }
+      }
+    });
   }
 
   /*************************************************************************************************
@@ -292,8 +332,6 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       @Override
       public void onSwipeRight(int pos)
       {
-
-
         if (!mbIsOnEdit)
         {
           hideDeleteButton(pos);

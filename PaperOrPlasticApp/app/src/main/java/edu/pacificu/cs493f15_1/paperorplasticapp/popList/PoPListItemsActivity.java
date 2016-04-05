@@ -7,7 +7,10 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -19,11 +22,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
+import com.firebase.client.ValueEventListener;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
@@ -33,11 +45,15 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
+import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleListItem;
+import edu.pacificu.cs493f15_1.utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Utils;
 
 /**
  * Created by alco8653 on 4/5/2016.
  */
-public class PoPListItemsActivity extends BaseActivity
+public abstract class PoPListItemsActivity extends BaseActivity
 {
   static final float SLIDE_RIGHT_ITEM = 5;
   static final float SLIDE_LEFT_ITEM = -145;
@@ -62,6 +78,20 @@ public class PoPListItemsActivity extends BaseActivity
   private boolean mbIsGrocery;
   private Spinner mGroupBySpinner;
 
+
+
+  /**
+   FIREBASE GOODIES
+   */
+  private Firebase mListRef, mListItemsRef;
+  private SimpleListItemAdapter mSimpleListItemAdapter;
+  private String mListID;
+  private boolean mCurrentUserIsOwner = false;
+  private SimpleList mSimpleList;
+  private ValueEventListener mListRefListener;
+  private boolean bUseFB;
+
+
   /********************************************************************************************
    * Function name: onCreate
    *
@@ -77,7 +107,7 @@ public class PoPListItemsActivity extends BaseActivity
     super.onCreate(savedInstanceState);
   }
 
-  protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final String fileName, final boolean isGrocery)
+  protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final String fileName, final boolean isGrocery)
   {
     setContentView(R.layout.activity_list_items);
     mbIsGrocery = isGrocery;
@@ -85,12 +115,30 @@ public class PoPListItemsActivity extends BaseActivity
     mbIsOnEdit = false;
     mPoPLists = popLists;
     //get current viewing list
-    mPoPListName = getIntent().getStringExtra("PoPListName");
 
-    Log.d("PoPListItemsActivity", "PopList passed through: " + mPoPListName);
+    bUseFB = true;
 
-    readListsFromFile(popLists);
-    mPoPList = popLists.getListByName(mPoPListName);
+    initializeLayoutItems();
+
+    if (bUseFB)
+    {
+      mListID = getIntent().getStringExtra(Constants.KEY_LIST_ID);
+      if (null != mListID)
+      {
+        setupFirebase();
+        setupFirebaseListItems();
+      }
+    }
+    else
+    {
+      mPoPListName = getIntent().getStringExtra("PoPListName");
+      Log.d("PoPListItemsActivity", "PopList passed through: " + mPoPListName);
+
+      readListsFromFile(popLists);
+      mPoPList = popLists.getListByName(mPoPListName);
+    }
+
+
        /*if (1 == mPoPList.describeContents())
        {
            mPoPFileName = GroceryLists.GROCERY_FILE_NAME;
@@ -101,7 +149,7 @@ public class PoPListItemsActivity extends BaseActivity
        }*/
 
     //set up add item button
-    mbAddItem = (FloatingActionButton) findViewById(R.id.bAddList);
+
 
     setupEditDeleteButtonsForGLists();
 
@@ -112,10 +160,136 @@ public class PoPListItemsActivity extends BaseActivity
     //setup the sorting group by spinner (drop down list sorting)
     setUpGroupSpinnerHandleSorting();
   }
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void initializeLayoutItems()
+  {
+    mbAddItem = (FloatingActionButton) findViewById(R.id.bAddList);
+    mItemListView = (ListView) findViewById(R.id.listViewOfItems);
+    mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
+    setupToolbar();
+  }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void setupToolbar()
+  {
+    Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        /* Common toolbar setup */
+    setSupportActionBar(toolbar);
+        /* Add back button to the action bar */
+    if (getSupportActionBar() != null)
+    {
+      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+  }
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void setupFirebase()
+  {
+    if (mbIsGrocery)
+    {
+      mListRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
+      mListItemsRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LIST_ITEMS).child(mListID);
+    }
+    else
+    {
+      mListRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
+      mListItemsRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS).child(mListID);
+    }
+  }
+
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void setupFirebaseListItems()
+  {
+    mSimpleListItemAdapter = new SimpleListItemAdapter(this, SimpleListItem.class,
+      R.layout.single_active_list_item,mListItemsRef, mListID, mEncodedEmail, mbIsGrocery);
+
+    mItemListView.setAdapter(mSimpleListItemAdapter);
+
+    mListRefListener = mListRef.addValueEventListener(new ValueEventListener()
+    {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot)
+      {
+        SimpleList simpleList = dataSnapshot.getValue(SimpleList.class);
+        if (null == simpleList)
+        {
+          finish();
+          return;
+        }
+        mSimpleList = simpleList;
+        mSimpleListItemAdapter.setList(mSimpleList);
+        mCurrentUserIsOwner = Utils.checkIfOwner(simpleList, mEncodedEmail);
+
+        invalidateOptionsMenu();
+        setTitle(simpleList.getmListName());
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError)
+      {
+        Log.e("LIST ITEMS","READ FAILED AH");
+      }
+    });
+
+    setUpListViewFB();
+  }
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void setUpListViewFB()
+  {
+    mItemListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+    {
+      @Override
+      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+      {
+        //TODO: what do we want to do on a long click
+        return false;
+      }
+    });
+
+    mItemListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+    {
+      @Override
+      public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+      {
+        //TODO: what do we want to do on a normal click
+      }
+    });
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
   private void setUpListView()
   {
-    mItemListView = (ListView) findViewById(R.id.listViewOfItems);
+
     //list adapter holds info of lists for listView
     //TODO: change name of grocery_list_item.xml to something generic to use in kitchen inventory as well
     mItemAdapter = new ListItemAdapter(this,
@@ -144,26 +318,81 @@ public class PoPListItemsActivity extends BaseActivity
     mItemListView.setItemsCanFocus(true);
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_OK) {
       if (resultCode == RESULT_OK) {
         String item_name = data.getStringExtra("item_name");
-        newItem = new ListItem(item_name);
 
-        newItem.setAll(0, 0, 1, 0.00, 0, false, "init", new NutritionFactModel());
-        newItem.setNutritionFacts(0, 0, 0, 0, 0, 0); //Initializing for outputing to a file;
-        //OutputFileToLogcat("onActivityResult Part 1");
-        mPoPLists.clearLists();
-        readListsFromFile(mPoPLists);
-        addItemToListView(newItem);
-        writeListsToFile();
+        if (bUseFB)
+        {
+          addItemToFB(item_name);
+        }
+        else
+        {
+          newItem = new ListItem(item_name);
+
+          newItem.setAll(0, 0, 1, 0.00, 0, false, "init", new NutritionFactModel());
+          newItem.setNutritionFacts(0, 0, 0, 0, 0, 0); //Initializing for outputing to a file;
+          //OutputFileToLogcat("onActivityResult Part 1");
+          mPoPLists.clearLists();
+          readListsFromFile(mPoPLists);
+          addItemToListView(newItem);
+          writeListsToFile();
+        }
 
 
         mbAddingItem = true;
       }
     }
   }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void addItemToFB(String itemName)
+  {
+    if (!itemName.equals(""))
+    {
+      Firebase fbRef = new Firebase(Constants.FIREBASE_URL);
+
+      HashMap<String, Object> updatedItemToAddMap = new HashMap<String, Object>();
+
+            /* Save push() to maintain same random Id */
+      Firebase newRef = mListItemsRef.push();
+      String itemId = newRef.getKey();
+
+            /* Make a POJO for the item and immediately turn it into a HashMap */
+      SimpleListItem itemToAddObject = new SimpleListItem(itemName, mEncodedEmail);
+      HashMap<String, Object> itemToAdd =
+        (HashMap<String, Object>) new ObjectMapper().convertValue(itemToAddObject, Map.class);
+
+            /* Add the item to the update map*/
+      updatedItemToAddMap.put("/" + mListRef.toString() + "/"
+        + mListID + "/" + itemId, itemToAdd);
+
+            /* Make the timestamp for last changed */
+      HashMap<String, Object> changedTimestampMap = new HashMap<>();
+      changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+            /* Add the updated timestamp */
+      updatedItemToAddMap.put("/" + mListRef.toString() +
+        "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
+
+            /* Do the update */
+      fbRef.updateChildren(updatedItemToAddMap);
+    }
+  }
+
 
   /********************************************************************************************
    * Function name: addItemToListView
@@ -233,7 +462,6 @@ public class PoPListItemsActivity extends BaseActivity
    * Returned:    NONE
    ***********************************************************************************************/
   private void setUpGroupSpinnerHandleSorting() {
-    mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
     ArrayAdapter<String> adapter = new ArrayAdapter<String>(PoPListItemsActivity.this,
       android.R.layout.simple_spinner_item, PoPList.GroupByStrings);
 
@@ -278,7 +506,12 @@ public class PoPListItemsActivity extends BaseActivity
       }
     });
   }
-
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
   public void onClick (View view)
   {
   }
@@ -313,6 +546,12 @@ public class PoPListItemsActivity extends BaseActivity
         });
     }*/
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
   private void setupEditDeleteButtonsForGLists ()
   {
     mbEdit = (ToggleButton) findViewById (R.id.bEdit);
@@ -670,6 +909,58 @@ public class PoPListItemsActivity extends BaseActivity
   public boolean isOnEdit()
   {
     return mbIsOnEdit;
+  }
+
+
+  /**
+   * Override onOptionsItemSelected to use main_menu instead of BaseActivity menu
+   *
+   * @param menu
+   */
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu)
+  {
+        /* Inflate the menu; this adds items to the action bar if it is present. */
+    getMenuInflater().inflate(R.menu.menu_pop_list_items, menu);
+
+
+    MenuItem edit = menu.findItem(R.id.action_edit_list_name);
+    MenuItem share = menu.findItem(R.id.action_share_list);
+    MenuItem remove = menu.findItem(R.id.action_remove_list);
+
+    return true;
+  }
+
+  /**
+   * Override onOptionsItemSelected to add action_settings only to the MainActivity
+   *
+   * @param item
+   */
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
+  {
+    int id = item.getItemId();
+
+    if (id == R.id.action_edit_list_name)
+    {
+      //onClickEditButton();
+
+      return true;
+    }
+
+    if (id == R.id.action_share_list)
+    {
+
+      return true;
+    }
+    if (id == R.id.action_remove_list)
+    {
+
+      return true;
+    }
+
+
+    return super.onOptionsItemSelected(item);
   }
 
 }

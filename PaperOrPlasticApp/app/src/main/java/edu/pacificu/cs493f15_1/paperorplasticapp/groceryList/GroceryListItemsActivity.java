@@ -13,11 +13,8 @@ public class GroceryListItemsActivity extends PoPListItemsActivity {
 
   /********************************************************************************************
    * Function name: onCreate
-   * <p/>
    * Description:   Initializes all needed setup for objects in page
-   * <p/>
    * Parameters:    savedInstanceState  - a bundle object
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
   @Override
@@ -25,7 +22,8 @@ public class GroceryListItemsActivity extends PoPListItemsActivity {
 
     super.onCreate(savedInstanceState);
 
-    PoPOnCreate(savedInstanceState, new GroceryLists(), GroceryLists.GROCERY_FILE_NAME, true);
+    PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_list_items,
+      GroceryLists.GROCERY_FILE_NAME, true);
   }
 
 }
