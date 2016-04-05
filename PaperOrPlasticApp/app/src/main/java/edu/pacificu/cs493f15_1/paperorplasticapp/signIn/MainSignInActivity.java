@@ -338,6 +338,13 @@ public void rememberPass(String email, String password)
         mfCurrentUser.setmbRememberPass(true);
       }
     }
+    else
+    {
+      mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
+      mSignInPrefsEditor.putString("email", "alco8653@pacificu.edu");
+      mSignInPrefsEditor.putString("password", "pass123");
+      mSignInPrefsEditor.commit();
+    }
 
   }
   else
