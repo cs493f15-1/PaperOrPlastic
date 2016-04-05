@@ -34,4 +34,5 @@
 
     <color name="cAccentColor">#2eb8b8</color>
     <color name="cToggleButtonColor">#70dbdb</color>
+    <color name="primary_text_default_material_light">#ffffff</color>
 </resources>
