@@ -85,7 +85,7 @@ public abstract class PoPList
   /********************************************
    * Adds
    *******************************************/
-  public void addItem (ListItem item)
+  public boolean addItem (ListItem item)
   {
     int i;
     boolean bExists;
@@ -113,6 +113,7 @@ public abstract class PoPList
     {
       mItems.add (item);
     }
+    return bExists;
   }
 
   //(only works for certain kinds of category sorting)

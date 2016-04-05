@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listTabHost"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#b8d0d4">
+         xmlns:tools="http://schemas.android.com/tools"
+         android:id="@+id/listTabHost"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:background="#b8d0d4">
 
     <LinearLayout android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/linearLayout"
-        android:weightSum="1"
-        android:nestedScrollingEnabled="false">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/Toolbar" android:visibility="visible"/>
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:id="@+id/linearLayout"
+                  android:weightSum="1"
+                  android:nestedScrollingEnabled="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#c4c3c3" android:visibility="gone">
+            android:background="#c4c3c3"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
                 android:layout_width="165dp"
@@ -35,13 +31,11 @@
 
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="#5e5e5e"
-                android:layout_alignTop="@+id/bBackToHome"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentLeft="false"
-                android:layout_toEndOf="@id/bBackToHome"
-                android:layout_toRightOf="@id/bBackToHome"
-                android:layout_marginLeft="25dp" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp" />
 
             <Button
                 android:layout_width="50dp"
@@ -61,18 +55,12 @@
                 android:textOff="@string/sEdit"
                 android:textOn="@string/sEdit"
                 android:textSize="15sp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/groceryListText"
-                android:layout_toEndOf="@+id/groceryListText"
-                android:layout_toStartOf="@id/bListSettings"
-                android:layout_toLeftOf="@id/bListSettings"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentLeft="false"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:gravity="center"
                 android:textColor="@color/ccBlack"
-                android:background="@drawable/edit_btn_toggle" />
+                android:background="@drawable/edit_btn_toggle"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/groceryListText"
+                android:layout_toStartOf="@+id/groceryListText" />
 
         </RelativeLayout>
 
@@ -91,22 +79,24 @@
                 android:text="@string/sAddList"
                 android:onClick="onAddListClick" />
 
-            <HorizontalScrollView android:layout_width="321dp"
-                android:layout_height="match_parent"
-                android:fillViewport="true"
-                android:scrollbars="horizontal"
-                android:layout_gravity="right"
-                android:backgroundTint="#48928d"
-                android:backgroundTintMode="multiply"
-                android:foregroundGravity="left"
-                android:scrollIndicators="right">
+            <HorizontalScrollView android:layout_width="315dp"
+                                  android:layout_height="match_parent"
+                                  android:fillViewport="true"
+                                  android:scrollbars="horizontal"
+                                  android:layout_gravity="right"
+                                  android:backgroundTint="#48928d"
+                                  android:backgroundTintMode="multiply"
+                                  android:foregroundGravity="left"
+                                  android:scrollIndicators="right"
+                                  android:nestedScrollingEnabled="true">
 
                 <TabWidget android:id="@android:id/tabs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/Base.Widget.AppCompat.ActionBar.TabBar"
-                    android:foregroundGravity="top|left|bottom|right"
-                    android:showDividers="beginning|end" />
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           style="@style/Base.Widget.AppCompat.ActionBar.TabBar"
+                           android:foregroundGravity="top|left|bottom|right"
+                           android:showDividers="beginning|end"
+                           android:scrollIndicators="right" />
             </HorizontalScrollView>
 
         </TableRow>
@@ -123,7 +113,7 @@
                 android:id="@+id/groupByText"
                 style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
                 android:textColor="#737373"
-                android:layout_alignBottom="@+id/bAddItem"
+                android:layout_alignBottom="@+id/bAddList"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
@@ -143,7 +133,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
-                android:id="@+id/bAddItem"
+                android:id="@+id/bAddList"
                 android:layout_gravity="left|top"
                 android:longClickable="true"
                 android:layout_alignBottom="@+id/GroupBySpinner"
@@ -159,12 +149,9 @@
         </RelativeLayout>
 
         <FrameLayout android:id="@android:id/tabcontent"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom">
-
-
-
+                     android:layout_width="fill_parent"
+                     android:layout_height="match_parent"
+                     android:layout_gravity="bottom">
 
             <ListView
                 android:layout_width="wrap_content"

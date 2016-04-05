@@ -131,21 +131,21 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
           mView = v;
 
           //for activity to know which list to delete if they choose to delete it in dialog fragment
-          ((PoPListSettingsActivity) getContext()).setPositionClicked((Integer) v.getTag());
+          ((PoPListActivity) getContext()).setPositionClicked((Integer) v.getTag());
 
-          ((PoPListSettingsActivity) getContext()).setDeleteListListener(new DeleteListDialogListener()
+          ((PoPListActivity) getContext()).setDeleteListListener(new DeleteListDialogListener()
           {
             @Override
             public void onDeleted()
             {
               //
-              ((PoPListSettingsActivity) getContext()).deleteList();
+              ((PoPListActivity) getContext()).deleteList();
             }
           });
 
           v.setVisibility(View.INVISIBLE);
 
-          ((PoPListSettingsActivity) getContext()).showDeleteListFragment();
+          ((PoPListActivity) getContext()).showDeleteListFragment();
 
 
         }
@@ -164,13 +164,14 @@ public abstract class PoPListAdapter extends ArrayAdapter<PoPList>
     //set list row info
     PoPList list = mListArray.get(position);
     listHolder.listName.setText(list.getListName());
+    listHolder.listName.setTag(list.getListName());
     listHolder.bDelete.setTag(position);
 
     return row;
   }
 
 
-  static class ListHolder
+  public static class ListHolder
   {
     QtyChangeDialogListener mQtyChangeListener;
     TextView listName;

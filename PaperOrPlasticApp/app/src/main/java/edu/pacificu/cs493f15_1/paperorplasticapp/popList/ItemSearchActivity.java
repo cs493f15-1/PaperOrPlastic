@@ -180,33 +180,6 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
             }
         });
 
-//        mDialog = getDialog();
-//        mDialog.setTitle("Add Item");
-//        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-//        // Do something else
-//
-//
-//        mbCancel = (Button) rootView.findViewById(R.id.cancel_button);
-//        mbCancel.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mDialog.dismiss();
-//            }
-//        });
-//
-//
-//
-//        mbOK = (Button) rootView.findViewById (R.id.ok_button);
-//        mbOK.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GroceryListActivity activity = (GroceryListActivity) getActivity();
-//                ItemSearchDialogListener listener = activity.getItemInfoListener();
-//                listener.onFinishNewItemDialog(mItemSearchQuery.getText().toString());
-//                mDialog.dismiss();
-//            }
-//        });
-//
     }
 
     @Override

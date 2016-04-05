@@ -50,6 +50,12 @@
             android:name=".menu.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+
+        <activity
+        android:name=".popList.PoPListItemsActivity"
+        android:label="@string/title_activity_list_items">
+        </activity>
+
         <activity
             android:name=".groceryList.GroceryListActivity"
             android:label="@string/title_activity_grocery_lists">
@@ -61,6 +67,17 @@
             android:label="@string/title_activity_item_search">
 
         </activity>
+
+        <activity
+            android:name=".groceryList.GroceryListItemsActivity"
+            android:label="@string/title_activity_grocery_list_items">
+        </activity>
+
+        <activity
+            android:name=".kitchenInventory.KitchenInventoryItemsActivity"
+            android:label="@string/title_activity_kitchen_inventory_items">
+        </activity>
+
         <activity
             android:name=".groceryList.GroceryListSettingsActivity"
             android:label="@string/title_activity_grocery_lists_settings" >

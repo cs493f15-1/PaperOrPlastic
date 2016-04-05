@@ -449,6 +449,7 @@ public void rememberPass(String email, String password)
       bUsingOffline = true;
     }
     bUsingOffline = true;
+    mEncodedEmail = null;
 
     //intent.putExtra("currentUser", mfCurrentUser);
 

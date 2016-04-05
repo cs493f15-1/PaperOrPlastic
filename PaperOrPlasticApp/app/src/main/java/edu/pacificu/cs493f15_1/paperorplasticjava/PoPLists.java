@@ -16,7 +16,7 @@ public abstract class PoPLists
    * Printing
    *********************************/
 
-  public void printListNames ()
+  public void printListNames()
   {
     for (PoPList tempList : mLists)
     {
@@ -30,27 +30,44 @@ public abstract class PoPLists
 
   public String getListName(int listIndex)
   {
-    return mLists.get (listIndex).getListName();
+    return mLists.get(listIndex).getListName();
   }
 
-  public PoPList getList (int listIndex)
+  public PoPList getList(int listIndex)
   {
 
     PoPList list = null;
     if (mLists.size() > listIndex)
     {
-      list =  mLists.get(listIndex);
+      list = mLists.get(listIndex);
     }
     return list;
 
   }
 
-  public int getSize ()
+  public PoPList getListByName(String listName)
+  {
+    PoPList list = null;
+
+    for (int i = 0; i < mLists.size() && list == null; ++i)
+    {
+      if (mLists.get(i).getListName().equals(listName))
+      {
+        list = mLists.get(i);
+      }
+    }
+
+    return list;
+
+  }
+
+
+  public int getSize()
   {
     return mLists.size();
   }
 
-  public ArrayList<PoPList> getArrayOfLists ()
+  public ArrayList<PoPList> getArrayOfLists()
   {
     return mLists;
   }
@@ -59,9 +76,9 @@ public abstract class PoPLists
    * Sets
    *********************************/
 
-  public void setListName (int listIndex, String newListName)
+  public void setListName(int listIndex, String newListName)
   {
-    mLists.get (listIndex).setListName (newListName);
+    mLists.get(listIndex).setListName(newListName);
   }
 
   /*********************************
@@ -70,13 +87,13 @@ public abstract class PoPLists
 
   /**
    * ListNameExists
-   *
+   * <p/>
    * Checks if the list names exists in the list. Captilization does not matter.
    *
    * @param listName - the name of the list being checked
    * @return whether the list name is in the list already
    */
-  public boolean ListNameExists (String listName)
+  public boolean ListNameExists(String listName)
   {
     boolean bExists = false;
     int i;
@@ -85,23 +102,24 @@ public abstract class PoPLists
     for (i = 0; i < getSize() && !bExists; ++i)
     {
       tempList = getList(i);
-      bExists = (tempList.getListName().toUpperCase().contains (listName.toUpperCase()));
+      bExists = (tempList.getListName().toUpperCase().contains(listName.toUpperCase()));
     }
 
     return bExists;
   }
+
   /*********************************
    * Adding
    ********************************/
 
-  public abstract void addList (String listName);
+  public abstract void addList(String listName);
 
   /*********************************
    * Deletes
    ********************************/
-  public void deleteList (int listIndex)
+  public void deleteList(int listIndex)
   {
-    mLists.remove (listIndex);
+    mLists.remove(listIndex);
   }
 
   /*********************************
@@ -110,14 +128,14 @@ public abstract class PoPLists
 
   /********************************************************************************************
    * Function name: writeListsToFile
-   *
+   * <p/>
    * Description: Outputs the current mLists to the passed in PrintWriter
-   *
+   * <p/>
    * Parameters: listsOutput - the printWriter which the PoPLists will be outputted to
-   *
+   * <p/>
    * Returns: None
    ******************************************************************************************/
-  public void writeListsToFile (PrintWriter listsOutput)
+  public void writeListsToFile(PrintWriter listsOutput)
   {
     listsOutput.println(mLists.size());
 
@@ -131,14 +149,14 @@ public abstract class PoPLists
 
   /********************************************************************************************
    * Function name: readListsFromFile
-   *
+   * <p/>
    * Description: reads from a file using a scanner and inputs the information into mLists
-   *
+   * <p/>
    * Parameters: listsInput - the Scanner which the PoPLists will be read from
-   *
+   * <p/>
    * Returns: None
    ******************************************************************************************/
-  public  void readListsFromFile (Scanner listsInput)
+  public void readListsFromFile(Scanner listsInput)
   {
     int size;
     PoPList tempList;
@@ -153,7 +171,7 @@ public abstract class PoPLists
     }
   }
 
-  public void clearLists ()
+  public void clearLists()
   {
     for (int i = 0; i < mLists.size(); i++)
     {
