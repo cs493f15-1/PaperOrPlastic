@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
 
 android
         {
@@ -67,9 +66,11 @@ dependencies
             compile 'com.firebaseui:firebase-ui:0.2.2'
 
             /* For Google Play Services */
-            compile 'com.google.android.gms:play-services-safetynet:8.3.0'
-            compile 'com.google.android.gms:play-services-auth:8.3.0'
+            compile 'com.google.android.gms:play-services-safetynet:8.4.0'
+            compile 'com.google.android.gms:play-services-auth:8.4.0'
 
 
             testCompile 'junit:junit:4.12'
         }
+
+apply plugin: 'com.google.gms.google-services'

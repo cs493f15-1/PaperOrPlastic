@@ -748,6 +748,16 @@ public void rememberPass(String email, String password)
     if (requestCode == RC_GOOGLE_LOGIN)
     {
       GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+      GoogleSignInAccount account = result.getSignInAccount();
+      Log.d(LOG_TAG, "Google Sign in result email:" + account.getEmail());
+      Log.d(LOG_TAG, "Google Sign in result display:" + account.getDisplayName());
+      Log.d(LOG_TAG, "Google Sign in result token:" + account.getIdToken());
+      Log.d(LOG_TAG, "Google Sign in result server auth code:" + account.getServerAuthCode());
+      Log.d(LOG_TAG, "Google Sign in result id:" + account.getId());
+
+
+
+
       handleSignInResult(result);
     }
 
@@ -796,7 +806,7 @@ public void rememberPass(String email, String password)
         try
         {
           String scope = String.format("oath2:%s" , new Scope(Scopes.PROFILE)) + " email";
-
+          Log.e(LOG_TAG, "Scope is: "  + scope);
           token = GoogleAuthUtil.getToken(MainSignInActivity.this, mGoogleAccount.getEmail(), scope);
         } catch (IOException transientEx)
         {
