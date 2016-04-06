@@ -106,20 +106,6 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
     }
 
 
-
-
-//    fUserTest = getIntent().getParcelableExtra("currentUser");
-//    //now since we have user TODO: create a sign out button
-//    if (null != fUserTest)
-//    {
-//      if (fUserTest.getMyRef() != null)
-//      {
-//        System.out.println(fUserTest.getmEmail());
-//        System.out.println(this.getApplicationContext().toString());
-//      }
-//    }
-
-
     //Create and initialize buttons
     buttons = new ArrayList<Button>(BUTTON_IDS.length);
 
@@ -241,6 +227,12 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
     }
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   public void loadSavedPreferences()
   {
     for (int index = 0; index < NUM_BUTTONS; index++)

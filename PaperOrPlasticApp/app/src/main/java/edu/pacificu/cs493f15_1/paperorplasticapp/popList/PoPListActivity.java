@@ -108,7 +108,8 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     super.onCreate(savedInstanceState);
   }
 
-  protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout, final String fileName, final boolean isGrocery)
+  protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout,
+                              final String fileName, final boolean isGrocery)
   {
     setContentView(activitylayout);
     mbIsOnEdit = false;
@@ -122,16 +123,21 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     //setupBackButton (isGrocery);
 
     setupToolbar();
-    setupFirebase();
 
 
     //Set Up ListView
     mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
 
 
-    //setupPOPListAdapter();
-    setupFBListAdapter();
-
+    if (bUsingOffline)
+    {
+      setupPOPListAdapter();
+    }
+    else
+    {
+      setupFirebase();
+      setupFBListAdapter();
+    }
 
     setupSwipeListening();
 
@@ -337,13 +343,11 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
         {
           hideDeleteButton(pos);
         }
-
       }
 
       @Override
       public void onSwipeLeft(int pos)
       {
-
         if (!mbIsOnEdit)
         {
           showDeleteButton(pos);
@@ -367,6 +371,11 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     MenuItem edit = menu.findItem(R.id.action_edit_lists);
     MenuItem settings = menu.findItem(R.id.action_settings);
+
+    if (bUsingOffline)
+    {
+      menu.removeItem(R.id.action_logout);
+    }
 
     return true;
   }

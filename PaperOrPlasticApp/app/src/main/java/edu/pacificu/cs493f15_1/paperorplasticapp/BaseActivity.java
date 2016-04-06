@@ -47,6 +47,12 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
   protected boolean bUsingOffline;
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   protected void onCreate(Bundle savedInstanceState)
   {
@@ -56,7 +62,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
     GoogleSignInOptions GSO = new GoogleSignInOptions
       .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
       .requestEmail().build();
-
 
 
     /**
@@ -76,6 +81,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
     mEncodedEmail = sp.getString(Constants.KEY_ENCODED_EMAIL, null);
     mProvider = sp.getString(Constants.KEY_PROVIDER, null);
 
+    if (null == mEncodedEmail)
+    {
+      bUsingOffline = true;
+    }
 
     if (!((this instanceof MainSignInActivity) || (this instanceof CreateAccountActivity) ||
       (this instanceof PasswordRecoveryActivity) || bUsingOffline))
@@ -100,35 +109,64 @@ public abstract class BaseActivity extends AppCompatActivity implements
       };
       mFirebaseRef.addAuthStateListener(mAuthListener);
     }
+
+    invalidateOptionsMenu();
   }
 
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   public void onDestroy()
   {
     super.onDestroy();
             /* Cleanup the AuthStateListener */
     if (!((this instanceof MainSignInActivity) || (this instanceof CreateAccountActivity) ||
-      (this instanceof PasswordRecoveryActivity))) {
+      (this instanceof PasswordRecoveryActivity) || bUsingOffline)) {
       mFirebaseRef.removeAuthStateListener(mAuthListener);
     }
-
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   public void onSaveInstanceState(Bundle outState)
   {
     super.onSaveInstanceState(outState);
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   public boolean onCreateOptionsMenu(Menu menu)
   {
           /* Inflate the menu; this adds items to the action bar if it is present. */
     getMenuInflater().inflate(R.menu.menu_base, menu);
+    if (bUsingOffline)
+    {
+      menu.removeItem(R.id.action_logout);
+    }
     return true;
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   public boolean onOptionsItemSelected(MenuItem item)
   {
@@ -148,24 +186,30 @@ public abstract class BaseActivity extends AppCompatActivity implements
     return super.onOptionsItemSelected(item);
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   protected void initializeBackground(LinearLayout linearLayout)
   {
 
     /**
      * Set different background image for landscape and portrait layouts?
-     * TODO: lock app in portrait for simplicity
      */
     linearLayout.setBackgroundResource(R.drawable.grocerybackportrait2);
   }
 
-
-  /**
-   * Logs out the user from their current session and starts LoginActivity.
-   * Also disconnects the mGoogleApiClient if connected and provider is Google
-   */
+  /*************************************************************************************************
+   *   Method:      logout
+   *   Description: Logs out the user from their current session and starts MainSignInActivity.
+   *                Also disconnects the mGoogleApiClient if connected and provider is Google
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   protected void logout()
   {
-
         /* Logout if mProvider is not null */
     if (mProvider != null)
     {
@@ -174,7 +218,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
 
       if (mProvider.equals(Constants.GOOGLE_PROVIDER))
       {
-
                 /* Logout from Google+ */
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
           new ResultCallback<Status>()
@@ -188,8 +231,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
       }
     }
   }
-
-
 
 /***************************************************************************************************
 *   Method:
@@ -206,17 +247,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
     finish();
   }
 
-  @Override
-  public void onConnectionFailed(ConnectionResult connectionResult)
-  {
-
-  }
-
-
   /*************************************************************************************************
    *   Method:      captureFirebaseError
    *   Description: upon receiving a firebase error, interpret this error and output to the system
-   *                 the type of error. TODO: create a dialog box to indicate the error to the user
+   *                 the type of error.
    *   Parameters:  N/A
    *   Returned:    N/A
    ************************************************************************************************/
@@ -258,6 +292,18 @@ public abstract class BaseActivity extends AppCompatActivity implements
     }
 
     return errorMessage;
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  @Override
+  public void onConnectionFailed(ConnectionResult connectionResult)
+  {
+
   }
 
 }

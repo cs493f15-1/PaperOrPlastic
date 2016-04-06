@@ -116,20 +116,10 @@ public abstract class PoPListItemsActivity extends BaseActivity
     mPoPLists = popLists;
     //get current viewing list
 
-    bUseFB = true;
 
     initializeLayoutItems();
 
-    if (bUseFB)
-    {
-      mListID = getIntent().getStringExtra(Constants.KEY_LIST_ID);
-      if (null != mListID)
-      {
-        setupFirebase();
-        setupFirebaseListItems();
-      }
-    }
-    else
+    if (bUsingOffline)
     {
       mPoPListName = getIntent().getStringExtra("PoPListName");
       Log.d("PoPListItemsActivity", "PopList passed through: " + mPoPListName);
@@ -138,6 +128,16 @@ public abstract class PoPListItemsActivity extends BaseActivity
       mPoPList = popLists.getListByName(mPoPListName);
       setUpListView();
     }
+    else
+    {
+      mListID = getIntent().getStringExtra(Constants.KEY_LIST_ID);
+      if (null != mListID)
+      {
+        setupFirebase();
+        setupFirebaseListItems();
+      }
+    }
+
 
 
        /*if (1 == mPoPList.describeContents())
@@ -389,13 +389,13 @@ public abstract class PoPListItemsActivity extends BaseActivity
         changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
             /* Add the updated timestamp */
-        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_GROCERY_LIST_ITEMS +
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LISTS  +
           "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
       }
       else
       {
                     /* Add the item to the update map*/
-        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS + "/"
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS + "/"
           + mListID + "/" + itemId, itemToAdd);
 
             /* Make the timestamp for last changed */
@@ -403,7 +403,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
         changedTimestampMap.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
             /* Add the updated timestamp */
-        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS +
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY +
           "/" + mListID + "/" + Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, changedTimestampMap);
       }
 
@@ -415,11 +415,8 @@ public abstract class PoPListItemsActivity extends BaseActivity
 
   /********************************************************************************************
    * Function name: addItemToListView
-   * <p/>
    * Description:   Adds item layout to listView as a new row and adds it to listadapter
-   * <p/>
    * Parameters:    newItem - the new ListItem being added
-   * <p/>
    * Returns:       none
    ******************************************************************************************/
   public void addItemToListView (ListItem newItem)
@@ -946,6 +943,12 @@ public abstract class PoPListItemsActivity extends BaseActivity
     MenuItem edit = menu.findItem(R.id.action_edit_list_name);
     MenuItem share = menu.findItem(R.id.action_share_list);
     MenuItem remove = menu.findItem(R.id.action_remove_list);
+
+    if (bUsingOffline)
+    {
+      menu.removeItem(R.id.action_logout);
+    }
+
 
     return true;
   }

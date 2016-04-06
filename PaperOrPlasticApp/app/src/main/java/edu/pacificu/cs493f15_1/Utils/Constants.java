@@ -13,7 +13,7 @@ public final class Constants
    * where active lists are stored (ie "activeLists")
    */
   public static final String FIREBASE_LOCATION_GROCERY_LISTS = "groceryLists";
-  public static final String FIREBASE_LOCATION_GROCERY_LIST_ITEMS = "shoppingListItems";
+  public static final String FIREBASE_LOCATION_GROCERY_LIST_ITEMS = "groceryListItems";
   public static final String FIREBASE_LOCATION_KITCHEN_INVENTORY = "kitchenInventory";
   public static final String FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS = "kitchenInventoryItems";
 

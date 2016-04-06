@@ -79,10 +79,7 @@ public class MainSignInActivity extends BaseActivity
   private String SIGNIN_PREFS_BOOLEAN = "saveSignIn";
 
   //  buttons
-  private Button  mButtonSignIn,
-                  mButtonCreateAccount,
-                  mButtonRecoverPassword,
-                  mButtonResetPassword,
+  private Button  mButtonSignIn, mButtonCreateAccount, mButtonRecoverPassword, mButtonResetPassword,
                   mButtonContinue;
 
   //  checkboxes
@@ -101,7 +98,7 @@ public class MainSignInActivity extends BaseActivity
   private Firebase mFirebaseRef;
   private FirebaseUser mfCurrentUser;
 
-  private boolean mAuthSuccess = false, mbResetSuccess, mbResetDismiss;
+  private boolean mAuthSuccess = false;
 
   private View mLoginFormView;
 
@@ -119,8 +116,7 @@ public class MainSignInActivity extends BaseActivity
   GoogleSignInAccount mGoogleAccount;
 
 
-
-  /***************************************************************************************************
+  /*************************************************************************************************
  *   Method:        onCreate
  *   Description:   is called when the activity is created. Sets the content view and initializes
  *                  our buttons, text fields, and firebase (connection to the cloud database).
@@ -128,7 +124,7 @@ public class MainSignInActivity extends BaseActivity
  *                  necessary initialization.
  *   Parameters:    savedInstanceState
  *   Returned:      N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   @Override
   protected void onCreate (Bundle savedInstanceState)
   {
@@ -139,12 +135,12 @@ public class MainSignInActivity extends BaseActivity
     initializeActivity();
   }
 
-  /***************************************************************************************************
+  /*************************************************************************************************
    *   Method:       onResume
    *   Description:  calls super.onResume() and initializes the sign-in prefs
    *   Parameters:   N/A
    *   Returned:     N/A
-   ***************************************************************************************************/
+   ************************************************************************************************/
   @Override
   protected void onResume ()
   {
@@ -172,12 +168,12 @@ public class MainSignInActivity extends BaseActivity
     }
   }
 
-  /***************************************************************************************************
+  /*************************************************************************************************
    *   Method:       onPause
    *   Description:  calls super.onPause()
    *   Parameters:   N/A
    *   Returned:     N/A
-   ***************************************************************************************************/
+   ************************************************************************************************/
   @Override
   public void onPause()
   {
@@ -190,7 +186,7 @@ public class MainSignInActivity extends BaseActivity
  *   Description:  calls all initialization functions
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   private void initializeActivity()
   {
     initializeButtons();
@@ -217,7 +213,7 @@ public class MainSignInActivity extends BaseActivity
  *   Description:  pairs member variable buttons with the views on this activity by ID
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeButtons ()
 {
   //  initializing/pairing buttons
@@ -238,7 +234,7 @@ private void initializeButtons ()
  *   Description:  pairs member variable checkboxes with the views on this activity by ID
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeCheckboxes()
 {
   mcbRememberPass = (CheckBox) findViewById(R.id.cbRememberPassword);
@@ -251,7 +247,7 @@ private void initializeCheckboxes()
  *   Description:  pairs member variable edit text fields with the views on this activity
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeEditFields()
 {
   mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -266,7 +262,7 @@ private void initializeEditFields()
  *   Description:  sets shared preferences for signing in with this app
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeSignInPrefs()
 {
   mSignInPreferences = getSharedPreferences(SIGNIN_PREFS, MODE_PRIVATE);
@@ -322,7 +318,7 @@ private void setupGoogleSignIn()
  *   Parameters:  email - user email
  *                password - user password
  *   Returned:    N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 public void rememberPass(String email, String password)
 {
   if (mcbRememberPass.isChecked())
@@ -448,6 +444,9 @@ public void rememberPass(String email, String password)
       //then we are choosing to continue with use of the app offline... TODO for now a quick fix
       bUsingOffline = true;
     }
+
+    super.bUsingOffline = true;
+
     bUsingOffline = true;
     mEncodedEmail = null;
 
@@ -462,7 +461,7 @@ public void rememberPass(String email, String password)
  *   Description: for now, using this as a template to see how to get a dialog box to appear
  *   Parameters:  N/A
  *   Returned:    N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   private void messageDialog (String title, String message, final boolean bContinue)
   {
     final Intent intent = new Intent (this, ContinueActivity.class);
@@ -491,7 +490,7 @@ public void rememberPass(String email, String password)
  *                email - the email for the user
  *                password - the password for the user
  *   Returned:    N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   public void setMfCurrentUser (AuthData authData, String email, String password)
   {
     mAuthSuccess = true;
@@ -504,7 +503,7 @@ public void rememberPass(String email, String password)
     rememberPass(email, password);
   }
 
-  /***************************************************************************************************
+  /*************************************************************************************************
  *   Method:      signInAttempt
  *   Description: to be executed when the user clicks on sign-in button. captures text in the email
  *                 and password edit text fields -> attempts to signin using these credentials. A
@@ -512,7 +511,7 @@ public void rememberPass(String email, String password)
  *                 if the sign in attempt was or was not successful
  *   Parameters:  N/A
  *   Returned:    N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   public void signInAttempt()
   {
     final String email = mEmailView.getText().toString();
@@ -565,7 +564,6 @@ public void rememberPass(String email, String password)
           {
             setAuthUserGoogle(authData);
           }
-
         }
                 /* Save provider name and encodedEmail for later use and start MainActivity */
         spe.putString(Constants.KEY_PROVIDER, authData.getProvider()).apply();
@@ -584,9 +582,7 @@ public void rememberPass(String email, String password)
     {
       mAuthProgressDialog.dismiss();
     }
-
   }
-
 
 /***************************************************************************************************
 *   Method:
@@ -725,7 +721,12 @@ public void rememberPass(String email, String password)
     });
   }
 
-
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   *************************************************************************************************/
   @Override
   public void onConnectionFailed(ConnectionResult result)
   {
@@ -737,19 +738,24 @@ public void rememberPass(String email, String password)
     //showErrorToast(result.toString());
   }
 
-  /**
-   * Show error toast to users
-   */
+  /*************************************************************************************************
+   *   Method:
+   *   Description: show error toast to users
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   private void showErrorToast(String message)
   {
     Toast.makeText(MainSignInActivity.this, message, Toast.LENGTH_LONG).show();
   }
 
-
-  /**
-   * This callback is triggered when any startActivityForResult finishes. The requestCode maps to
-   * the value passed into startActivityForResult.
-   */
+  /*************************************************************************************************
+   *   Method:
+   *   Description: This callback is triggered when any startActivityForResult finishes. The
+   *   requestCode maps to the value passed into startActivityForResult.
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data)
   {
@@ -772,6 +778,12 @@ public void rememberPass(String email, String password)
 
   }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   private void handleSignInResult(GoogleSignInResult result)
   {
     Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
@@ -780,8 +792,6 @@ public void rememberPass(String email, String password)
             /* Signed in successfully, get the OAuth token */
       mGoogleAccount = result.getSignInAccount();
       getGoogleOAuthTokenAndLogin();
-
-
     }
     else
     {
@@ -797,9 +807,12 @@ public void rememberPass(String email, String password)
     }
   }
 
-  /**
-   * Gets the GoogleAuthToken and logs in.
-   */
+  /*************************************************************************************************
+   *   Method:
+   *   Description: Gets the GoogleAuthToken and logs in.
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
   private void getGoogleOAuthTokenAndLogin()
   {
         /* Get OAuth token in Background */
@@ -850,7 +863,8 @@ public void rememberPass(String email, String password)
         if (token != null)
         {
                     /* Successfully got OAuth token, now login with Google */
-          mFirebaseRef.authWithOAuthToken(Constants.GOOGLE_PROVIDER, token, new PoPAuthResultHandler(Constants.GOOGLE_PROVIDER));
+          mFirebaseRef.authWithOAuthToken(Constants.GOOGLE_PROVIDER, token,
+            new PoPAuthResultHandler(Constants.GOOGLE_PROVIDER));
         }
         else if (mErrorMessage != null)
         {
