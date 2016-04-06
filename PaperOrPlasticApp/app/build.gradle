@@ -2,12 +2,9 @@ apply plugin: 'com.android.application'
 
 android
         {
-            signingConfigs {
-                config {
-                }
-            }
             compileSdkVersion 23
             buildToolsVersion "23.0.1"
+
             defaultConfig
                     {
                         applicationId "edu.pacificu.cs493f15_1.paperorplasticapp"
@@ -16,14 +13,32 @@ android
                         versionCode 1
                         versionName "1.0"
                     }
+//            signingConfigs
+//                    {
+//                        release
+//                                {
+//                                    storeFile file("myreleasekey.keystore")
+//                                    storePassword "password"
+//                                    keyAlias "MyReleaseKey"
+//                                    keyPassword "password"
+//                                }
+//
+//                    }
             buildTypes
                     {
                         release
                                 {
                                     minifyEnabled false
                                     proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                                    //signingConfig signingConfigs.release
                                 }
                     }
+
+            buildTypes.each
+                    {
+                        it.buildConfigField 'String','UNIQUE_FIREBASE_ROOT_URL', UniqueFirebaseRootUrl
+                    }
+
             packagingOptions
                     {
                         exclude 'META-INF/LICENSE'
@@ -35,13 +50,27 @@ android
 dependencies
         {
             compile fileTree(include: ['*.jar'], dir: 'libs')
+
             // Unit testing dependencies
             testCompile 'junit:junit:4.12'
             // Dependency for using Mockito
+
             testCompile 'org.mockito:mockito-core:1.10.19'
             compile 'com.android.support:appcompat-v7:23.0.1'
             compile 'com.android.support:design:23.0.1'
             compile 'com.android.support:support-v4:23.0.1'
-            compile 'com.firebase:firebase-client-android:2.4.0+'
+
+
+            //firebase
+            compile 'com.firebase:firebase-client-android:2.4.0'
+            compile 'com.firebaseui:firebase-ui:0.2.2'
+
+            /* For Google Play Services */
+            compile 'com.google.android.gms:play-services-safetynet:8.4.0'
+            compile 'com.google.android.gms:play-services-auth:8.4.0'
+
+
             testCompile 'junit:junit:4.12'
         }
+
+apply plugin: 'com.google.gms.google-services'

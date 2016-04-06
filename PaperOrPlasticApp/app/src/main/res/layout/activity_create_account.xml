@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" xmlns:tools="http://schemas.android.com/tools"
+            android:fillViewport="true"
+            tools:context=".paperorplasticapp.signIn.CreateAccountActivity"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:id="@+id/linear_layout_caa"
+        android:gravity="center"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        >
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginBottom="10dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your name or username"
+                android:id="@+id/editTextName"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:padding="5dp" android:background="#99ffffff"
+                android:minHeight="45dp"
+                android:textSize="15.5sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your email"
+                android:inputType="textEmailAddress"
+                android:id="@+id/editTextNewEmail"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:padding="5dp" android:background="#99ffffff"
+                android:minHeight="45dp"
+                android:textSize="15.5sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bCreateTheAccount"
+            android:text="Create Account" android:background="@color/colorPrimary"
+            android:textColor="@color/ccWhite"
+            android:textStyle="normal" android:minHeight="45dp"
+            android:onClick="onCreateAccountPressed"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+                      android:gravity="center" android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account? "
+                android:id="@+id/textView"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:id="@+id/bCAAsignin"
+                android:textColor="@color/ccWhite"
+                style="@style/ButtonClear" android:background="#00ffffff"
+                android:textStyle="bold" android:textSize="14sp" android:onClick="onSignInPressed"
+                android:gravity="left|center" android:minWidth="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

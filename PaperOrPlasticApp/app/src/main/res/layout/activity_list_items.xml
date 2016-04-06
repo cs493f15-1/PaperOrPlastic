@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#b8d0d4">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@color/cListTitleColor"
+            android:id="@+id/relativeLayout2"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <ToggleButton
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:text="@string/sEdit"
+                android:id="@+id/bEdit"
+                android:onClick="onClickEditButton"
+                android:textOff="@string/sEdit"
+                android:textOn="@string/sEdit"
+                android:textSize="15sp"
+                android:gravity="center"
+                android:textColor="@color/ccBlack"
+                android:background="@drawable/edit_btn_toggle"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/listName"
+                style="@style/Base.TextAppearance.AppCompat.SearchResult.Title"
+                android:layout_weight="24.94"
+                android:layout_span="30"
+
+                android:gravity="center_vertical|center_horizontal"
+                android:textColor="@color/cListTitleTextColor"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="top"
+            android:layout_below="@+id/relativeLayout2">
+
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/app_bar"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="visible"
+                android:background="@color/colorPrimary"
+                android:theme="@style/Toolbar"/>
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/bAddList"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/icon_add"
+                android:onClick="onAddItemClick" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/app_bar"
+                android:id="@+id/relativeLayout">
+
+                <Spinner
+                    android:id="@+id/GroupBySpinner"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:spinnerMode="dropdown"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/groupByText"
+                    android:layout_toEndOf="@+id/groupByText" />
+
+                <TextView
+                    android:layout_width="120dp"
+                    android:layout_height="34dp"
+                    android:text="@string/sGroupBy"
+                    android:id="@+id/groupByText"
+                    style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:textColor="#737373"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/listViewOfItems"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/relativeLayout" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

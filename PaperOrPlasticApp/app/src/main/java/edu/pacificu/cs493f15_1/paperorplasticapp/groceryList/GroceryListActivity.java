@@ -43,7 +43,8 @@ public class GroceryListActivity extends PoPListActivity {
 
         super.onCreate(savedInstanceState);
 
-        PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list, R.layout.grocery_list_item, GroceryLists.GROCERY_FILE_NAME, true);
+        PoPOnCreate(savedInstanceState, new GroceryLists(), R.layout.activity_grocery_list_settings_new,
+          GroceryLists.GROCERY_FILE_NAME, true);
     }
 
 

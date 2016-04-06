@@ -9,15 +9,15 @@ import java.util.Scanner;
  */
 public class KitchenInventory extends PoPList
 {
-    boolean bIsLinked;
-    boolean bIsShared;
+  boolean bIsLinked;
+  boolean bIsShared;
 
-    public KitchenInventory(String name)
-    {
-        mListName = name;
-        mItems = new ArrayList<ListItem>();
-        mCurrentSortingValue = SORT_NONE;
-    }
+  public KitchenInventory(String name)
+  {
+    mListName = name;
+    mItems = new ArrayList<ListItem>();
+    mCurrentSortingValue = SORT_NONE;
+  }
     /*Functions
         Eat ()
         ThrowAway () (these two functions matter if we are watching the users diet
@@ -27,58 +27,58 @@ public class KitchenInventory extends PoPList
         unShareList ();
      */
 
-    /*********************************
-     * I/O
-     ********************************/
+  /*********************************
+   * I/O
+   ********************************/
 
-    /********************************************************************************************
-     * Function name: writeListToFile
-     *
-     * Description: Outputs the current list to the passed in PrintWriter
-     *
-     * Parameters: listOutput - the printWriter which the KitchenInventory will be outputted to
-     *
-     * Returns: None
-     ******************************************************************************************/
-    public void writeListToFile (PrintWriter listOutput)
+  /********************************************************************************************
+   * Function name: writeListToFile
+   *
+   * Description: Outputs the current list to the passed in PrintWriter
+   *
+   * Parameters: listOutput - the printWriter which the KitchenInventory will be outputted to
+   *
+   * Returns: None
+   ******************************************************************************************/
+  public void writeListToFile (PrintWriter listOutput)
+  {
+    listOutput.println(getListName());
+    listOutput.println(getSize() + " " + getCurrentSortingValue());
+    for (ListItem item : mItems)
     {
-        listOutput.println(getListName());
-        listOutput.println(getSize() + " " + getCurrentSortingValue());
-        for (ListItem item : mItems)
-        {
-            item.writeItemToFile(listOutput);
-        }
-        listOutput.flush();
+      item.writeItemToFile(listOutput);
     }
+    listOutput.flush();
+  }
 
 
-    /********************************************************************************************
-     * Function name: readListFromFile
-     *
-     * Description: reads from a file using a scanner and inputs the information into the list
-     *
-     * Parameters: listInput - the Scanner which the KitchenInventory will be read from
-     *
-     * Returns: None
-     ******************************************************************************************/
-    public void readListFromFile (Scanner listInput)
+  /********************************************************************************************
+   * Function name: readListFromFile
+   *
+   * Description: reads from a file using a scanner and inputs the information into the list
+   *
+   * Parameters: listInput - the Scanner which the KitchenInventory will be read from
+   *
+   * Returns: None
+   ******************************************************************************************/
+  public void readListFromFile (Scanner listInput)
+  {
+    String temp;
+    int size;
+    ListItem tempItem;
+
+    listInput.nextLine(); //get the new line character left from before
+    setListName(listInput.nextLine());
+
+    size = listInput.nextInt();
+
+    setCurrentSortingValue(listInput.nextInt());
+
+    for (int i = 0; i < size; ++i)
     {
-        String temp;
-        int size;
-        ListItem tempItem;
-
-        listInput.nextLine(); //get the new line character left from before
-        setListName(listInput.nextLine());
-
-        size = listInput.nextInt();
-
-        setCurrentSortingValue(listInput.nextInt());
-
-        for (int i = 0; i < size; ++i)
-        {
-            tempItem = new ListItem("temp");
-            tempItem.readItemFromFile(listInput);
-            addItem(tempItem);
-        }
+      tempItem = new ListItem("temp");
+      tempItem.readItemFromFile(listInput);
+      addItem(tempItem);
     }
+  }
 }
