@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionSettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
@@ -146,12 +144,10 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         if (buttons.get (G_LIST) == view)
         {
-            startIntent (G_LIST, GroceryListSettingsActivity.class);
+
         }
         else if (buttons.get (K_LIST) == view)
-
         {
-            startIntent (K_LIST, KitchenInventorySettingsActivity.class);
         }
         else if (buttons.get (NUTRITION) == view)
         {

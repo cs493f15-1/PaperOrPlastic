@@ -75,6 +75,9 @@
 
     <string name="sSearchHint">Not Case Sens</string>
 
+    <string name="sDuplicateListError">The list could not be added because there is already a list with that name. Please select a different name.</string>
+    <string name="sDuplicateItemError">The item could not be added because there is already an item with that name.</string>
+    <string name="sCouldNotAddItemSinceNoListError">The item could not be added because there is no list available. Please select a list first.</string>
 
     <string name="sDeleteList">Are you sure you want to delete this list?</string>
     <string name="sGroupBy">Group By</string>
@@ -84,12 +87,6 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
-
-    <string name="sDuplicateListError">The list could not be added because there is already a list with that name. Please select a different name.</string>
-    <string name="sDuplicateItemError">The item could not be added because there is already an item with that name.</string>
-    <string name="sCouldNotAddItemSinceNoListError">The item could not be added because there is no list available. Please select a list first.</string>
-
-
 
     <string name="server_client_id">208743903372-mohql0t0q8k3c5ocpq6bte6jgno812h8.apps.googleusercontent.com</string>
     <!--<string name="server_client_id2">208743903372-qivsb5vpjal1mpgkk8l91natj3h1rd9c.apps.googleusercontent.com</string>-->

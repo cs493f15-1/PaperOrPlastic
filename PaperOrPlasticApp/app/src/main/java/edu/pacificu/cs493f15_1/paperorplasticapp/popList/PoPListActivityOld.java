@@ -55,8 +55,6 @@ import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListSettingsActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventorySettingsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
@@ -748,18 +746,18 @@ public abstract class PoPListActivityOld extends BaseActivity implements ListDFr
       public void onClick(View v)
       {
 
-        if (mbIsGrocery)
-        {
-          Intent intent = new Intent(PoPListActivityOld.this, GroceryListSettingsActivity.class);
-          intent.putExtra("Caller", "GroceryListActivity");
-          startActivity(intent);
-        }
-        else
-        {
-          Intent intent = new Intent(PoPListActivityOld.this, KitchenInventorySettingsActivity.class);
-          intent.putExtra("Caller", "KitchenInventoryActivity");
-          startActivity(intent);
-        }
+//        if (mbIsGrocery)
+//        {
+//          Intent intent = new Intent(PoPListActivityOld.this, GroceryListSettingsActivity.class);
+//          intent.putExtra("Caller", "GroceryListActivity");
+//          startActivity(intent);
+//        }
+//        else
+//        {
+//          Intent intent = new Intent(PoPListActivityOld.this, KitchenInventorySettingsActivity.class);
+//          intent.putExtra("Caller", "KitchenInventoryActivity");
+//          startActivity(intent);
+//        }
       }
     });
   }
@@ -1306,18 +1304,7 @@ public abstract class PoPListActivityOld extends BaseActivity implements ListDFr
    ******************************************************************************************/
   public void onSettingsClicked()
   {
-    if (bIsGrocery)
-    {
-      Intent intent = new Intent(PoPListActivityOld.this, GroceryListSettingsActivity.class);
-      intent.putExtra("Caller", "GroceryListActivity");
-      startActivity(intent);
-    }
-    else
-    {
-      Intent intent = new Intent(PoPListActivityOld.this, KitchenInventorySettingsActivity.class);
-      intent.putExtra("Caller", "KitchenInventoryActivity");
-      startActivity(intent);
-    }
+
   }
 
 

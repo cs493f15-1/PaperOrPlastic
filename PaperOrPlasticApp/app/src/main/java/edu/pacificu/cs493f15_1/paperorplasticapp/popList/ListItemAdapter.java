@@ -101,6 +101,10 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
       //set up check box functionality
       itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
       itemHolder.checkBox.setTag(mPosition);
+      if (mItemArray.get(mPosition).getCheckedOff())
+      {
+        itemHolder.checkBox.callOnClick();
+      }
       itemHolder.checkBox.setOnClickListener(new OnCheckListener()
       {
         @Override
@@ -112,26 +116,15 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
           if (!mbWaiting)
           {
             mbWaiting = Boolean.TRUE;
-
-            mTimerTask = new TimerTask()
+            boolean bCheckedOff = mItemArray.get(mPosition).getCheckedOff();
+            if (bCheckedOff)
             {
-              public void run()
-              {
-                mHandlerUI.post(new Runnable() {
-                  public void run() {
-                    if (mbWaiting) {
-                      //remove item after certain amount of time?
-                      mItemArray.remove(mPosition);
-                      ListItemAdapter.this.notifyDataSetChanged();
-                      mbWaiting = false;
-                    }
-                  }
-                });
-              }
-
-            };
-            timer.schedule(mTimerTask, 3000);  //
-
+              mItemArray.get(mPosition).setCheckedOff(true);
+            }
+            else
+            {
+              mItemArray.get(mPosition).setCheckedOff(false);
+            }
           }
           else
           {
@@ -242,6 +235,5 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
     EditText itemQuantity;
     Button bDelete;
   }
-
 
 }
