@@ -45,7 +45,6 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.utils.Constants;
-
 /**
  * Created by sull0678 on 4/4/2016.
  */
