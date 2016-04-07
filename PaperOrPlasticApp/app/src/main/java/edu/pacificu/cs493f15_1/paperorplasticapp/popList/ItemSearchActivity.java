@@ -1,26 +1,16 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,18 +22,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.popList.ListItemAdapter;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ExecuteQueryTask;
-import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 
 public class ItemSearchActivity extends Activity implements ExecuteQueryTask.AsyncResponse {
+
     private EditText mItemSearchQuery;
-    private Dialog mDialog;
-    private PoPLists mPoPLists;
-    private String mPoPFileName;
     private ListView mItemListView;
     private String clickedName;
     private ListItem mItemResult;
@@ -160,7 +144,11 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
                         sendItemNameToList(item_name);
 
                     } else {
-                        AlertDialog noListDialog = new AlertDialog.Builder(mDialog.getContext()).create();
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                getResources().getString(R.string.sCouldNotAddItemSinceNoListError),
+                                Toast.LENGTH_LONG);
+                        toast.show();
+/*                        AlertDialog noListDialog = new AlertDialog.Builder(mDialog.getContext()).create();
                         noListDialog.setTitle("Item Not Added");
                         noListDialog.setMessage("The item could not be added because there is no list available. Please create a list first.");
                         noListDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
@@ -170,7 +158,7 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
                                     }
                                 });
 
-                        noListDialog.show();
+                        noListDialog.show();*/
                     }
 
                     return true;
@@ -179,7 +167,6 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
                 return false;
             }
         });
-
     }
 
     @Override

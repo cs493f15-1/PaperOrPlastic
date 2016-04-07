@@ -85,6 +85,18 @@ public abstract class PoPList
   /********************************************
    * Adds
    *******************************************/
+
+
+  /********************************************************************************************
+   * Function name: addItem
+   *
+   * Description: adds the ListItem to the list and returns true if the item already exists
+   *              in the list added
+   *
+   * Parameters: item - the item being added to the list
+   *
+   * Returns: true if the item already exists in the list; otherwise false.
+   ******************************************************************************************/
   public boolean addItem (ListItem item)
   {
     int i;
@@ -100,21 +112,22 @@ public abstract class PoPList
       {
         tempItem = mItems.get (i);
 
-        if (item.getItemName().contains (tempItem.getItemName()))
+        if (item.getItemName().equals (tempItem.getItemName()))
         {
-          tempItem.setAddQuantity (1);
+          tempItem.setQuantity (tempItem.getQuantity() + 1);
           mItems.set (i, tempItem);
+
           bExists = true;
         }
       }
     }
 
-    if (bExists == false)
-    {
-      mItems.add (item);
+    if (bExists == false) {
+      mItems.add(item);
     }
     return bExists;
   }
+
 
   //(only works for certain kinds of category sorting)
    /* public boolean moveItemToCat (int itemIndex, int sortingType, int categoryNameIndex)
