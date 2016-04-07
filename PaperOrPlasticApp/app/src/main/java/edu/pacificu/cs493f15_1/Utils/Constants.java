@@ -31,7 +31,7 @@ public final class Constants
   public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
   public static final String FIREBASE_PROPERTY_ITEM_NAME = "mItemName";
   public static final String FIREBASE_PROPERTY_EMAIL = "email";
-  public static final String FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD = "bLoggedInWithPassword";
+  public static final String FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD = "bLoggedInPassword";
 
   /**
    * Constants for Firebase URL

@@ -347,10 +347,6 @@ public void rememberPass(String email, String password)
   {
     mSignInPrefsEditor.clear();
     mSignInPrefsEditor.commit();
-    if (mfCurrentUser != null)
-    {
-      mfCurrentUser.setmbRememberPass(false);
-    }
   }
 }
 
@@ -437,14 +433,6 @@ public void rememberPass(String email, String password)
   {
     Intent intent = new Intent (MainSignInActivity.this, ContinueActivity.class);
 
-    if (!mAuthSuccess)
-    {
-      //mfCurrentUser = new FirebaseUser("offline");
-
-      //then we are choosing to continue with use of the app offline... TODO for now a quick fix
-      bUsingOffline = true;
-    }
-
     super.bUsingOffline = true;
 
     bUsingOffline = true;
@@ -522,8 +510,6 @@ public void rememberPass(String email, String password)
     /* authenticate the user with the information in the fields!! */
     mFirebaseRef.authWithPassword(email, password,
       new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
-
-
   }
 
   /** NEW CLASS -- Declaring our own methods of authenticating the user
