@@ -94,6 +94,9 @@ public class NutritionActivity extends Activity implements OnClickListener
 
             formatText.setText ("FORMAT: " + scanFormat);
             contentText.setText ("CONTENT: " + scanContent);
+
+
+            
         }
         else
         {
