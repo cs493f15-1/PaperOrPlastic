@@ -93,8 +93,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   int mPositionClicked = 0;
 
   /**
-   *  NEW THINGS FOR TESTING
-   *
+   * NEW THINGS FOR TESTING
    */
 
   private Firebase mUserRef, mListsRef;
@@ -111,18 +110,17 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private SimpleListAdapter mSimpleListAdapter;
 
 
-
   /********************************************************************************************
    * Function name: onCreate
-   *
+   * <p/>
    * Description:   Initializes all needed setup for objects in page
-   *
+   * <p/>
    * Parameters:    savedInstanceState  - a bundle object
-   *
+   * <p/>
    * Returns:       none
    ******************************************************************************************/
   @Override
-  protected void onCreate (Bundle savedInstanceState)
+  protected void onCreate(Bundle savedInstanceState)
   {
     //Used for add item
     Intent intent;
@@ -130,8 +128,8 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     super.onCreate(savedInstanceState);
   }
 
-  protected void PoPOnCreate (Bundle savedInstanceState, PoPLists popLists, final int activitylayout,
-                              final String fileName, final boolean isGrocery)
+  protected void PoPOnCreate(Bundle savedInstanceState, PoPLists popLists, final int activitylayout,
+                             final String fileName, final boolean isGrocery)
   {
     setContentView(activitylayout);
     mbIsOnEdit = false;
@@ -170,13 +168,13 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   //called in PopListAdapter and in listView On click listener
-  public void onListClick (String listName)
+  public void onListClick(String listName)
   {
     Intent intent;
 
@@ -195,12 +193,12 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
-  public void onFBListClick (String listId)
+  public void onFBListClick(String listId)
   {
     Intent intent;
 
@@ -256,7 +254,6 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       public void onItemClick(AdapterView<?> parent, View view,
                               int position, long id)
       {
-
         // selected item
         mLastClicked = position;
 
@@ -268,10 +265,10 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public PoPLists getPoPLists()
   {
@@ -279,20 +276,20 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
-  public void onClick (View view)
+  public void onClick(View view)
   {
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public void setupToolbar()
   {
@@ -307,10 +304,10 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public void setupFirebase()
   {
@@ -327,17 +324,18 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       }
     }
   }
+
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public void setupPOPListAdapter()
   {
     //list adapter holds info of lists for listView
     mListAdapter = new PoPListAdapter(mListOfListView.getContext(),
-      R.layout.listview_list_row_settings, mPoPLists.getArrayOfLists())
+        R.layout.listview_list_row_settings, mPoPLists.getArrayOfLists())
     {
     };
 
@@ -355,10 +353,10 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public void setupFBListAdapter()
   {
@@ -375,7 +373,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     }
 
     mSimpleListAdapter = new SimpleListAdapter(this, SimpleList.class,
-      R.layout.single_active_list, listRef, mEncodedEmail);
+        R.layout.single_active_list, listRef, mEncodedEmail);
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);
@@ -397,10 +395,10 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
   public void setupSwipeListening()
   {
@@ -435,7 +433,8 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    * Returned:    NONE
    ***********************************************************************************************/
 
-  private void setupEditDeleteButtonsForLists() {
+  private void setupEditDeleteButtonsForLists()
+  {
     mbEdit = (ToggleButton) findViewById(R.id.bEdit);
     mbEdit.setChecked(mbIsOnEdit);
   }
@@ -446,20 +445,26 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    * Parameters:  view
    * Returned:    NONE
    ***********************************************************************************************/
-  public void onClickEditButton() {
-    if (mListAdapters.size() != 0) {
+  public void onClickEditButton()
+  {
+    if (mListAdapters.size() != 0)
+    {
       int size = mPoPLists.getSize();
 
-      if (size > 0) {
+      if (size > 0)
+      {
 
-        if (!mbIsOnEdit) {
+        if (!mbIsOnEdit)
+        {
           mbIsOnEdit = true;
           mbEdit.setChecked(mbIsOnEdit);
           //TODO make onEdit function that does this for loop and call when tab is changed as well (onTabChanged function, line 121)
           showDeleteButtons(size);
           mbAddItem.setTextColor(Color.rgb(170, 170, 170));
           mbAddItem.setEnabled(false);
-        } else {
+        }
+        else
+        {
 
           mbIsOnEdit = false;
           mbEdit.setChecked(mbIsOnEdit);
@@ -521,38 +526,38 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
 
 
-      /***********************************************************************************************
-       * Method:      setupAddItemButtons
-       * Description: Sets up addItem buttons
-       * Parameters:  NONE
-       * Returned:    NONE
-       ***********************************************************************************************/
-      private void setupAddItemButtons() {
-
-      //set up add item button
-      mbAddItem = (Button) findViewById(R.id.bAddItem);
-
-}
-
-    /***********************************************************************************************
-     * Method:      onAddItemClick
-     * Description: If addItem button is clicked, call activity for searching for an item
-     * Parameters:  view - the button that was clicked
-     * Returned:    NONE
-     ***********************************************************************************************/
-
-    public void onAddItemClick(View view)
-    {
-      Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
-      addItemIntent.putExtra("num_list_items", getNumPoPList());
-    }
-
-
-  private void setupEditDeleteButtonsForGLists ()
+  /***********************************************************************************************
+   * Method:      setupAddItemButtons
+   * Description: Sets up addItem buttons
+   * Parameters:  NONE
+   * Returned:    NONE
+   ***********************************************************************************************/
+  private void setupAddItemButtons()
   {
-    mbEdit = (ToggleButton) findViewById (R.id.bEdit);
+
+    //set up add item button
+    mbAddItem = (Button) findViewById(R.id.bAddItem);
+
   }
 
+  /***********************************************************************************************
+   * Method:      onAddItemClick
+   * Description: If addItem button is clicked, call activity for searching for an item
+   * Parameters:  view - the button that was clicked
+   * Returned:    NONE
+   ***********************************************************************************************/
+
+  public void onAddItemClick(View view)
+  {
+    Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
+    addItemIntent.putExtra("num_list_items", getNumPoPList());
+  }
+
+
+  private void setupEditDeleteButtonsForGLists()
+  {
+    mbEdit = (ToggleButton) findViewById(R.id.bEdit);
+  }
 
 
   /********************************************************************************************
@@ -587,12 +592,12 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
   /*************************************************************************************************
-   *   Method:
-   *   Description:
-   *   Parameters:   N/A
-   *   Returned:     N/A
+   * Method:
+   * Description:
+   * Parameters:   N/A
+   * Returned:     N/A
    ************************************************************************************************/
-  public void onAddListClick (View v)
+  public void onAddListClick(View v)
   {
     mListInfoListener = new DialogListener()
     {
@@ -613,9 +618,9 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
           }
           else
           {
-          Toast toast = Toast.makeText(getApplicationContext(),
-            getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
-          toast.show();
+            Toast toast = Toast.makeText(getApplicationContext(),
+                getResources().getString(R.string.sDuplicateListError), Toast.LENGTH_LONG);
+            toast.show();
           }
         }
       }
@@ -627,74 +632,77 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
 
-    /********************************************************************************************
-     * Function name: onPause
-     * <p/>
-     * Description:   When the activity is paused writes the PoPLists to the file passed in OnCreate
-     * <p/>
-     * Parameters:    none
-     * <p/>
-     * Returns:       none
-     ******************************************************************************************/
-    @Override
-    protected void onPause() {
-        super.onPause();
-        writeListsToFile();
+  /********************************************************************************************
+   * Function name: onPause
+   * <p/>
+   * Description:   When the activity is paused writes the PoPLists to the file passed in OnCreate
+   * <p/>
+   * Parameters:    none
+   * <p/>
+   * Returns:       none
+   ******************************************************************************************/
+  @Override
+  protected void onPause()
+  {
+    super.onPause();
+    writeListsToFile();
 
-        //   OutputFileToLogcat("onPause");
+    //   OutputFileToLogcat("onPause");
 
+    mPoPLists.clearLists();
+  }
+
+  /********************************************************************************************
+   * Function name: onResume
+   * <p/>
+   * Description:   When the activity is resumed reads in PoPLists from the file passed in OnCreate
+   * and updates mPoPLists with the information.
+   * <p/>
+   * Parameters:    none
+   * <p/>
+   * Returns:       none
+   ******************************************************************************************/
+  @Override
+  protected void onResume()
+  {
+    super.onResume();
+    //read list info from file
+    Context context = getApplicationContext();
+    File popFile = context.getFileStreamPath(mPoPFileName);
+
+    mbIsOnEdit = false;
+
+    if (popFile.exists())
+    {
       mPoPLists.clearLists();
+      readListsFromFile(mPoPLists);
     }
 
-    /********************************************************************************************
-     * Function name: onResume
-     * <p/>
-     * Description:   When the activity is resumed reads in PoPLists from the file passed in OnCreate
-     * and updates mPoPLists with the information.
-     * <p/>
-     * Parameters:    none
-     * <p/>
-     * Returns:       none
-     ******************************************************************************************/
-    @Override
-    protected void onResume() {
-        super.onResume();
-      //read list info from file
-      Context context = getApplicationContext();
-      File popFile = context.getFileStreamPath(mPoPFileName);
 
-      mbIsOnEdit = false;
-
-      if (popFile.exists())
-      {
-        mPoPLists.clearLists();
-        readListsFromFile(mPoPLists);
-      }
-
-
-    }
+  }
 
 
   /***********************************************************************************************
-   *   Method:      showDeleteButtons
-   *   Description: shows a delete button for every item in list view base on size passed in
-   *   Parameters:  size - size of list
-   *   Returned:    NONE
+   * Method:      showDeleteButtons
+   * Description: shows a delete button for every item in list view base on size passed in
+   * Parameters:  size - size of list
+   * Returned:    NONE
    ***********************************************************************************************/
-  private void showDeleteButtons (int size)
+  private void showDeleteButtons(int size)
   {
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++)
+    {
       showDeleteButton(i);
     }
   }
 
   /***********************************************************************************************
-   *   Method:      hideDeleteButtons
-   *   Description: hides a delete button for every item in list view base on size passed in
-   *   Parameters:  size - size of list
-   *   Returned:    NONE
+   * Method:      hideDeleteButtons
+   * Description: hides a delete button for every item in list view base on size passed in
+   * Parameters:  size - size of list
+   * Returned:    NONE
    ***********************************************************************************************/
-  private void hideDeleteButtons (int size)
+  private void hideDeleteButtons(int size)
   {
     for (int i = 0; i < size; i++)
     {
@@ -704,41 +712,43 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
   /********************************************************************************************
    * Function name: readListsFromFile
-   *
+   * <p/>
    * Description:   Reads from the mPoPFileName the current GroceryLists
-   *
+   * <p/>
    * Parameters:    None
-   *
+   * <p/>
    * Returns:       None
    ******************************************************************************************/
-  private void readListsFromFile (PoPLists popLists)
+  private void readListsFromFile(PoPLists popLists)
   {
     FileInputStream popInput;
     Scanner listsInput;
 
-    try {
+    try
+    {
       popInput = openFileInput(mPoPFileName);
 
       listsInput = new Scanner(popInput);
       mLastTabIndex = listsInput.nextInt();
       popLists.readListsFromFile(listsInput);
       listsInput.close();
-    } catch (FileNotFoundException e) {
+    } catch (FileNotFoundException e)
+    {
       e.printStackTrace();
     }
   }
 
   /********************************************************************************************
    * Function name: writeGListsToGroceryFile
-   *
+   * <p/>
    * Description:   Writes the current mPoPLists to mPoPFileName to store the information
-   *                stored in mPoPLists
-   *
+   * stored in mPoPLists
+   * <p/>
    * Parameters:    None
-   *
+   * <p/>
    * Returns:       None
    ******************************************************************************************/
-  private void writeListsToFile ()
+  private void writeListsToFile()
   {
     FileOutputStream popOutput = null;
     PrintWriter listsOutput = null;
@@ -752,134 +762,124 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       mPoPLists.writeListsToFile(listsOutput);
       listsOutput.flush();
       listsOutput.close();
-    }
-    catch (FileNotFoundException e) {
+    } catch (FileNotFoundException e)
+    {
       e.printStackTrace();
     }
   }
 
 
+  /********************************************************************************************
+   * Function name: getNumGLists
+   * Description:   Gets the total number of GroceryLists
+   * Parameters:    none
+   * Returns:       the total number of GLists
+   ******************************************************************************************/
 
-    /********************************************************************************************
-     * Function name: getNumGLists
-     * <p/>
-     * Description:   Gets the total number of GroceryLists
-     * <p/>
-     * Parameters:    none
-     * <p/>
-     * Returns:       the total number of GLists
-     ******************************************************************************************/
+  public int getNumPoPList()
+  {
+    return mPoPLists.getSize();
+  }
 
-    public int getNumPoPList() {
-        return mPoPLists.getSize();
-    }
+  /********************************************************************************************
+   * Function name: showDeleteButton
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
+  private boolean showDeleteButton(final int pos)
+  {
+    mPositionClicked = pos;
+    View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
+    if (child != null)
+    {
 
-    /********************************************************************************************
-     * Function name: showDeleteButton
-     * <p/>
-     * Description:
-     * <p/>
-     * Parameters:
-     * <p/>
-     * Returns:
-     ******************************************************************************************/
-    private boolean showDeleteButton(final int pos) {
-      mPositionClicked = pos;
-      View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
-      if (child != null) {
+      delete = (Button) child.findViewById(R.id.bDelete);
 
-        delete = (Button) child.findViewById(R.id.bDelete);
-
-        if (delete != null)
+      if (delete != null)
+      {
+        if (delete.getVisibility() == View.INVISIBLE)
         {
-          if (delete.getVisibility() == View.INVISIBLE) {
-            Animation deleteAnimation =
+          Animation deleteAnimation =
               AnimationUtils.loadAnimation(this,
-                R.anim.slide_out_left);
+                  R.anim.slide_out_left);
 
-            delete.startAnimation(deleteAnimation);
-            delete.setVisibility(View.VISIBLE);
+          delete.startAnimation(deleteAnimation);
+          delete.setVisibility(View.VISIBLE);
 
-            slideItemView(child, SLIDE_LEFT_ITEM);
-          }
+          slideItemView(child, SLIDE_LEFT_ITEM);
         }
-        return true;
       }
-      return false;
+      return true;
     }
+    return false;
+  }
 
-    /********************************************************************************************
-     * Function name: hideDeleteButton
-     * <p/>
-     * Description:
-     * <p/>
-     * Parameters:
-     * <p/>
-     * Returns:
-     ******************************************************************************************/
-    private boolean hideDeleteButton(final int pos) {
-      mPositionClicked = pos;
-      View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
-      if (child != null) {
+  /********************************************************************************************
+   * Function name: hideDeleteButton
+   * Description:
+   * Parameters:
+   * Returns:
+   ******************************************************************************************/
+  private boolean hideDeleteButton(final int pos)
+  {
+    mPositionClicked = pos;
+    View child = mListOfListView.getChildAt(pos - mListOfListView.getFirstVisiblePosition());
+    if (child != null)
+    {
 
-        delete = (Button) child.findViewById(R.id.bDelete);
+      delete = (Button) child.findViewById(R.id.bDelete);
 
-        if (delete != null)
+      if (delete != null)
+      {
+        if (delete.getVisibility() == View.VISIBLE)
         {
-          if (delete.getVisibility() == View.VISIBLE) {
-            Animation deleteAnimation =
+          Animation deleteAnimation =
               AnimationUtils.loadAnimation(this,
-                R.anim.slide_in_right);
+                  R.anim.slide_in_right);
 
-            delete.startAnimation(deleteAnimation);
+          delete.startAnimation(deleteAnimation);
 
-            delete.setVisibility(View.INVISIBLE);
+          delete.setVisibility(View.INVISIBLE);
 
-            slideItemView(child, SLIDE_RIGHT_ITEM);
+          slideItemView(child, SLIDE_RIGHT_ITEM);
 
-          }
         }
-        return true;
       }
-      return false;
+      return true;
     }
+    return false;
+  }
 
 
-    /********************************************************************************************
-     * Function name: dispatchTouchEvent
-     * <p/>
-     * Description:   calls the super for fragment activity for swiping
-     * <p/>
-     * Parameters:    None
-     * <p/>
-     * Returns:       None
-     ******************************************************************************************/
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
+  /********************************************************************************************
+   * Function name: dispatchTouchEvent
+   * Description:   calls the super for fragment activity for swiping
+   * Parameters:    None
+   * Returns:       None
+   ******************************************************************************************/
+  @Override
+  public boolean dispatchTouchEvent(MotionEvent ev)
+  {
 
-        return super.dispatchTouchEvent(ev);
-    }
-    //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
+    return super.dispatchTouchEvent(ev);
+  }
+  //https://github.com/sohambannerjee8/SwipeListView/blob/master/app/src/main/java/com/nisostech/soham/MainActivity.java
 
-    public PoPLists getLists() {
-        return mPoPLists;
-    }
-
-
+  public PoPLists getLists()
+  {
+    return mPoPLists;
+  }
 
 
   /********************************************************************************************
    * Function name: slideItemView
-   *
    * Description:   Slides the list view item over
-   *
    * Parameters:    child             - the view that is sliding
-   *                translationAmount - how much the view will slide
-   *
+   * translationAmount - how much the view will slide
    * Returns:       none
    ******************************************************************************************/
-
-  private void slideItemView (View child, float translationAmount)
+  private void slideItemView(View child, float translationAmount)
   {
     //can use this function to slide any other items in view over, does not slide over list name since we want to see the name
     // listName = (TextView) child.findViewById(R.id.listName);
@@ -890,32 +890,26 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
   /********************************************************************************************
    * Function name: deleteList
-   *
    * Description:   When the activity is paused writes the PoPLists to mPoPFileName
-   *
    * Parameters:    position - which list will be deleted
-   *
    * Returns:       none
    ******************************************************************************************/
-  public void deleteList ()
+  public void deleteList()
   {
     mPoPLists.deleteList(mPositionClicked);
     mListAdapter.notifyDataSetChanged();
   }
 
 
-  public void setPositionClicked (int position)
+  public void setPositionClicked(int position)
   {
     mPositionClicked = position;
   }
 
   /********************************************************************************************
    * Function name: DeleteListDialogListener
-   *
    * Description:   returns the mDeleteListListener for other class to use
-   *
    * Parameters:    none
-   *
    * Returns:       mDeleteListListener
    ******************************************************************************************/
   public DeleteListDialogListener getDeleteDialogListener()
@@ -923,7 +917,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     return mDeleteListListener;
   }
 
-  public void setDeleteListListener (DeleteListDialogListener listener)
+  public void setDeleteListListener(DeleteListDialogListener listener)
   {
     mDeleteListListener = listener;
   }
@@ -936,54 +930,56 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   }
 
 
+  private void OutputFileToLogcat(String where)
+  {
+    int i = 0;
+    FileInputStream popInput;
+    Scanner listsInput;
 
-    private void OutputFileToLogcat(String where) {
-        int i = 0;
-        FileInputStream popInput;
-        Scanner listsInput;
+    try
+    {
+      popInput = openFileInput(mPoPFileName);
+      listsInput = new Scanner(popInput);
 
-        try {
-            popInput = openFileInput(mPoPFileName);
-            listsInput = new Scanner(popInput);
+      Log.d("Called From", where);
 
-            Log.d("Called From", where);
+      while (listsInput.hasNextLine() || i > 20)
+      {
+        Log.d("Line:" + i, listsInput.nextLine());
+        ++i;
+      }
 
-            while (listsInput.hasNextLine() || i > 20) {
-                Log.d("Line:" + i, listsInput.nextLine());
-                ++i;
-            }
-
-            listsInput.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+      listsInput.close();
+    } catch (FileNotFoundException e)
+    {
+      e.printStackTrace();
     }
+  }
 
 
-    /********************************************************************************************
-     * Function name: isOnEdit
-     * <p/>
-     * Description:   Returns whether or not the edit button is clicked
-     * <p/>
-     * Parameters: None
-     * <p/>
-     * Returns: mbIsOnEdit
-     ******************************************************************************************/
-    public boolean isOnEdit() {
-        return mbIsOnEdit;
-    }
+  /********************************************************************************************
+   * Function name: isOnEdit
+   * Description:   Returns whether or not the edit button is clicked
+   * Parameters: None
+   * Returns: mbIsOnEdit
+   ******************************************************************************************/
+  public boolean isOnEdit()
+  {
+    return mbIsOnEdit;
+  }
 
-    /***********************************************************************************************
-     * Method:      getListInfoListener
-     * Description: If addList button is clicked, create dialog box and listener for finishing
-     * dialog
-     * Parameters:  view - the button that was clicked
-     * Returned:    NONE
-     ***********************************************************************************************/
+  /***********************************************************************************************
+   * Method:      getListInfoListener
+   * Description: If addList button is clicked, create dialog box and listener for finishing
+   * dialog
+   * Parameters:  view - the button that was clicked
+   * Returned:    NONE
+   ***********************************************************************************************/
 
-    public DialogListener getListInfoListener() {
-        return mListInfoListener;
-    }
+  public DialogListener getListInfoListener()
+  {
+    return mListInfoListener;
+  }
 
 }
 

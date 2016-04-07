@@ -24,12 +24,12 @@ public final class Constants
    * Constants for Firebase object properties
    */
 
-  public static final String FIREBASE_PROPERTY_BOUGHT = "bought";
-  public static final String FIREBASE_PROPERTY_BOUGHT_BY = "boughtBy";
-  public static final String FIREBASE_PROPERTY_LIST_NAME = "listName";
+  public static final String FIREBASE_PROPERTY_BOUGHT = "bBought";
+  public static final String FIREBASE_PROPERTY_BOUGHT_BY = "mBoughtBy";
+  public static final String FIREBASE_PROPERTY_LIST_NAME = "mListName";
   public static final String FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED = "timestampLastChanged";
   public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
-  public static final String FIREBASE_PROPERTY_ITEM_NAME = "itemName";
+  public static final String FIREBASE_PROPERTY_ITEM_NAME = "mItemName";
   public static final String FIREBASE_PROPERTY_EMAIL = "email";
   public static final String FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD = "bLoggedInWithPassword";
 
