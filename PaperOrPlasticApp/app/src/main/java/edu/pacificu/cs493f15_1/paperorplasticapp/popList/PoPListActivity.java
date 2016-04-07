@@ -147,11 +147,9 @@ public abstract class PoPListActivity extends FragmentActivity {
      ******************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //Used for add item
-        Intent intent;
-
         super.onCreate(savedInstanceState);
+
+        Log.i("lifecycle", "In On Create");
     }
 
     /********************************************************************************************
@@ -179,8 +177,10 @@ public abstract class PoPListActivity extends FragmentActivity {
         mItemLayout = itemLayout;
         mPoPFileName = fileName;
         mbIsOnEdit = false;
+
         mbAddingItem = false;
         mbIsGrocery = isGrocery;
+
         //to view items
         mListView = (ListView) findViewById(R.id.listView);
 
@@ -640,6 +640,8 @@ public abstract class PoPListActivity extends FragmentActivity {
     {
         super.onPause();
 
+        Log.i("lifecycle", "In On Pause");
+
         writeListsToFile();
         mPoPLists.clearLists();
         mListAdapters.clear();
@@ -658,6 +660,8 @@ public abstract class PoPListActivity extends FragmentActivity {
     protected void onResume ()
     {
         super.onResume();
+
+        Log.i("lifecycle", "In On Resume");
 
         Context context = getApplicationContext();
         File popFile = context.getFileStreamPath(mPoPFileName);

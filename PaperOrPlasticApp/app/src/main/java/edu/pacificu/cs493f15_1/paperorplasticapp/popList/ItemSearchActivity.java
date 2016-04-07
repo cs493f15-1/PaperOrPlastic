@@ -21,6 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +39,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.popList.ListItemAdapter;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ExecuteQueryTask;
+import edu.pacificu.cs493f15_1.paperorplasticjava.ExecuteUPCScanTask;
 import edu.pacificu.cs493f15_1.paperorplasticjava.GroceryList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
@@ -52,8 +57,14 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
     private ArrayList<ListItem> mSuggestions = new ArrayList<>();
     private JSONArray JSONResults;
 
+    //For barcode Scanner
+    private Button bScanButton;
+    private TextView formatText, contentText;
+
+    //For query nutritional fields
     public String[] mNutritionFields = new String[17];
 
+    //Return from execute query task, receiving transfer item data for Suggestion List
     public ExecuteQueryTask.AsyncResponse response = new ExecuteQueryTask.AsyncResponse() {
         @Override
         public void processFinish(JSONArray output) {
@@ -63,10 +74,53 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
 
     public ExecuteQueryTask queryTask = new ExecuteQueryTask(response);
 
+    public ExecuteUPCScanTask upcScanTask = new ExecuteUPCScanTask();
+
+
+    //Required because some bug
+    @Override
+    public void processFinish(JSONArray output) {
+        JSONResults = output;
+    }
+
+    //After Barcode scan
+    public void onActivityResult (int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult (requestCode, resultCode, intent);
+
+        if (scanningResult != null)
+        {
+            String scanContent = scanningResult.getContents ();
+            String scanFormat = scanningResult.getFormatName ();
+
+            formatText.setText ("FORMAT: " + scanFormat);
+            contentText.setText ("CONTENT: " + scanContent);
+        }
+        else
+        {
+            Toast toast = Toast.makeText (getApplicationContext (), "No scan data received!",
+                    Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_item);
+
+        bScanButton = (Button) findViewById (R.id.scan_button);
+
+        bScanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*IntentIntegrator scanIntegrator = new IntentIntegrator (ItemSearchActivity.this);
+
+                scanIntegrator.initiateScan();*/
+
+                upcScanTask.execute("49000036756");
+            }
+        });
 
         //For nutrtionix fields
         mNutritionFields[0] = "nf_calories";
@@ -104,6 +158,7 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
         // Show soft keyboard automatically and request focus to field
         mItemSearchQuery.requestFocus();
 
+        //Executes everytime user types
         mItemSearchQuery.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -207,13 +262,6 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
 
     }
 
-
-    //Required because some bug
-    @Override
-    public void processFinish(JSONArray output) {
-        JSONResults = output;
-    }
-
     //Sends item name and NF back to list activity
     public void sendItemNameToList(String itemName, String brandName, String itemDesc, NutritionFactModel itemNF) {
         Intent dataBack = new Intent();
@@ -244,4 +292,24 @@ public class ItemSearchActivity extends Activity implements ExecuteQueryTask.Asy
         setResult(RESULT_OK, dataBack);
         finish();
     }
+
+
+    /***********************************************************************************************
+     *   Method:      onClick
+     *
+     *   Description: Called when a click has been captured.
+     *
+     *   Parameters:  view - the view that has been clicked
+     *
+     *   Returned:    N/A
+     ***********************************************************************************************/
+//    public void onClick (View view)
+//    {
+//
+//        if (view == bScanButton)
+//        {
+//
+//        }
+//
+//    }
 }

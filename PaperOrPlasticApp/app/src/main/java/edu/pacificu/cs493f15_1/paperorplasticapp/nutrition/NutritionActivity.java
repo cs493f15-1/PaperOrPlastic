@@ -1,6 +1,6 @@
 /**************************************************************************************************
  *   File:     NutritionActivity.java
- *   Author:   Abigail Jones
+ *   Author:   Kevin Jo
  *   Date:     10/28/15
  *   Class:    Capstone/Software Engineering
  *   Project:  PaperOrPlastic Application
@@ -10,13 +10,16 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.nutrition;
 
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
+
 
 /***************************************************************************************************
  *   Class:         NutritionActivity
@@ -27,16 +30,27 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
  **************************************************************************************************/
 public class NutritionActivity extends Activity
 {
+
     private TextView mItemName, mBrandName, mCalories, mTotalFats, mSatFat, mPolyFat, mMonoFat,
             mTransFat, mCholesterol, mSodium, mPotassium, mTotalCarbs, mFiber, mSugars, mProtein,
             mVitA, mVitC, mCalcium, mIron;
-    private NutritionFactModel mNutrition;
 
+    private NutritionFactModel mNutrition;
+    /********************************************************************************************
+     * Function name: onCreate
+     *
+     * Description:   Initializes all needed setup for objects in page
+     *
+     * Parameters:    savedInstanceState  - a bundle object
+     *
+     * Returns:       none
+     ******************************************************************************************/
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nutrition);
+
 
         //Setting up Text fields for Nutr. values
         mNutrition = new NutritionFactModel();
@@ -107,7 +121,15 @@ public class NutritionActivity extends Activity
         mVitC.setText(vitCText);
         mCalcium.setText(String.format("%1$s" + "mg", mNutrition.getCalcium()));
         mIron.setText(String.format("%1$s" + "mg", mNutrition.getIron()));
-    }
 
+
+        //bScanButton = (Button) findViewById (R.id.scan_button);
+        //formatText = (TextView) findViewById (R.id.scan_format);
+        //contentText = (TextView) findViewById (R.id.scan_content);
+
+        //bScanButton.setOnClickListener (this);
+
+
+    }
 
 }

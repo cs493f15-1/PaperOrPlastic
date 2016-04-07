@@ -487,6 +487,7 @@
             android:layout_toEndOf="@+id/IronText"
             android:layout_alignParentEnd="true"/>
 
-    </RelativeLayout>
 
-</LinearLayout>
+
+</RelativeLayout>
+    </LinearLayout>

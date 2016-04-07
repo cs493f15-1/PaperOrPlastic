@@ -22,16 +22,11 @@ import java.util.List;
  */
 
 
-public class ExecuteQueryTask extends AsyncTask<String, Void, JSONArray>
+public class ExecuteQueryTask extends AsyncTask<String, Void, Void>
 {
 	//Setup for returning results
 	public interface AsyncResponse {
 		void processFinish(JSONArray output);
-	}
-
-	@Override
-	protected void onPostExecute(JSONArray result) {
-
 	}
 
 	public AsyncResponse delegate;
@@ -45,9 +40,13 @@ public class ExecuteQueryTask extends AsyncTask<String, Void, JSONArray>
 	StringBuilder sb = new StringBuilder ();
 	JSONArray returnJSONArray = new JSONArray();
 
+	JSONObject queryBundle = new JSONObject ();
+	JSONObject filters = new JSONObject ();
+	JSONObject sort = new JSONObject();
+	JSONArray fields = new JSONArray();
 
 	@Override
-	protected JSONArray doInBackground (String... query) {
+	protected Void doInBackground (String... query) {
 		try
 		{
 			URL url = new URL (website);
@@ -58,10 +57,7 @@ public class ExecuteQueryTask extends AsyncTask<String, Void, JSONArray>
 			urlConnection.setRequestMethod("POST");
 			urlConnection.connect();
 
-			JSONObject queryBundle = new JSONObject ();
-			JSONObject filters = new JSONObject ();
-			JSONObject sort = new JSONObject();
-			JSONArray fields = new JSONArray();
+
 
 			//Login
 			queryBundle.put("appId", "0f0b5b93");
@@ -117,9 +113,7 @@ public class ExecuteQueryTask extends AsyncTask<String, Void, JSONArray>
 			{
 				BufferedReader buffer = new BufferedReader (new InputStreamReader(urlConnection.getInputStream (), "UTF-8"));
 
-
 				String line = null;
-				int total;
 
 				while ((line = buffer.readLine ()) != null)
 				{
@@ -148,8 +142,6 @@ public class ExecuteQueryTask extends AsyncTask<String, Void, JSONArray>
 			}
 
 			delegate.processFinish(returnJSONArray);
-
-			return returnJSONArray;
 		}
 
 		catch (MalformedURLException e)

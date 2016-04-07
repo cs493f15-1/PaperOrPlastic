@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -225,39 +226,39 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
         //set list row info
         ListItem item = mItemArray.get(position);
-        itemHolder.itemButton.setText(item.getItemName());
+        itemHolder.itemButton.setText(String.format("%1$s%n%2$s", item.getItemName(), Html.fromHtml("<i>" + item.getBrandName() +"</i>")));
 
         itemHolder.itemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-				ListItem item = mItemArray.get(position);
+                ListItem item = mItemArray.get(position);
 
-				Intent intent = new Intent(mContext, NutritionActivity.class);
+                Intent intent = new Intent(mContext, NutritionActivity.class);
 
-				intent.putExtra("item_name", item.getItemName());
-				intent.putExtra("brand_name", item.getBrandName());
-				intent.putExtra("item_description", item.getDesc());
-				intent.putExtra("nf_calories", item.getCalories());
-				intent.putExtra("nf_total_fat", item.getTotal_Fat());
-				intent.putExtra("nf_saturated_fat", item.getSat_Fat());
-				intent.putExtra("nf_total_carbohydrate", item.getTotal_Carbs());
-				intent.putExtra("nf_protein", item.getProtein());
-				intent.putExtra("nf_sugars", item.getSugars());
-				intent.putExtra("nf_dietary_fiber", item.getFiber());
-				intent.putExtra("nf_sodium", item.getSodium());
+                intent.putExtra("item_name", item.getItemName());
+                intent.putExtra("brand_name", item.getBrandName());
+                intent.putExtra("item_description", item.getDesc());
+                intent.putExtra("nf_calories", item.getCalories());
+                intent.putExtra("nf_total_fat", item.getTotal_Fat());
+                intent.putExtra("nf_saturated_fat", item.getSat_Fat());
+                intent.putExtra("nf_total_carbohydrate", item.getTotal_Carbs());
+                intent.putExtra("nf_protein", item.getProtein());
+                intent.putExtra("nf_sugars", item.getSugars());
+                intent.putExtra("nf_dietary_fiber", item.getFiber());
+                intent.putExtra("nf_sodium", item.getSodium());
                 intent.putExtra("nf_polyunsaturated_fat", item.getPolyFat());
                 intent.putExtra("nf_monounsaturated_fat", item.getMonoFat());
                 intent.putExtra("nf_trans_fatty_acid", item.getTransFat());
                 intent.putExtra("nf_cholesterol", item.getCholesterol());
-                intent.putExtra("nf_potassium", item.getPotassium() );
+                intent.putExtra("nf_potassium", item.getPotassium());
                 intent.putExtra("nf_vitamin_a_dv", item.getVitA());
                 intent.putExtra("nf_vitamin_c_dv", item.getVitC());
                 intent.putExtra("nf_calcium_dv", item.getCalcium());
                 intent.putExtra("nf_iron_dv", item.getIron());
 
                 mContext.startActivity(intent);
-			}
-		});
+            }
+        });
 
         itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
         itemHolder.bDelete.setTag(position);
