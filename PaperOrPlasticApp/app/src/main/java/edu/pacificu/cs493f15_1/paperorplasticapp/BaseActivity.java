@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   protected Firebase mFirebaseRef;
   protected Firebase.AuthStateListener mAuthListener;
 
-  protected boolean bUsingOffline;
+  protected boolean bUsingOffline = true;
 
   /*************************************************************************************************
    *   Method:
@@ -85,6 +85,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
     {
       bUsingOffline = true;
     }
+    else
+    {
+      bUsingOffline = false;
+    }
 
     if (!((this instanceof MainSignInActivity) || (this instanceof CreateAccountActivity) ||
       (this instanceof PasswordRecoveryActivity) || bUsingOffline))
@@ -102,6 +106,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
             SharedPreferences.Editor spe = sp.edit();
             spe.putString(Constants.KEY_ENCODED_EMAIL, null);
             spe.putString(Constants.KEY_PROVIDER, null);
+
+            spe.commit();
 
             takeUserToSignInScreenOnUnAuth();
           }

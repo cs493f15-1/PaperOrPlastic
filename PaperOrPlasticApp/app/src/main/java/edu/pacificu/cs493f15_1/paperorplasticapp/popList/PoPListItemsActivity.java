@@ -133,6 +133,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
       readListsFromFile(popLists);
       mPoPList = popLists.getListByName(mPoPListName);
+      setTitle(mPoPListName);
       setUpListView();
     }
     else

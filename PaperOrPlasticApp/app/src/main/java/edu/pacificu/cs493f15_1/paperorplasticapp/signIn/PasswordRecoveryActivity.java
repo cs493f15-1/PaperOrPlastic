@@ -169,8 +169,6 @@ public class PasswordRecoveryActivity extends BaseActivity
 
       myFirebaseRef.authWithPassword(userEmail, userToken, new Firebase.AuthResultHandler()
       {
-
-
         @Override
         public void onAuthenticated(AuthData authData)
         {

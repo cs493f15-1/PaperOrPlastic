@@ -25,7 +25,9 @@ import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
@@ -47,6 +49,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
 
 /***************************************************************************************************
@@ -146,6 +149,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     setupToolbar();
 
 
+
     //Set Up ListView
     mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
     mListOfListView.setItemsCanFocus(true);
@@ -160,10 +164,67 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       setupFBListAdapter();
     }
 
+    setUpActivityTitle();
+
     setupSwipeListening();
 
     handleSwipingToDelete();
+  }
 
+  /*************************************************************************************************
+   * Method:
+   * Description:
+   * Parameters:  N/A
+   * Returned:    N/A
+   ************************************************************************************************/
+  private void setUpActivityTitle()
+  {
+
+    if (bUsingOffline)
+    {
+      if (mbIsGrocery)
+      {
+        setTitle("Your Grocery Lists");
+      }
+      else
+      {
+        setTitle("Your Inventory");
+      }
+
+    }
+    else
+    {
+      mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+      mUserRefListener = mUserRef.addValueEventListener(new ValueEventListener()
+      {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot)
+        {
+          User user = dataSnapshot.getValue(User.class);
+
+          if (user != null)
+          {
+            String title;
+            String name = user.getmName().split("\\s")[0];
+            if (mbIsGrocery)
+            {
+              title = name + "'s Lists";
+            }
+            else
+            {
+              title = name + "'s Inventory";
+            }
+            setTitle(title);
+          }
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError)
+        {
+
+        }
+      });
+    }
 
   }
 

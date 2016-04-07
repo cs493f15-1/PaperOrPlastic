@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
-import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
+
 
 import java.util.ArrayList;
 import java.util.List;
