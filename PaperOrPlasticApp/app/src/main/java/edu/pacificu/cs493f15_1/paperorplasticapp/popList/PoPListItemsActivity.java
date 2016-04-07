@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -50,6 +52,9 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleListItem;
 import edu.pacificu.cs493f15_1.utils.Constants;
 import edu.pacificu.cs493f15_1.utils.Utils;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by alco8653 on 4/5/2016.
@@ -90,6 +95,9 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   private boolean mCurrentUserIsOwner = false;
   private SimpleList mSimpleList;
   private ValueEventListener mListRefListener;
+
+  private boolean bScannedItem = false;
+  private TextView formatText, contentText;
 
   /********************************************************************************************
    * Function name: onCreate
@@ -171,6 +179,8 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     mbAddItem = (FloatingActionButton) findViewById(R.id.bAddList);
     mItemListView = (ListView) findViewById(R.id.listViewOfItems);
     mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
+    formatText = (TextView) findViewById (R.id.scan_format);
+    contentText = (TextView) findViewById (R.id.scan_content);
     setupToolbar();
   }
 
@@ -329,6 +339,28 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     if (requestCode == REQUEST_OK) {
       if (resultCode == RESULT_OK) {
         String item_name = data.getStringExtra("item_name");
+
+
+        if (bScannedItem)
+        {
+          IntentResult scanningResult = IntentIntegrator.parseActivityResult (requestCode, resultCode, data);
+
+          if (scanningResult != null)
+          {
+            String scanContent = scanningResult.getContents ();
+            String scanFormat = scanningResult.getFormatName ();
+
+            formatText.setText ("FORMAT: " + scanFormat);
+            contentText.setText ("CONTENT: " + scanContent);
+          }
+          else
+          {
+            Toast toast = Toast.makeText (getApplicationContext (), "No scan data received!",
+                Toast.LENGTH_SHORT);
+            toast.show();
+          }
+        }
+
 
         if (!bUsingOffline)
         {
@@ -969,6 +1001,13 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       return true;
     }
 
+    if (id == R.id.action_barcode_add_item)
+    {
+      onBarcodeScanClick();
+
+      return true;
+    }
+
     if (id == R.id.action_share_list)
     {
 
@@ -982,6 +1021,21 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
 
     return super.onOptionsItemSelected(item);
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void onBarcodeScanClick()
+  {
+    bScannedItem = true;
+    IntentIntegrator scanIntegrator = new IntentIntegrator (this);
+
+    scanIntegrator.initiateScan();
+
   }
 
   /*************************************************************************************************

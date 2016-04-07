@@ -1,7 +1,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.media.Image;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
@@ -53,13 +57,53 @@ public class SimpleListItemAdapter extends FirebaseListAdapter<SimpleListItem>
     TextView textViewItemName = (TextView) view.findViewById(R.id.text_view_active_list_item_name);
     final TextView textViewBoughtByUser = (TextView) view.findViewById(R.id.text_view_bought_by_user);
     TextView textViewBoughtBy = (TextView) view.findViewById(R.id.text_view_bought_by);
+    ImageButton deleteButton = (ImageButton) view.findViewById(R.id.button_remove_item);
 
     String owner = item.getmOwner();
 
     textViewItemName.setText(item.getmItemName());
 
+    final String itemToRemoveId = this.getRef(position).getKey();
+
     //if we want to delete an item, how do we update the view todo
     //set a click listener for when the user clicks the X in the PoPListActivity?
+
+    deleteButton.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+    public void onClick(View v)
+      {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(mActivity, R.style.CustomTheme_Dialog)
+            .setTitle("Remove Item")
+            .setMessage("Are you sure you want to remove this item?")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int which) {
+
+                removeItem(itemToRemoveId);
+                       /* Dismiss the dialog */
+                dialog.dismiss();
+              }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener()
+            {
+              public void onClick(DialogInterface dialog, int which)
+              {
+                       /* Dismiss the dialog */
+                dialog.dismiss();
+              }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert);
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+
+      }
+
+    });
+
+
+
+
   }
 
   private void removeItem (String itemId)
