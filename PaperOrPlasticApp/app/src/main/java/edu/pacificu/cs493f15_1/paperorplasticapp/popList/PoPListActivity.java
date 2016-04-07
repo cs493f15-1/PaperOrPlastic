@@ -45,7 +45,6 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.utils.Constants;
-
 /**
  * Created by sull0678 on 4/4/2016.
  */
@@ -90,7 +89,6 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private ValueEventListener mSimpleListRefListener;
 
   private SimpleListAdapter mSimpleListAdapter;
-  private boolean bUseFB = true;
 
 
   /********************************************************************************************
@@ -495,7 +493,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       public void onFinishNewListDialog(String newListName) {
 
 
-        if (bUseFB)
+        if (!bUsingOffline)
         {
           addListToFirebase(newListName);
         }
