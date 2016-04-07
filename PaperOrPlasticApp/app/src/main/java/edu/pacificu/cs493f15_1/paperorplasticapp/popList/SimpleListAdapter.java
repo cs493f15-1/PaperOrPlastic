@@ -1,6 +1,8 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
+import android.text.format.DateFormat;
+import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -12,10 +14,12 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseListAdapter;
 
+
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Utils;
 
 /**
  * Created by alco8653 on 3/15/2016.
@@ -49,9 +53,12 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
 
     TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
     final TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
+    TextView textViewTime = (TextView) view.findViewById(R.id.text_view_edit_time);
 
     String ownerEmail = list.getmOwner();
 
+
+    Log.e ("OWNEREMAIL", "owner of the list " + ownerEmail);
 
 
         /* Set the list name and owner */
@@ -72,7 +79,8 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
           public void onDataChange(DataSnapshot dataSnapshot) {
             User user = dataSnapshot.getValue(User.class);
 
-            if (user != null) {
+            if (user != null)
+            {
               textViewCreatedByUser.setText(user.getmName());
             }
           }

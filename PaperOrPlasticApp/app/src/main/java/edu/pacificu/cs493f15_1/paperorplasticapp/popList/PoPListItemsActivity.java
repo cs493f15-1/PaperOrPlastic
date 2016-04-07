@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
+import android.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.fbdialog.EditListNameDialog;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
@@ -53,7 +54,7 @@ import edu.pacificu.cs493f15_1.utils.Utils;
 /**
  * Created by alco8653 on 4/5/2016.
  */
-public abstract class PoPListItemsActivity extends BaseActivity
+public abstract class PoPListItemsActivity extends BaseActivity implements View.OnClickListener
 {
   static final float SLIDE_RIGHT_ITEM = 5;
   static final float SLIDE_LEFT_ITEM = -145;
@@ -77,7 +78,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
   private ListItem newItem;
   private boolean mbIsGrocery;
   private Spinner mGroupBySpinner;
-
+  private DialogListener mListInfoListener;
 
 
   /**
@@ -89,8 +90,6 @@ public abstract class PoPListItemsActivity extends BaseActivity
   private boolean mCurrentUserIsOwner = false;
   private SimpleList mSimpleList;
   private ValueEventListener mListRefListener;
-  private boolean bUseFB;
-
 
   /********************************************************************************************
    * Function name: onCreate
@@ -331,7 +330,7 @@ public abstract class PoPListItemsActivity extends BaseActivity
       if (resultCode == RESULT_OK) {
         String item_name = data.getStringExtra("item_name");
 
-        if (bUseFB)
+        if (!bUsingOffline)
         {
           addItemToFB(item_name);
         }
@@ -377,11 +376,10 @@ public abstract class PoPListItemsActivity extends BaseActivity
       HashMap<String, Object> itemToAdd =
         (HashMap<String, Object>) new ObjectMapper().convertValue(itemToAddObject, Map.class);
 
-
       if (mbIsGrocery)
       {
                     /* Add the item to the update map*/
-        updatedItemToAddMap.put("/" + Constants.FIREBASE_URL_GROCERY_LIST_ITEMS + "/"
+        updatedItemToAddMap.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LIST_ITEMS + "/"
           + mListID + "/" + itemId, itemToAdd);
 
             /* Make the timestamp for last changed */
@@ -907,9 +905,9 @@ public abstract class PoPListItemsActivity extends BaseActivity
 
   public void showDeleteListFragment()
   {
-    fm = getSupportFragmentManager();
-    DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
-    deleteListFragment.show(fm, "Yeah");
+//    fm = getSupportFragmentManager();
+//    DeletePoPListDFragment deleteListFragment = new DeletePoPListDFragment();
+//    deleteListFragment.show(fm, "Yeah");
   }
 
   public PoPList getPoPList()
@@ -963,9 +961,10 @@ public abstract class PoPListItemsActivity extends BaseActivity
   {
     int id = item.getItemId();
 
+
     if (id == R.id.action_edit_list_name)
     {
-      //onClickEditButton();
+      onMenuEditClick();
 
       return true;
     }
@@ -977,12 +976,158 @@ public abstract class PoPListItemsActivity extends BaseActivity
     }
     if (id == R.id.action_remove_list)
     {
-
+      onMenuDeleteList();
       return true;
     }
 
 
     return super.onOptionsItemSelected(item);
   }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void onMenuEditClick()
+  {
+    mListInfoListener = new DialogListener()
+    {
+      @Override
+      public void onFinishNewListDialog(String newListName)
+      {
+        if (!newListName.equals(""))
+        {
+          if (bUsingOffline)
+          {
+
+          }
+          else
+          {
+            if (null != mListID)
+            {
+              editListName(newListName);
+            }
+          }
+        }
+      }
+    };
+
+    fm = getFragmentManager();
+    EditListNameDialog list = new EditListNameDialog();
+    list.show(fm, "fs");
+  }
+
+  /***********************************************************************************************
+   * Method:      getListInfoListener
+   * Description: If addList button is clicked, create dialog box and listener for finishing
+   * dialog
+   * Parameters:  view - the button that was clicked
+   * Returned:    NONE
+   ***********************************************************************************************/
+  public DialogListener getListInfoListener()
+  {
+    return mListInfoListener;
+  }
+
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void onMenuDeleteList()
+  {
+    if (bUsingOffline)
+    {
+
+    }
+    else
+    {
+      deleteList(mbIsGrocery);
+    }
+  }
+
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void deleteList (boolean bGrocery)
+  {
+    HashMap<String, Object> removedList = new HashMap<>();
+
+    if (bGrocery)
+    {
+         /* Add the item to the update map*/
+      removedList.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LISTS + "/"
+          + mListID, null);
+
+      removedList.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LIST_ITEMS + "/" + mListID, null);
+
+      Firebase ref = new Firebase(Constants.FIREBASE_URL);
+
+      ref.updateChildren(removedList, new Firebase.CompletionListener()
+      {
+        @Override
+        public void onComplete(FirebaseError firebaseError, Firebase firebase)
+        {
+          if (null != firebaseError)
+          {
+            Log.e("Firebase - Grocery", captureFirebaseError(firebaseError));
+          }
+        }
+      });
+    }
+    else
+    {
+                 /* Add the item to the update map*/
+      removedList.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY + "/"
+          + mListID, null);
+
+      removedList.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS + "/" + mListID, null);
+
+      Firebase ref = new Firebase(Constants.FIREBASE_URL);
+
+      ref.updateChildren(removedList, new Firebase.CompletionListener()
+      {
+        @Override
+        public void onComplete(FirebaseError firebaseError, Firebase firebase)
+        {
+          if (null != firebaseError)
+          {
+            Log.e("Firebase - Grocery", captureFirebaseError(firebaseError));
+          }
+        }
+      });
+    }
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void editListName(String newListName)
+  {
+    if (!newListName.equals(mSimpleList.getmListName()))
+    {
+      HashMap<String, Object> updatedInfo = new HashMap<>();
+      updatedInfo.put(Constants.FIREBASE_PROPERTY_LIST_NAME, newListName);
+
+      HashMap<String, Object> updatedTimeStamp = new HashMap<>();
+      updatedTimeStamp.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+
+      updatedInfo.put(Constants.FIREBASE_PROPERTY_TIMESTAMP_LAST_CHANGED, updatedTimeStamp);
+
+      mListRef.updateChildren(updatedInfo);
+    }
+  }
+
 
 }

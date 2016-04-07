@@ -72,7 +72,7 @@ import edu.pacificu.cs493f15_1.utils.Constants;
  * Parameters:    N/A
  * Returned:      N/A
  **************************************************************************************************/
-public abstract class PoPListActivityOld extends BaseActivity implements ListDFragment.EditNameDialogListener
+public abstract class PoPListActivityOld extends BaseActivity
 {
   final int REQUEST_OK = 1;
   public static final float SLIDE_RIGHT_ITEM = 5;
@@ -617,26 +617,26 @@ public abstract class PoPListActivityOld extends BaseActivity implements ListDFr
    ***********************************************************************************************/
   private void setupBackButton()
   {
-    mbBack = (Button) findViewById(R.id.bBackToHome);
-    mbBack.setOnClickListener(new View.OnClickListener()
-    {
-      @Override
-      public void onClick(View v)
-      {
-        if (mbIsGrocery)
-        {
-          Intent intent = new Intent(PoPListActivityOld.this, ContinueActivity.class);
-          intent.putExtra("Caller", "GroceryListActivity");
-          startActivity(intent);
-        }
-        else
-        {
-          Intent intent = new Intent(PoPListActivityOld.this, ContinueActivity.class);
-          intent.putExtra("Caller", "KitchenInventoryActivity");
-          startActivity(intent);
-        }
-      }
-    });
+//    mbBack = (Button) findViewById(R.id.bBackToHome);
+//    mbBack.setOnClickListener(new View.OnClickListener()
+//    {
+//      @Override
+//      public void onClick(View v)
+//      {
+//        if (mbIsGrocery)
+//        {
+//          Intent intent = new Intent(PoPListActivityOld.this, ContinueActivity.class);
+//          intent.putExtra("Caller", "GroceryListActivity");
+//          startActivity(intent);
+//        }
+//        else
+//        {
+//          Intent intent = new Intent(PoPListActivityOld.this, ContinueActivity.class);
+//          intent.putExtra("Caller", "KitchenInventoryActivity");
+//          startActivity(intent);
+//        }
+//      }
+//    });
   }
 
   /***********************************************************************************************
@@ -961,7 +961,6 @@ public abstract class PoPListActivityOld extends BaseActivity implements ListDFr
    * Returns:       none
    ******************************************************************************************/
 
-  @Override
   public void onFinishListDialog(String newListName)
   {
     if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
