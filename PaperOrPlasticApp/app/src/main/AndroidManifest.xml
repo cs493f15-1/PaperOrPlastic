@@ -52,11 +52,6 @@
         </activity>
 
         <activity
-        android:name=".popList.PoPListItemsActivity"
-        android:label="@string/title_activity_list_items">
-        </activity>
-
-        <activity
             android:name=".groceryList.GroceryListActivity"
             android:label="@string/title_activity_grocery_lists">
 
@@ -79,16 +74,8 @@
         </activity>
 
         <activity
-            android:name=".groceryList.GroceryListSettingsActivity"
-            android:label="@string/title_activity_grocery_lists_settings" >
-        </activity>
-        <activity
             android:name=".kitchenInventory.KitchenInventoryActivity"
             android:label="@string/title_activity_kitchen_inventories" >
-        </activity>
-        <activity
-            android:name=".kitchenInventory.KitchenInventorySettingsActivity"
-            android:label="@string/title_activity_kitchen_inventory_settings" >
         </activity>
         <activity
             android:name=".nutrition.NutritionActivity"
