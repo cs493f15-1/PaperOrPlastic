@@ -31,6 +31,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="Edit"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_remove_list"
         android:orderInCategory="100"
         android:title="Delete List"

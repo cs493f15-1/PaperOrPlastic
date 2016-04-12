@@ -567,6 +567,17 @@ public void rememberPass(String email, String password)
     public void onAuthenticationError (FirebaseError firebaseError)
     {
       mAuthProgressDialog.dismiss();
+
+      //TODO: refactor this to nice function.
+      //we want to the function to set the text fields based on the error.
+      //so it will probz look at all the email errors - mEmailView.setError("")
+      //same thing with mEditPassword
+      //also want to use the same idea for the createAccount page and PassRecovery
+
+      if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD)
+      {
+        mEditPassword.setError("Invalid password.");
+      }
     }
   }
 

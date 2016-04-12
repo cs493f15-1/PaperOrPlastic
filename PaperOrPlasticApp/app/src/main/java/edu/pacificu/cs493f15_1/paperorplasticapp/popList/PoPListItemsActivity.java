@@ -1,11 +1,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentActivity;
 import android.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
@@ -92,7 +94,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   private Firebase mListRef, mListItemsRef;
   private SimpleListItemAdapter mSimpleListItemAdapter;
   private String mListID;
-  private boolean mCurrentUserIsOwner = false;
+  private boolean mbCurrentUserIsOwner = false;
   private SimpleList mSimpleList;
   private ValueEventListener mListRefListener;
 
@@ -231,8 +233,11 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
    ************************************************************************************************/
   private void setupFirebaseListItems()
   {
+
     mSimpleListItemAdapter = new SimpleListItemAdapter(this, SimpleListItem.class,
-      R.layout.single_active_list_item, mListItemsRef, mListID, mEncodedEmail, mbIsGrocery);
+      R.layout.single_active_list_item,
+        mListItemsRef.orderByChild(Constants.FIREBASE_PROPERTY_BOUGHT_BY),
+        mListID, mEncodedEmail, mbIsGrocery);
 
     mItemListView.setAdapter(mSimpleListItemAdapter);
 
@@ -249,7 +254,15 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
         }
         mSimpleList = simpleList;
         mSimpleListItemAdapter.setList(mSimpleList);
-        mCurrentUserIsOwner = Utils.checkIfOwner(simpleList, mEncodedEmail);
+        mbCurrentUserIsOwner = Utils.checkIfOwner(simpleList, mEncodedEmail);
+
+        if (mbCurrentUserIsOwner)
+        {
+          Log.e("list owner", "user is owner. Encoded email: " + mEncodedEmail
+              + " List: " + simpleList.getmListName() + " owner of list " +
+              simpleList.getmOwner());
+        }
+
 
         invalidateOptionsMenu();
         setTitle(simpleList.getmListName());
@@ -287,9 +300,91 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       @Override
       public void onItemClick(AdapterView<?> parent, View view, int position, long id)
       {
-        //TODO: what do we want to do on a normal click
+        final SimpleListItem selectedListItem = mSimpleListItemAdapter.getItem(position);
+        String itemId = mSimpleListItemAdapter.getRef(position).getKey();
+        buyItemOnClick (selectedListItem, itemId);
       }
     });
+
+    mItemListView.setOnTouchListener(new OnSwipeTouchListener(this, mItemListView)
+    {
+      @Override
+      public void onSwipeRight(int pos)
+      {
+       hideDeleteButton2(pos);
+      }
+
+      @Override
+      public void onSwipeLeft(int pos)
+      {
+        showDeleteButton2(pos);
+      }
+    });
+
+  }
+
+
+  public void buyItemOnClick(final SimpleListItem selectedListItem, String itemId)
+  {
+    if (selectedListItem != null)
+    {
+                        /* If current user is shopping */
+
+                            /* Create map and fill it in with deep path multi write operations list */
+      HashMap<String, Object> updatedItemBoughtData = new HashMap<String, Object>();
+
+                            /* Buy selected item if it is NOT already bought */
+      if (!selectedListItem.isbBought())
+      {
+        updatedItemBoughtData.put(Constants.FIREBASE_PROPERTY_BOUGHT, true);
+        updatedItemBoughtData.put(Constants.FIREBASE_PROPERTY_BOUGHT_BY, mEncodedEmail);
+      }
+      else
+      {
+                                /* Return selected item only if it was bought by current user */
+        if (selectedListItem.getmBoughtBy().equals(mEncodedEmail))
+        {
+          updatedItemBoughtData.put(Constants.FIREBASE_PROPERTY_BOUGHT, false);
+          updatedItemBoughtData.put(Constants.FIREBASE_PROPERTY_BOUGHT_BY, null);
+        }
+      }
+                            /* Do update */
+      if (mbIsGrocery)
+      {
+        Firebase firebaseItemLocation = new Firebase(Constants.FIREBASE_URL_GROCERY_LIST_ITEMS)
+            .child(mListID).child(itemId);
+        firebaseItemLocation.updateChildren(updatedItemBoughtData, new Firebase.CompletionListener()
+        {
+          @Override
+          public void onComplete(FirebaseError firebaseError, Firebase firebase)
+          {
+            if (firebaseError != null)
+            {
+              Log.d("Click item", "Error updating data" +
+                  firebaseError.getMessage());
+            }
+          }
+        });
+      }
+      else
+      {
+        Firebase firebaseItemLocation = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY_ITEMS)
+            .child(mListID).child(itemId);
+        firebaseItemLocation.updateChildren(updatedItemBoughtData, new Firebase.CompletionListener()
+        {
+          @Override
+          public void onComplete(FirebaseError firebaseError, Firebase firebase)
+          {
+            if (firebaseError != null)
+            {
+              Log.d("Click item", "Error updating data" +
+                  firebaseError.getMessage());
+            }
+          }
+        });
+      }
+    }
+
   }
 
   /*************************************************************************************************
@@ -518,7 +613,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         PoPList list = mPoPList;
-
+        Query testQ;
         if (null != list) {
           switch (position) {
             case PoPList.SORT_NONE: // first item in dropdown currently blank
@@ -544,6 +639,8 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
               mPoPList.setCurrentSortingValue(PoPList.SORT_PRICE);
               break;
           }
+
+          mItemListView.setAdapter(mSimpleListItemAdapter);
         }
       }
 
@@ -756,6 +853,70 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       e.printStackTrace();
     }
   }
+
+
+  private boolean showDeleteButton2(final int pos) {
+    mPositionClicked = pos;
+    ImageButton bDelete;
+
+    View child = mItemListView.getChildAt(pos - mItemListView.getFirstVisiblePosition());
+    if (child != null) {
+
+      bDelete = (ImageButton) child.findViewById(R.id.button_remove_item);
+
+      if (bDelete != null)
+      {
+        if (bDelete.getVisibility() == View.INVISIBLE)
+        {
+          Animation deleteAnimation =
+              AnimationUtils.loadAnimation(this,
+                  R.anim.slide_out_left);
+
+          bDelete.startAnimation(deleteAnimation);
+          bDelete.setVisibility(View.VISIBLE);
+
+          slideItemView(child, SLIDE_LEFT_ITEM);
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  private boolean hideDeleteButton2(final int pos) {
+    mPositionClicked = pos;
+    View child = mItemListView.getChildAt(pos - mItemListView.getFirstVisiblePosition());
+    if (child != null) {
+
+      ImageButton bDelete = (ImageButton) child.findViewById(R.id.button_remove_item);
+            /*delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v)
+                {
+                }
+            });*/
+      if (bDelete != null)
+      {
+        if (bDelete.getVisibility() == View.VISIBLE)
+        {
+          Animation deleteAnimation =
+              AnimationUtils.loadAnimation(this,
+                  R.anim.slide_in_right);
+
+          bDelete.startAnimation(deleteAnimation);
+
+          bDelete.setVisibility(View.INVISIBLE);
+
+          slideItemView(child, SLIDE_RIGHT_ITEM);
+
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+
   /********************************************************************************************
    * Function name: showDeleteButton
    *
@@ -980,6 +1141,11 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       menu.removeItem(R.id.action_logout);
     }
 
+    if (!mbCurrentUserIsOwner)
+    {
+      menu.removeItem(R.id.action_remove_list);
+    }
+
 
     return true;
   }
@@ -997,7 +1163,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
     if (id == R.id.action_edit_list_name)
     {
-      onMenuEditClick();
+      onMenuEditListNameClick();
 
       return true;
     }
@@ -1006,6 +1172,21 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     {
       onBarcodeScanClick();
 
+      return true;
+    }
+
+    if (id == R.id.action_edit)
+    {
+      if (mbIsOnEdit)
+      {
+        mbIsOnEdit = false;
+      }
+      else
+      {
+        mbIsOnEdit = true;
+      }
+
+      onMenuEditClick();
       return true;
     }
 
@@ -1036,7 +1217,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     IntentIntegrator scanIntegrator = new IntentIntegrator (this);
 
     scanIntegrator.initiateScan();
-
   }
 
   /*************************************************************************************************
@@ -1045,7 +1225,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
    *   Parameters:   N/A
    *   Returned:     N/A
    ************************************************************************************************/
-  private void onMenuEditClick()
+  private void onMenuEditListNameClick()
   {
     mListInfoListener = new DialogListener()
     {
@@ -1056,13 +1236,13 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
         {
           if (bUsingOffline)
           {
-
+            //edit the list name offline - file stuff TODO
           }
           else
           {
             if (null != mListID)
             {
-              editListName(newListName);
+              editListNameFirebase(newListName);
             }
           }
         }
@@ -1073,6 +1253,55 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     EditListNameDialog list = new EditListNameDialog();
     list.show(fm, "fs");
   }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  private void onMenuEditClick()
+  {
+
+    if (!bUsingOffline)
+    {
+      int numItems = mItemListView.getAdapter().getCount();
+
+      if (mbIsOnEdit)
+      {
+        for (int i = 0; i < numItems; ++i)
+        {
+          showDeleteButton2(i);
+        }
+      }
+      else
+      {
+        for (int i = 0; i < numItems; ++i)
+        {
+          hideDeleteButton2(i);
+        }
+      }
+    }
+    else
+    {
+      int size = mPoPList.getSize();
+      if (size > 0) {
+
+        if (!mbIsOnEdit) {
+          mbIsOnEdit = true;
+          Log.d("PopListItems", Boolean.toString(mbIsOnEdit));
+          mbEdit.setChecked(mbIsOnEdit);
+          showDeleteButtons(size);
+        } else {
+          mbIsOnEdit = false;
+          Log.d("PopListItems", Boolean.toString(mbIsOnEdit));
+          mbEdit.setChecked(mbIsOnEdit);
+          hideDeleteButtons(size);
+        }
+      }
+    }
+  }
+
 
   /***********************************************************************************************
    * Method:      getListInfoListener
@@ -1097,11 +1326,34 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   {
     if (bUsingOffline)
     {
-
+      //deleting a list on the file...
     }
     else
     {
-      deleteList(mbIsGrocery);
+      AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.CustomTheme_Dialog)
+          .setTitle("Delete List")
+          .setMessage("Are you sure you want to delete this list?")
+          .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+          {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              deleteListFirebase(mbIsGrocery);
+              dialog.dismiss();
+            }
+          })
+          .setNegativeButton("No", new DialogInterface.OnClickListener()
+          {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+              dialog.dismiss();
+            }
+          })
+          .setIcon(android.R.drawable.ic_dialog_alert);
+
+      AlertDialog alertDialog = alertDialogBuilder.create();
+      alertDialog.show();
     }
   }
 
@@ -1112,7 +1364,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
    *   Parameters:   N/A
    *   Returned:     N/A
    ************************************************************************************************/
-  public void deleteList (boolean bGrocery)
+  public void deleteListFirebase (boolean bGrocery)
   {
     HashMap<String, Object> removedList = new HashMap<>();
 
@@ -1168,7 +1420,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
    *   Parameters:   N/A
    *   Returned:     N/A
    ************************************************************************************************/
-  public void editListName(String newListName)
+  public void editListNameFirebase(String newListName)
   {
     if (!newListName.equals(mSimpleList.getmListName()))
     {

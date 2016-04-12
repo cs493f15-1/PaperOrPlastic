@@ -77,18 +77,4 @@ public class EditListNameDialog extends DialogFragment
     // Do something else
     return rootView;
   }
-
-
 }
-
-
-//public class EditListNameDialog extends EditSimpleListDialogFragment
-//{
-//  String mItemName, mItemID;
-//
-//  public static EditListNameDialog newInstance (SimpleList, int resource, String listID,
-//                                                String encodedEmail)
-//  {}
-//
-//
-//}
