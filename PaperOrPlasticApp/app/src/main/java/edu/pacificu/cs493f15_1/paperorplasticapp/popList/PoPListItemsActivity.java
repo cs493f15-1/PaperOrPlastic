@@ -44,6 +44,7 @@ import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.fbdialog.EditListNameDialog;
+import edu.pacificu.cs493f15_1.paperorplasticapp.fbdialog.ShareListDialog;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
@@ -52,6 +53,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
 import edu.pacificu.cs493f15_1.utils.Utils;
 
@@ -1313,8 +1315,65 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
    ************************************************************************************************/
   public void onMenuShareList()
   {
+    mListInfoListener = new DialogListener()
+    {
+      @Override
+      public void onFinishNewListDialog(String sharedUser)
+      {
+        if (!sharedUser.equals(""))
+        {
+          if (bUsingOffline)
+          {
+            //edit the list name offline - file stuff TODO
+          }
+          else
+          {
+            if (null != mListID)
+            {
+              shareListFirebase(sharedUser);
+            }
+          }
+        }
+      }
+    };
 
+    fm = getFragmentManager();
+    ShareListDialog list = new ShareListDialog();
+    list.show(fm, "fs");
+  }
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void shareListFirebase(String email)
+  {
+    final String sharedEncodedEmail = Utils.encodeEmail(email);
+
+    final String listId = mListRef.getKey(); //the current list we are trying to share
+
+    final Firebase shareRef = new Firebase(Constants.FIREBASE_URL_SHARED_WITH).child(listId).child(sharedEncodedEmail);
+    Firebase userRef = new Firebase(Constants.FIREBASE_URL_USERS).child(sharedEncodedEmail);
+    //location of the shared used (assuming they already have an account)
+    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+        User user = dataSnapshot.getValue(User.class);
+
+        if (user != null)
+        {
+          shareRef.setValue(user);
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError) {
+        Log.e("POP list items",
+          "Read failed: " + firebaseError.getMessage());
+      }
+    });
   }
 
 
