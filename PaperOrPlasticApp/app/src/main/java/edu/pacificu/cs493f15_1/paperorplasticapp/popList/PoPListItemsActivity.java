@@ -1139,11 +1139,13 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     if (bUsingOffline)
     {
       menu.removeItem(R.id.action_logout);
+      menu.removeItem(R.id.action_share_list);
     }
 
-    if (!mbCurrentUserIsOwner)
+    if (!mbCurrentUserIsOwner) //current person is looking at a list they do not own
     {
       menu.removeItem(R.id.action_remove_list);
+      menu.removeItem(R.id.action_share_list);
     }
 
 
@@ -1192,7 +1194,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
     if (id == R.id.action_share_list)
     {
-
+      onMenuShareList();
       return true;
     }
     if (id == R.id.action_remove_list)
@@ -1303,6 +1305,19 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   }
 
 
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  public void onMenuShareList()
+  {
+
+
+  }
+
+
   /***********************************************************************************************
    * Method:      getListInfoListener
    * Description: If addList button is clicked, create dialog box and listener for finishing
@@ -1367,6 +1382,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   public void deleteListFirebase (boolean bGrocery)
   {
     HashMap<String, Object> removedList = new HashMap<>();
+    Firebase ref = new Firebase(Constants.FIREBASE_URL);
 
     if (bGrocery)
     {
@@ -1376,7 +1392,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
       removedList.put("/" + Constants.FIREBASE_LOCATION_GROCERY_LIST_ITEMS + "/" + mListID, null);
 
-      Firebase ref = new Firebase(Constants.FIREBASE_URL);
 
       ref.updateChildren(removedList, new Firebase.CompletionListener()
       {
@@ -1398,8 +1413,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
       removedList.put("/" + Constants.FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS + "/" + mListID, null);
 
-      Firebase ref = new Firebase(Constants.FIREBASE_URL);
-
       ref.updateChildren(removedList, new Firebase.CompletionListener()
       {
         @Override
@@ -1407,7 +1420,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
         {
           if (null != firebaseError)
           {
-            Log.e("Firebase - Grocery", captureFirebaseError(firebaseError));
+            Log.e("Firebase - Kitchen", captureFirebaseError(firebaseError));
           }
         }
       });
