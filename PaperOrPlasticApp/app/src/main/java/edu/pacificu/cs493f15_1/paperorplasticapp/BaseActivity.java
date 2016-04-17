@@ -1,8 +1,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -200,7 +203,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
    ************************************************************************************************/
   protected void initializeBackground(LinearLayout linearLayout)
   {
-
     /**
      * Set different background image for landscape and portrait layouts?
      */
@@ -294,6 +296,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
           break;
         default:
           System.out.println("Firebase error");
+          break;
       }
     }
 
@@ -309,6 +312,34 @@ public abstract class BaseActivity extends AppCompatActivity implements
   @Override
   public void onConnectionFailed(ConnectionResult connectionResult)
   {
+
+  }
+
+  /***************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ***************************************************************************************************/
+  public void messageDialog(String title, String message)
+  {
+    final AlertDialog theDialog = new AlertDialog.Builder (this)
+        .setMessage(message)
+        .setPositiveButton("OK", new DialogInterface.OnClickListener()
+        {
+          public void onClick(DialogInterface dialog, int ok)
+          { //user clicked ok
+          }
+        }).show();
+
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable()
+    {
+      public void run()
+      {
+        theDialog.dismiss();
+      }
+    }, 3000);
 
   }
 

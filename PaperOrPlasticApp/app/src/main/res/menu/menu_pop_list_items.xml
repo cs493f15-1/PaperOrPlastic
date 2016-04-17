@@ -13,15 +13,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_share_list"
-        android:animateLayoutChanges="true"
-        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
-        android:orderInCategory="100"
-        android:title="Share List"
-        android:visible="true"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_barcode_add_item"
         android:animateLayoutChanges="true"
         android:icon="@drawable/barcode_add"
@@ -29,6 +20,22 @@
         android:title="Barcode Add"
         android:visible="true"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share_list"
+        android:animateLayoutChanges="true"
+        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        android:orderInCategory="100"
+        android:title="Share List"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="Edit"
+        android:visible="true"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_remove_list"

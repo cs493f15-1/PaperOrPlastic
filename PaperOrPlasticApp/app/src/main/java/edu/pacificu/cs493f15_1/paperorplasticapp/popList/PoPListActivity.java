@@ -421,20 +421,9 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    ************************************************************************************************/
   public void setupFBListAdapter()
   {
-    Firebase listRef;
-
-    //list adapter holds info of lists for listView
-    if (mbIsGrocery)
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
-    }
-    else
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
-    }
-
+    Log.e("current", "current encoded email: " + mEncodedEmail);
     mSimpleListAdapter = new SimpleListAdapter(this, SimpleList.class,
-        R.layout.single_active_list, listRef, mEncodedEmail);
+        R.layout.single_active_list, mListsRef, mEncodedEmail);
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);

@@ -263,24 +263,4 @@ public class CreateAccountActivity extends BaseActivity
   }
 
 
-/***************************************************************************************************
-*   Method:
-*   Description:
-*   Parameters:  N/A
-*   Returned:    N/A
-***************************************************************************************************/
-  public void messageDialog(String title, String message)
-  {
-    new AlertDialog.Builder (this)
-      .setTitle (title)
-      .setMessage (message)
-      .setPositiveButton ("OK", new DialogInterface.OnClickListener()
-      {
-        public void onClick(DialogInterface dialog, int ok)
-        { //user clicked ok
-        }
-      }).show();
-  }
-
-
 }
