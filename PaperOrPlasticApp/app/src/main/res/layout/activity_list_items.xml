@@ -95,7 +95,7 @@
                     android:spinnerMode="dropdown"
                     android:layout_gravity="center_horizontal"
                     android:layout_alignParentTop="true"
-                    android:backgroundTint="@color/cAccentColor"
+                    android:backgroundTint="@color/colorPrimary"
                     android:layout_alignParentStart="false"
                     android:backgroundTintMode="screen"
                     android:layout_alignParentEnd="false" />
