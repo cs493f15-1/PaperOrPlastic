@@ -1,8 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -28,8 +25,8 @@ import java.util.Map;
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
-import edu.pacificu.cs493f15_1.Utils.Constants;
-import edu.pacificu.cs493f15_1.Utils.Utils;
+import edu.pacificu.cs493f15_1.utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Utils;
 
 /**
  * Created by alco8653 on 2/28/2016.
@@ -260,26 +257,6 @@ public class CreateAccountActivity extends BaseActivity
       return false;
     }
     return true;
-  }
-
-
-/***************************************************************************************************
-*   Method:
-*   Description:
-*   Parameters:  N/A
-*   Returned:    N/A
-***************************************************************************************************/
-  public void messageDialog(String title, String message)
-  {
-    new AlertDialog.Builder (this)
-      .setTitle (title)
-      .setMessage (message)
-      .setPositiveButton ("OK", new DialogInterface.OnClickListener()
-      {
-        public void onClick(DialogInterface dialog, int ok)
-        { //user clicked ok
-        }
-      }).show();
   }
 
 

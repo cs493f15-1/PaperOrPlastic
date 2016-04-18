@@ -1,8 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
-import android.text.format.DateFormat;
-import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,7 +16,7 @@ import com.firebase.ui.FirebaseListAdapter;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * Created by alco8653 on 3/15/2016.
@@ -57,7 +55,7 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
     String ownerEmail = list.getmOwner();
 
 
-    Log.e ("OWNEREMAIL", "owner of the list " + ownerEmail);
+    Log.e ("OWNEREMAIL", "owner of the list " + ownerEmail + ". Current user:" + mEncodedEmail);
 
 
         /* Set the list name and owner */

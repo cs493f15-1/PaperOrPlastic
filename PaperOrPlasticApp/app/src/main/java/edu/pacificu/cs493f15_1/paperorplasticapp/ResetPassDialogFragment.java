@@ -5,17 +5,14 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * Reset Password Dialog Fragment (dialog to reset the user's password)

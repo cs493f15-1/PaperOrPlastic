@@ -39,15 +39,16 @@
         android:textStyle="bold"
         android:visibility="invisible" />
 
-    <!--<ImageButton-->
-        <!--android:id="@+id/button_remove_item"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center_vertical"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:contentDescription="Remove Item"-->
-        <!--android:src="@drawable/ic_action_remove"-->
-        <!--android:visibility="visible" />-->
+    <ImageButton
+        android:id="@+id/button_remove_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:contentDescription="Remove Item"
+        android:src="@drawable/ic_delete_forever_black_24dp"
+        android:visibility="visible"
+        android:padding="10dp"/>
 
 
 </LinearLayout>

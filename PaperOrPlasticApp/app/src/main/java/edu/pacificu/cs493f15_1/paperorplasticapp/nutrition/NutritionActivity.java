@@ -1,4 +1,5 @@
 /**************************************************************************************************
+<<<<<<< HEAD
  *   File:     NutritionActivity.java
  *   Author:   Kevin Jo
  *   Date:     10/28/15
@@ -6,12 +7,26 @@
  *   Project:  PaperOrPlastic Application
  *   Purpose:  This activity will be the activity that is opened when the user selects the
  *             nutrition button from the continue activity
+=======
+ * File:     NutritionActivity.java
+ * Author:   Abigail Jones
+ * Date:     10/28/15
+ * Class:    Capstone/Software Engineering
+ * Project:  PaperOrPlastic Application
+ * Purpose:  This activity will be the activity that is opened when the user selects the
+ * nutrition button from the continue activity
+>>>>>>> upstream/master
  ***************************************************************************************************/
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.nutrition;
 
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,9 +34,13 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
+import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
  *   Class:         NutritionActivity
@@ -30,26 +49,25 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class NutritionActivity extends BaseActivity
-{
+public class NutritionActivity extends BaseActivity {
 
     private TextView mItemName, mBrandName, mCalories, mTotalFats, mSatFat, mPolyFat, mMonoFat,
             mTransFat, mCholesterol, mSodium, mPotassium, mTotalCarbs, mFiber, mSugars, mProtein,
             mVitA, mVitC, mCalcium, mIron;
 
     private NutritionFactModel mNutrition;
+
     /********************************************************************************************
      * Function name: onCreate
-     *
+     * <p/>
      * Description:   Initializes all needed setup for objects in page
-     *
+     * <p/>
      * Parameters:    savedInstanceState  - a bundle object
-     *
+     * <p/>
      * Returns:       none
      ******************************************************************************************/
     @Override
-    protected void onCreate (Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nutrition);
 
@@ -133,5 +151,4 @@ public class NutritionActivity extends BaseActivity
 
 
     }
-
 }

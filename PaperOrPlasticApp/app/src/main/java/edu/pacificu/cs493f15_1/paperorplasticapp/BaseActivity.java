@@ -1,8 +1,11 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -22,7 +25,7 @@ import com.google.android.gms.common.api.Status;
 import edu.pacificu.cs493f15_1.paperorplasticapp.signIn.CreateAccountActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.signIn.MainSignInActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.signIn.PasswordRecoveryActivity;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * This class is to be used as a base class for all activities in PoP.
@@ -45,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
   protected Firebase mFirebaseRef;
   protected Firebase.AuthStateListener mAuthListener;
 
-  protected boolean bUsingOffline;
+  protected boolean bUsingOffline = true;
 
   /*************************************************************************************************
    *   Method:
@@ -85,6 +88,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
     {
       bUsingOffline = true;
     }
+    else
+    {
+      bUsingOffline = false;
+    }
 
     if (!((this instanceof MainSignInActivity) || (this instanceof CreateAccountActivity) ||
       (this instanceof PasswordRecoveryActivity) || bUsingOffline))
@@ -102,6 +109,8 @@ public abstract class BaseActivity extends AppCompatActivity implements
             SharedPreferences.Editor spe = sp.edit();
             spe.putString(Constants.KEY_ENCODED_EMAIL, null);
             spe.putString(Constants.KEY_PROVIDER, null);
+
+            spe.commit();
 
             takeUserToSignInScreenOnUnAuth();
           }
@@ -194,7 +203,6 @@ public abstract class BaseActivity extends AppCompatActivity implements
    ************************************************************************************************/
   protected void initializeBackground(LinearLayout linearLayout)
   {
-
     /**
      * Set different background image for landscape and portrait layouts?
      */
@@ -288,6 +296,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
           break;
         default:
           System.out.println("Firebase error");
+          break;
       }
     }
 
@@ -303,6 +312,34 @@ public abstract class BaseActivity extends AppCompatActivity implements
   @Override
   public void onConnectionFailed(ConnectionResult connectionResult)
   {
+
+  }
+
+  /***************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ***************************************************************************************************/
+  public void messageDialog(String title, String message)
+  {
+    final AlertDialog theDialog = new AlertDialog.Builder (this)
+        .setMessage(message)
+        .setPositiveButton("OK", new DialogInterface.OnClickListener()
+        {
+          public void onClick(DialogInterface dialog, int ok)
+          { //user clicked ok
+          }
+        }).show();
+
+    Handler handler = new Handler();
+    handler.postDelayed(new Runnable()
+    {
+      public void run()
+      {
+        theDialog.dismiss();
+      }
+    }, 3000);
 
   }
 

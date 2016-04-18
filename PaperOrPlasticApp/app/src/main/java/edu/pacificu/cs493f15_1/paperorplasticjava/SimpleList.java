@@ -5,7 +5,7 @@ import com.firebase.client.ServerValue;
 
 import java.util.HashMap;
 
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * Created by alco8653 on 3/14/2016.

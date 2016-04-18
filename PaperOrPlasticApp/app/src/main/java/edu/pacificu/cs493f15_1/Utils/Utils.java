@@ -1,4 +1,4 @@
-package edu.pacificu.cs493f15_1.Utils;
+package edu.pacificu.cs493f15_1.utils;
 
 import android.content.Context;
 

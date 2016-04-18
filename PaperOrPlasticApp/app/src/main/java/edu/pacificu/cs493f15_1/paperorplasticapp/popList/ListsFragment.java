@@ -11,12 +11,10 @@ import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 
-import java.util.List;
-
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 /**
  * Created by alco8653 on 3/31/2016.

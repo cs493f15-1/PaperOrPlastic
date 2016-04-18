@@ -16,16 +16,13 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.usage.ConfigurationStats;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -35,7 +32,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -56,15 +52,14 @@ import com.google.android.gms.common.api.Scope;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
-import edu.pacificu.cs493f15_1.Utils.Utils;
+import edu.pacificu.cs493f15_1.utils.Utils;
 
 /***************************************************************************************************
  *   Class:         MainSignInActivity
@@ -347,10 +342,6 @@ public void rememberPass(String email, String password)
   {
     mSignInPrefsEditor.clear();
     mSignInPrefsEditor.commit();
-    if (mfCurrentUser != null)
-    {
-      mfCurrentUser.setmbRememberPass(false);
-    }
   }
 }
 
@@ -437,14 +428,6 @@ public void rememberPass(String email, String password)
   {
     Intent intent = new Intent (MainSignInActivity.this, ContinueActivity.class);
 
-    if (!mAuthSuccess)
-    {
-      //mfCurrentUser = new FirebaseUser("offline");
-
-      //then we are choosing to continue with use of the app offline... TODO for now a quick fix
-      bUsingOffline = true;
-    }
-
     super.bUsingOffline = true;
 
     bUsingOffline = true;
@@ -522,8 +505,6 @@ public void rememberPass(String email, String password)
     /* authenticate the user with the information in the fields!! */
     mFirebaseRef.authWithPassword(email, password,
       new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
-
-
   }
 
   /** NEW CLASS -- Declaring our own methods of authenticating the user
@@ -581,6 +562,17 @@ public void rememberPass(String email, String password)
     public void onAuthenticationError (FirebaseError firebaseError)
     {
       mAuthProgressDialog.dismiss();
+
+      //TODO: refactor this to nice function.
+      //we want to the function to set the text fields based on the error.
+      //so it will probz look at all the email errors - mEmailView.setError("")
+      //same thing with mEditPassword
+      //also want to use the same idea for the createAccount page and PassRecovery
+
+      if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD)
+      {
+        mEditPassword.setError("Invalid password.");
+      }
     }
   }
 

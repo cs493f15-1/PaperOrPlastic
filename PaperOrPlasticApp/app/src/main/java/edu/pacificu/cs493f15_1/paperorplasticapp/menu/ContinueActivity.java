@@ -10,7 +10,6 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -26,7 +25,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
-import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
 
 
 /***************************************************************************************************
@@ -74,7 +73,6 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   final int ALPHA_SETTING = 35;
 
   private Firebase mUserRef;
-  //private FirebaseUser fUserTest;
 
   /***********************************************************************************************
    *   Method:        onCreate

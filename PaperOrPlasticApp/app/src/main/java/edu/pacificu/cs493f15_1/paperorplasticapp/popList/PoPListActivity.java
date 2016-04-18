@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.Toolbar;
@@ -21,11 +18,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
 
@@ -33,7 +31,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,11 +42,10 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
-import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
-import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
-import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.utils.Constants;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 
 /***************************************************************************************************
  * Class:         POPListActivity
@@ -149,6 +145,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     setupToolbar();
 
 
+
     //Set Up ListView
     mListOfListView = (ListView) findViewById(R.id.listViewOfLists);
     mListOfListView.setItemsCanFocus(true);
@@ -163,10 +160,67 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
       setupFBListAdapter();
     }
 
+    setUpActivityTitle();
+
     setupSwipeListening();
 
     handleSwipingToDelete();
+  }
 
+  /*************************************************************************************************
+   * Method:
+   * Description:
+   * Parameters:  N/A
+   * Returned:    N/A
+   ************************************************************************************************/
+  private void setUpActivityTitle()
+  {
+
+    if (bUsingOffline)
+    {
+      if (mbIsGrocery)
+      {
+        setTitle("Your Grocery Lists");
+      }
+      else
+      {
+        setTitle("Your Inventory");
+      }
+
+    }
+    else
+    {
+      mUserRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+      mUserRefListener = mUserRef.addValueEventListener(new ValueEventListener()
+      {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot)
+        {
+          User user = dataSnapshot.getValue(User.class);
+
+          if (user != null)
+          {
+            String title;
+            String name = user.getmName().split("\\s")[0];
+            if (mbIsGrocery)
+            {
+              title = name + "'s Lists";
+            }
+            else
+            {
+              title = name + "'s Inventory";
+            }
+            setTitle(title);
+          }
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError)
+        {
+
+        }
+      });
+    }
 
   }
 
@@ -424,20 +478,9 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    ************************************************************************************************/
   public void setupFBListAdapter()
   {
-    Firebase listRef;
-
-    //list adapter holds info of lists for listView
-    if (mbIsGrocery)
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
-    }
-    else
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
-    }
-
+    Log.e("current", "current encoded email: " + mEncodedEmail);
     mSimpleListAdapter = new SimpleListAdapter(this, SimpleList.class,
-        R.layout.single_active_list, listRef, mEncodedEmail);
+        R.layout.single_active_list, mListsRef, mEncodedEmail);
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);
