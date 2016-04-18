@@ -1,8 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;

@@ -1,8 +1,6 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
-import android.text.format.DateFormat;
-import android.text.style.TtsSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -19,7 +17,6 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
-import edu.pacificu.cs493f15_1.utils.Utils;
 
 /**
  * Created by alco8653 on 3/15/2016.

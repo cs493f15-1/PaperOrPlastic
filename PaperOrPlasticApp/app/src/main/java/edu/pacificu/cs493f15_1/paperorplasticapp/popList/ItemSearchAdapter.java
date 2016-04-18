@@ -2,6 +2,7 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import java.util.ArrayList;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 
 /**
@@ -45,6 +47,7 @@ public class ItemSearchAdapter extends ArrayAdapter<ListItem> {
 		super.add(item);
 	}
 
+	//Initializes items in suggestions, and sets up onClick
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
@@ -62,7 +65,9 @@ public class ItemSearchAdapter extends ArrayAdapter<ListItem> {
 			@Override
 			public void onClick(View v) {
 				selectedItem = getItem(position);
-				searchActivity.sendItemNameToList(selectedItem.getItemName());
+				searchActivity.sendItemNameToList(selectedItem.getItemName(),
+						selectedItem.getBrandName(), selectedItem.getDesc(),
+						selectedItem.getNutritionFacts());
 			}
 		});
 

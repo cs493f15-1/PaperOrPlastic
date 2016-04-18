@@ -13,11 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.ServerValue;
-
-import java.util.HashMap;
-
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.utils.Constants;
 

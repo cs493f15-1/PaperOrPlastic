@@ -206,7 +206,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     /**
      * Set different background image for landscape and portrait layouts?
      */
-    linearLayout.setBackgroundResource(R.drawable.grocerybackportraitsmall);
+    linearLayout.setBackgroundResource(R.drawable.grocerybackportrait);
   }
 
   /*************************************************************************************************

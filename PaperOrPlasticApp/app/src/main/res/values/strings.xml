@@ -71,7 +71,7 @@
     <string name="sEdit">Edit</string>
     <string name="passRecover">Recover Password</string>
 
-    <string name="sSearchBar">Item Name...</string>
+    <string name="sSearchBar" formatted="false">Item Name...</string>
 
     <string name="sSearchHint">Not Case Sens</string>
 
@@ -87,6 +87,11 @@
         <item>Medium</item>
         <item>Hard</item>
     </string-array>
+
+    <!--
+    For nutritional fact page
+    -->
+    <string name="sTotalFat">%15s</string>
 
     <string name="server_client_id">208743903372-mohql0t0q8k3c5ocpq6bte6jgno812h8.apps.googleusercontent.com</string>
     <!--<string name="server_client_id2">208743903372-qivsb5vpjal1mpgkk8l91natj3h1rd9c.apps.googleusercontent.com</string>-->

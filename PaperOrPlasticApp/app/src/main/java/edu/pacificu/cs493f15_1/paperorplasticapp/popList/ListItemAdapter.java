@@ -2,8 +2,10 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.TimerTask;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 
@@ -30,6 +33,8 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
   Context mContext;
   public int mPosition;
   final Handler mHandlerUI = new Handler(); //for waiting if needed
+
+    private NutritionActivity mNutritionActivity;
 
 
   private int nCounter;
@@ -64,16 +69,6 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
     //mItemArray.add(item);
   }
 
-
-    /*public void replaceItems (ArrayList<ListItem> sortedItems)
-    {
-        super.clear ();
-        super.addAll();
-        super.notifyDataSetChanged();
-
-    }*/
-
-
   public Context getContext ()
   {
     return mContext;
@@ -88,46 +83,38 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
 
     mPosition = position; //to see which item was clicked
 
-    if(row == null)
-    {
+    if(row == null) {
       LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
       row = inflater.inflate(mLayoutResourceId, parent, false);
 
       //get items in row and set them to layout items
       itemHolder = new ItemHolder();
 
-      itemHolder.itemButton = (Button)row.findViewById(R.id.bListItem);
+      itemHolder.itemButton = (Button) row.findViewById(R.id.bListItem);
 
       //set up check box functionality
-      itemHolder.checkBox = (CheckBox)row.findViewById(R.id.itemCheckBox);
+      itemHolder.checkBox = (CheckBox) row.findViewById(R.id.itemCheckBox);
       itemHolder.checkBox.setTag(mPosition);
-      if (mItemArray.get(mPosition).getCheckedOff())
-      {
+
+      if (mItemArray.get(mPosition).getCheckedOff()) {
         itemHolder.checkBox.callOnClick();
       }
-      itemHolder.checkBox.setOnClickListener(new OnCheckListener()
-      {
+
+      itemHolder.checkBox.setOnClickListener(new OnCheckListener() {
         @Override
-        public void onClick (View v)
-        {
+        public void onClick(View v) {
           //to wait to remove for a certain amount of time
           mPosition = (Integer) v.getTag();
 
-          if (!mbWaiting)
-          {
+          if (!mbWaiting) {
             mbWaiting = Boolean.TRUE;
             boolean bCheckedOff = mItemArray.get(mPosition).getCheckedOff();
-            if (bCheckedOff)
-            {
+            if (bCheckedOff) {
               mItemArray.get(mPosition).setCheckedOff(true);
-            }
-            else
-            {
+            } else {
               mItemArray.get(mPosition).setCheckedOff(false);
             }
-          }
-          else
-          {
+          } else {
             mbWaiting = Boolean.FALSE;
             mTimerTask.cancel();
           }
@@ -135,14 +122,13 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
       });
 
       //set up item quantity editText
-      itemHolder.itemQuantity = (EditText)row.findViewById(R.id.input_qty);
+      itemHolder.itemQuantity = (EditText) row.findViewById(R.id.input_qty);
       itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
       itemHolder.itemQuantity.addTextChangedListener(new TextWatcher() {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
           //if editText is not empty, assign new quantity to item
-          if (!s.toString().isEmpty())
-          {
+          if (!s.toString().isEmpty()) {
             mItemArray.get(position).setQuantity(Integer.parseInt(s.toString()));
           }
         }
@@ -191,19 +177,14 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
           handler.postDelayed(new Runnable() {
             public void run() {
               // Actions to do after 100 milliseconds
-              ((PoPListItemsActivity) getContext()).slideItemView( ((View) mView.getParent()), PoPListItemsActivity.SLIDE_RIGHT_ITEM );
+              ((PoPListItemsActivity) getContext()).slideItemView(((View) mView.getParent()), PoPListItemsActivity.SLIDE_RIGHT_ITEM);
 
             }
           }, 60);
-
         }
-
-
       });
-
-
-
     }
+
     else
     {
       itemHolder = (ItemHolder) row.getTag();
@@ -225,8 +206,48 @@ public class ListItemAdapter extends ArrayAdapter<ListItem>
     itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
     itemHolder.bDelete.setTag(position);
 
+    //set list row info
+    ListItem itemButton = mItemArray.get(position);
+    itemHolder.itemButton.setText(String.format("%1$s%n%2$s", item.getItemName(), Html.fromHtml("<i>" + item.getBrandName() +"</i>")));
+
+    itemHolder.itemButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        ListItem item = mItemArray.get(position);
+
+        Intent intent = new Intent(mContext, NutritionActivity.class);
+
+        intent.putExtra("item_name", item.getItemName());
+        intent.putExtra("brand_name", item.getBrandName());
+        intent.putExtra("item_description", item.getDesc());
+        intent.putExtra("nf_calories", item.getCalories());
+        intent.putExtra("nf_total_fat", item.getTotal_Fat());
+        intent.putExtra("nf_saturated_fat", item.getSat_Fat());
+        intent.putExtra("nf_total_carbohydrate", item.getTotal_Carbs());
+        intent.putExtra("nf_protein", item.getProtein());
+        intent.putExtra("nf_sugars", item.getSugars());
+        intent.putExtra("nf_dietary_fiber", item.getFiber());
+        intent.putExtra("nf_sodium", item.getSodium());
+        intent.putExtra("nf_polyunsaturated_fat", item.getPolyFat());
+        intent.putExtra("nf_monounsaturated_fat", item.getMonoFat());
+        intent.putExtra("nf_trans_fatty_acid", item.getTransFat());
+        intent.putExtra("nf_cholesterol", item.getCholesterol());
+        intent.putExtra("nf_potassium", item.getPotassium());
+        intent.putExtra("nf_vitamin_a_dv", item.getVitA());
+        intent.putExtra("nf_vitamin_c_dv", item.getVitC());
+        intent.putExtra("nf_calcium_dv", item.getCalcium());
+        intent.putExtra("nf_iron_dv", item.getIron());
+
+        mContext.startActivity(intent);
+      }
+    });
+
+    itemHolder.itemQuantity.setText(String.valueOf(mItemArray.get(position).getQuantity()));
+    itemHolder.bDelete.setTag(position);
+
     return row;
-  }
+    }
+
 
   static class ItemHolder
   {

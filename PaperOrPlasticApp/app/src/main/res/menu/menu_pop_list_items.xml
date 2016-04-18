@@ -6,7 +6,6 @@
     <item
         android:id="@+id/action_edit_list_name"
         android:animateLayoutChanges="true"
-        android:icon="@drawable/ic_create_white_24dp"
         android:orderInCategory="100"
         android:title="Edit List Name"
         android:visible="true"
