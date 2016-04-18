@@ -1,6 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.text.format.DateFormat;
 import android.text.style.TtsSpan;
 import android.util.Log;
@@ -52,6 +53,10 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
      */
 
     TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
+    Typeface laneUpperFont = Typeface.createFromAsset(mActivity.getAssets(), "fonts/laneWUnderLine.ttf");
+    Typeface laneNarrowFont = Typeface.createFromAsset(mActivity.getAssets(), "fonts/LANENAR.ttf");
+    textViewListName.setTypeface(laneNarrowFont);
+
     final TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
     TextView textViewTime = (TextView) view.findViewById(R.id.text_view_edit_time);
 

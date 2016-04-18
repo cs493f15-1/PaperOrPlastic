@@ -97,7 +97,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   private ValueEventListener mListRefListener;
 
   private boolean bScannedItem = false;
-  private TextView formatText, contentText;
+  private TextView formatText, contentText, textFont;
 
   /********************************************************************************************
    * Function name: onCreate
@@ -121,6 +121,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     mPoPFileName = fileName;
     mbIsOnEdit = false;
     mPoPLists = popLists;
+
     //get current viewing list
 
 
@@ -182,6 +183,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
     formatText = (TextView) findViewById (R.id.scan_format);
     contentText = (TextView) findViewById (R.id.scan_content);
+
     setupToolbar();
   }
 
@@ -339,6 +341,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_OK) {
       if (resultCode == RESULT_OK) {
+
         String item_name = data.getStringExtra("item_name");
 
 

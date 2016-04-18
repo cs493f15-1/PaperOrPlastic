@@ -221,6 +221,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
     {
       //unauthorize the firebase user
       mFirebaseRef.unauth();
+      bUsingOffline = true;
 
       if (mProvider.equals(Constants.GOOGLE_PROVIDER))
       {
@@ -244,7 +245,7 @@ public abstract class BaseActivity extends AppCompatActivity implements
 *   Parameters:  N/A
 *   Returned:    N/A
 ***************************************************************************************************/
-  private void takeUserToSignInScreenOnUnAuth()
+  protected void takeUserToSignInScreenOnUnAuth()
   {
         /* Move user to LoginActivity, and remove the backstack */
     Intent intent = new Intent(BaseActivity.this, MainSignInActivity.class);
@@ -293,8 +294,10 @@ public abstract class BaseActivity extends AppCompatActivity implements
           errorMessage = "Error: Operation failed.";
           break;
         default:
-          System.out.println("Firebase error");
+          errorMessage = "Firebase error";
+         // System.out.println("Firebase error");
       }
+      System.out.println(errorMessage);
     }
 
     return errorMessage;
