@@ -17,25 +17,54 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.usage.ConfigurationStats;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.Scope;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
+import edu.pacificu.cs493f15_1.Utils.Constants;
+import edu.pacificu.cs493f15_1.paperorplasticjava.FirebaseUser;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
+import edu.pacificu.cs493f15_1.Utils.Utils;
 
 /***************************************************************************************************
  *   Class:         MainSignInActivity
@@ -43,31 +72,51 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class MainSignInActivity extends AppCompatActivity implements View.OnClickListener
+public class MainSignInActivity extends BaseActivity
 {
-  private String FIREBASE_URL = "https://boiling-fire-3734.firebaseio.com/";
+  private static final String LOG_TAG = MainSignInActivity.class.getSimpleName();
+  private String SIGNIN_PREFS = "signinPrefs";
+  private String SIGNIN_PREFS_BOOLEAN = "saveSignIn";
 
   //  buttons
-  private Button  mButtonSignIn,
-                  mButtonCreateAccount,
-                  mButtonRecoverPassword,
-                  mButtonResetPassword,
+  private Button  mButtonSignIn, mButtonCreateAccount, mButtonRecoverPassword, mButtonResetPassword,
                   mButtonContinue;
 
-  //testing new email input box
+  //  checkboxes
+  private CheckBox mcbRememberPass;
+
+  //email & password
   private AutoCompleteTextView mEmailView;
-
-
-  //  edit text fields
   private EditText  mEditPassword;
 
+  private SharedPreferences mSignInPreferences;
+  private SharedPreferences.Editor mSignInPrefsEditor;
+
+  private boolean saveSignIn = false;
 
   //  firebase reference
-  private Firebase  myFirebaseRef;
+  private Firebase mFirebaseRef;
+  private FirebaseUser mfCurrentUser;
+
+  private boolean mAuthSuccess = false;
 
   private View mLoginFormView;
 
-/***************************************************************************************************
+  private ProgressDialog mAuthProgressDialog;
+
+
+  /**
+   * Variables related to Google Login
+   */
+    /* A flag indicating that a PendingIntent is in progress and prevents us from starting further intents. */
+  private boolean mGoogleIntentInProgress;
+  /* Request code used to invoke sign in user interactions for Google+ */
+  public static final int RC_GOOGLE_LOGIN = 1;
+  /* A Google account object that is populated if the user signs in with Google */
+  GoogleSignInAccount mGoogleAccount;
+
+
+  /*************************************************************************************************
  *   Method:        onCreate
  *   Description:   is called when the activity is created. Sets the content view and initializes
  *                  our buttons, text fields, and firebase (connection to the cloud database).
@@ -75,7 +124,7 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
  *                  necessary initialization.
  *   Parameters:    savedInstanceState
  *   Returned:      N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
   @Override
   protected void onCreate (Bundle savedInstanceState)
   {
@@ -83,22 +132,88 @@ public class MainSignInActivity extends AppCompatActivity implements View.OnClic
 
     setContentView(R.layout.activity_main_sign_in);
 
+    initializeActivity();
+  }
+
+  /*************************************************************************************************
+   *   Method:       onResume
+   *   Description:  calls super.onResume() and initializes the sign-in prefs
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  @Override
+  protected void onResume ()
+  {
+    super.onResume();
+    //initializeSignInPrefs();
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+    SharedPreferences.Editor spe = sp.edit();
+
+    /**
+     * Get the newly registered user email if present, use null as default value
+     */
+    String signupEmail = sp.getString(Constants.KEY_SIGNUP_EMAIL, null);
+
+    /**
+     * Fill in the email editText and remove value from SharedPreferences if email is present
+     */
+    if (signupEmail != null)
+    {
+      mEmailView.setText(signupEmail);
+
+      /**
+       * Clear signupEmail sharedPreferences to make sure that they are used just once
+       */
+      spe.putString(Constants.KEY_SIGNUP_EMAIL, null).apply();
+    }
+  }
+
+  /*************************************************************************************************
+   *   Method:       onPause
+   *   Description:  calls super.onPause()
+   *   Parameters:   N/A
+   *   Returned:     N/A
+   ************************************************************************************************/
+  @Override
+  public void onPause()
+  {
+    super.onPause();
+  }
+
+
+/***************************************************************************************************
+ *   Method:       initializeActivity
+ *   Description:  calls all initialization functions
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ **************************************************************************************************/
+  private void initializeActivity()
+  {
     initializeButtons();
     initializeEditFields();
+    initializeCheckboxes();
     initializeFirebase();
+    initializeSignInPrefs();
 
+    mLoginFormView = findViewById(R.id.loginForm);
+    LinearLayout linearLayout = (LinearLayout) mLoginFormView;
+    linearLayout.setBackgroundResource(R.drawable.grocerybackportrait);
 
-    testWritingDataToFirebase();
-    testCreateFirebaseUsers();
+    mAuthProgressDialog = new ProgressDialog(this);
+    mAuthProgressDialog.setTitle("Loading...");
+    mAuthProgressDialog.setMessage("Authenticating with Firebase...");
+    mAuthProgressDialog.setCancelable(false);
 
+    setupGoogleSignIn();
   }
+
 
 /***************************************************************************************************
  *   Method:       initializeButtons
  *   Description:  pairs member variable buttons with the views on this activity by ID
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeButtons ()
 {
   //  initializing/pairing buttons
@@ -108,12 +223,22 @@ private void initializeButtons ()
   mButtonContinue = (Button) findViewById (R.id.bContinue);
   mButtonResetPassword = (Button) findViewById (R.id.bResetPassword);
 
-  //  on click listener for buttons (connect to the view)
-  mButtonSignIn.setOnClickListener(this);
-  mButtonCreateAccount.setOnClickListener(this);
-  mButtonRecoverPassword.setOnClickListener(this);
-  mButtonContinue.setOnClickListener(this);
-  mButtonResetPassword.setOnClickListener(this);
+
+  SignInButton signInButton = (SignInButton)findViewById(R.id.login_with_google);
+  signInButton.setSize(SignInButton.SIZE_WIDE);
+
+}
+
+/***************************************************************************************************
+ *   Method:       initializeCheckboxes
+ *   Description:  pairs member variable checkboxes with the views on this activity by ID
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ **************************************************************************************************/
+private void initializeCheckboxes()
+{
+  mcbRememberPass = (CheckBox) findViewById(R.id.cbRememberPassword);
+  mcbRememberPass.setChecked(false);
 }
 
 
@@ -122,278 +247,212 @@ private void initializeButtons ()
  *   Description:  pairs member variable edit text fields with the views on this activity
  *   Parameters:   N/A
  *   Returned:     N/A
- ***************************************************************************************************/
+ **************************************************************************************************/
 private void initializeEditFields()
 {
   mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-  mEditPassword = (EditText) findViewById (R.id.editTextPassword);
+  mEditPassword = (EditText) findViewById (R.id.editTextPasswordInput);
   mLoginFormView = findViewById(R.id.loginForm);
 }
 
 
+
 /***************************************************************************************************
- *   Method:         initializeFirebase
- *   Description:    links firebase with our application by setting our member variable myFirebaseRef
- *                   to the link of our cloud database
- *   Parameters:     N/A
- *   Returned:       N/A
- ***************************************************************************************************/
+ *   Method:       initializeSignInPrefs
+ *   Description:  sets shared preferences for signing in with this app
+ *   Parameters:   N/A
+ *   Returned:     N/A
+ **************************************************************************************************/
+private void initializeSignInPrefs()
+{
+  mSignInPreferences = getSharedPreferences(SIGNIN_PREFS, MODE_PRIVATE);
+  mSignInPrefsEditor = mSignInPreferences.edit();
+  saveSignIn = mSignInPreferences.getBoolean(SIGNIN_PREFS_BOOLEAN, false);
+  if (saveSignIn)
+  {
+    mEmailView.setText(mSignInPreferences.getString("email", ""));
+    mEditPassword.setText(mSignInPreferences.getString("password", ""));
+    mcbRememberPass.setChecked(true);
+  }
+}
+
+
+
+/***************************************************************************************************
+*   Method:         initializeFirebase
+*   Description:    links firebase with our application by setting our member variable myFirebaseRef
+*                   to the link of our cloud database
+*   Parameters:     N/A
+*   Returned:       N/A
+***************************************************************************************************/
 private void initializeFirebase()
 {
-  Firebase.setAndroidContext(this);
-  myFirebaseRef = new Firebase (FIREBASE_URL);
+  //Firebase.setAndroidContext(this.getApplication());
+  mFirebaseRef = new Firebase (Constants.FIREBASE_URL);
 }
 
 /***************************************************************************************************
- *   Method:      testWritingDataToFirebase
- *   Description: just some testing...
- *   Parameters:  N/A
- *   Returned:    N/A
- ***************************************************************************************************/
-private void testWritingDataToFirebase()
+*   Method:      setupGoogleSignI
+*   Description: when sign in button pressed, attempt to authenticate the user through
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+/* Sets up the Google Sign In Button : https://developers.google.com/android/reference/com/google/android/gms/common/SignInButton */
+private void setupGoogleSignIn()
 {
-  myFirebaseRef.child ("message").setValue ("YO WADDUP");
-  myFirebaseRef.child ("testing").setValue ("Testing123");
-
-
-  // test creating a new reference "ref" to save data
-  Firebase ref = new Firebase (FIREBASE_URL + "/test-saving-data");
-
-  // creating another reference "alanRef" (which is the child of the above reference)
-  // creating reference to a child object -  a user with id alanisawesome
-  Firebase alanRef = ref.child ("users").child ("alanisawesome");
-
-  // creating new object testUser
-  TestUser alan = new TestUser ("Alan Turing", 1912);
-
-  // setting the value of the reference we created to the java object we created
-  alanRef.setValue(alan);
-
-  //now test retrieving this information -- Attach a listener to read the data at our posts reference (test saving data)
-  alanRef.addValueEventListener(new ValueEventListener()
+  SignInButton signInButton = (SignInButton) findViewById(R.id.login_with_google);
+  signInButton.setSize(SignInButton.SIZE_WIDE);
+  signInButton.setOnClickListener(new View.OnClickListener()
   {
     @Override
-    public void onDataChange(DataSnapshot snapshot)
+    public void onClick(View v)
     {
-      System.out.println(snapshot.getValue());
-      System.out.println("There are " + snapshot.getChildrenCount() + " fields to this user.");
-    }
-
-    @Override
-    public void onCancelled(FirebaseError firebaseError)
-    {
-      System.out.println("The read failed: " + firebaseError.getMessage());
+      onSignInGooglePressed(v);
     }
   });
 }
-
 /***************************************************************************************************
- *   Method:      testCreateFirebaseUsers
- *   Description: just more testing....
- *   Parameters:  N/A
+ *   Method:      rememberPass
+ *   Description: remember the email and password if the checkbox is checked. otherwise, clear
+ *                the sign in preferences data
+ *   Parameters:  email - user email
+ *                password - user password
  *   Returned:    N/A
- ***************************************************************************************************/
-private void testCreateFirebaseUsers ()
+ **************************************************************************************************/
+public void rememberPass(String email, String password)
 {
-  //hard coding the addition of a registered user
-
-  myFirebaseRef.createUser("alco8653@pacificu.edu", "password1234",
-          new Firebase.ValueResultHandler<Map<String, Object>>()
-          {
-            @Override
-            public void onSuccess(Map<String, Object> result)
-            {
-              System.out.println("Successfully created user account with uid: " + result.get("uid"));
-            }
-
-            @Override
-            public void onError(FirebaseError firebaseError)
-            {
-              // there was an error
-              System.out.println("Error creating user. ");
-            }
-          });
-
-  myFirebaseRef.authWithPassword("alco8653@pacificu.edu", "password1234", new Firebase.AuthResultHandler()
+  if (mcbRememberPass.isChecked())
   {
-    @Override
-    public void onAuthenticated(AuthData authData)
+    if (mAuthSuccess)
     {
-      System.out.println("Authenticated the user.");
-      System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+      mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
+      mSignInPrefsEditor.putString("email", email);
+      mSignInPrefsEditor.putString("password", password);
+      mSignInPrefsEditor.commit();
+      if (mfCurrentUser != null)
+      {
+        mfCurrentUser.setmbRememberPass(true);
+      }
+    }
+    else
+    {
+      mSignInPrefsEditor.putBoolean(SIGNIN_PREFS_BOOLEAN, true);
+      mSignInPrefsEditor.putString("email", "alco8653@pacificu.edu");
+      mSignInPrefsEditor.putString("password", "pass123");
+      mSignInPrefsEditor.commit();
     }
 
-    @Override
-    public void onAuthenticationError(FirebaseError firebaseError)
+  }
+  else
+  {
+    mSignInPrefsEditor.clear();
+    mSignInPrefsEditor.commit();
+    if (mfCurrentUser != null)
     {
-      // there was an error
-      System.out.println("Error authenticating user. ");
+      mfCurrentUser.setmbRememberPass(false);
     }
-  });
-
+  }
 }
 
+
 /***************************************************************************************************
- *   Method:      onClick
- *   Description: called when a click has been captured.
- *                If selected:
- *                Sign-In:        - capture information in edit text fields and pass to
- *                                  firebase to attempt to authenticate the user
- *                Create Account: - capture information in edit text fields and
- *                                  pass to firebase to attempt to create the user
- *                Recover Password: - an email to recover password is sent to the email
- *                                    typed in the email field
- *                Reset Password: - resets the password associated with the user with token passed in
- *                Continue:       - starts the next activity (home screen)
- *   Parameters:  view - the view that has been clicked
- *   Returned:    N/A
- ***************************************************************************************************/
-  public void onClick (View view)
+*   Method:      onSignInPressed
+*   Description: when sign in button pressed, attempt to authenticate the user
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+  public void onSignInPressed (View view)
   {
-    Intent intent; //will be using this to launch to new activity (e.g. clicking continue)
+    String email = mEmailView.getText().toString();
+    String password = mEditPassword.getText().toString();
 
-    if (mButtonSignIn == view)
+
+    if (email.equals(""))
     {
-      //capture text from password editText and email editText ->pass this to firebase authentication
-      myFirebaseRef.authWithPassword (mEmailView.getText().toString(),
-                                      mEditPassword.getText().toString(),
-                                      new Firebase.AuthResultHandler()
-      {
-        @Override
-        public void onAuthenticated(AuthData authData)
-        {
-          System.out.println("Authenticated the user.");
-          System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-          messageDialog ("Sign-In", "Successful login.");
-        }
-
-        @Override
-        public void onAuthenticationError(FirebaseError firebaseError)
-        {
-          // there was an error
-          System.out.println("Error authenticating user. ");
-          messageDialog ("Unable to Sign-In", "Invalid password or email.");
-        }
-      });
+      mEmailView.setError("This cannot be empty.");
+      return;
     }
 
-    if (mButtonCreateAccount == view)
+    if (password.equals(""))
     {
-      //capture text from password editText and email editText -> pass this to firebase user create
+      mEditPassword.setError("This cannot be empty.");
+      return;
+    }
+    mAuthProgressDialog.show();
+    signInAttempt();
+  }
 
-      myFirebaseRef.createUser (mEmailView.getText().toString(),
-                                mEditPassword.getText().toString(),
-                                new Firebase.ValueResultHandler<Map<String, Object>>()
-      {
-        @Override
-        public void onSuccess(Map<String, Object> result)
-        {
-          System.out.println("Successfully created user account with uid: " + result.get("uid"));
-          messageDialog("Create Account","Account has been created.");
-        }
 
-        @Override
-        public void onError(FirebaseError firebaseError)
-        {
-          // there was an error
-          System.out.println("Error creating user. ");
-          messageDialog("Unable to Create Account","Email in use or invalid Email.");
-        }
-      });
+
+
+/***************************************************************************************************
+*   Method:      onSignInGooglePressed
+*   Description: when sign in button pressed, attempt to authenticate the user through
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+  public void onSignInGooglePressed(View view)
+  {
+    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+    startActivityForResult(signInIntent, RC_GOOGLE_LOGIN);
+    mAuthProgressDialog.show();
+  }
+
+
+
+/***************************************************************************************************
+*   Method:      onCreateAccountPressed
+*   Description: Open CreateAccountActivity when user taps on "Create Account"
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+
+  public void onCreateAccountPressed (View view)
+  {
+    Intent intent = new Intent(MainSignInActivity.this, CreateAccountActivity.class);
+    startActivity(intent);
+  }
+
+/***************************************************************************************************
+*   Method:      onRecoverPressed
+*   Description: Open PasswordRecoveryActivity when user taps on "Create Account"
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+
+  public void onRecoverPressed (View view)
+  {
+    Intent intent = new Intent(MainSignInActivity.this, PasswordRecoveryActivity.class);
+    startActivity(intent);
+  }
+
+
+/***************************************************************************************************
+*   Method:      onContinueOfflinePressed
+*   Description: to be executed when continue offline button is pressed
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+  public void onContinueOfflinePressed (View view)
+  {
+    Intent intent = new Intent (MainSignInActivity.this, ContinueActivity.class);
+
+    if (!mAuthSuccess)
+    {
+      //mfCurrentUser = new FirebaseUser("offline");
+
+      //then we are choosing to continue with use of the app offline... TODO for now a quick fix
+      bUsingOffline = true;
     }
 
-    if (mButtonRecoverPassword == view)
-    {
-      myFirebaseRef.resetPassword(mEmailView.getText().toString(), new Firebase.ResultHandler() {
-        @Override
-        public void onSuccess()
-        {
-          messageDialog ("Recover Password", "Recovery Email has been sent to: \n" + mEmailView.getText().toString());
-        }
-        @Override
-        public void onError(FirebaseError firebaseError)
-        {
-          // error encountered
-          messageDialog ("Recover Password", "Error sending recovery Email to: \n" + mEmailView.getText().toString());
-        }
-      });
-    }
+    super.bUsingOffline = true;
 
-    if (mButtonResetPassword == view)
-    {
-      final Dialog login = new Dialog (this);
+    bUsingOffline = true;
+    mEncodedEmail = null;
 
-      login.setContentView(R.layout.dialog_pass_recovery);
-      login.setTitle("Reset Password");
+    //intent.putExtra("currentUser", mfCurrentUser);
 
-      Button btnReset = (Button) login.findViewById(R.id.btnReset);
-      Button btnCancel = (Button) login.findViewById(R.id.btnCancel);
-
-      final EditText  txtUser = (EditText) login.findViewById(R.id.userEmail),
-                      txtToken = (EditText) login.findViewById(R.id.passwordToken),
-                      txtNewPass = (EditText) login.findViewById(R.id.newPassword);
-
-      //recoverPasswordDialog();
-
-      btnReset.setOnClickListener(new View.OnClickListener()
-      {
-        @Override
-        public void onClick(View v)
-        {
-          myFirebaseRef.authWithPassword(txtUser.getText().toString(),
-            txtToken.getText().toString(),
-            new Firebase.AuthResultHandler()
-            {
-              @Override
-              public void onAuthenticated(AuthData authData)
-              {
-                myFirebaseRef.changePassword(txtUser.getText().toString(),
-                txtToken.getText().toString(), txtNewPass.getText().toString(),
-                new Firebase.ResultHandler()
-                {
-                  @Override
-                  public void onSuccess()
-                  {
-                    System.out.println("Password changed. ");
-                  }
-
-                  @Override
-                  public void onError(FirebaseError firebaseError)
-                  {
-                    System.out.println("Error changing password. ");
-                  }
-                });
-              }
-
-              @Override
-              public void onAuthenticationError(FirebaseError firebaseError)
-              {
-                // there was an error
-              }
-            });
-
-          login.dismiss();
-        }
-      });
-
-      btnCancel.setOnClickListener(new View.OnClickListener()
-      {
-        @Override
-        public void onClick(View v)
-        {
-          login.dismiss();
-        }
-      });
-
-      login.show();
-    }
-
-    if (mButtonContinue == view)
-    {
-      intent = new Intent (this, ContinueActivity.class);
-      startActivity (intent);
-    }
-
+    startActivity(intent);
   }
 
 
@@ -402,83 +461,419 @@ private void testCreateFirebaseUsers ()
  *   Description: for now, using this as a template to see how to get a dialog box to appear
  *   Parameters:  N/A
  *   Returned:    N/A
- ***************************************************************************************************/
-  private void messageDialog (String title, String message)
+ **************************************************************************************************/
+  private void messageDialog (String title, String message, final boolean bContinue)
   {
-    new AlertDialog.Builder (this).setTitle (title).setMessage(message)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener()
-            {
-              public void onClick(DialogInterface dialog, int ok)
-              {
-                //user clicked ok
+    final Intent intent = new Intent (this, ContinueActivity.class);
+
+    new AlertDialog.Builder (this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int ok) { //user clicked ok
+                if (bContinue)
+                {
+                  if (mAuthSuccess)
+                  {
+                    intent.putExtra("currentUser", mfCurrentUser);
+                  }
+                  startActivity(intent);
+                }
               }
-            }).show ();
+            }).show();
   }
 
-
-/*  private void recoverPasswordDialog()
+/***************************************************************************************************
+ *   Method:      setMfCurrentUser
+ *   Description: after a successful sign-in attempts, sets the mf current user
+ *   Parameters:  authData - firebase authorization data
+ *                email - the email for the user
+ *                password - the password for the user
+ *   Returned:    N/A
+ **************************************************************************************************/
+  public void setMfCurrentUser (AuthData authData, String email, String password)
   {
-    LayoutInflater inflater = this.getLayoutInflater();
+    mAuthSuccess = true;
 
-    AlertDialog.Builder test;
-    DialogInterface.OnClickListener resetDialog;
-    test = new AlertDialog.Builder (this).setView(inflater.inflate(R.layout.dialog_pass_recovery, null));
+    mfCurrentUser = new FirebaseUser(authData.getUid());
+    mfCurrentUser.setmProvider(authData.getProvider());
+    mfCurrentUser.getMyRef().child("provider").setValue(authData.getProvider());
+    mfCurrentUser.setmEmail(email);
+
+    rememberPass(email, password);
+  }
+
+  /*************************************************************************************************
+ *   Method:      signInAttempt
+ *   Description: to be executed when the user clicks on sign-in button. captures text in the email
+ *                 and password edit text fields -> attempts to signin using these credentials. A
+ *                 dialog appears after the sign in button has been pressed in order to indicate
+ *                 if the sign in attempt was or was not successful
+ *   Parameters:  N/A
+ *   Returned:    N/A
+ **************************************************************************************************/
+  public void signInAttempt()
+  {
+    final String email = mEmailView.getText().toString();
+    final String password = mEditPassword.getText().toString();
+
+    rememberPass(email, password);
+
+    /* authenticate the user with the information in the fields!! */
+    mFirebaseRef.authWithPassword(email, password,
+      new PoPAuthResultHandler(Constants.PASSWORD_PROVIDER));
 
 
+  }
 
-    test.setPositiveButton("OK", new DialogInterface.OnClickListener()
+  /** NEW CLASS -- Declaring our own methods of authenticating the user
+   *
+   *
+   *
+   */
+  private class PoPAuthResultHandler implements Firebase.AuthResultHandler
+  {
+    private final String provider;
+
+    public PoPAuthResultHandler (String provider)
+    {
+      this.provider = provider;
+    }
+
+    @Override
+    public void onAuthenticated (AuthData authData)
+    {
+      mAuthSuccess = true;
+      bUsingOffline = false;
+      mAuthProgressDialog.dismiss();
+      Log.i(LOG_TAG, provider + " " + "auth successful.");
+
+      if (authData != null)
+      {
+        //shared preferences
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor spe = sp.edit();
+
+        if (authData.getProvider().equals(Constants.PASSWORD_PROVIDER))
+        {
+          setAuthUserPassPro(authData);
+        }
+        else
+        {
+          if (authData.getProvider().equals(Constants.GOOGLE_PROVIDER))
+          {
+            setAuthUserGoogle(authData);
+          }
+        }
+                /* Save provider name and encodedEmail for later use and start MainActivity */
+        spe.putString(Constants.KEY_PROVIDER, authData.getProvider()).apply();
+        spe.putString(Constants.KEY_ENCODED_EMAIL, mEncodedEmail).apply();
+
+                /* Go to main activity */
+        Intent intent = new Intent(MainSignInActivity.this, ContinueActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+      }
+    }
+
+    @Override
+    public void onAuthenticationError (FirebaseError firebaseError)
+    {
+      mAuthProgressDialog.dismiss();
+    }
+  }
+
+/***************************************************************************************************
+*   Method:
+*   Description:
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+  private void setAuthUserGoogle(AuthData authData)
+  {
+    SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    SharedPreferences.Editor spe = sp.edit();
+    String unprocessedEmail;
+
+
+    if (mGoogleApiClient.isConnected())
+    {
+      unprocessedEmail = mGoogleAccount.getEmail().toLowerCase();
+      spe.putString(Constants.KEY_GOOGLE_EMAIL, unprocessedEmail).apply();
+    }
+    else
+    {
+
+      /**
+       * Otherwise get email from sharedPreferences, use null as default value
+       * (this mean that user resumes his session)
+       */
+      unprocessedEmail = sp.getString(Constants.KEY_GOOGLE_EMAIL, null);
+    }
+    /**
+     * Encode user email replacing "." with "," to be able to use it
+     * as a Firebase db key
+     */
+    mEncodedEmail = Utils.encodeEmail(unprocessedEmail);
+
+            /* Get username from authData */
+    final String userName = (String) authData.getProviderData().get(Constants.PROVIDER_DATA_DISPLAY_NAME);
+
+            /* If no user exists, make a user */
+    final Firebase userLocation = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+    userLocation.addListenerForSingleValueEvent(new ValueEventListener()
     {
       @Override
-      public void onClick(DialogInterface dialog, int ok)
+      public void onDataChange(DataSnapshot dataSnapshot)
       {
-        //user clicked ok
+                    /* If nothing is there ...*/
+        if (dataSnapshot.getValue() == null)
+        {
+          HashMap<String, Object> timestampJoined = new HashMap<>();
+          timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
-        myFirebaseRef.authWithPassword(dUserEmail.getText().toString(),
-                dPassToken.getText().toString(),
-                new Firebase.AuthResultHandler()
-                {
-                  @Override
-                  public void onAuthenticated(AuthData authData)
-                  {
-                    myFirebaseRef.changePassword(dUserEmail.getText().toString(),
-                            dPassToken.getText().toString(), dPassNew.getText().toString(),
-                            new Firebase.ResultHandler()
-                            {
-                              @Override
-                              public void onSuccess()
-                              {
-                                System.out.println("Password changed. ");
-                              }
-
-                              @Override
-                              public void onError(FirebaseError firebaseError)
-                              {
-                                System.out.println("Error changing password. ");
-                              }
-                            });
-                  }
-
-                  @Override
-                  public void onAuthenticationError(FirebaseError firebaseError)
-                  {
-                    // there was an error
-                  }
-                });
+          User newUser = new User(userName, mEncodedEmail, timestampJoined);
+          userLocation.setValue(newUser);
+        }
       }
-    })
-    .setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-    {
-      public void onClick(DialogInterface dialog, int cancel)
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError)
       {
-        //user clicked cancel
-        //LoginDialogFragment.this.getDialog().cancel();
+        Log.d(LOG_TAG, "Error occurred: " + firebaseError.getMessage());
       }
     });
 
-    test.show();
+  }
 
-  }*/
+/***************************************************************************************************
+*   Method:
+*   Description:
+*   Parameters:  N/A
+*   Returned:    N/A
+***************************************************************************************************/
+  private void setAuthUserPassPro(AuthData authData)
+  {
+    final String unprocessedEmail = authData.getProviderData()
+      .get(Constants.FIREBASE_PROPERTY_EMAIL).toString().toLowerCase();
+    /**
+     * Encode user email replacing "." with ","
+     * to be able to use it as a Firebase db key
+     */
+    mEncodedEmail = Utils.encodeEmail(unprocessedEmail);
+
+    final Firebase userRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEncodedEmail);
+
+    /**
+     * Check if current user has logged in at least once
+     */
+    userRef.addListenerForSingleValueEvent(new ValueEventListener()
+    {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot)
+      {
+        User user = dataSnapshot.getValue(User.class);
+
+        if (user != null)
+        {
+          /**
+           * If recently registered user has hasLoggedInWithPassword = "false"
+           * (never logged in using password provider)
+           */
+          if (!user.isbLoggedInPassword())
+          {
+
+            /**
+             * Change password if user that just signed in signed up recently
+             * to make sure that user will be able to use temporary password
+             * from the email more than 24 hours
+             */
+            mFirebaseRef.changePassword(unprocessedEmail, mEditPassword.getText().toString(),
+              mEditPassword.getText().toString(), new Firebase.ResultHandler()
+              {
+                @Override
+                public void onSuccess()
+                {
+                  userRef.child(Constants.FIREBASE_PROPERTY_USER_HAS_LOGGED_IN_WITH_PASSWORD).setValue(true);
+                                        /* The password was changed */
+                  Log.d(LOG_TAG, "pass change successful" +
+                    mEditPassword.getText().toString());
+                }
+
+                @Override
+                public void onError(FirebaseError firebaseError)
+                {
+                  Log.d(LOG_TAG, "failed to change the password" + firebaseError);
+                }
+              });
+          }
+        }
+      }
+
+      @Override
+      public void onCancelled(FirebaseError firebaseError)
+      {
+        Log.e(LOG_TAG,
+          "the read failed" +
+            firebaseError.getMessage());
+      }
+    });
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   *************************************************************************************************/
+  @Override
+  public void onConnectionFailed(ConnectionResult result)
+  {
+    /**
+     * An unresolvable error has occurred and Google APIs (including Sign-In) will not
+     * be available.
+     */
+    mAuthProgressDialog.dismiss();
+    //showErrorToast(result.toString());
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description: show error toast to users
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  private void showErrorToast(String message)
+  {
+    Toast.makeText(MainSignInActivity.this, message, Toast.LENGTH_LONG).show();
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description: This callback is triggered when any startActivityForResult finishes. The
+   *   requestCode maps to the value passed into startActivityForResult.
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data)
+  {
+    super.onActivityResult(requestCode, resultCode, data);
+        /* Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); */
+    if (requestCode == RC_GOOGLE_LOGIN)
+    {
+      GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+      GoogleSignInAccount account = result.getSignInAccount();
 
 
+//      Log.d(LOG_TAG, "Google Sign in result email:" + account.getEmail());
+//      Log.d(LOG_TAG, "Google Sign in result display:" + account.getDisplayName());
+//      Log.d(LOG_TAG, "Google Sign in result token:" + account.getIdToken());
+//      Log.d(LOG_TAG, "Google Sign in result server auth code:" + account.getServerAuthCode());
+//      Log.d(LOG_TAG, "Google Sign in result id:" + account.getId());
+
+      handleSignInResult(result);
+    }
+
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description:
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  private void handleSignInResult(GoogleSignInResult result)
+  {
+    Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
+    if (result.isSuccess())
+    {
+            /* Signed in successfully, get the OAuth token */
+      mGoogleAccount = result.getSignInAccount();
+      getGoogleOAuthTokenAndLogin();
+    }
+    else
+    {
+      if (result.getStatus().getStatusCode() == GoogleSignInStatusCodes.SIGN_IN_CANCELLED)
+      {
+        showErrorToast("The sign in was cancelled. Make sure you're connected to the internet and try again.");
+      }
+      else
+      {
+        showErrorToast("Error handling the sign in: " + result.getStatus().getStatusMessage());
+      }
+      mAuthProgressDialog.dismiss();
+    }
+  }
+
+  /*************************************************************************************************
+   *   Method:
+   *   Description: Gets the GoogleAuthToken and logs in.
+   *   Parameters:  N/A
+   *   Returned:    N/A
+   ************************************************************************************************/
+  private void getGoogleOAuthTokenAndLogin()
+  {
+        /* Get OAuth token in Background */
+    AsyncTask<Void, Void, String> task = new AsyncTask<Void, Void, String>()
+    {
+      String mErrorMessage = null;
+
+      @Override
+      protected String doInBackground(Void... params)
+      {
+        String token = null;
+
+        try
+        {
+          String scope = String.format("oath2:%s" , new Scope(Scopes.PROFILE)) + " email";
+          Log.e(LOG_TAG, "Scope is: "  + scope);
+          token = GoogleAuthUtil.getToken(MainSignInActivity.this, mGoogleAccount.getEmail(), scope);
+        } catch (IOException transientEx)
+        {
+                    /* Network or server error */
+          //Log.e(LOG_TAG, getString(R.string.google_error_auth_with_google) + transientEx);
+          mErrorMessage = "Network error: " + transientEx.getMessage();
+        } catch (UserRecoverableAuthException e)
+        {
+          //Log.w(LOG_TAG, getString(R.string.google_error_recoverable_oauth_error) + e.toString());
+
+                    /* We probably need to ask for permissions, so start the intent if there is none pending */
+          if (!mGoogleIntentInProgress)
+          {
+            mGoogleIntentInProgress = true;
+            Intent recover = e.getIntent();
+            startActivityForResult(recover, RC_GOOGLE_LOGIN);
+          }
+        } catch (GoogleAuthException authEx)
+        {
+                    /* The call is not ever expected to succeed assuming you have already verified that
+                     * Google Play services is installed. */
+          Log.e(LOG_TAG, " " + authEx.getMessage(), authEx);
+         mErrorMessage = "Error auth with Google: " + authEx.getMessage();
+        }
+        return token;
+      }
+
+      @Override
+      protected void onPostExecute(String token)
+      {
+        mAuthProgressDialog.dismiss();
+        if (token != null)
+        {
+                    /* Successfully got OAuth token, now login with Google */
+          mFirebaseRef.authWithOAuthToken(Constants.GOOGLE_PROVIDER, token,
+            new PoPAuthResultHandler(Constants.GOOGLE_PROVIDER));
+        }
+        else if (mErrorMessage != null)
+        {
+          showErrorToast(mErrorMessage);
+        }
+      }
+    };
+
+    task.execute();
+  }
 
 }

@@ -17,61 +17,71 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  */
 public class ListDFragment extends DialogFragment
 {
-    private Button mbCancel;
-    private Button mbOK;
-    private EditText mEditText;
-    private Dialog mDialog;
+  private Button mbCancel;
+  private Button mbOK;
+  private EditText mEditText;
+  private Dialog mDialog;
+
+  String mEncodedEmail;
 
 
-    public interface EditNameDialogListener {
-        void onFinishListDialog(String inputText);
-    }
+  public interface EditNameDialogListener
+  {
+    void onFinishListDialog(String inputText);
+  }
 
-    public ListDFragment() {
-        // Empty constructor required for DialogFragment
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.listdialogfragment, container,
-                false);
+  public ListDFragment()
+  {
+    // Empty constructor required for DialogFragment
+  }
 
 
-
-        // Get field from view
-        mEditText = (EditText) rootView.findViewById(R.id.edit_text);
-
-        // makes editText selected
-        mEditText.requestFocus();
-
-
-        mbCancel = (Button) rootView.findViewById (R.id.cancel_button);
-        mbCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-            }
-        });
-
-        mbOK = (Button) rootView.findViewById (R.id.ok_button);
-        mbOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PoPListActivity activity = (PoPListActivity) getActivity();
-                (activity.getListInfoListener()).onFinishNewListDialog(mEditText.getText().toString());
-                mDialog.dismiss();
-            }
-        });
-
-        mDialog = getDialog();
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState)
+  {
+    View rootView = inflater.inflate(R.layout.listdialogfragment, container,
+      false);
 
 
-        mDialog.setTitle("Add List");
+    // Get field from view
+    mEditText = (EditText) rootView.findViewById(R.id.edit_text);
 
-        mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        // Do something else
-        return rootView;
-    }
+    // makes editText selected
+    mEditText.requestFocus();
+
+
+    mbCancel = (Button) rootView.findViewById(R.id.cancel_button);
+    mbCancel.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        mDialog.dismiss();
+      }
+    });
+
+    mbOK = (Button) rootView.findViewById(R.id.ok_button);
+    mbOK.setOnClickListener(new View.OnClickListener()
+    {
+      @Override
+      public void onClick(View v)
+      {
+        PoPListActivity activity = (PoPListActivity) getActivity();
+        (activity.getListInfoListener()).onFinishNewListDialog(mEditText.getText().toString());
+        mDialog.dismiss();
+      }
+    });
+
+    mDialog = getDialog();
+
+
+    mDialog.setTitle("Add List");
+
+    mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+    // Do something else
+    return rootView;
+  }
+
+
 }

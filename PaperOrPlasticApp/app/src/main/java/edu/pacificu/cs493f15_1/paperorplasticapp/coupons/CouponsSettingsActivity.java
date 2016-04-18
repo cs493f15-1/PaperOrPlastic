@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.menu.ContinueActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
@@ -32,7 +33,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class CouponsSettingsActivity extends Activity implements View.OnClickListener
+public class CouponsSettingsActivity extends BaseActivity implements View.OnClickListener
 {
     //Used to change fonts
     private TextView titleText;

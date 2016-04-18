@@ -7,13 +7,11 @@ import java.util.Scanner;
 /**
  * Created by sull0678 on 10/12/2015.
  */
-public class KitchenInventory extends PoPList
-{
+public class KitchenInventory extends PoPList {
     boolean bIsLinked;
     boolean bIsShared;
 
-    public KitchenInventory(String name)
-    {
+    public KitchenInventory(String name) {
         mListName = name;
         mItems = new ArrayList<ListItem>();
         mCurrentSortingValue = SORT_NONE;
@@ -33,19 +31,17 @@ public class KitchenInventory extends PoPList
 
     /********************************************************************************************
      * Function name: writeListToFile
-     *
+     * <p/>
      * Description: Outputs the current list to the passed in PrintWriter
-     *
+     * <p/>
      * Parameters: listOutput - the printWriter which the KitchenInventory will be outputted to
-     *
+     * <p/>
      * Returns: None
      ******************************************************************************************/
-    public void writeListToFile (PrintWriter listOutput)
-    {
+    public void writeListToFile(PrintWriter listOutput) {
         listOutput.println(getListName());
         listOutput.println(getSize() + " " + getCurrentSortingValue());
-        for (ListItem item : mItems)
-        {
+        for (ListItem item : mItems) {
             item.writeItemToFile(listOutput);
         }
         listOutput.flush();
@@ -54,15 +50,14 @@ public class KitchenInventory extends PoPList
 
     /********************************************************************************************
      * Function name: readListFromFile
-     *
+     * <p/>
      * Description: reads from a file using a scanner and inputs the information into the list
-     *
+     * <p/>
      * Parameters: listInput - the Scanner which the KitchenInventory will be read from
-     *
+     * <p/>
      * Returns: None
      ******************************************************************************************/
-    public void readListFromFile (Scanner listInput)
-    {
+    public void readListFromFile(Scanner listInput) {
         String temp;
         int size;
         ListItem tempItem;
@@ -74,8 +69,7 @@ public class KitchenInventory extends PoPList
 
         setCurrentSortingValue(listInput.nextInt());
 
-        for (int i = 0; i < size; ++i)
-        {
+        for (int i = 0; i < size; ++i) {
             tempItem = new ListItem("temp", "brand", "desc");
             tempItem.readItemFromFile(listInput);
             addItem(tempItem);

@@ -248,14 +248,7 @@ public class ListItem
 
     public void setNotes (String notes)
     {
-        if (notes.length() <= MAX_LENGTH)
-        {
-            mNotes = notes;
-        }
-        else
-        {
-            mNotes = notes.substring(0, MAX_LENGTH);
-        }
+      mNotes = notes.substring(0, MAX_LENGTH);
     }
 
     public void setNutritionFacts (int itemCal, double itemTotalFat,

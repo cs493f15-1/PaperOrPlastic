@@ -13,6 +13,9 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.coupons;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.fasterxml.jackson.databind.deser.Deserializers;
+
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
@@ -22,7 +25,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class CouponsActivity extends Activity
+public class CouponsActivity extends BaseActivity
 {
     @Override
     protected void onCreate (Bundle savedInstanceState)

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/action_edit_list_name"
+        android:animateLayoutChanges="true"
+        android:orderInCategory="100"
+        android:title="Edit List Name"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share_list"
+        android:animateLayoutChanges="true"
+        android:icon="@drawable/abc_ic_menu_share_mtrl_alpha"
+        android:orderInCategory="100"
+        android:title="Share List"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_barcode_add_item"
+        android:animateLayoutChanges="true"
+        android:icon="@drawable/barcode_add"
+        android:orderInCategory="100"
+        android:title="Barcode Add"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_remove_list"
+        android:orderInCategory="100"
+        android:title="Delete List"
+        android:visible="true"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="Logout"
+        android:visible="true"
+        app:showAsAction="never" />
+
+</menu>

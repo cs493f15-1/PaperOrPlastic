@@ -29,11 +29,8 @@ public class KitchenInventoryActivity  extends PoPListActivity {
 
     /********************************************************************************************
      * Function name: onCreate
-     * <p/>
      * Description:   Initializes all needed setup for objects in page
-     * <p/>
      * Parameters:    savedInstanceState  - a bundle object
-     * <p/>
      * Returns:       none
      ******************************************************************************************/
     @Override
@@ -41,7 +38,8 @@ public class KitchenInventoryActivity  extends PoPListActivity {
 
         super.onCreate(savedInstanceState);
 
-        PoPOnCreate(savedInstanceState, new KitchenInventories(), R.layout.activity_kitchen_inventory, R.layout.kitchen_inventory_item, KitchenInventories.KITCHEN_FILE_NAME, false);
+        PoPOnCreate(savedInstanceState, new KitchenInventories(), R.layout.activity_kitchen_inventory_new,
+         KitchenInventories.KITCHEN_FILE_NAME, false);
     }
 
 }

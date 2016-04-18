@@ -50,12 +50,11 @@ public class ExecuteUPCScanTask extends AsyncTask<String, Void, Void> {
 
 			int HttpResult1 = urlConnection.getResponseCode ();
 
-/*
+
 			//Login
 			queryBundle.put("upc", URLEncoder.encode(UPC[0], "UTF-8"));
 			queryBundle.put("appId", "0f0b5b93");
 			queryBundle.put("appKey", "f468c4aec88a5de24bf91e30a9f491bf");
-*/
 
 			//Adding UPC
 			//Long intUPC = Long.parseLong(UPC[0].trim());

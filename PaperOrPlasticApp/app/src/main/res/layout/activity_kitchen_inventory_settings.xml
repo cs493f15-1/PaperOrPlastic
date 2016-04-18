@@ -9,6 +9,7 @@ android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -16,7 +17,7 @@ android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:background="@color/cListTitleColor"
-        android:id="@+id/relativeLayout2">
+        android:id="@+id/relativeLayout2" android:visibility="gone">
 
         <Button
             android:layout_width="50dp"
@@ -47,6 +48,16 @@ android:layout_height="match_parent"
             android:background="@drawable/edit_btn_toggle"
             android:layout_alignParentRight="true" />
 
+        <!--<Button-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/sEdit"-->
+            <!--android:id="@+id/bEdit"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_toRightOf="@+id/bBack"-->
+            <!--android:layout_toEndOf="@+id/bBack" />-->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -75,21 +86,21 @@ android:layout_height="match_parent"
                 android:checked="false" />-->
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="top"
-        android:layout_below="@+id/relativeLayout2">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/Toolbar" android:layout_alignParentTop="true"/>
 
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listViewOfLists"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true" android:layout_below="@+id/app_bar"/>
 
-    </RelativeLayout>
 </RelativeLayout>
 
 </LinearLayout>

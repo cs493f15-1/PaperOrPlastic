@@ -39,7 +39,7 @@ public class GroceryListsTest
         GLists.addList(gListName0);
 
         Assert.assertEquals("The size of the List was not as expected.", 1, GLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getListName());
+        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getmListName());
     }
 
     /**
@@ -53,13 +53,13 @@ public class GroceryListsTest
         GLists.addList(gListName0);
 
         Assert.assertEquals("The size of the List was not as expected.", 1, GLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getListName());
+        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getmListName());
 
         GLists.addList(gListName1);
 
         Assert.assertEquals("The size of the List was not as expected.", 2, GLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getListName());
-        Assert.assertEquals("The List1 returned was not as expected.", gListName1, GLists.getList(1).getListName());
+        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getmListName());
+        Assert.assertEquals("The List1 returned was not as expected.", gListName1, GLists.getList(1).getmListName());
     }
 
     /**
@@ -72,7 +72,7 @@ public class GroceryListsTest
         GLists.addList(gListName0);
 
         Assert.assertEquals("The size of the List was not as expected.", 1, GLists.getSize());
-        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getListName());
+        Assert.assertEquals("The List1 returned was not as expected.", gListName0, GLists.getList(0).getmListName());
 
         GLists.deleteList(0);
 

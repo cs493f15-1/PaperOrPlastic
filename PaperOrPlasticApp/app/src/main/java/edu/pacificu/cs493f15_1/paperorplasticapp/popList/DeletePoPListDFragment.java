@@ -62,7 +62,7 @@ public class DeletePoPListDFragment extends DialogFragment
         mbOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PoPListSettingsActivity activity = (PoPListSettingsActivity) getActivity(); //TODO Come back to this maybe if statements?
+                PoPListActivity activity = (PoPListActivity) getActivity(); //TODO Come back to this maybe if statements?
                 DeleteListDialogListener listener = activity.getDeleteDialogListener();
                 listener.onDeleted();
                 mDialog.dismiss();

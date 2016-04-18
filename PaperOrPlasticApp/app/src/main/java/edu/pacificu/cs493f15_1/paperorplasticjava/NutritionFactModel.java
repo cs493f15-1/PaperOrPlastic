@@ -6,12 +6,10 @@ import java.util.Scanner;
 /**
  * Created by jo9026 on 10/22/2015.
  */
-public class NutritionFactModel
-{
+public class NutritionFactModel {
 	/******************************
 	 * Nutrition Data Model for MVC
 	 ******************************/
-
 	int mCalories;
 	double mTotalFat;
 	double mSatFat;
@@ -31,9 +29,9 @@ public class NutritionFactModel
 	int mIron;
 
 
-	public NutritionFactModel()
-	{
-	}
+  public NutritionFactModel()
+  {
+  }
 
 	/*********************************
 	 * GETTERS

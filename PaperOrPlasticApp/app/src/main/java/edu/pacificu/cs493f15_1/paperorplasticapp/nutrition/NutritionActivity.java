@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
 /***************************************************************************************************
  *   Class:         NutritionActivity
@@ -28,7 +30,7 @@ import edu.pacificu.cs493f15_1.paperorplasticjava.NutritionFactModel;
  *   Parameters:    N/A
  *   Returned:      N/A
  **************************************************************************************************/
-public class NutritionActivity extends Activity
+public class NutritionActivity extends BaseActivity
 {
 
     private TextView mItemName, mBrandName, mCalories, mTotalFats, mSatFat, mPolyFat, mMonoFat,

@@ -16,8 +16,8 @@ public class GroceryList extends PoPList
   {
     mListName = name;
 
-      mItems = new ArrayList<ListItem>();
-      mCurrentSortingValue = SORT_NONE;
+    mItems = new ArrayList<ListItem>();
+    mCurrentSortingValue = SORT_NONE;
   }
 
     /*Functions
@@ -27,9 +27,9 @@ public class GroceryList extends PoPList
         unShareList ();
     */
 
-    /*********************************
-     * I/O
-     ********************************/
+  /*********************************
+   * I/O
+   ********************************/
 
   /********************************************************************************************
    * Function name: writeListToFile
