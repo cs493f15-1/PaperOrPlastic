@@ -183,16 +183,16 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     {
         boolean bIsChecked = switches.get (index).isChecked ();
 
-            if (bIsChecked)
-            {
-                ContinueActivity.buttons.get (index).setVisibility(View.VISIBLE);
-                buttons.get (index).setClickable(true);
-            }
-            else
-            {
-                ContinueActivity.buttons.get (index).setVisibility(View.VISIBLE);
-                buttons.get (index).setClickable(false);
-            }
+        if (bIsChecked)
+        {
+            buttons.get (index).setClickable(true);
+        }
+        else
+        {
+            buttons.get (index).setClickable(false);
+        }
+
+        ContinueActivity.buttons.get (index).setVisibility(View.VISIBLE);
 
         savePreferences(SWITCH_PREF_KEYS[index], bIsChecked);
     }

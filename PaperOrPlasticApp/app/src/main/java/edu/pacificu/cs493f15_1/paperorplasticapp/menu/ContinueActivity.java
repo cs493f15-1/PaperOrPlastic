@@ -10,7 +10,6 @@
 
 package edu.pacificu.cs493f15_1.paperorplasticapp.menu;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -74,7 +73,6 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   final int ALPHA_SETTING = 35;
 
   private Firebase mUserRef;
-  //private FirebaseUser fUserTest;
 
   /***********************************************************************************************
    *   Method:        onCreate
@@ -99,6 +97,7 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
     {
       bUsingOffline = true;
     }
+
     else
     {
       bUsingOffline = false;

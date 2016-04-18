@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/lists_row_height"
     android:layout_margin="2dp"
-    android:background="@android:color/white"
+    android:background="#a3ffffff"
     android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"

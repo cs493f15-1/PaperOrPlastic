@@ -2,7 +2,6 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,12 +12,12 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import edu.pacificu.cs493f15_1.utils.Utils;
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleListItem;
 import edu.pacificu.cs493f15_1.utils.Constants;
-import edu.pacificu.cs493f15_1.utils.Utils;
 
 
 /********************************************************************************************

@@ -11,8 +11,6 @@ import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 
-import java.util.List;
-
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;

@@ -37,14 +37,15 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
+
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
-import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 
 /***************************************************************************************************
  * Class:         POPListActivity
@@ -105,6 +106,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private ValueEventListener mSimpleListRefListener;
 
   private SimpleListAdapter mSimpleListAdapter;
+
 
 
   /********************************************************************************************
@@ -229,23 +231,94 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    * Returned:     N/A
    ************************************************************************************************/
   //called in PopListAdapter and in listView On click listener
-  public void onListClick(String listName)
-  {
-    Intent intent;
+  public void onListClick(String listName) {
+      Intent intent;
 
-    if (mbIsGrocery)
-    {
-      intent = new Intent(this, GroceryListItemsActivity.class);
-    }
-    else
-    {
-      intent = new Intent(this, KitchenInventoryItemsActivity.class);
+      if (mbIsGrocery) {
+          intent = new Intent(this, GroceryListItemsActivity.class);
+      } else {
+          intent = new Intent(this, KitchenInventoryItemsActivity.class);
+      }
+
+      intent.putExtra("PoPListName", listName);
+
+      startActivity(intent);
+  }
+
+    /********************************************************************************************
+     * Function name: onCreate
+     * <p/>
+     * Description:   Initializes all needed setup for objects in page
+     * <p/>
+     * Parameters:    savedInstanceState  - a bundle object
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************//*
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Log.i("lifecycle", "In On Create");
     }
 
-    intent.putExtra("PoPListName", listName);
+    *//********************************************************************************************
+     * Function name: PoPOnCreate
+     * <p/>
+     * Description:   a function that is used in the OnCreate of GroceryListActivity and
+     * KitchenInventoryActivity and is used to implement the functionality of the
+     * Activity.
+     * <p/>
+     * Parameters:    savedInstanceState  - a bundle object
+     * popList             - The lists object created in GroceryListActivity or KitchenInventoryActivity
+     * activityLayout      - the layout of GroceryListActivity or KitchenInventoryActivity
+     * itemLayout          - the layout of the items in GroceryListActivity or KitchenInventoryActivity
+     * fileName            - the file which the PoPLists should be stored in
+     * isGrocery           - A boolean on whether the activity is called from GroceryListActivity or not
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************//*
+    protected void PoPOnCreate(Bundle savedInstanceState, PoPLists popLists,
+                               final int activityLayout, final int itemLayout,
+                               final String fileName, final boolean isGrocery) {
+        setContentView(activityLayout);
+
+        mPoPLists = popLists;
+        mItemLayout = itemLayout;
+        mPoPFileName = fileName;
+        mbIsOnEdit = false;
+
+        mbAddingItem = false;
+        mbIsGrocery = isGrocery;
+
+        //to view items
+        mListView = (ListView) findViewById(R.id.listView);
+
+        handleSwipingToDelete();
+
+        //setup tabs
+        setupTabs();
+
+        //setup edit button
+        setupEditDeleteButtonsForLists();
+
+        //setup back buttons
+        setupBackButton();
+
+        //setup settings activity button
+        setupSettingsActivityButton();
+
+        //setup addList and addItem buttons
+        setupAddListButtons();
+
+        setupAddItemButtons();
+
+        //setup the sorting group by spinner (drop down list sorting)
+        setUpGroupSpinnerHandleSorting();
+
+        addAllExistingListsInPoPListsToTabs();
 
     startActivity(intent);
-  }
+  }*/
 
   /*************************************************************************************************
    * Method:
@@ -258,9 +331,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     Intent intent;
 
     if (mbIsGrocery)
-    {
-      intent = new Intent(this, GroceryListItemsActivity.class);
-    }
+        intent = new Intent(this, GroceryListItemsActivity.class);
     else
     {
       intent = new Intent(this, KitchenInventoryItemsActivity.class);
@@ -281,41 +352,35 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private void handleSwipingToDelete()
   {
     //to be able to swipe list items over for delete
-    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView)
-    {
-      @Override
-      public void onSwipeRight(int pos)
-      {
-        // Log.d("GroceryListActivity", "onSwipeRight function entered");
+    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView) {
+        @Override
+        public void onSwipeRight(int pos) {
+            // Log.d("GroceryListActivity", "onSwipeRight function entered");
 
-        if (!mbIsOnEdit)
-        {
-          hideDeleteButton(pos);
+            if (!mbIsOnEdit) {
+                hideDeleteButton(pos);
+            }
+
         }
 
-      }
-
-      @Override
-      public void onSwipeLeft(int pos)
-      {
-        // Log.d("GroceryListActivity", "onSwipeLeft function entered");
-        if (!mbIsOnEdit)
-        {
-          showDeleteButton(pos);
-          showDeleteButton(pos); //TODO can this be removed?
+        @Override
+        public void onSwipeLeft(int pos) {
+            // Log.d("GroceryListActivity", "onSwipeLeft function entered");
+            if (!mbIsOnEdit) {
+                showDeleteButton(pos);
+                showDeleteButton(pos); //TODO can this be removed?
+            }
         }
-      }
 
-      public void onItemClick(AdapterView<?> parent, View view,
-                              int position, long id)
-      {
-        // selected item
-        mLastClicked = position;
+        public void onItemClick(AdapterView<?> parent, View view,
+                                int position, long id) {
+            // selected item
+            mLastClicked = position;
 
-        Toast toast = Toast.makeText(getApplicationContext(), mLastClicked, Toast.LENGTH_LONG);
-        toast.show();
+            Toast toast = Toast.makeText(getApplicationContext(), mLastClicked, Toast.LENGTH_LONG);
+            toast.show();
 
-      }
+        }
     });
   }
 
@@ -396,14 +461,12 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     mListOfListView.setAdapter(mListAdapter);
 
-    mListOfListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-    {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-      {
-        //pass list name to onListClick
-        onListClick((String) ((PoPListAdapter.ListHolder) view.getTag()).listName.getTag());
-      }
+    mListOfListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //pass list name to onListClick
+            onListClick((String) ((PoPListAdapter.ListHolder) view.getTag()).listName.getTag());
+        }
     });
   }
 
@@ -415,37 +478,23 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
    ************************************************************************************************/
   public void setupFBListAdapter()
   {
-    Firebase listRef;
-
-    //list adapter holds info of lists for listView
-    if (mbIsGrocery)
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_GROCERY_LISTS);
-    }
-    else
-    {
-      listRef = new Firebase(Constants.FIREBASE_URL_KITCHEN_INVENTORY);
-    }
-
+    Log.e("current", "current encoded email: " + mEncodedEmail);
     mSimpleListAdapter = new SimpleListAdapter(this, SimpleList.class,
-        R.layout.single_active_list, listRef, mEncodedEmail);
+        R.layout.single_active_list, mListsRef, mEncodedEmail);
 
 
     mListOfListView.setAdapter(mSimpleListAdapter);
 
 
-    mListOfListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-    {
-      @Override
-      public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-      {
-        SimpleList selectedList = mSimpleListAdapter.getItem(position);
-        if (null != selectedList)
-        {
-          String listId = mSimpleListAdapter.getRef(position).getKey();
-          onFBListClick(listId);
+    mListOfListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            SimpleList selectedList = mSimpleListAdapter.getItem(position);
+            if (null != selectedList) {
+                String listId = mSimpleListAdapter.getRef(position).getKey();
+                onFBListClick(listId);
+            }
         }
-      }
     });
   }
 
@@ -458,25 +507,20 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   public void setupSwipeListening()
   {
     //set up swipe listening
-    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView)
-    {
-      @Override
-      public void onSwipeRight(int pos)
-      {
-        if (!mbIsOnEdit)
-        {
-          hideDeleteButton(pos);
+    mListOfListView.setOnTouchListener(new OnSwipeTouchListener(this, mListOfListView) {
+        @Override
+        public void onSwipeRight(int pos) {
+            if (!mbIsOnEdit) {
+                hideDeleteButton(pos);
+            }
         }
-      }
 
-      @Override
-      public void onSwipeLeft(int pos)
-      {
-        if (!mbIsOnEdit)
-        {
-          showDeleteButton(pos);
+        @Override
+        public void onSwipeLeft(int pos) {
+            if (!mbIsOnEdit) {
+                showDeleteButton(pos);
+            }
         }
-      }
     });
   }
 
@@ -579,42 +623,48 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     return super.onOptionsItemSelected(item);
   }
 
+    /***********************************************************************************************
+     * Method:      setupAddItemButtons
+     * Description: Sets up addItem buttons
+     * Parameters:  NONE
+     * Returned:    NONE
+     ***********************************************************************************************/
+    private void setupAddItemButtons()
+    {
 
+        //set up add item button
+        mbAddItem = (Button) findViewById(R.id.bAddItem);
+    }
 
-  /***********************************************************************************************
-   * Method:      setupAddItemButtons
-   * Description: Sets up addItem buttons
-   * Parameters:  NONE
-   * Returned:    NONE
-   ***********************************************************************************************/
-  private void setupAddItemButtons()
-  {
+    /***********************************************************************************************
+     * Method:      onAddItemClick
+     * Description: If addItem button is clicked, call activity for searching for an item
+     * Parameters:  view - the button that was clicked
+     * Returned:    NONE
+     ***********************************************************************************************/
 
-    //set up add item button
-    mbAddItem = (Button) findViewById(R.id.bAddItem);
+    public void onAddItemClick(View view)
+    {
+        Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
+        addItemIntent.putExtra("num_list_items", getNumPoPList());
 
-  }
+        if (mbIsGrocery)
+        {
+            addItemIntent.putExtra("Caller", "GroceryListActivity");
+        }
+        else
+        {
+            addItemIntent.putExtra("Caller", "KitchenInventoryActivity");
+        }
+        startActivityForResult(addItemIntent, REQUEST_OK);
+    }
 
-  /***********************************************************************************************
-   * Method:      onAddItemClick
-   * Description: If addItem button is clicked, call activity for searching for an item
-   * Parameters:  view - the button that was clicked
-   * Returned:    NONE
-   ***********************************************************************************************/
-
-  public void onAddItemClick(View view)
-  {
-    Intent addItemIntent = new Intent(PoPListActivity.this, ItemSearchActivity.class);
-    addItemIntent.putExtra("num_list_items", getNumPoPList());
-  }
-
-
+/*
   private void setupEditDeleteButtonsForGLists()
   {
     mbEdit = (ToggleButton) findViewById(R.id.bEdit);
   }
-
-
+*/
   /********************************************************************************************
    * Function name: addListToFirebase
    * Description:   adds the list name to the database
@@ -735,7 +785,6 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
 
   }
-
 
   /***********************************************************************************************
    * Method:      showDeleteButtons

@@ -6,9 +6,17 @@
     <item
         android:id="@+id/action_edit_list_name"
         android:animateLayoutChanges="true"
-        android:icon="@drawable/ic_create_white_24dp"
         android:orderInCategory="100"
         android:title="Edit List Name"
+        android:visible="true"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_barcode_add_item"
+        android:animateLayoutChanges="true"
+        android:icon="@drawable/barcode_add"
+        android:orderInCategory="100"
+        android:title="Barcode Add"
         android:visible="true"
         app:showAsAction="ifRoom" />
 
@@ -19,16 +27,14 @@
         android:orderInCategory="100"
         android:title="Share List"
         android:visible="true"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_barcode_add_item"
-        android:animateLayoutChanges="true"
-        android:icon="@drawable/barcode_add"
+        android:id="@+id/action_edit"
         android:orderInCategory="100"
-        android:title="Barcode Add"
+        android:title="Edit"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_remove_list"

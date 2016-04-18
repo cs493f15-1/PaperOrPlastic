@@ -16,16 +16,13 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.usage.ConfigurationStats;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
@@ -35,7 +32,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -56,7 +52,6 @@ import com.google.android.gms.common.api.Scope;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
@@ -197,7 +192,7 @@ public class MainSignInActivity extends BaseActivity
 
     mLoginFormView = findViewById(R.id.loginForm);
     LinearLayout linearLayout = (LinearLayout) mLoginFormView;
-    linearLayout.setBackgroundResource(R.drawable.grocerybackportraitsmall);
+    linearLayout.setBackgroundResource(R.drawable.grocerybackportrait);
 
     mAuthProgressDialog = new ProgressDialog(this);
     mAuthProgressDialog.setTitle("Loading...");
@@ -567,6 +562,17 @@ public void rememberPass(String email, String password)
     public void onAuthenticationError (FirebaseError firebaseError)
     {
       mAuthProgressDialog.dismiss();
+
+      //TODO: refactor this to nice function.
+      //we want to the function to set the text fields based on the error.
+      //so it will probz look at all the email errors - mEmailView.setError("")
+      //same thing with mEditPassword
+      //also want to use the same idea for the createAccount page and PassRecovery
+
+      if (firebaseError.getCode() == FirebaseError.INVALID_PASSWORD)
+      {
+        mEditPassword.setError("Invalid password.");
+      }
     }
   }
 

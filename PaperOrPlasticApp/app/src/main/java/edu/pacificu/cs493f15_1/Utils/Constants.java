@@ -16,8 +16,8 @@ public final class Constants
   public static final String FIREBASE_LOCATION_GROCERY_LIST_ITEMS = "groceryListItems";
   public static final String FIREBASE_LOCATION_KITCHEN_INVENTORY = "kitchenInventory";
   public static final String FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS = "kitchenInventoryItems";
-
   public static final String FIREBASE_LOCATION_USERS = "users";
+  public static final String FIREBASE_LOCATION_SHARED_WITH = "sharedWith";
 
 
   /**
@@ -45,6 +45,8 @@ public final class Constants
   public static final String FIREBASE_URL_KITCHEN_INVENTORY_ITEMS = FIREBASE_URL + "/" + FIREBASE_LOCATION_KITCHEN_INVENTORY_ITEMS;
 
   public static final String FIREBASE_URL_USERS = FIREBASE_URL + "/" + FIREBASE_LOCATION_USERS;
+
+  public static final String FIREBASE_URL_SHARED_WITH = FIREBASE_URL + "/" + FIREBASE_LOCATION_SHARED_WITH;
 
   /**
    * Constants for bundles, extras and shared preferences keys

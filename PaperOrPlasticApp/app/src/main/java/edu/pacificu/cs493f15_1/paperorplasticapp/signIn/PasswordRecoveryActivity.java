@@ -1,15 +1,12 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.signIn;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -173,24 +170,24 @@ public class PasswordRecoveryActivity extends BaseActivity
         public void onAuthenticated(AuthData authData)
         {
           myFirebaseRef.changePassword(userEmail, userToken, userPass,
-            new Firebase.ResultHandler()
-            {
-              @Override
-              public void onSuccess()
+              new Firebase.ResultHandler()
               {
-                messageDialog("Reset Password", "Password reset successful!");
-                Intent intent = new Intent(PasswordRecoveryActivity.this, MainSignInActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-              }
+                @Override
+                public void onSuccess()
+                {
+                  messageDialog("Reset Password", "Password reset successful!");
+                  Intent intent = new Intent(PasswordRecoveryActivity.this, MainSignInActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                  startActivity(intent);
+                  finish();
+                }
 
-              @Override
-              public void onError(FirebaseError firebaseError)
-              {
-                messageDialog("Reset Password", captureFirebaseError(firebaseError));
-              }
-            });
+                @Override
+                public void onError(FirebaseError firebaseError)
+                {
+                  messageDialog("Reset Password", captureFirebaseError(firebaseError));
+                }
+              });
         }
 
         @Override
@@ -200,26 +197,15 @@ public class PasswordRecoveryActivity extends BaseActivity
         }
       });
 
-      mProgressDialog.dismiss();
-    }
 
-  }
-
-/***************************************************************************************************
-*   Method:
-*   Description:
-*   Parameters:  N/A
-*   Returned:    N/A
-***************************************************************************************************/
-  public void messageDialog(String title, String message)
-  {
-    new AlertDialog.Builder (this)
-      .setMessage(message)
-      .setPositiveButton("OK", new DialogInterface.OnClickListener()
+      Handler handler = new Handler();
+      handler.postDelayed(new Runnable()
       {
-        public void onClick(DialogInterface dialog, int ok)
-        { //user clicked ok
-        }
-      }).show();
+        public void run()
+        {
+          mProgressDialog.dismiss();
+        }}, 3000);
+    }
   }
+
 }

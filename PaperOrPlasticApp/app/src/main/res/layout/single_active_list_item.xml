@@ -47,7 +47,8 @@
         android:background="@android:color/transparent"
         android:contentDescription="Remove Item"
         android:src="@drawable/ic_delete_forever_black_24dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:padding="10dp"/>
 
 
 </LinearLayout>
