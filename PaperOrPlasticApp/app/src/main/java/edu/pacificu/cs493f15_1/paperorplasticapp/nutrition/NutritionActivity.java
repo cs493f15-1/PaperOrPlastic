@@ -17,6 +17,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 public class NutritionActivity extends Activity implements OnClickListener
 {
   private Button bScanButton;
-  private TextView formatText, contentText;
+  private TextView formatText, contentText, titleText;
 
   /********************************************************************************************
    * Function name: onCreate
@@ -56,6 +57,11 @@ public class NutritionActivity extends Activity implements OnClickListener
     bScanButton = (Button) findViewById(R.id.scan_button);
     formatText = (TextView) findViewById(R.id.scan_format);
     contentText = (TextView) findViewById(R.id.scan_content);
+    titleText = (TextView) findViewById (R.id.nutritionTitleText);
+
+    Typeface laneUpperFont = Typeface.createFromAsset(getAssets(), "fonts/laneWUnderLine.ttf");
+    Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
+    titleText.setTypeface(laneUpperFont);
 
     bScanButton.setOnClickListener(this);
 

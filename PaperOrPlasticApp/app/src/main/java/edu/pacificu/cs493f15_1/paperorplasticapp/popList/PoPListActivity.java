@@ -3,6 +3,7 @@ package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -22,14 +23,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,6 +88,8 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   private String mPoPFileName;
   private PoPLists mPoPLists;
   private DialogListener mListInfoListener;
+
+  TextView mTBarTitle;
 
   private int mItemLayout;
 
@@ -148,6 +155,11 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     setupToolbar();
 
+    mTBarTitle = (TextView) findViewById(R.id.toolbar_title);
+    Typeface laneUpperFont = Typeface.createFromAsset(getAssets(), "fonts/laneWUnderLine.ttf");
+    Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
+    mTBarTitle.setTypeface(laneNarrowFont, Typeface.BOLD);
+    mTBarTitle.setTextColor(Color.WHITE);
 
 
     //Set Up ListView
@@ -184,13 +196,15 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     {
       if (mbIsGrocery)
       {
-        setTitle("Your Grocery Lists");
+       mTBarTitle.setText("Your Grocery Lists");
+        //setTitle("Your Grocery Lists");
       }
       else
       {
-        setTitle("Your Inventory");
+       mTBarTitle.setText ("Your Inventory");
+        //setTitle("Your Inventory");
       }
-
+      setTitle("");
     }
     else
     {
@@ -214,7 +228,9 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
             {
               title = name + "'s Inventory";
             }
-            setTitle(title);
+            mTBarTitle.setText(title);
+
+            setTitle("");
           }
         }
 
@@ -355,6 +371,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
   public void setupToolbar()
   {
     Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+
         /* Common toolbar setup */
     setSupportActionBar(toolbar);
         /* Add back button to the action bar */

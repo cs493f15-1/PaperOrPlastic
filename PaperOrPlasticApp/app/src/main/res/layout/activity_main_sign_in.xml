@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Forgot password?"
-                android:id="@+id/textView2" android:layout_marginRight="5dp"
+                android:id="@+id/aboutYearText" android:layout_marginRight="5dp"
                 />
             <Button
                 android:layout_width="wrap_content"

@@ -75,6 +75,10 @@
 
     <string name="sSearchHint">Not Case Sens</string>
 
+    <string name="sReturnToSignin">Return to Sign-in</string>
+
+    <string name="sCreatedByAuthors">Created By:\nBrianna Alcoran\nAbby Jones\nKevin Jo\nLauren Sullivan\nEvan Heydemann</string>
+
     <string name="sDuplicateListError">The list could not be added because there is already a list with that name. Please select a different name.</string>
     <string name="sDuplicateItemError">The item could not be added because there is already an item with that name.</string>
     <string name="sCouldNotAddItemSinceNoListError">The item could not be added because there is no list available. Please select a list first.</string>

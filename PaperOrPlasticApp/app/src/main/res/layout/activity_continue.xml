@@ -199,7 +199,7 @@
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Return to Sign-in"
+        android:text="@string/sReturnToSignin"
         android:layout_gravity="center_horizontal"
         android:textStyle="bold"
         android:background="#f6eaea"

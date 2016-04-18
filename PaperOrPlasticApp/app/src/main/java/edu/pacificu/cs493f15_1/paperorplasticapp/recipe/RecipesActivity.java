@@ -11,7 +11,9 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.recipe;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 
@@ -24,10 +26,19 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  **************************************************************************************************/
 public class RecipesActivity extends Activity
 {
+
+    //Used to change fonts
+    private TextView titleText;
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipes);
+
+        titleText = (TextView) findViewById(R.id.recipesTitleText);
+        Typeface laneUpperFont = Typeface.createFromAsset(getAssets(), "fonts/laneWUnderLine.ttf");
+        Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
+        titleText.setTypeface(laneUpperFont);
     }
 }
