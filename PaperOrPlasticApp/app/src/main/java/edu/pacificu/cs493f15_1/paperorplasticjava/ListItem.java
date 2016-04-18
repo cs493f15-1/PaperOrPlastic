@@ -247,7 +247,7 @@ public class ListItem
   public void writeItemToFile (PrintWriter itemOutput)
   {
     String content = getFoodType() + " " + getAisle() + " " + getQuantity() + " " + getPrice()
-      + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";
+      + " " + getCustomCategory() + " " + getCheckedOff() + " " + getNotes() + " ";//TODO move notes to its own line
 
     itemOutput.println(getItemName());
     itemOutput.print(content);
