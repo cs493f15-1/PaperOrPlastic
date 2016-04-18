@@ -76,7 +76,6 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   final int ALPHA_SETTING = 35;
 
   private Firebase mUserRef;
-  //private FirebaseUser fUserTest;
 
   /***********************************************************************************************
    *   Method:        onCreate

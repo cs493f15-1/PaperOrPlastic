@@ -63,7 +63,7 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
     String ownerEmail = list.getmOwner();
 
 
-    Log.e ("OWNEREMAIL", "owner of the list " + ownerEmail);
+    Log.e ("OWNEREMAIL", "owner of the list " + ownerEmail + ". Current user:" + mEncodedEmail);
 
 
         /* Set the list name and owner */

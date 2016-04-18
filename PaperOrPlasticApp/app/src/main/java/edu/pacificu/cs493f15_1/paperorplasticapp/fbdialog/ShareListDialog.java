@@ -14,9 +14,9 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.popList.PoPListItemsActivity;
 
 /**
- * Created by alcoranb on 4/6/16.
+ * Created by alco8653 on 4/12/2016.
  */
-public class EditListNameDialog extends DialogFragment
+public class ShareListDialog extends DialogFragment
 {
   private Button mbCancel;
   private Button mbOK;
@@ -26,7 +26,7 @@ public class EditListNameDialog extends DialogFragment
   String mEncodedEmail;
 
 
-  public EditListNameDialog()
+  public ShareListDialog()
   {
     // Empty constructor required for DialogFragment
   }
@@ -36,13 +36,14 @@ public class EditListNameDialog extends DialogFragment
                            Bundle savedInstanceState)
   {
     View rootView = inflater.inflate(R.layout.listdialogfragment, container,
-        false);
+      false);
 
 
     // Get field from view
     mEditText = (EditText) rootView.findViewById(R.id.edit_text);
 
     // makes editText selected
+    mEditText.setHint("Enter your friend's email address");
     mEditText.requestFocus();
 
 
@@ -71,7 +72,7 @@ public class EditListNameDialog extends DialogFragment
     mDialog = getDialog();
 
 
-    mDialog.setTitle("Edit List Name");
+    mDialog.setTitle("Share this list with: ");
 
     mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     // Do something else

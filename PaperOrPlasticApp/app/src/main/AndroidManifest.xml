@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".signIn.MainSignInActivity"
-            android:label="Sign In" >
+            android:label="Sign In"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +26,8 @@
         <activity
             android:name=".signIn.CreateAccountActivity"
             android:label="Create Account"
-            android:parentActivityName=".signIn.MainSignInActivity" >
+            android:parentActivityName=".signIn.MainSignInActivity"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".signIn.MainSignInActivity" />
@@ -33,7 +35,8 @@
         <activity
             android:name=".signIn.PasswordRecoveryActivity"
             android:label="Recover Password"
-            android:parentActivityName=".signIn.MainSignInActivity" >
+            android:parentActivityName=".signIn.MainSignInActivity"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".signIn.MainSignInActivity" />

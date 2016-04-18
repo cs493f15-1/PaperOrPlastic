@@ -24,7 +24,7 @@ public abstract class PoPList
   public static final int SORT_AISLE = 4;
   public static final int SORT_PRICE = 5;
 
-  public static final String[]GroupByStrings = {"" , "alphabetical", "calories", "date entered", "aisle", "price"};
+  public static final String[]GroupByStrings = {"Group By" , "Alphabetical", "Calories", "Date Entered", "Price"};
 
   /*******************************************
    * Gets
