@@ -1,6 +1,7 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -11,7 +12,6 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseListAdapter;
-
 
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
@@ -49,6 +49,10 @@ public class SimpleListAdapter extends FirebaseListAdapter<SimpleList>
      */
 
     TextView textViewListName = (TextView) view.findViewById(R.id.text_view_list_name);
+    Typeface laneUpperFont = Typeface.createFromAsset(mActivity.getAssets(), "fonts/laneWUnderLine.ttf");
+    Typeface laneNarrowFont = Typeface.createFromAsset(mActivity.getAssets(), "fonts/LANENAR.ttf");
+    textViewListName.setTypeface(laneNarrowFont);
+
     final TextView textViewCreatedByUser = (TextView) view.findViewById(R.id.text_view_created_by_user);
     TextView textViewTime = (TextView) view.findViewById(R.id.text_view_edit_time);
 
