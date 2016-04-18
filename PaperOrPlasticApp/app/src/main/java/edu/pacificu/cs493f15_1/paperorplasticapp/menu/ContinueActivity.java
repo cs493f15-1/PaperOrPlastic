@@ -57,6 +57,8 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   static final int RECIPES = 4;
   static final int SETTINGS = 5;
   static final int ABOUT = 6;
+  static final int LOGOUT = 7;
+  static final int RETURN_SIGNIN = 8;
   static final int NUM_BUTTONS = 5;
 
   public static List<Button> buttons;
@@ -64,7 +66,7 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
   private static final int[] BUTTON_IDS = {R.id.bContGList, R.id.bContKInv,
     R.id.bContCoupons, R.id.bContNutrition,
     R.id.bContRecipes, R.id.bContSettings,
-    R.id.bContAbout};
+    R.id.bContAbout,   R.id.bLogoutButton, R.id.bReturnSignin};
 
   //Used to change fonts
   private TextView titleText;
@@ -115,6 +117,18 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
       button.getBackground().setAlpha(ALPHA_SETTING);
       button.setTypeface(laneNarrowFont, Typeface.BOLD);
       buttons.add(button);
+    }
+
+    buttons.get (LOGOUT).setVisibility(View.GONE);
+    buttons.get (RETURN_SIGNIN).setVisibility(View.GONE);
+
+    if (bUsingOffline)
+    {
+      buttons.get (RETURN_SIGNIN).setVisibility(View.VISIBLE);
+    }
+    else
+    {
+      buttons.get (LOGOUT).setVisibility(View.VISIBLE);
     }
 
     loadSavedPreferences();
@@ -223,6 +237,14 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
       //will start a new activity using the intents
       intent = new Intent(this, AboutActivity.class);
       startActivity(intent);
+    }
+    else if (buttons.get(LOGOUT) == view)
+    {
+      logout();
+    }
+    else if (buttons.get (RETURN_SIGNIN) == view)
+    {
+      takeUserToSignInScreenOnUnAuth ();
     }
   }
 

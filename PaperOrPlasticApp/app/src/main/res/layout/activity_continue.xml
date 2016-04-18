@@ -177,4 +177,42 @@
         android:layout_below="@+id/bContNutrition"
         android:layout_alignRight="@+id/bContLists" />
 
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="logout"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:background="#f6eaea"
+        android:textSize="20dp"
+        android:textAlignment="textStart"
+        android:paddingStart="40sp"
+        android:id="@+id/bLogoutButton"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/bContAbout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sReturnToSignin"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:background="#f6eaea"
+        android:textSize="20dp"
+        android:textAlignment="textStart"
+        android:paddingStart="40sp"
+        android:id="@+id/bReturnSignin"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_below="@+id/bLogoutButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/bContLists"
+        android:layout_alignEnd="@+id/bContLists" />
+
 </RelativeLayout>

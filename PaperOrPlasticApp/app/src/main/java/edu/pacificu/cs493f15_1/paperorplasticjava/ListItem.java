@@ -213,7 +213,7 @@ public class ListItem
 
     public void setFoodType (int foodType)
     {
-         mFoodType = foodType;
+        mFoodType = foodType;
     }
 
     public void setAisle (int aisle)
@@ -248,7 +248,7 @@ public class ListItem
 
     public void setNotes (String notes)
     {
-      mNotes = notes.substring(0, MAX_LENGTH);
+        mNotes = notes.substring(0, MAX_LENGTH);
     }
 
     public void setNutritionFacts (int itemCal, double itemTotalFat,
@@ -259,11 +259,11 @@ public class ListItem
                                    int itemVitC, int itemCalcium, int itemIron)
     {
         mNFModel.setAll(itemCal, itemTotalFat,
-        itemSatFat, itemPolyFat, itemMonoFat,
-        itemTransFat, itemCholesterol, itemSodium,
-        itemCarbs, itemFiber, itemSugar,
-        itemProtein, itemPotassium, itemVitA,
-        itemVitC, itemCalcium, itemIron);
+                itemSatFat, itemPolyFat, itemMonoFat,
+                itemTransFat, itemCholesterol, itemSodium,
+                itemCarbs, itemFiber, itemSugar,
+                itemProtein, itemPotassium, itemVitA,
+                itemVitC, itemCalcium, itemIron);
     }
 
     public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)

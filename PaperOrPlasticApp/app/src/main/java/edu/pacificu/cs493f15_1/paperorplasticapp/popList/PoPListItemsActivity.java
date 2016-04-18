@@ -1,12 +1,14 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.popList;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,6 +34,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ServerValue;
 import com.firebase.client.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,21 +46,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.fbdialog.ShareListDialog;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.User;
 import edu.pacificu.cs493f15_1.utils.Constants;
 import edu.pacificu.cs493f15_1.utils.Utils;
-import edu.pacificu.cs493f15_1.paperorplasticjava.User;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by alco8653 on 4/5/2016.
@@ -87,6 +87,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   private Spinner mGroupBySpinner;
   private DialogListener mListInfoListener;
 
+  TextView mTBarTitle;
 
   /**
    FIREBASE GOODIES
@@ -99,7 +100,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   private ValueEventListener mListRefListener;
 
   private boolean bScannedItem = false;
-  private TextView formatText, contentText;
+  private TextView formatText, contentText, textFont;
 
   /********************************************************************************************
    * Function name: onCreate
@@ -123,10 +124,17 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     mPoPFileName = fileName;
     mbIsOnEdit = false;
     mPoPLists = popLists;
+
     //get current viewing list
 
 
     initializeLayoutItems();
+
+    mTBarTitle = (TextView) findViewById(R.id.toolbar_title_item);
+    Typeface laneUpperFont = Typeface.createFromAsset(getAssets(), "fonts/laneWUnderLine.ttf");
+    Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
+    mTBarTitle.setTypeface(laneNarrowFont, Typeface.BOLD);
+    mTBarTitle.setTextColor(Color.WHITE);
 
     if (bUsingOffline)
     {
@@ -135,7 +143,9 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
       readListsFromFile(popLists);
       mPoPList = popLists.getListByName(mPoPListName);
-      setTitle(mPoPListName);
+      //setTitle(mPoPListName);
+      setTitle("");
+      mTBarTitle.setText(mPoPListName);
       setUpListView();
     }
     else
@@ -182,6 +192,8 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     mbAddItem = (FloatingActionButton) findViewById(R.id.bAddList);
     mItemListView = (ListView) findViewById(R.id.listViewOfItems);
     mGroupBySpinner = (Spinner) findViewById(R.id.GroupBySpinner);
+//    formatText = (TextView) findViewById (R.id.scan_format);
+//    contentText = (TextView) findViewById (R.id.scan_content);
 
     setupToolbar();
   }
@@ -195,6 +207,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   public void setupToolbar()
   {
     Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+
         /* Common toolbar setup */
     setSupportActionBar(toolbar);
         /* Add back button to the action bar */
@@ -264,7 +277,10 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
 
         invalidateOptionsMenu();
-        setTitle(simpleList.getmListName());
+        //setTitle(simpleList.getmListName());
+        setTitle("");
+        //String text = ;
+       mTBarTitle.setText(simpleList.getmListName());
       }
 
       @Override
@@ -305,17 +321,14 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       }
     });
 
-    mItemListView.setOnTouchListener(new OnSwipeTouchListener(this, mItemListView)
-    {
+    mItemListView.setOnTouchListener(new OnSwipeTouchListener(this, mItemListView) {
       @Override
-      public void onSwipeRight(int pos)
-      {
-       hideDeleteButton2(pos);
+      public void onSwipeRight(int pos) {
+        hideDeleteButton2(pos);
       }
 
       @Override
-      public void onSwipeLeft(int pos)
-      {
+      public void onSwipeLeft(int pos) {
         showDeleteButton2(pos);
       }
     });
@@ -434,6 +447,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == REQUEST_OK) {
       if (resultCode == RESULT_OK) {
+
         String item_name = data.getStringExtra("item_name");
         String brand_name = data.getStringExtra("brand_name");
         String desc = data.getStringExtra("item_desc");
@@ -1377,8 +1391,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       public void onDataChange(DataSnapshot dataSnapshot) {
         User user = dataSnapshot.getValue(User.class);
 
-        if (user != null)
-        {
+        if (user != null) {
           shareRef.setValue(user);
         }
       }
@@ -1386,7 +1399,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       @Override
       public void onCancelled(FirebaseError firebaseError) {
         Log.e("POP list items",
-          "Read failed: " + firebaseError.getMessage());
+                "Read failed: " + firebaseError.getMessage());
       }
     });
   }

@@ -11,7 +11,9 @@
 package edu.pacificu.cs493f15_1.paperorplasticapp.coupons;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.fasterxml.jackson.databind.deser.Deserializers;
 
@@ -27,10 +29,19 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
  **************************************************************************************************/
 public class CouponsActivity extends BaseActivity
 {
+
+    //Used to change fonts
+    private TextView titleText;
+
     @Override
     protected void onCreate (Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupons);
+
+        titleText = (TextView) findViewById(R.id.couponsTitleText);
+        Typeface laneUpperFont = Typeface.createFromAsset(getAssets(), "fonts/laneWUnderLine.ttf");
+        Typeface laneNarrowFont = Typeface.createFromAsset(getAssets(), "fonts/LANENAR.ttf");
+        titleText.setTypeface(laneUpperFont);
     }
 }

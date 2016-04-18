@@ -25,11 +25,11 @@ task clean(type: Delete) {
 }
 
 dependencies
-{
-    apply plugin: 'java'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    // Unit testing dependencies
-    testCompile 'junit:junit:4.12'
-    // Dependency for using Mockito
-    testCompile 'org.mockito:mockito-core:1.10.19'
-}
+        {
+            apply plugin: 'java'
+            compile fileTree(include: ['*.jar'], dir: 'libs')
+            // Unit testing dependencies
+            testCompile 'junit:junit:4.12'
+            // Dependency for using Mockito
+            testCompile 'org.mockito:mockito-core:1.10.19'
+        }
