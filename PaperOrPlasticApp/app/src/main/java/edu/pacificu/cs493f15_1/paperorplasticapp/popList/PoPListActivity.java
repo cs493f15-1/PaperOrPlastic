@@ -129,7 +129,21 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     super.onCreate(savedInstanceState);
   }
-
+    /********************************************************************************************
+     * Function name: PoPOnCreate
+     * <p/>
+     * Description:   a function that is used in the OnCreate of GroceryListActivity and
+     * KitchenInventoryActivity and is used to implement the functionality of the
+     * Activity.
+     * <p/>
+     * Parameters: savedInstanceState  - a bundle object
+     *             popList             - The lists object created in GroceryListActivity or KitchenInventoryActivity
+     *             activityLayout      - the layout of GroceryListActivity or KitchenInventoryActivity
+     *             fileName            - the file which the PoPLists should be stored in
+     *             isGrocery           - A boolean on whether the activity is called from GroceryListActivity or not
+     * <p/>
+     * Returns:       none
+     ******************************************************************************************/
   protected void PoPOnCreate(Bundle savedInstanceState, PoPLists popLists, final int activitylayout,
                              final String fileName, final boolean isGrocery)
   {
@@ -273,64 +287,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
         Log.i("lifecycle", "In On Create");
     }
 
-    *//********************************************************************************************
-     * Function name: PoPOnCreate
-     * <p/>
-     * Description:   a function that is used in the OnCreate of GroceryListActivity and
-     * KitchenInventoryActivity and is used to implement the functionality of the
-     * Activity.
-     * <p/>
-     * Parameters:    savedInstanceState  - a bundle object
-     * popList             - The lists object created in GroceryListActivity or KitchenInventoryActivity
-     * activityLayout      - the layout of GroceryListActivity or KitchenInventoryActivity
-     * itemLayout          - the layout of the items in GroceryListActivity or KitchenInventoryActivity
-     * fileName            - the file which the PoPLists should be stored in
-     * isGrocery           - A boolean on whether the activity is called from GroceryListActivity or not
-     * <p/>
-     * Returns:       none
-     ******************************************************************************************//*
-    protected void PoPOnCreate(Bundle savedInstanceState, PoPLists popLists,
-                               final int activityLayout, final int itemLayout,
-                               final String fileName, final boolean isGrocery) {
-        setContentView(activityLayout);
-
-        mPoPLists = popLists;
-        mItemLayout = itemLayout;
-        mPoPFileName = fileName;
-        mbIsOnEdit = false;
-
-        mbAddingItem = false;
-        mbIsGrocery = isGrocery;
-
-        //to view items
-        mListView = (ListView) findViewById(R.id.listView);
-
-        handleSwipingToDelete();
-
-        //setup tabs
-        setupTabs();
-
-        //setup edit button
-        setupEditDeleteButtonsForLists();
-
-        //setup back buttons
-        setupBackButton();
-
-        //setup settings activity button
-        setupSettingsActivityButton();
-
-        //setup addList and addItem buttons
-        setupAddListButtons();
-
-        setupAddItemButtons();
-
-        //setup the sorting group by spinner (drop down list sorting)
-        setUpGroupSpinnerHandleSorting();
-
-        addAllExistingListsInPoPListsToTabs();
-
-    startActivity(intent);
-  }*/
+    */
 
   /*************************************************************************************************
    * Method:
@@ -789,6 +746,8 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
     File popFile = context.getFileStreamPath(mPoPFileName);
 
     mbIsOnEdit = false;
+
+    //popFile.delete();
 
     if (popFile.exists())
     {
