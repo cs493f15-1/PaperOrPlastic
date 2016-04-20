@@ -432,7 +432,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
         }
       }
     });
-
     mItemListView.setItemsCanFocus(true);
   }
 
@@ -503,6 +502,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
           readListsFromFile(mPoPLists);
           addItemToListView(newItem);
           writeListsToFile();
+          mPoPLists.clearLists();
         }
 
 
@@ -598,7 +598,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
       }
     }, 60);
-
 
        /* if (mPoPList.addItem(newItem))
         {
@@ -849,6 +848,10 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       listsInput = new Scanner(popInput);
       mLastTabIndex = listsInput.nextInt();
       popLists.readListsFromFile(listsInput);
+
+     // PoPList tempList = mPoPLists.getListByName(mPoPListName);
+     // mPoPList.copyList(tempList);
+
       listsInput.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -869,6 +872,9 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   {
     FileOutputStream popOutput = null;
     PrintWriter listsOutput = null;
+
+    PoPList tempList = mPoPLists.getListByName(mPoPListName);
+    tempList.copyList(mPoPList);
 
     try
     {
@@ -1084,6 +1090,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   protected void onPause ()
   {
     super.onPause();
+
     writeListsToFile();
     mPoPLists.clearLists();
   }

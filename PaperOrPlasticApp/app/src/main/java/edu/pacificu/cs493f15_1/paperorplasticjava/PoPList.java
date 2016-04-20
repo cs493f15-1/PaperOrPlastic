@@ -77,6 +77,15 @@ public abstract class PoPList
     mListName = name;
   }
 
+  public void copyList (PoPList list)
+  {
+    mListName = list.getListName();
+    // mAisleCategoryNames;
+    // mFoodTypeCategoryNames; //TODO for later/when these are implemented
+    // mCustomCategoryNames;
+    mCurrentSortingValue = list.getCurrentSortingValue();
+    mItems = list.getItemArray();
+  }
 
   public void setItems (ArrayList<ListItem> items)
   {
