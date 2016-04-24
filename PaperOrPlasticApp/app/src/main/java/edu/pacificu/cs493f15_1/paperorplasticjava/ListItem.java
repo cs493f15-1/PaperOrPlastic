@@ -273,11 +273,11 @@ public class ListItem
                 itemVitC, itemCalcium, itemIron);
     }
 
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
+    public void setAll (int foodType, int aisle, int quantity, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
     {
         setFoodType (foodType);
         setAisle(aisle);
-        setAddQuantity(quantityToAdd);
+        setQuantity(quantity);
         setPrice(price);
         setCustomCategory(customCategory);
         setCheckedOff(checkedOff);
@@ -350,7 +350,7 @@ public class ListItem
 
         setFoodType(itemInput.nextInt());
         setAisle(itemInput.nextInt());
-        setAddQuantity(itemInput.nextInt());
+        setQuantity(itemInput.nextInt());
         setPrice(itemInput.nextDouble());
         setCustomCategory(itemInput.nextInt());
         setCheckedOff(itemInput.nextBoolean());

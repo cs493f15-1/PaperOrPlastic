@@ -670,7 +670,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
               break;
           }
 
-          mItemListView.setAdapter(mSimpleListItemAdapter);
+          mItemListView.setAdapter(mItemAdapter);
         }
       }
 
@@ -1074,6 +1074,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     {
       mPoPLists.clearLists();
       readListsFromFile(mPoPLists);
+      mPoPList = mPoPLists.getListByName(mPoPListName);
     }
   }
 
