@@ -43,6 +43,7 @@ import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryItemsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticjava.ListItem;
+import edu.pacificu.cs493f15_1.paperorplasticjava.PoPList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.PoPLists;
 import edu.pacificu.cs493f15_1.paperorplasticjava.SimpleList;
 import edu.pacificu.cs493f15_1.paperorplasticjava.User;
@@ -685,6 +686,13 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
         }
         else
         {
+          if (newListName.length() > PoPList.MAX_LIST_NAME)
+          {
+              Toast toast = Toast.makeText(getApplicationContext(),
+                      getResources().getString(R.string.sLengthofList) + " " +
+                      PoPList.MAX_LIST_NAME + " characters.", Toast.LENGTH_LONG);
+              toast.show();
+          }
           if (!mPoPLists.ListNameExists(newListName)) //List name does not already exist
           {
             //add List to Lists and create a tab
@@ -747,7 +755,7 @@ public abstract class PoPListActivity extends BaseActivity implements View.OnCli
 
     mbIsOnEdit = false;
 
-    //popFile.delete();
+   // popFile.delete();
 
     if (popFile.exists())
     {

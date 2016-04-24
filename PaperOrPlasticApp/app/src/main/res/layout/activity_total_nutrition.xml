@@ -7,8 +7,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/sCoupons"
-        android:id="@+id/couponsTitleText"
+        android:text="@string/sTotalNutrition"
+        android:id="@+id/nutritionTitle"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:textSize="45dp"
@@ -20,7 +20,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/sNotImplemented"
         android:id="@+id/textView2"
-        android:layout_below="@+id/couponsTitleText"
+        android:layout_below="@+id/nutritionTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="99dp" />
 </RelativeLayout>

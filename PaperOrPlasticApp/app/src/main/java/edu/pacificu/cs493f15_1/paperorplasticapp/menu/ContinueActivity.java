@@ -21,20 +21,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-
 import com.firebase.client.Firebase;
-
-import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.pacificu.cs493f15_1.paperorplasticapp.BaseActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.R;
 import edu.pacificu.cs493f15_1.paperorplasticapp.coupons.CouponsActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.groceryList.GroceryListActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.kitchenInventory.KitchenInventoryActivity;
-import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.NutritionActivity;
+import edu.pacificu.cs493f15_1.paperorplasticapp.nutrition.TotalNutritionActivity;
 import edu.pacificu.cs493f15_1.paperorplasticapp.recipe.RecipesActivity;
 import edu.pacificu.cs493f15_1.utils.Constants;
 
@@ -214,7 +211,7 @@ public class ContinueActivity extends BaseActivity implements View.OnClickListen
       //will start a new activity using the intents
 
 
-      intent = new Intent(this, NutritionActivity.class);
+      intent = new Intent(this, TotalNutritionActivity.class);
 
       //intent.putExtra("currentUser", fUserTest);
 

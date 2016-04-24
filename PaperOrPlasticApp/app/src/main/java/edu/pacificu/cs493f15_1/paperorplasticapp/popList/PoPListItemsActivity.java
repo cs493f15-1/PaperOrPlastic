@@ -849,9 +849,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       mLastTabIndex = listsInput.nextInt();
       popLists.readListsFromFile(listsInput);
 
-     // PoPList tempList = mPoPLists.getListByName(mPoPListName);
-     // mPoPList.copyList(tempList);
-
       listsInput.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -1074,7 +1071,12 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     {
       mPoPLists.clearLists();
       readListsFromFile(mPoPLists);
+
+    }
+    if (!mPoPList.getListName().equalsIgnoreCase(mPoPListName))
+    {
       mPoPList = mPoPLists.getListByName(mPoPListName);
+      setUpListView();
     }
   }
 
@@ -1094,6 +1096,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
 
     writeListsToFile();
     mPoPLists.clearLists();
+    mItemAdapter.clear();
   }
 
   /********************************************************************************************

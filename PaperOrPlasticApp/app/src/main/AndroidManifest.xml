@@ -89,6 +89,10 @@
             android:label="@string/title_activity_nutrition_settings" >
         </activity>
         <activity
+            android:name=".nutrition.TotalNutritionActivity"
+            android:label="@string/title_activity_total_nutrition" >
+        </activity>
+        <activity
             android:name=".coupons.CouponsActivity"
             android:label="@string/title_activity_coupons" >
         </activity>
