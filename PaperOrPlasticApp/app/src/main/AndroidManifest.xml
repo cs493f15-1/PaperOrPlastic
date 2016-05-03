@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".signIn.MainSignInActivity"
-            android:label="Sign In"
+            android:label="Paper Or Plastic"
             android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -87,6 +87,10 @@
         <activity
             android:name=".nutrition.NutritionSettingsActivity"
             android:label="@string/title_activity_nutrition_settings" >
+        </activity>
+        <activity
+            android:name=".nutrition.TotalNutritionActivity"
+            android:label="@string/title_activity_total_nutrition" >
         </activity>
         <activity
             android:name=".coupons.CouponsActivity"
