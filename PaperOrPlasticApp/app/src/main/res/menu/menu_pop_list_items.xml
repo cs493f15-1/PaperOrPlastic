@@ -9,7 +9,7 @@
         android:orderInCategory="100"
         android:title="Edit List Name"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_barcode_add_item"

@@ -432,7 +432,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
         }
       }
     });
-
     mItemListView.setItemsCanFocus(true);
   }
 
@@ -503,6 +502,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
           readListsFromFile(mPoPLists);
           addItemToListView(newItem);
           writeListsToFile();
+          mPoPLists.clearLists();
         }
 
 
@@ -599,7 +599,6 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       }
     }, 60);
 
-
        /* if (mPoPList.addItem(newItem))
         {
             Toast toast = Toast.makeText(getApplicationContext(),
@@ -671,7 +670,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
               break;
           }
 
-          mItemListView.setAdapter(mSimpleListItemAdapter);
+          mItemListView.setAdapter(mItemAdapter);
         }
       }
 
@@ -849,6 +848,7 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
       listsInput = new Scanner(popInput);
       mLastTabIndex = listsInput.nextInt();
       popLists.readListsFromFile(listsInput);
+
       listsInput.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -869,6 +869,9 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   {
     FileOutputStream popOutput = null;
     PrintWriter listsOutput = null;
+
+    PoPList tempList = mPoPLists.getListByName(mPoPListName);
+    tempList.copyList(mPoPList);
 
     try
     {
@@ -1068,6 +1071,12 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
     {
       mPoPLists.clearLists();
       readListsFromFile(mPoPLists);
+
+    }
+    if (!mPoPList.getListName().equalsIgnoreCase(mPoPListName))
+    {
+      mPoPList = mPoPLists.getListByName(mPoPListName);
+      setUpListView();
     }
   }
 
@@ -1084,8 +1093,10 @@ public abstract class PoPListItemsActivity extends BaseActivity implements View.
   protected void onPause ()
   {
     super.onPause();
+
     writeListsToFile();
     mPoPLists.clearLists();
+    mItemAdapter.clear();
   }
 
   /********************************************************************************************

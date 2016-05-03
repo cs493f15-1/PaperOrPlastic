@@ -173,9 +173,10 @@ public abstract class PoPLists
 
   public void clearLists()
   {
-    for (int i = 0; i < mLists.size(); i++)
+    int size = mLists.size();
+    for (int i = 0; i < size; i++)
     {
-      mLists.remove(i);
+      mLists.remove(0);
     }
 
   }

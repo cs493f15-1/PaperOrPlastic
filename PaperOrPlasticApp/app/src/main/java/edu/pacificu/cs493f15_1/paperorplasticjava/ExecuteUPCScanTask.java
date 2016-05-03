@@ -1,26 +1,16 @@
 package edu.pacificu.cs493f15_1.paperorplasticjava;
 
 import android.os.AsyncTask;
-import android.provider.Settings;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by jo9026 on 4/4/2016.
@@ -48,13 +38,15 @@ public class ExecuteUPCScanTask extends AsyncTask<String, Void, Void> {
 			urlConnection.setRequestMethod("GET");
 			urlConnection.connect();
 
-			int HttpResult1 = urlConnection.getResponseCode ();
+			//int HttpResult1 = urlConnection.getResponseCode ();
 
-
-			//Login
-			queryBundle.put("upc", URLEncoder.encode(UPC[0], "UTF-8"));
-			queryBundle.put("appId", "0f0b5b93");
-			queryBundle.put("appKey", "f468c4aec88a5de24bf91e30a9f491bf");
+//			long upc = Integer.parseInt(UPC[0]);
+//
+//
+//			//Login
+//			queryBundle.put("upc", upc);
+//			queryBundle.put("appId", "0f0b5b93");
+//			queryBundle.put("appKey", "f468c4aec88a5de24bf91e30a9f491bf");
 
 			//Adding UPC
 			//Long intUPC = Long.parseLong(UPC[0].trim());

@@ -248,7 +248,14 @@ public class ListItem
 
     public void setNotes (String notes)
     {
-        mNotes = notes.substring(0, MAX_LENGTH);
+
+        if (notes.length() >= MAX_LENGTH) {
+            mNotes = notes.substring(0, MAX_LENGTH);
+        }
+        else
+        {
+            mNotes = notes;
+        }
     }
 
     public void setNutritionFacts (int itemCal, double itemTotalFat,
@@ -266,11 +273,11 @@ public class ListItem
                 itemVitC, itemCalcium, itemIron);
     }
 
-    public void setAll (int foodType, int aisle, int quantityToAdd, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
+    public void setAll (int foodType, int aisle, int quantity, double price, int customCategory, boolean checkedOff, String notes, NutritionFactModel NFacts)
     {
         setFoodType (foodType);
         setAisle(aisle);
-        setAddQuantity(quantityToAdd);
+        setQuantity(quantity);
         setPrice(price);
         setCustomCategory(customCategory);
         setCheckedOff(checkedOff);
@@ -343,7 +350,7 @@ public class ListItem
 
         setFoodType(itemInput.nextInt());
         setAisle(itemInput.nextInt());
-        setAddQuantity(itemInput.nextInt());
+        setQuantity(itemInput.nextInt());
         setPrice(itemInput.nextDouble());
         setCustomCategory(itemInput.nextInt());
         setCheckedOff(itemInput.nextBoolean());

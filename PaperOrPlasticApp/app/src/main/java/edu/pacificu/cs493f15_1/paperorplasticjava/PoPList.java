@@ -24,6 +24,8 @@ public abstract class PoPList
   public static final int SORT_AISLE = 4;
   public static final int SORT_PRICE = 5;
 
+  public static final int MAX_LIST_NAME = 20;
+
   public static final String[]GroupByStrings = {"Group By" , "Alphabetical", "Calories", "Date Entered", "Price"};
 
   /*******************************************
@@ -75,8 +77,22 @@ public abstract class PoPList
   public void setListName (String name)
   {
     mListName = name;
+
+    if (name.length() > MAX_LIST_NAME)
+    {
+      mListName = name.substring(0, MAX_LIST_NAME);
+    }
   }
 
+  public void copyList (PoPList list)
+  {
+    mListName = list.getListName();
+    // mAisleCategoryNames;
+    // mFoodTypeCategoryNames; //TODO for later/when these are implemented
+    // mCustomCategoryNames;
+    mCurrentSortingValue = list.getCurrentSortingValue();
+    mItems = list.getItemArray();
+  }
 
   public void setItems (ArrayList<ListItem> items)
   {

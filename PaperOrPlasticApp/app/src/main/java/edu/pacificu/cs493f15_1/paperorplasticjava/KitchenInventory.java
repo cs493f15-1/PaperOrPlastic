@@ -12,7 +12,7 @@ public class KitchenInventory extends PoPList {
     boolean bIsShared;
 
     public KitchenInventory(String name) {
-        mListName = name;
+        setListName(name);
         mItems = new ArrayList<ListItem>();
         mCurrentSortingValue = SORT_NONE;
     }
